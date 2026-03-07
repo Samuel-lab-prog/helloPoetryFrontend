@@ -56,9 +56,11 @@ export function PoemCard({ poem }: PoemCardProps) {
 					<Text textStyle='small' color='pink.100'>
 						{poem.author.name}
 					</Text>
-					<Text textStyle='smaller' color='pink.200' opacity={0.8}>
-						@{poem.author.nickname}
-					</Text>
+					<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
+						<NavLink to={`/authors/${poem.author.id}`}>
+							@{poem.author.nickname}
+						</NavLink>
+					</Link>
 				</Flex>
 			</Card.Body>
 

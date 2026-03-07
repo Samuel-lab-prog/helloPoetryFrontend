@@ -1,5 +1,5 @@
 ﻿import { NavLink, useParams } from 'react-router-dom';
-import { Box, Link, Flex, Icon } from '@chakra-ui/react';
+import { Avatar, Box, Link, Flex, Icon, Text } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer } from '@features/base';
 import { usePost } from '../hooks/usePost';
@@ -35,6 +35,41 @@ export function PostPage() {
 									updatedAt: poem.updatedAt,
 								}}
 							/>
+
+							<Flex
+								mt={6}
+								p={4}
+								gap={3}
+								align='center'
+								border='1px solid'
+								borderColor='purple.700'
+								borderRadius='lg'
+								bg='rgba(255, 255, 255, 0.02)'
+							>
+								<Avatar.Root size='lg'>
+									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+									<Avatar.Fallback name={poem.author.name} />
+								</Avatar.Root>
+
+								<Flex direction='column' gap={1} flex='1'>
+									<Text textStyle='small' color='pink.200'>
+										Autor
+									</Text>
+									<Text textStyle='body'>{poem.author.name}</Text>
+									<Text textStyle='smaller' color='pink.200'>
+										@{poem.author.nickname}
+									</Text>
+									<Text textStyle='smaller' color='pink.200'>
+										Curtidas: {poem.stats.likesCount} | Comentarios:{' '}
+										{poem.stats.commentsCount}
+									</Text>
+								</Flex>
+
+								<Link asChild textStyle='small' color='pink.100'>
+									<NavLink to={`/authors/${poem.author.id}`}>Ver autor</NavLink>
+								</Link>
+							</Flex>
+
 							<Box
 								as='article'
 								textAlign='justify'

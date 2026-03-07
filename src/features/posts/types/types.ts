@@ -5,13 +5,23 @@ export type FullPoemType = {
 	}[];
 	title: string;
 	slug: string;
-	excerpt: string;
+	excerpt: string | null;
 	id: number;
 	createdAt: Date;
 	content: string;
 	status: 'draft' | 'published';
 	visibility: 'public' | 'friends' | 'private' | 'unlisted';
 	isCommentable: boolean;
+	author: {
+		id: number;
+		name: string;
+		nickname: string;
+		avatarUrl: string | null;
+	};
+	stats: {
+		likesCount: number;
+		commentsCount: number;
+	};
 	updatedAt: Date;
 };
 
@@ -41,6 +51,25 @@ export type PaginatedPoemsType = {
 	nextCursor?: number | undefined;
 	poems: PoemPreviewType[];
 	hasMore: boolean;
+};
+
+export type AuthorProfileType = {
+	id: number;
+	nickname: string;
+	name: string;
+	bio: string | null;
+	avatarUrl: string | null;
+	role: string;
+	status: string;
+	stats: {
+		poemsCount: number;
+		commentsCount: number;
+		friendsCount: number;
+	};
+	isFriend: boolean;
+	hasBlockedRequester: boolean;
+	isBlockedByRequester: boolean;
+	isFriendRequester: boolean;
 };
 
 export type PaginatedMinimalPoemsType = {

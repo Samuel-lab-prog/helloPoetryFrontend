@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
-import { PostPage, PostsPage, HomePage } from '@features/posts';
+import { AuthorPage, PostPage, PostsPage, HomePage } from '@features/posts';
 import {
 	LoginPage,
 	MyProfilePage,
@@ -32,6 +32,7 @@ export default function App() {
 				{ index: true, element: <HomePage /> },
 				{ path: 'poems', element: <PostsPage /> },
 				{ path: 'poems/:slug/:id', element: <PostPage /> },
+				{ path: 'authors/:id', element: <AuthorPage /> },
 				{ path: '/login', element: <LoginPage /> },
 				{ path: '/register', element: <RegisterPage /> },
 				{
