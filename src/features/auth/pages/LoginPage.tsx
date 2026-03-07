@@ -18,9 +18,6 @@ export function LoginPage() {
 					mb={4}
 					gap={2}
 					textAlign='center'
-					animationName='slide-from-top, fade-in'
-					animationDuration='420ms'
-					animationTimingFunction='ease-out'
 				>
 					<Heading as='h1' textStyle='h1' color='accent'>
 						Login
