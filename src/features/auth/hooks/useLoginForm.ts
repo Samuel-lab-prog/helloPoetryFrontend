@@ -7,6 +7,12 @@ import { useMutation } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
 
+type AuthClient = {
+	id: number;
+	role: string;
+	status: string;
+};
+
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');
 	const navigate = useNavigate();
@@ -18,13 +24,14 @@ export function useLoginForm() {
 
 	const loginMutation = useMutation({
 		mutationFn: (data: LoginDataType) =>
-			createHTTPRequest<void, LoginDataType>({
+			createHTTPRequest<AuthClient, LoginDataType>({
 				path: '/auth/login',
 				method: 'POST',
 				body: data,
 			}),
 
-		onSuccess: () => {
+		onSuccess: (client) => {
+			localStorage.setItem('auth-client', JSON.stringify(client));
 			navigate('/admin');
 		},
 

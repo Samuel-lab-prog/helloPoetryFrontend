@@ -1,34 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 
-import { Navbar, ErrorPage, createHTTPRequest } from '@features/base';
+import { Navbar, ErrorPage } from '@features/base';
 import { PostPage, PostsPage, HomePage } from '@features/posts';
-import { LoginPage, RegisterPage } from '@features/auth';
+import { LoginPage, MyProfilePage, RegisterPage } from '@features/auth';
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
 export default function App() {
-	const { data: isAuthenticated = false } = useQuery({
-		queryKey: ['auth-navbar'],
-		queryFn: async () => {
-			try {
-				await createHTTPRequest<void>({
-					path: '/auth',
-					method: 'POST',
-					credentials: 'include',
-				});
-				return true;
-			} catch {
-				return false;
-			}
-		},
-		staleTime: 1000 * 60 * 5,
-		retry: false,
-	});
+	const isAuthenticated = !!localStorage.getItem('auth-client');
 
 	const navLinks = [
 		{ to: '/', label: 'Home' },
 		{ to: '/poems', label: 'Poems' },
 		...(isAuthenticated ? [{ to: '/poems/new', label: 'Create Poem' }] : []),
+		...(isAuthenticated ? [{ to: '/my-profile', label: 'My Profile' }] : []),
 		{ label: 'Register', to: '/register' },
 		{ label: 'Login', to: '/login' },
 	];
@@ -51,6 +35,10 @@ export default function App() {
 				{
 					path: 'admin',
 					element: <AdminPage />,
+				},
+				{
+					path: 'my-profile',
+					element: <MyProfilePage />,
 				},
 			],
 		},
