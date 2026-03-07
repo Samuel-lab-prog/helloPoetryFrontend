@@ -1,14 +1,14 @@
-import { DynamicForm, type Field } from '@features/base';
+﻿import { DynamicForm, type Field } from '@features/base';
 import { useRegisterForm } from '../hooks/useRegisterForm';
 import type { RegisterDataType } from '../schemas/registerSchema';
 
 const registerFields: Field<RegisterDataType>[] = [
-	{ name: 'nickname', label: 'Nickname', required: true, autoFocus: true },
-	{ name: 'name', label: 'Name', required: true },
-	{ name: 'email', label: 'Email', required: true },
-	{ name: 'password', label: 'Password', required: true, type: 'password' },
+	{ name: 'nickname', label: 'Apelido', required: true, autoFocus: true },
+	{ name: 'name', label: 'Nome', required: true },
+	{ name: 'email', label: 'E-mail', required: true },
+	{ name: 'password', label: 'Senha', required: true, type: 'password' },
 	{ name: 'bio', label: 'Bio', required: true, type: 'textarea' },
-	{ name: 'avatarUrl', label: 'Avatar URL', required: false },
+	{ name: 'avatarUrl', label: 'URL do avatar', required: false },
 ];
 
 export function RegisterForm() {
@@ -31,7 +31,7 @@ export function RegisterForm() {
 			generalError={generalError}
 			onSubmit={onSubmit}
 			handleSubmitFn={handleSubmit}
-			buttonLabel='Create account'
+			buttonLabel='Criar conta'
 			buttonVariant='surface'
 		/>
 	);

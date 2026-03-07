@@ -1,4 +1,4 @@
-import { useLoginForm } from '../hooks/useLoginForm';
+﻿import { useLoginForm } from '../hooks/useLoginForm';
 import type { LoginDataType } from '../schemas/loginSchema';
 import { DynamicForm, type Field } from '@features/base';
 
@@ -27,7 +27,7 @@ export function LoginForm() {
 			generalError={generalError}
 			onSubmit={onSubmit}
 			handleSubmitFn={handleSubmit}
-			buttonLabel='Enter'
+			buttonLabel='Entrar'
 			buttonVariant='surface'
 		/>
 	);

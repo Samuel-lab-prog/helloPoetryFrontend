@@ -67,7 +67,7 @@ function FooterNav({ links }: { links: FooterLink[] }) {
 	return (
 		<VStack align='start' gap={2}>
 			<Text textStyle='small' color='pink.200'>
-				Navegacao
+				Navegação
 			</Text>
 			{links.map((link) => (
 				<Link

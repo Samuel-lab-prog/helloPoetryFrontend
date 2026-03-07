@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
 type FriendRequestResult = {
@@ -28,10 +28,10 @@ export function useSendFriendRequest() {
 		if (!err) return '';
 
 		if (err.statusCode === 409)
-			return 'Pedido ja enviado ou relacao ja existe.';
+			return 'Pedido ja enviado ou relação ja existe.';
 		if (err.statusCode === 403)
-			return 'Voce nao pode enviar pedido para este usuario.';
-		if (err.statusCode === 404) return 'Autor nao encontrado.';
+			return 'Você não pode enviar pedido para este usuário.';
+		if (err.statusCode === 404) return 'Autor não encontrado.';
 		return 'Erro ao enviar pedido de amizade.';
 	}
 

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
 export function useAuth() {

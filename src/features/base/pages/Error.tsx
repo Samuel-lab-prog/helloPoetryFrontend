@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, Box, Button } from '@chakra-ui/react';
+﻿import { Flex, Heading, Text, Box, Button } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export function ErrorPage() {
@@ -13,20 +13,20 @@ export function ErrorPage() {
 		>
 			<Box maxW='md'>
 				<Heading as='h1' textStyle='h1'>
-					Oops!
+					Ops!
 				</Heading>
 
 				<Heading as='h2' textStyle='h5' mt={3}>
-					Something went wrong — or this page doesn’t exist.
+					Algo deu errado ou esta página não existe.
 				</Heading>
 
 				<Text textStyle='small' mt={1}>
-					Try returning to the homepage or checking the URL.
+					Tente voltar para a página inicial ou conferir a URL.
 				</Text>
 
 				<Box mt={6}>
 					<Button asChild variant='solidPink'>
-						<NavLink to='/'>Go back home</NavLink>
+						<NavLink to='/'>Voltar para o início</NavLink>
 					</Button>
 				</Box>
 			</Box>

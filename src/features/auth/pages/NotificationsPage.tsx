@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import { AsyncState, formatDate } from '@features/base';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
@@ -6,7 +6,7 @@ import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
 function getNotificationTitle(type: string) {
 	switch (type) {
 		case 'POEM_COMMENT_CREATED':
-			return 'Novo comentario';
+			return 'Novo comentário';
 		case 'NEW_FRIEND':
 			return 'Novo amigo';
 		case 'NEW_FRIEND_REQUEST':
@@ -14,13 +14,13 @@ function getNotificationTitle(type: string) {
 		case 'POEM_LIKED':
 			return 'Poema curtido';
 		case 'POEM_COMMENT_REPLIED':
-			return 'Resposta em comentario';
+			return 'Resposta em comentário';
 		case 'POEM_DEDICATED':
 			return 'Poema dedicado';
 		case 'USER_MENTION_IN_POEM':
-			return 'Voce foi mencionado';
+			return 'Você foi mencionado';
 		default:
-			return 'Notificacao';
+			return 'Notificação';
 	}
 }
 
@@ -42,7 +42,7 @@ export function NotificationsPage() {
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='4xl'>
 				<Heading as='h1' textStyle='h1' mb={6}>
-					Notifications
+					Notificações
 				</Heading>
 
 				<HStack mb={6} gap={3} wrap='wrap'>
@@ -51,7 +51,7 @@ export function NotificationsPage() {
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
 					>
-						{onlyUnread ? 'Mostrar todas' : 'Somente nao lidas'}
+						{onlyUnread ? 'Mostrar todas' : 'Somente não lidas'}
 					</Button>
 					<Button
 						variant='solidPink'
@@ -68,13 +68,13 @@ export function NotificationsPage() {
 					isError={isError}
 					isEmpty={notifications.length === 0}
 					loadingElement={
-						<Text textStyle='body'>Carregando notificacoes...</Text>
+						<Text textStyle='body'>Carregando notificações...</Text>
 					}
 					errorElement={
-						<Text textStyle='body'>Erro ao carregar notificacoes.</Text>
+						<Text textStyle='body'>Erro ao carregar notificações.</Text>
 					}
 					emptyElement={
-						<Text textStyle='body'>Nenhuma notificacao encontrada.</Text>
+						<Text textStyle='body'>Nenhuma notificação encontrada.</Text>
 					}
 				>
 					<Flex direction='column' gap={3}>
@@ -100,7 +100,7 @@ export function NotificationsPage() {
 										</Text>
 										{item.aggregatedCount > 1 && (
 											<Text textStyle='smaller' color='pink.200'>
-												Ocorrencias: {item.aggregatedCount}
+												Ocorrências: {item.aggregatedCount}
 											</Text>
 										)}
 									</Flex>

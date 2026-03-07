@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
 export function useFriendRequestActions() {
@@ -31,9 +31,9 @@ export function useFriendRequestActions() {
 			| AppErrorType
 			| undefined;
 		if (!err) return '';
-		if (err.statusCode === 404) return 'Solicitacao nao encontrada.';
-		if (err.statusCode === 403) return 'Voce nao pode executar esta acao.';
-		return 'Erro ao processar solicitacao.';
+		if (err.statusCode === 404) return 'Solicitação não encontrada.';
+		if (err.statusCode === 403) return 'Você não pode executar esta ação.';
+		return 'Erro ao processar solicitação.';
 	}
 
 	return {

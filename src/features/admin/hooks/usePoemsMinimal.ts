@@ -1,12 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import type { FullPoemType } from '@features/posts';
+import type { FullPoemType } from '@features/poems';
 
-type UsePostsMinimalOptions = {
+type UsePoemsMinimalOptions = {
 	limit?: number;
 };
 
-export function usePostsMinimal({ limit = 150 }: UsePostsMinimalOptions = {}) {
+export function usePoemsMinimal({ limit = 150 }: UsePoemsMinimalOptions = {}) {
 	const query = useQuery({
 		queryKey: ['poems-minimal', { limit }],
 		staleTime: 1000 * 60 * 30,

@@ -1,4 +1,4 @@
-import {
+﻿import {
 	Avatar,
 	Box,
 	Button,
@@ -36,8 +36,8 @@ export function AuthorPage() {
 	} = useAuthorProfile(authorId);
 	const {
 		poems,
-		isLoading: isPoemsLoading,
-		isError: isPoemsError,
+		isLoading: isPoemasLoading,
+		isError: isPoemasError,
 	} = useAuthorPoems(authorId);
 	const { sendFriendRequest, isSending, isSuccess, errorMessage } =
 		useSendFriendRequest();
@@ -59,7 +59,7 @@ export function AuthorPage() {
 					isEmpty={!author}
 					loadingElement={<Text textStyle='body'>Carregando autor...</Text>}
 					errorElement={<Text textStyle='body'>Erro ao carregar autor.</Text>}
-					emptyElement={<Text textStyle='body'>Autor nao encontrado.</Text>}
+					emptyElement={<Text textStyle='body'>Autor não encontrado.</Text>}
 				>
 					{author && (
 						<Flex
@@ -86,7 +86,7 @@ export function AuthorPage() {
 								</Text>
 								<Text textStyle='small'>{author.bio || 'Sem bio'}</Text>
 								<Text textStyle='smaller' color='pink.200'>
-									Poemas: {author.stats.poemsCount} | Comentarios:{' '}
+									Poemas: {author.stats.poemsCount} | Comentários:{' '}
 									{author.stats.commentsCount} | Amigos:{' '}
 									{author.stats.friendsCount}
 								</Text>
@@ -123,8 +123,8 @@ export function AuthorPage() {
 				</Heading>
 
 				<AsyncState
-					isLoading={isPoemsLoading}
-					isError={isPoemsError}
+					isLoading={isPoemasLoading}
+					isError={isPoemasError}
 					isEmpty={poems.length === 0}
 					loadingElement={<Text textStyle='body'>Carregando poemas...</Text>}
 					errorElement={<Text textStyle='body'>Erro ao carregar poemas.</Text>}

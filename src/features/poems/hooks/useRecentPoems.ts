@@ -1,12 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 import type { PaginatedPoemsType } from '../types/types';
 
-type UseRecentPostsOptions = {
+type UseRecentPoemsOptions = {
 	limit?: number;
 };
 
-export function useRecentPosts({ limit = 4 }: UseRecentPostsOptions) {
+export function useRecentPoems({ limit = 4 }: UseRecentPoemsOptions) {
 	const query = useQuery({
 		queryKey: ['poems-recent', { limit }],
 		retry: 3,

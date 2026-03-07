@@ -1,3 +1,4 @@
+﻿/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -21,8 +22,8 @@ import {
 	usePoemLike,
 	useSavedPoems,
 } from '@features/interactions';
-import { usePost } from '../hooks/usePost';
-import { PostHeader } from '../components/PostHeader';
+import { usePoem } from '../hooks/usePoem';
+import { PoemHeader } from '../components/PoemHeader';
 import { CommentThread } from '../components/CommentThread';
 
 function parsePoemId(rawId: string | undefined) {
@@ -45,7 +46,7 @@ function getAuthClientId() {
 	}
 }
 
-type PostAuthorCardProps = {
+type PoemAuthorCardProps = {
 	author: {
 		id: number;
 		name: string;
@@ -59,11 +60,11 @@ type PostAuthorCardProps = {
 	children: React.ReactNode;
 };
 
-const PostAuthorCard = memo(function PostAuthorCard({
+const PoemAuthorCard = memo(function PoemAuthorCard({
 	author,
 	stats,
 	children,
-}: PostAuthorCardProps) {
+}: PoemAuthorCardProps) {
 	return (
 		<Flex
 			mt={6}
@@ -89,7 +90,7 @@ const PostAuthorCard = memo(function PostAuthorCard({
 					@{author.nickname}
 				</Text>
 				<Text textStyle='smaller' color='pink.200'>
-					Curtidas: {stats.likesCount} | Comentarios: {stats.commentsCount}
+					Curtidas: {stats.likesCount} | Comentários: {stats.commentsCount}
 				</Text>
 			</Flex>
 
@@ -102,7 +103,7 @@ const PostAuthorCard = memo(function PostAuthorCard({
 	);
 });
 
-type PostActionsProps = {
+type PoemActionsProps = {
 	authClientId: number;
 	likedPoem: boolean;
 	isSaved: boolean;
@@ -112,7 +113,7 @@ type PostActionsProps = {
 	onToggleSave: () => Promise<void>;
 };
 
-const PostActions = memo(function PostActions({
+const PoemActions = memo(function PoemActions({
 	authClientId,
 	likedPoem,
 	isSaved,
@@ -120,7 +121,7 @@ const PostActions = memo(function PostActions({
 	isSavingPoem,
 	onToggleLike,
 	onToggleSave,
-}: PostActionsProps) {
+}: PoemActionsProps) {
 	if (authClientId <= 0) return null;
 
 	return (
@@ -246,14 +247,14 @@ const CommentsSection = memo(function CommentsSection({
 			bg='rgba(255, 255, 255, 0.03)'
 		>
 			<Heading as='h2' textStyle='h3' mb={4}>
-				Comentarios
+				Comentários
 			</Heading>
 
 			<Flex direction='column' gap={3} mb={6}>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Escreva um comentario (1-300 caracteres)'
+					placeholder='Escreva um comentário (1-300 caracteres)'
 					rows={4}
 					maxLength={300}
 					disabled={!poemIsCommentable || isCreatingComment}
@@ -270,12 +271,12 @@ const CommentsSection = memo(function CommentsSection({
 							void onPublishComment();
 						}}
 					>
-						Publicar comentario
+						Publicar comentário
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>
-						Comentarios desativados para este poema.
+						Comentários desativados para este poema.
 					</Text>
 				)}
 			</Flex>
@@ -284,9 +285,9 @@ const CommentsSection = memo(function CommentsSection({
 				isLoading={isLoadingComments}
 				isError={isCommentsError}
 				isEmpty={comments.length === 0}
-				loadingElement={<Text textStyle='body'>Carregando comentarios...</Text>}
+				loadingElement={<Text textStyle='body'>Carregando comentários...</Text>}
 				errorElement={
-					<Text textStyle='body'>Erro ao carregar comentarios.</Text>
+					<Text textStyle='body'>Erro ao carregar comentários.</Text>
 				}
 				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
 			>
@@ -298,7 +299,7 @@ const CommentsSection = memo(function CommentsSection({
 	);
 });
 
-export function PostPage() {
+export function PoemPage() {
 	const { id } = useParams<{ id: string }>();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
 	const authClientId = useMemo(() => getAuthClientId(), []);
@@ -310,7 +311,7 @@ export function PostPage() {
 	>({});
 	const [likedPoem, setLikedPoem] = useState(false);
 
-	const { poem, isError, isLoading } = usePost(poemId);
+	const { poem, isError, isLoading } = usePoem(poemId);
 	const {
 		comments,
 		isLoadingComments,
@@ -333,10 +334,11 @@ export function PostPage() {
 		useSavedPoems(authClientId > 0);
 
 	const isSaved = useMemo(
-		() => savedPoems.some((savedPoem) => savedPoem.id === poemId),
+		() =>
+			savedPoems.some((savedPoem: { id: number }) => savedPoem.id === poemId),
 		[savedPoems, poemId],
 	);
-	const postHeaderPoem = useMemo(
+	const poemHeaderPoem = useMemo(
 		() =>
 			poem
 				? {
@@ -383,7 +385,7 @@ export function PostPage() {
 					toaster.create({
 						type: 'error',
 						title: 'Erro ao carregar respostas',
-						description: 'Nao foi possivel buscar algumas respostas.',
+						description: 'Não foi possivel buscar algumas respostas.',
 						closable: true,
 					});
 				})
@@ -403,7 +405,7 @@ export function PostPage() {
 		shownErrorsRef.current[key] = message;
 		toaster.create({
 			type: 'error',
-			title: 'Operacao falhou',
+			title: 'Operação falhou',
 			description: message,
 			closable: true,
 		});
@@ -438,7 +440,7 @@ export function PostPage() {
 			setCommentInput('');
 			toaster.create({
 				type: 'success',
-				title: 'Comentario publicado',
+				title: 'Comentário publicado',
 				closable: true,
 			});
 		} catch {
@@ -498,7 +500,7 @@ export function PostPage() {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>ID de poema invalido.</Box>
+					<Box textStyle='body'>ID de poema inválido.</Box>
 				</Box>
 			</Flex>
 		);
@@ -511,7 +513,7 @@ export function PostPage() {
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
-					emptyElement={<Box textStyle='body'>Poema nao encontrado</Box>}
+					emptyElement={<Box textStyle='body'>Poema não encontrado</Box>}
 					errorElement={
 						<Box textStyle='body'>
 							Erro ao carregar o poema. Tente novamente mais tarde
@@ -519,7 +521,7 @@ export function PostPage() {
 					}
 					loadingElement={<Box textStyle='body'>Carregando poema...</Box>}
 				>
-					{poem && postHeaderPoem && (
+					{poem && poemHeaderPoem && (
 						<>
 							<Box
 								p={[4, 6]}
@@ -530,11 +532,11 @@ export function PostPage() {
 								backdropFilter='blur(4px)'
 								mb={6}
 							>
-								<PostHeader poem={postHeaderPoem} />
+								<PoemHeader poem={poemHeaderPoem} />
 							</Box>
 
-							<PostAuthorCard author={poem.author} stats={poem.stats}>
-								<PostActions
+							<PoemAuthorCard author={poem.author} stats={poem.stats}>
+								<PoemActions
 									authClientId={authClientId}
 									likedPoem={likedPoem}
 									isSaved={isSaved}
@@ -543,7 +545,7 @@ export function PostPage() {
 									onToggleLike={handleTogglePoemLike}
 									onToggleSave={handleToggleSavePoem}
 								/>
-							</PostAuthorCard>
+							</PoemAuthorCard>
 
 							<Box
 								as='article'

@@ -1,4 +1,4 @@
-import ReactMarkdown from 'react-markdown';
+﻿import ReactMarkdown from 'react-markdown';
 // eslint-disable-next-line no-duplicate-imports
 import { type Components } from 'react-markdown';
 import { Heading, Text, Mark } from '@chakra-ui/react';

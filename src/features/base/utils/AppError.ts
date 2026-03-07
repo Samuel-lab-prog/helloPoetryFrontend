@@ -1,4 +1,4 @@
-export type AppErrorType = {
+﻿export type AppErrorType = {
 	statusCode?: number;
 	errorMessages?: string[];
 };
@@ -10,7 +10,7 @@ export class AppError extends Error {
 
 	constructor({
 		statusCode = 500,
-		errorMessages = ['Application Error'],
+		errorMessages = ['Erro na aplicação'],
 	}: AppErrorType = {}) {
 		super(errorMessages.join(', '));
 

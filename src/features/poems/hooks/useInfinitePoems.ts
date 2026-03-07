@@ -1,14 +1,14 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+﻿import { useInfiniteQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 import type { PaginatedPoemsType } from '../types/types';
 
 type OrderOption = 'newest' | 'oldest';
-type UseInfinitePostsOption = {
+type UseInfinitePoemsOption = {
 	order: OrderOption;
 	limit?: number;
 };
 
-export function useInfinitePosts({ order, limit = 8 }: UseInfinitePostsOption) {
+export function useInfinitePoems({ order, limit = 8 }: UseInfinitePoemsOption) {
 	const query = useInfiniteQuery({
 		queryKey: ['poems', { order, limit }],
 		staleTime: 1000 * 60 * 60 * 24 * 7,

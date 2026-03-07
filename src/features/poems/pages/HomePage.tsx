@@ -1,16 +1,16 @@
-import { Flex } from '@chakra-ui/react';
+﻿import { Flex } from '@chakra-ui/react';
 import { PoemCard } from '../components/PoemCard';
-import { PostGrid } from '../components/PostGrid';
-import { useRecentPosts } from '../hooks/useRecentPosts';
+import { PoemGrid } from '../components/PoemGrid';
+import { useRecentPoems } from '../hooks/useRecentPoems';
 import { AsyncState, Footer } from '@features/base';
 
 export function HomePage() {
-	const { poems, isError, isLoading } = useRecentPosts({ limit: 4 });
+	const { poems, isError, isLoading } = useRecentPoems({ limit: 4 });
 	return (
 		<>
 			<Flex as='main' layerStyle='main' direction='column'>
 				<Flex as='section' direction='column' w='full' py='4'>
-					<PostGrid>
+					<PoemGrid>
 						<AsyncState
 							isLoading={isLoading}
 							isError={isError}
@@ -29,15 +29,15 @@ export function HomePage() {
 								<PoemCard key={poem.id} poem={poem} />
 							))}
 						</AsyncState>
-					</PostGrid>
+					</PoemGrid>
 				</Flex>
 			</Flex>
 			<Footer
 				links={[
-					{ label: 'Home', to: '/' },
-					{ label: 'Poems', to: '/poems' },
-					{ label: 'Register', to: '/register' },
-					{ label: 'Login', to: '/login' },
+					{ label: 'Início', to: '/' },
+					{ label: 'Poemas', to: '/poems' },
+					{ label: 'Cadastrar', to: '/register' },
+					{ label: 'Entrar', to: '/login' },
 				]}
 			></Footer>
 		</>

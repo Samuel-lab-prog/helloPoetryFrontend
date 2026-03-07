@@ -1,5 +1,5 @@
-import { Flex, Heading } from '@chakra-ui/react';
-import { CreatePostForm } from '../components/CreatePostForm';
+﻿import { Flex, Heading } from '@chakra-ui/react';
+import { CreatePoemForm } from '../components/CreatePoemForm';
 
 export function CreatePoemPage() {
 	return (
@@ -24,7 +24,7 @@ export function CreatePoemPage() {
 				w='full'
 			>
 				<Flex direction='column' w='full' maxW='4xl'>
-					<CreatePostForm />
+					<CreatePoemForm />
 				</Flex>
 			</Flex>
 		</Flex>

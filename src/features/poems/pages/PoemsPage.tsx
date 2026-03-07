@@ -1,12 +1,12 @@
-import { Flex, Heading, Button } from '@chakra-ui/react';
+﻿import { Flex, Heading, Button } from '@chakra-ui/react';
 import { AsyncState, SelectField } from '@features/base';
 import { PoemCard } from '../components/PoemCard';
-import { PostGrid } from '../components/PostGrid';
-import { useInfinitePosts } from '../hooks/useInfinitePosts';
-import { usePostsFilters } from '../hooks/usePostsFilters';
+import { PoemGrid } from '../components/PoemGrid';
+import { useInfinitePoems } from '../hooks/useInfinitePoems';
+import { usePoemsFilters } from '../hooks/usePoemsFilters';
 
-export function PostsPage() {
-	const { control, order } = usePostsFilters();
+export function PoemsPage() {
+	const { control, order } = usePoemsFilters();
 	const {
 		poems,
 		isError,
@@ -14,7 +14,7 @@ export function PostsPage() {
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-	} = useInfinitePosts({ order });
+	} = useInfinitePoems({ order });
 
 	const orderOptions: { value: 'newest' | 'oldest'; label: string }[] = [
 		{ value: 'newest', label: 'Mais recentes' },
@@ -52,11 +52,11 @@ export function PostsPage() {
 					errorElement={<Flex textStyle='body'>Erro ao carregar poemas</Flex>}
 					loadingElement={<Flex textStyle='body'>Carregando poemas...</Flex>}
 				>
-					<PostGrid>
+					<PoemGrid>
 						{poems.map((poem) => (
 							<PoemCard key={poem.id} poem={poem} />
 						))}
-					</PostGrid>
+					</PoemGrid>
 				</AsyncState>
 			</Flex>
 

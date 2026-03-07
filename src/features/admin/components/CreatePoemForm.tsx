@@ -1,7 +1,7 @@
-import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
+﻿import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
 
-import { useCreatePostForm } from '../hooks/useCreatePostForm';
+import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview } from '../hooks/useUsersPreview';
 import {
 	FormField,
@@ -9,9 +9,9 @@ import {
 	TagsField,
 	MarkdownRenderer,
 } from '@features/base';
-import { PostHeader } from '@root/features/posts';
+import { PoemHeader } from '@features/poems';
 
-export function CreatePostForm() {
+export function CreatePoemForm() {
 	const {
 		handleSubmit,
 		formState: { errors, isValid },
@@ -20,7 +20,7 @@ export function CreatePostForm() {
 		generalError,
 		control,
 		watch,
-	} = useCreatePostForm();
+	} = useCreatePoemForm();
 	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
 
 	const preview = watch();
@@ -33,8 +33,8 @@ export function CreatePostForm() {
 		[users],
 	);
 
-	const previewPost = {
-		title: preview?.title || 'Titulo do poema',
+	const previewPoem = {
+		title: preview?.title || 'Título do poema',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -57,7 +57,7 @@ export function CreatePostForm() {
 				{generalError && <Text color='red.500'>{generalError}</Text>}
 
 				<FormField
-					label='Titulo'
+					label='Título'
 					required
 					error={errors.title}
 					control={control}
@@ -75,7 +75,7 @@ export function CreatePostForm() {
 				/>
 
 				<FormField
-					label='Conteudo (Markdown)'
+					label='Conteúdo (Markdown)'
 					required
 					as='textarea'
 					rows={20}
@@ -109,16 +109,16 @@ export function CreatePostForm() {
 					name='visibility'
 					control={control}
 					options={[
-						{ value: 'public', label: 'Publico' },
+						{ value: 'public', label: 'Público' },
 						{ value: 'friends', label: 'Amigos' },
 						{ value: 'private', label: 'Privado' },
-						{ value: 'unlisted', label: 'Nao listado' },
+						{ value: 'unlisted', label: 'Não listado' },
 					]}
 					error={errors.visibility}
 				/>
 
 				<SelectField
-					label='Comentarios'
+					label='Comentários'
 					name='isCommentable'
 					control={control}
 					options={[
@@ -130,14 +130,14 @@ export function CreatePostForm() {
 				/>
 
 				<SelectField
-					label='Dedicado para'
+					label='Dedicado a'
 					name='toUserIds'
 					control={control}
 					placeholder={
-						isLoadingUsers ? 'Carregando usuarios...' : 'Sem dedicacao'
+						isLoadingUsers ? 'Carregando usuários...' : 'Sem dedicação'
 					}
 					options={[
-						{ value: 'none', label: 'Sem dedicacao' },
+						{ value: 'none', label: 'Sem dedicação' },
 						...dedicationOptions,
 					]}
 					transformValue={(value) =>
@@ -148,7 +148,7 @@ export function CreatePostForm() {
 				/>
 				{isUsersError && (
 					<Text textStyle='small' color='red.400'>
-						Erro ao carregar usuarios para dedicacao.
+						Erro ao carregar usuários para dedicação.
 					</Text>
 				)}
 
@@ -165,26 +165,26 @@ export function CreatePostForm() {
 			</Flex>
 
 			<Heading as='h2' textStyle='h2' mt={12}>
-				Preview
+				Pré-visualização
 			</Heading>
 
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formulario para visualizar o preview do poema
+						Preencha o formulário para visualizar a pré-visualização do poema
 					</Box>
 				) : (
 					<>
-						<PostHeader
+						<PoemHeader
 							poem={{
-								title: previewPost.title,
-								excerpt: previewPost.excerpt,
-								tags: previewPost.tags.map((tag: string, index: number) => ({
+								title: previewPoem.title,
+								excerpt: previewPoem.excerpt,
+								tags: previewPoem.tags.map((tag: string, index: number) => ({
 									id: index,
 									name: tag,
 								})),
-								createdAt: previewPost.createdAt,
-								updatedAt: previewPost.createdAt,
+								createdAt: previewPoem.createdAt,
+								updatedAt: previewPoem.createdAt,
 							}}
 						/>
 
@@ -196,7 +196,7 @@ export function CreatePostForm() {
 							wordBreak='break-word'
 							textStyle='small'
 						>
-							<MarkdownRenderer content={previewPost.content} />
+							<MarkdownRenderer content={previewPoem.content} />
 						</Box>
 					</>
 				)}

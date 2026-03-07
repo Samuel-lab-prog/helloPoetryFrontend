@@ -1,4 +1,4 @@
-import { Card, Text, Badge, Flex, Link, Box } from '@chakra-ui/react';
+﻿import { Card, Text, Badge, Flex, Link, Box } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import type { PoemPreviewType } from '../types/types';
 

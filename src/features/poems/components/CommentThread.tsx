@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function */
+﻿/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, Flex, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
@@ -204,7 +204,7 @@ export const CommentThread = memo(function CommentThread({
 						<Textarea
 							value={replyInput}
 							onChange={(e) => setReplyInput(e.target.value)}
-							placeholder='Responder comentario'
+							placeholder='Responder comentário'
 							rows={3}
 							maxLength={300}
 							disabled={!poemIsCommentable || isCreatingComment}

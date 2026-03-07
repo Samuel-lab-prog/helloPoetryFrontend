@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
@@ -33,11 +33,11 @@ export function useRegisterForm() {
 			const error = err as AppErrorType;
 
 			if (error.statusCode === 409) {
-				setGeneralError('Nickname or e-mail already in use.');
+				setGeneralError('Apelido ou e-mail já está em uso.');
 				return;
 			}
 
-			setGeneralError('Network error, please try again.');
+			setGeneralError('Erro de rede. Tente novamente.');
 		},
 	});
 

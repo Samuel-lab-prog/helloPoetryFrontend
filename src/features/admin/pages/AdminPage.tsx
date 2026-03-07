@@ -1,8 +1,8 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Flex, Heading, Button } from '@chakra-ui/react';
-import { CreatePostForm } from '../components/CreatePostForm';
-import { UpdatePostForm } from '../components/UpdatePostForm';
-import { DeletePostForm } from '../components/DeletePostForm';
+import { CreatePoemForm } from '../components/CreatePoemForm';
+import { UpdatePoemForm } from '../components/UpdatePoemForm';
+import { DeletePoemForm } from '../components/DeletePoemForm';
 
 type ActiveForm = 'create' | 'update' | 'delete';
 
@@ -19,7 +19,7 @@ export function AdminPage() {
 				w='full'
 			>
 				<Heading as='h1' textStyle='h1' mb={6}>
-					Admin Dashboard
+					Painel Administrativo
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
 					<Button variant='solidPink' onClick={() => setActiveForm('create')}>
@@ -46,7 +46,7 @@ export function AdminPage() {
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Criar Poema
 							</Heading>
-							<CreatePostForm />
+							<CreatePoemForm />
 						</>
 					)}
 
@@ -55,7 +55,7 @@ export function AdminPage() {
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Atualizar Poema
 							</Heading>
-							<UpdatePostForm />
+							<UpdatePoemForm />
 						</>
 					)}
 
@@ -64,7 +64,7 @@ export function AdminPage() {
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Deletar Poema
 							</Heading>
-							<DeletePostForm />
+							<DeletePoemForm />
 						</>
 					)}
 				</Flex>

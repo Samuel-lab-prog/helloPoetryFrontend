@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@chakra-ui/react';
+﻿import { Flex, Heading, Text } from '@chakra-ui/react';
 import { LoginForm } from '../components/LoginForm';
 
 export function LoginPage() {
@@ -19,11 +19,11 @@ export function LoginPage() {
 					textAlign='center'
 				>
 					<Heading as='h1' textStyle='h1' color='accent'>
-						Login
+						Entrar
 					</Heading>
 
 					<Text textStyle='small' color='pink.100'>
-						Please enter your credentials to log in.
+						Informe suas credenciais para entrar.
 					</Text>
 				</Flex>
 

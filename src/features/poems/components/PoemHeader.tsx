@@ -1,8 +1,8 @@
-import { formatDate } from '@features/base';
-import { Tag } from './PostTag';
+﻿import { formatDate } from '@features/base';
+import { Tag } from './PoemTag';
 import { Heading, Text, Flex, VStack } from '@chakra-ui/react';
 
-type PostHeaderProps = {
+type PoemHeaderProps = {
 	poem: {
 		title: string;
 		excerpt: string | null;
@@ -12,7 +12,7 @@ type PostHeaderProps = {
 	};
 };
 
-export function PostHeader({ poem }: PostHeaderProps) {
+export function PoemHeader({ poem }: PoemHeaderProps) {
 	const { title, excerpt, tags, createdAt, updatedAt } = poem;
 
 	return (

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @file Interactions feature barrel
  */
 

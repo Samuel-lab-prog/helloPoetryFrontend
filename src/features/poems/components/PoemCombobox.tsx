@@ -22,7 +22,7 @@ interface Props<T extends FieldValues> {
 	name: Path<T>;
 }
 
-export function PostCombobox<T extends FieldValues>({
+export function PoemCombobox<T extends FieldValues>({
 	name,
 	error,
 	control,

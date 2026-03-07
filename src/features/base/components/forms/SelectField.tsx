@@ -1,4 +1,4 @@
-import { Box, Field, NativeSelect } from '@chakra-ui/react';
+﻿import { Box, Field, NativeSelect } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
 	Controller,
@@ -22,7 +22,7 @@ interface SelectFieldProps<T extends FieldValues> {
 	required?: boolean;
 	placeholder?: string;
 	disabled?: boolean;
-	transformValue?: (value: string) => unknown; // ← nova prop
+	transformValue?: (value: string) => unknown; // â† nova prop
 }
 
 export function SelectField<T extends FieldValues>({

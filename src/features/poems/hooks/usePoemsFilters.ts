@@ -1,14 +1,14 @@
-import { useSearchParams } from 'react-router-dom';
+﻿import { useSearchParams } from 'react-router-dom';
 import { useForm, type Control } from 'react-hook-form';
 import { useEffect } from 'react';
 export type OrderOption = 'newest' | 'oldest';
 
-type UsePostFiltersReturn = {
+type UsePoemFiltersReturn = {
 	control: Control<{ order: OrderOption }>;
 	order: OrderOption;
 };
 
-export function usePostsFilters(): UsePostFiltersReturn {
+export function usePoemsFilters(): UsePoemFiltersReturn {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const initialOrder = (searchParams.get('order') as OrderOption) || 'newest';
 

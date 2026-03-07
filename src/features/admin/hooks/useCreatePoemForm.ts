@@ -1,16 +1,16 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPostSchema, type CreatePostType } from '../schemas/schemas';
+import { createPoemSchema, type CreatePoemType } from '../schemas/schemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppError } from '@features/base';
 
-export function useCreatePostForm() {
+export function useCreatePoemForm() {
 	const queryClient = useQueryClient();
 	const [generalError, setGeneralError] = useState('');
 
-	const form = useForm<CreatePostType>({
-		resolver: zodResolver(createPostSchema),
+	const form = useForm<CreatePoemType>({
+		resolver: zodResolver(createPoemSchema),
 		mode: 'onChange',
 		defaultValues: {
 			status: 'draft',
@@ -21,16 +21,16 @@ export function useCreatePostForm() {
 		},
 	});
 
-	const { mutateAsync, isPending } = useCreatePost();
+	const { mutateAsync, isPending } = useCreatePoem();
 
-	async function onSubmit(data: CreatePostType) {
+	async function onSubmit(data: CreatePoemType) {
 		try {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			queryClient.invalidateQueries({ queryKey: ['poems'] });
 			alert('Poema criado com sucesso!');
 		} catch (err) {
-			handleCreatePostError(err, form.setError, setGeneralError);
+			handleCreatePoemError(err, form.setError, setGeneralError);
 		}
 	}
 
@@ -46,9 +46,9 @@ export function useCreatePostForm() {
 	};
 }
 
-function handleCreatePostError(
+function handleCreatePoemError(
 	err: unknown,
-	setError: UseFormSetError<CreatePostType>,
+	setError: UseFormSetError<CreatePoemType>,
 	setGeneralError: (msg: string) => void,
 ) {
 	const error = err as AppError;
@@ -56,33 +56,33 @@ function handleCreatePostError(
 	const message = error?.errorMessages?.join(' ');
 
 	if (status === 401) {
-		setGeneralError('Voce nao tem permissao para criar poemas.');
+		setGeneralError('Você não tem permissao para criar poemas.');
 		return;
 	}
 
 	if (status === 409 && message?.includes('slug')) {
 		setError('title', {
 			type: 'manual',
-			message: 'Ja existe um poema com esse titulo.',
+			message: 'Ja existe um poema com esse título.',
 		});
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados invalidos. Verifique os campos e tente novamente.');
+		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
 		return;
 	}
 
 	setGeneralError('Erro ao criar poema. Tente novamente mais tarde.');
 }
 
-function useCreatePost() {
+function useCreatePoem() {
 	return useMutation({
-		mutationFn: (newPost: CreatePostType) =>
-			createHTTPRequest<{ id: number }, CreatePostType>({
+		mutationFn: (newPoem: CreatePoemType) =>
+			createHTTPRequest<{ id: number }, CreatePoemType>({
 				path: '/poems',
 				method: 'POST',
-				body: newPost,
+				body: newPoem,
 			}),
 	});
 }

@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 import type { FullPoemType } from '../types/types';
 
-export function usePost(id: number) {
+export function usePoem(id: number) {
 	const query = useQuery({
 		queryKey: ['poem', id],
 		retry: 3,

@@ -1,4 +1,4 @@
-import type { AppErrorType } from '../utils/AppError';
+﻿import type { AppErrorType } from '../utils/AppError';
 
 export function formatDate(
 	date: Date | string,

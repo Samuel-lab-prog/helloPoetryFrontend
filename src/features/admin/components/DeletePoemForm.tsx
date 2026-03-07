@@ -1,10 +1,10 @@
-import { Flex, Button, Text } from '@chakra-ui/react';
-import { useDeletePostForm } from '../hooks/useDeleteForm';
-import { usePostsMinimal } from '../hooks/usePostsMinimal';
-import { PostCombobox } from '@features/posts';
+﻿import { Flex, Button, Text } from '@chakra-ui/react';
+import { useDeletePoemForm } from '../hooks/useDeletePoemForm';
+import { usePoemsMinimal } from '../hooks/usePoemsMinimal';
+import { PoemCombobox } from '@features/poems';
 
-export function DeletePostForm() {
-	const { poems } = usePostsMinimal();
+export function DeletePoemForm() {
+	const { poems } = usePoemsMinimal();
 
 	const {
 		handleSubmit,
@@ -13,7 +13,7 @@ export function DeletePostForm() {
 		control,
 		isPending,
 		generalError,
-	} = useDeletePostForm();
+	} = useDeletePoemForm();
 
 	return (
 		<Flex
@@ -25,7 +25,7 @@ export function DeletePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox name='id' poems={poems} control={control} />
+			<PoemCombobox name='id' poems={poems} control={control} />
 
 			<Button
 				type='submit'

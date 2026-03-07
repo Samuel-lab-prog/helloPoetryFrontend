@@ -1,7 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
-import { AuthorPage, PostPage, PostsPage, HomePage } from '@features/posts';
+import { AuthorPage, PoemPage, PoemsPage, HomePage } from '@features/poems';
 import {
 	LoginPage,
 	MyProfilePage,
@@ -14,15 +14,15 @@ export default function App() {
 	const isAuthenticated = !!localStorage.getItem('auth-client');
 
 	const navLinks = [
-		{ to: '/', label: 'Home' },
-		{ to: '/poems', label: 'Poems' },
-		...(isAuthenticated ? [{ to: '/poems/new', label: 'Create Poem' }] : []),
-		...(isAuthenticated ? [{ to: '/my-profile', label: 'My Profile' }] : []),
+		{ to: '/', label: 'Início' },
+		{ to: '/poems', label: 'Poemas' },
+		...(isAuthenticated ? [{ to: '/poems/new', label: 'Criar Poema' }] : []),
+		...(isAuthenticated ? [{ to: '/my-profile', label: 'Meu Perfil' }] : []),
 		...(isAuthenticated
-			? [{ to: '/notifications', label: 'Notifications' }]
+			? [{ to: '/notifications', label: 'Notificações' }]
 			: []),
-		{ label: 'Register', to: '/register' },
-		{ label: 'Login', to: '/login' },
+		{ label: 'Cadastrar', to: '/register' },
+		{ label: 'Entrar', to: '/login' },
 	];
 
 	const router = createBrowserRouter([
@@ -32,8 +32,8 @@ export default function App() {
 			errorElement: <ErrorPage />,
 			children: [
 				{ index: true, element: <HomePage /> },
-				{ path: 'poems', element: <PostsPage /> },
-				{ path: 'poems/:slug/:id', element: <PostPage /> },
+				{ path: 'poems', element: <PoemsPage /> },
+				{ path: 'poems/:slug/:id', element: <PoemPage /> },
 				{ path: 'authors/:id', element: <AuthorPage /> },
 				{ path: '/login', element: <LoginPage /> },
 				{ path: '/register', element: <RegisterPage /> },

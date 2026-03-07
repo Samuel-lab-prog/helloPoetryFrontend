@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
 export type PoemCommentType = {
@@ -110,28 +110,28 @@ export function usePoemComments(poemId: number) {
 	function getErrorMessage() {
 		const error = mutation.error as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 404) return 'Poema nao encontrado.';
-		if (error.statusCode === 403) return 'Voce nao pode comentar neste poema.';
-		if (error.statusCode === 422) return 'Comentario invalido (1-300 chars).';
-		return 'Erro ao enviar comentario.';
+		if (error.statusCode === 404) return 'Poema não encontrado.';
+		if (error.statusCode === 403) return 'Você não pode comentar neste poema.';
+		if (error.statusCode === 422) return 'Comentário inválido (1-300 chars).';
+		return 'Erro ao enviar comentário.';
 	}
 
 	function getDeleteErrorMessage() {
 		const error = deleteMutation.error as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 403)
-			return 'Voce nao pode deletar este comentario.';
-		if (error.statusCode === 404) return 'Comentario nao encontrado.';
-		return 'Erro ao deletar comentario.';
+			return 'Você não pode deletar este comentário.';
+		if (error.statusCode === 404) return 'Comentário não encontrado.';
+		return 'Erro ao deletar comentário.';
 	}
 
 	function getLikeCommentErrorMessage() {
 		const error = (likeCommentMutation.error ||
 			unlikeCommentMutation.error) as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 404) return 'Comentario nao encontrado.';
-		if (error.statusCode === 409) return 'Estado de curtida invalido.';
-		return 'Erro ao atualizar curtida do comentario.';
+		if (error.statusCode === 404) return 'Comentário não encontrado.';
+		if (error.statusCode === 409) return 'Estado de curtida inválido.';
+		return 'Erro ao atualizar curtida do comentário.';
 	}
 
 	return {

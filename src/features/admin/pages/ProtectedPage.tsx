@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Center, Spinner, Heading, Text } from '@chakra-ui/react';
@@ -24,9 +24,8 @@ export function ProtectedRoutePage() {
 				setIsAuthenticated(true);
 			} catch (error: unknown) {
 				const typedError = error as AppError;
-				if (typedError.statusCode === 401) {
-					navigate('/');
-				}
+				if (typedError.statusCode === 401) navigate('/');
+
 				setIsAuthenticated(false);
 			}
 		}
@@ -34,14 +33,13 @@ export function ProtectedRoutePage() {
 		authUser();
 	}, [authenticate, navigate]);
 
-	if (isAuthenticated === null) {
+	if (isAuthenticated === null)
 		return (
 			<Center h='100vh'>
 				<Spinner size='xl' />
 				<Text ml={4}>Carregando...</Text>
 			</Center>
 		);
-	}
 
 	return isAuthenticated ? (
 		<Outlet />

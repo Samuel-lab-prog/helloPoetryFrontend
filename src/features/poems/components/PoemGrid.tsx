@@ -1,11 +1,11 @@
-import { Grid } from '@chakra-ui/react';
+﻿import { Grid } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
 
-type PostGridProps = {
+type PoemGridProps = {
 	children: ReactNode;
 };
 
-export function PostGrid({ children }: PostGridProps) {
+export function PoemGrid({ children }: PoemGridProps) {
 	return (
 		<Grid
 			templateColumns={[

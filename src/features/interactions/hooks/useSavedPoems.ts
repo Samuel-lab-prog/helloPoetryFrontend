@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
 type SavedPoemType = {
@@ -44,7 +44,7 @@ export function useSavedPoems(enabled = true) {
 			unsaveMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faca login para salvar poemas.';
-		if (error.statusCode === 404) return 'Poema nao encontrado.';
+		if (error.statusCode === 404) return 'Poema não encontrado.';
 		if (error.statusCode === 409) return 'Poema ja esta salvo.';
 		return 'Erro ao atualizar poema salvo.';
 	}

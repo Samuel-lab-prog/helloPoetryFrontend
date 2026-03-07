@@ -1,4 +1,4 @@
-import { Flex, Heading, Text } from '@chakra-ui/react';
+﻿import { Flex, Heading, Text } from '@chakra-ui/react';
 import { RegisterForm } from '../components/RegisterForm';
 
 export function RegisterPage() {
@@ -13,11 +13,11 @@ export function RegisterPage() {
 					textAlign='center'
 				>
 					<Heading as='h1' textStyle='h1' color='accent'>
-						Create account
+						Criar conta
 					</Heading>
 
 					<Text textStyle='small' color='pink.100'>
-						Fill in your details to create your account.
+						Preencha seus dados para criar sua conta.
 					</Text>
 				</Flex>
 

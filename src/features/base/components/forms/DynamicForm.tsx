@@ -1,5 +1,4 @@
-import { Text } from '@chakra-ui/react';
-import type { ButtonProps } from '@chakra-ui/react';
+﻿import { Text, type ButtonProps } from '@chakra-ui/react';
 import { FieldContainer } from './FieldContainer';
 import { FormCard } from './FormCard';
 import { FormField } from './FormField';

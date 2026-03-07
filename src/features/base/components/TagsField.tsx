@@ -1,4 +1,4 @@
-import { Box, Field, TagsInput } from '@chakra-ui/react';
+﻿import { Box, Field, TagsInput } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
 	Controller,
@@ -105,7 +105,6 @@ export function TagsField<T extends FieldValues>({
 											bg='transparent'
 											color='pink.100'
 											_highlighted={{
-												filter: 'brightness(1.08)',
 												color: 'pink.50',
 											}}
 										>

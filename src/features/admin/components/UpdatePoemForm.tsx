@@ -1,12 +1,12 @@
-import { Flex, Button, Text } from '@chakra-ui/react';
+﻿import { Flex, Button, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useUpdatePostForm } from '../hooks/useUpdatePostForm';
-import { usePostsMinimal } from '../hooks/usePostsMinimal';
-import { usePost, PostCombobox } from '@features/posts';
+import { useUpdatePoemForm } from '../hooks/useUpdatePoemForm';
+import { usePoemsMinimal } from '../hooks/usePoemsMinimal';
+import { usePoem, PoemCombobox } from '@features/poems';
 import { FormField, SelectField, TagsField } from '@features/base';
 
-export function UpdatePostForm() {
-	const { poems } = usePostsMinimal();
+export function UpdatePoemForm() {
+	const { poems } = usePoemsMinimal();
 
 	const {
 		control,
@@ -17,17 +17,17 @@ export function UpdatePostForm() {
 		onSubmit,
 		isPending,
 		generalError,
-	} = useUpdatePostForm();
+	} = useUpdatePoemForm();
 
-	const postId = watch('id');
-	const { poem, isLoading } = usePost(postId);
+	const poemId = watch('id');
+	const { poem, isLoading } = usePoem(poemId);
 
 	useEffect(() => {
 		if (!poem) return;
 		reset({
 			id: poem.id,
 			title: poem.title,
-			excerpt: poem.excerpt,
+			excerpt: poem.excerpt ?? undefined,
 			content: poem.content,
 			status: poem.status,
 			visibility: poem.visibility,
@@ -46,15 +46,15 @@ export function UpdatePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox name='id' control={control} poems={poems} />
+			<PoemCombobox name='id' control={control} poems={poems} />
 
 			<FormField
-				label='Titulo'
+				label='Título'
 				control={control}
 				name='title'
 				error={errors.title}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<SelectField
@@ -67,7 +67,7 @@ export function UpdatePostForm() {
 				]}
 				error={errors.status}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<SelectField
@@ -75,18 +75,18 @@ export function UpdatePostForm() {
 				name='visibility'
 				control={control}
 				options={[
-					{ value: 'public', label: 'Publico' },
+					{ value: 'public', label: 'Público' },
 					{ value: 'friends', label: 'Amigos' },
 					{ value: 'private', label: 'Privado' },
-					{ value: 'unlisted', label: 'Nao listado' },
+					{ value: 'unlisted', label: 'Não listado' },
 				]}
 				error={errors.visibility}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<SelectField
-				label='Comentarios'
+				label='Comentários'
 				name='isCommentable'
 				control={control}
 				options={[
@@ -96,7 +96,7 @@ export function UpdatePostForm() {
 				transformValue={(value) => value === 'true'}
 				error={errors.isCommentable}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<FormField
@@ -107,18 +107,18 @@ export function UpdatePostForm() {
 				name='excerpt'
 				error={errors.excerpt}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<FormField
-				label='Conteudo (Markdown)'
+				label='Conteúdo (Markdown)'
 				as='textarea'
 				rows={20}
 				control={control}
 				name='content'
 				error={errors.content}
 				required
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 			/>
 
 			<TagsField
@@ -126,7 +126,7 @@ export function UpdatePostForm() {
 				control={control}
 				name='tags'
 				error={errors.tags}
-				disabled={isLoading || !postId}
+				disabled={isLoading || !poemId}
 				placeholder='Adicione suas tags'
 			/>
 

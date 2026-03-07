@@ -1,4 +1,4 @@
-export type FullPoemType = {
+﻿export type FullPoemType = {
 	tags: {
 		name: string;
 		id: number;
@@ -21,6 +21,7 @@ export type FullPoemType = {
 	stats: {
 		likesCount: number;
 		commentsCount: number;
+		likedByCurrentUser: boolean;
 	};
 	updatedAt: Date;
 };

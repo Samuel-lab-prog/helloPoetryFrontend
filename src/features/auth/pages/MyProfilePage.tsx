@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+﻿import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useMyProfile } from '../hooks/useMyProfile';
@@ -27,7 +27,7 @@ export function MyProfilePage() {
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='4xl'>
 				<Heading as='h1' textStyle='h1' mb={8}>
-					My Profile
+					Meu Perfil
 				</Heading>
 
 				<AsyncState
@@ -36,7 +36,7 @@ export function MyProfilePage() {
 					isEmpty={!profile}
 					loadingElement={<Text textStyle='body'>Carregando perfil...</Text>}
 					errorElement={<Text textStyle='body'>Erro ao carregar perfil.</Text>}
-					emptyElement={<Text textStyle='body'>Perfil nao encontrado.</Text>}
+					emptyElement={<Text textStyle='body'>Perfil não encontrado.</Text>}
 				>
 					{profile && (
 						<Flex
@@ -61,7 +61,7 @@ export function MyProfilePage() {
 									Poemas: {profile.stats.poemsIds.length}
 								</Text>
 								<Text textStyle='small'>
-									Comentarios: {profile.stats.commentsIds.length}
+									Comentários: {profile.stats.commentsIds.length}
 								</Text>
 								<Text textStyle='small'>
 									Amigos: {profile.stats.friendsIds.length}
@@ -70,11 +70,11 @@ export function MyProfilePage() {
 
 							<Flex direction='column' gap={3} mt={4}>
 								<Heading as='h2' textStyle='h4'>
-									Solicitacoes de amizade recebidas
+									Solicitações de amizade recebidas
 								</Heading>
 
 								{profile.friendshipRequestsReceived.length === 0 && (
-									<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+									<Text textStyle='small'>Nenhuma solicitação pendente.</Text>
 								)}
 
 								{profile.friendshipRequestsReceived.map((request) => (
@@ -128,7 +128,7 @@ export function MyProfilePage() {
 								)}
 
 								{!isLoadingSavedPoems && savedPoems.length === 0 && (
-									<Text textStyle='small'>Voce ainda nao salvou poemas.</Text>
+									<Text textStyle='small'>Você ainda não salvou poemas.</Text>
 								)}
 
 								{savedPoems.map((poem) => (
