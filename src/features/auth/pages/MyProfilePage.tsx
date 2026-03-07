@@ -46,10 +46,15 @@ export function MyProfilePage() {
 							Entre para ver seu perfil
 						</Heading>
 						<Text textStyle='body' color='pink.100'>
-							Acompanhe poemas salvos, pedidos de amizade e suas estatisticas em um unico lugar.
+							Acompanhe poemas salvos, pedidos de amizade e suas estatisticas em
+							um unico lugar.
 						</Text>
 						<HStack gap={3} wrap='wrap'>
-							<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
+							<Button
+								size={{ base: 'sm', md: 'md' }}
+								variant='solidPink'
+								asChild
+							>
 								<NavLink to='/login'>Entrar</NavLink>
 							</Button>
 							<Button
@@ -108,21 +113,51 @@ export function MyProfilePage() {
 								templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
 								gap={4}
 							>
-								<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-									<Text textStyle='smaller' color='pink.200'>Poemas</Text>
+								<Box
+									p={4}
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='xl'
+									bg='rgba(255, 255, 255, 0.02)'
+								>
+									<Text textStyle='smaller' color='pink.200'>
+										Poemas
+									</Text>
 									<Text textStyle='h3'>{profile.stats.poemsIds.length}</Text>
 								</Box>
-								<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-									<Text textStyle='smaller' color='pink.200'>Comentários</Text>
+								<Box
+									p={4}
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='xl'
+									bg='rgba(255, 255, 255, 0.02)'
+								>
+									<Text textStyle='smaller' color='pink.200'>
+										Comentários
+									</Text>
 									<Text textStyle='h3'>{profile.stats.commentsIds.length}</Text>
 								</Box>
-								<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-									<Text textStyle='smaller' color='pink.200'>Amigos</Text>
+								<Box
+									p={4}
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='xl'
+									bg='rgba(255, 255, 255, 0.02)'
+								>
+									<Text textStyle='smaller' color='pink.200'>
+										Amigos
+									</Text>
 									<Text textStyle='h3'>{profile.stats.friendsIds.length}</Text>
 								</Box>
 							</Grid>
 
-							<Box p={5} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
+							<Box
+								p={5}
+								border='1px solid'
+								borderColor='purple.700'
+								borderRadius='xl'
+								bg='rgba(255, 255, 255, 0.02)'
+							>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Solicitações de amizade recebidas
 								</Heading>
@@ -144,7 +179,9 @@ export function MyProfilePage() {
 											borderColor='purple.700'
 											borderRadius='md'
 										>
-											<Text textStyle='small'>@{request.requesterNickname}</Text>
+											<Text textStyle='small'>
+												@{request.requesterNickname}
+											</Text>
 											<Flex gap={2}>
 												<Button
 													size={{ base: 'xs', md: 'sm' }}
@@ -175,7 +212,13 @@ export function MyProfilePage() {
 								)}
 							</Box>
 
-							<Box p={5} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
+							<Box
+								p={5}
+								border='1px solid'
+								borderColor='purple.700'
+								borderRadius='xl'
+								bg='rgba(255, 255, 255, 0.02)'
+							>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Poemas salvos
 								</Heading>
@@ -202,7 +245,11 @@ export function MyProfilePage() {
 											borderRadius='md'
 										>
 											<Text textStyle='small'>{poem.title}</Text>
-											<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' asChild>
+											<Button
+												size={{ base: 'xs', md: 'sm' }}
+												variant='solidPink'
+												asChild
+											>
 												<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 													Abrir
 												</NavLink>

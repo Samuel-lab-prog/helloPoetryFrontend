@@ -41,12 +41,14 @@ function getNotificationLink(item: NotificationItem) {
 	const poemId = item.data?.poemId;
 	if (poemId && poemId > 0) return `/poems/${poemId}`;
 
-	if (item.entityType === 'POEM' && item.entityId) return `/poems/${item.entityId}`;
+	if (item.entityType === 'POEM' && item.entityId)
+		return `/poems/${item.entityId}`;
 
 	const userId = item.data?.newFriendId ?? item.data?.requesterId;
 	if (userId && userId > 0) return `/authors/${userId}`;
 
-	if (item.entityType === 'USER' && item.entityId) return `/authors/${item.entityId}`;
+	if (item.entityType === 'USER' && item.entityId)
+		return `/authors/${item.entityId}`;
 
 	return null;
 }

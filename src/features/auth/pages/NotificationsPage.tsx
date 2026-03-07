@@ -1,5 +1,13 @@
 import { useMemo, useState } from 'react';
-import { Badge, Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import {
+	Badge,
+	Box,
+	Button,
+	Flex,
+	Heading,
+	HStack,
+	Text,
+} from '@chakra-ui/react';
 import { AsyncState } from '@features/base';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
 import { NotificationCard } from '../components/NotificationCard';
@@ -67,9 +75,15 @@ export function NotificationsPage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={notifications.length === 0}
-					loadingElement={<Text textStyle='body'>Carregando notificações...</Text>}
-					errorElement={<Text textStyle='body'>Erro ao carregar notificações.</Text>}
-					emptyElement={<Text textStyle='body'>Nenhuma notificação encontrada.</Text>}
+					loadingElement={
+						<Text textStyle='body'>Carregando notificações...</Text>
+					}
+					errorElement={
+						<Text textStyle='body'>Erro ao carregar notificações.</Text>
+					}
+					emptyElement={
+						<Text textStyle='body'>Nenhuma notificação encontrada.</Text>
+					}
 				>
 					<Flex direction='column' gap={3}>
 						{notifications.map((item) => (

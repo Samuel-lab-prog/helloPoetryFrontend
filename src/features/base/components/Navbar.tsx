@@ -11,7 +11,18 @@
 	Link,
 	Text,
 } from '@chakra-ui/react';
-import { Menu, X } from 'lucide-react';
+import {
+	Bell,
+	BookOpen,
+	House,
+	LogIn,
+	Menu,
+	PenSquare,
+	User,
+	UserPlus,
+	Users,
+	X,
+} from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 
 /* ---------------- LOGO ---------------- */
@@ -70,6 +81,28 @@ const MenuLinks = ({
 	onLinkClick?: () => void;
 }) => {
 	const Container = isMobile || isSidebar ? VStack : HStack;
+	const getLinkIcon = (to: string) => {
+		switch (to) {
+			case '/':
+				return House;
+			case '/poems':
+				return BookOpen;
+			case '/poets':
+				return Users;
+			case '/poems/new':
+				return PenSquare;
+			case '/my-profile':
+				return User;
+			case '/notifications':
+				return Bell;
+			case '/register':
+				return UserPlus;
+			case '/login':
+				return LogIn;
+			default:
+				return BookOpen;
+		}
+	};
 
 	return (
 		<Container
@@ -98,7 +131,12 @@ const MenuLinks = ({
 						bg: 'rgba(255, 143, 189, 0.14)',
 					}}
 				>
-					<NavLink to={link.to}>{link.label}</NavLink>
+					<NavLink to={link.to}>
+						<HStack gap={2}>
+							<Icon as={getLinkIcon(link.to)} boxSize={4} />
+							<Text>{link.label}</Text>
+						</HStack>
+					</NavLink>
 				</Link>
 			))}
 		</Container>

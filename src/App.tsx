@@ -1,7 +1,13 @@
 ﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
-import { AuthorPage, PoemPage, PoemsPage, HomePage } from '@features/poems';
+import {
+	AuthorPage,
+	HomePage,
+	PoemPage,
+	PoemsPage,
+	PoetsPage,
+} from '@features/poems';
 import {
 	LoginPage,
 	MyProfilePage,
@@ -16,6 +22,7 @@ export default function App() {
 	const navLinks = [
 		{ to: '/', label: 'Início' },
 		{ to: '/poems', label: 'Poemas' },
+		{ to: '/poets', label: 'Poetas' },
 		...(isAuthenticated ? [{ to: '/poems/new', label: 'Criar' }] : []),
 		...(isAuthenticated ? [{ to: '/my-profile', label: 'Meu Perfil' }] : []),
 		...(isAuthenticated
@@ -33,6 +40,7 @@ export default function App() {
 			children: [
 				{ index: true, element: <HomePage /> },
 				{ path: 'poems', element: <PoemsPage /> },
+				{ path: 'poets', element: <PoetsPage /> },
 				{ path: 'poems/:slug/:id', element: <PoemPage /> },
 				{ path: 'authors/:id', element: <AuthorPage /> },
 				{ path: '/login', element: <LoginPage /> },

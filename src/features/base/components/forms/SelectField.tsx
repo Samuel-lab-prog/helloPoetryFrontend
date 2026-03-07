@@ -125,7 +125,9 @@ export function SelectField<T extends FieldValues>({
 							h='70%'
 							right={1}
 							borderRadius='md'
-							bg={hasError ? 'rgba(239,68,68,0.14)' : 'rgba(255, 255, 255, 0.05)'}
+							bg={
+								hasError ? 'rgba(239,68,68,0.14)' : 'rgba(255, 255, 255, 0.05)'
+							}
 							border='1px solid'
 							borderColor={hasError ? 'red.400' : 'purple.600'}
 							color={hasError ? 'red.300' : isFocused ? 'pink.200' : 'pink.300'}
