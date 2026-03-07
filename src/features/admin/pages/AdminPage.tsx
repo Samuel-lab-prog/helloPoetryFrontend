@@ -10,12 +10,7 @@ export function AdminPage() {
 	const [activeForm, setActiveForm] = useState<ActiveForm>('create');
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			gap={8}
-		>
+		<Flex as='main' layerStyle='main' direction='column' gap={8}>
 			<Flex
 				as='section'
 				direction='column'
@@ -23,34 +18,17 @@ export function AdminPage() {
 				justify='center'
 				w='full'
 			>
-				<Heading
-					as='h1'
-					textStyle='h1'
-					mb={6}
-				>
+				<Heading as='h1' textStyle='h1' mb={6}>
 					Admin Dashboard
 				</Heading>
-				<Flex
-					gap={2}
-					mb={8}
-					direction={['column', undefined, 'row']}
-				>
-					<Button
-						variant='surface'
-						onClick={() => setActiveForm('create')}
-					>
+				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
+					<Button variant='surface' onClick={() => setActiveForm('create')}>
 						Criar Post
 					</Button>
-					<Button
-						variant='surface'
-						onClick={() => setActiveForm('update')}
-					>
+					<Button variant='surface' onClick={() => setActiveForm('update')}>
 						Atualizar Post
 					</Button>
-					<Button
-						variant='surface'
-						onClick={() => setActiveForm('delete')}
-					>
+					<Button variant='surface' onClick={() => setActiveForm('delete')}>
 						Deletar Post
 					</Button>
 				</Flex>
@@ -62,19 +40,10 @@ export function AdminPage() {
 				justify='center'
 				w='full'
 			>
-				<Flex
-					direction='column'
-					w='full'
-					maxW='4xl'
-				>
+				<Flex direction='column' w='full' maxW='4xl'>
 					{activeForm === 'create' && (
 						<>
-							<Heading
-								as='h2'
-								textStyle='h2'
-								mb={4}
-								textAlign='center'
-							>
+							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Criar Post
 							</Heading>
 							<CreatePostForm />
@@ -83,12 +52,7 @@ export function AdminPage() {
 
 					{activeForm === 'update' && (
 						<>
-							<Heading
-								as='h2'
-								textStyle='h2'
-								mb={4}
-								textAlign='center'
-							>
+							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Atualizar Post
 							</Heading>
 							<UpdatePostForm />
@@ -97,12 +61,7 @@ export function AdminPage() {
 
 					{activeForm === 'delete' && (
 						<>
-							<Heading
-								as='h2'
-								textStyle='h2'
-								mb={4}
-								textAlign='center'
-							>
+							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
 								Deletar Post
 							</Heading>
 							<DeletePostForm />

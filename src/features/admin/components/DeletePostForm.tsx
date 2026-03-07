@@ -25,11 +25,7 @@ export function DeletePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox
-				name='id'
-				posts={posts}
-				control={control}
-			/>
+			<PostCombobox name='id' posts={posts} control={control} />
 
 			<Button
 				type='submit'

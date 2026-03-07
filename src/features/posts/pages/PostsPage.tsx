@@ -29,22 +29,9 @@ export function PostsPage() {
 	];
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-		>
-			<Flex
-				as='section'
-				mb={6}
-				gap={8}
-				direction='column'
-				w='full'
-			>
-				<Heading
-					as='h1'
-					textStyle='h1'
-				>
+		<Flex as='main' layerStyle='main' direction='column'>
+			<Flex as='section' mb={6} gap={8} direction='column' w='full'>
+				<Heading as='h1' textStyle='h1'>
 					Todas as Publicações
 				</Heading>
 
@@ -71,12 +58,7 @@ export function PostsPage() {
 				</Flex>
 			</Flex>
 
-			<Flex
-				as='section'
-				w='full'
-				direction='column'
-				gap={4}
-			>
+			<Flex as='section' w='full' direction='column' gap={4}>
 				<AsyncState
 					isError={isError}
 					isEmpty={posts?.length === 0 && !isLoading}
@@ -87,10 +69,7 @@ export function PostsPage() {
 				>
 					<PostGrid>
 						{posts.map((post) => (
-							<PostCard
-								key={post.id}
-								post={post}
-							/>
+							<PostCard key={post.id} post={post} />
 						))}
 					</PostGrid>
 				</AsyncState>

@@ -3,11 +3,7 @@ import { LoginForm } from '../components/LoginForm';
 
 export function LoginPage() {
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-		>
+		<Flex as='main' layerStyle='main' direction='column'>
 			<Flex
 				as='section'
 				px={4}
@@ -23,18 +19,12 @@ export function LoginPage() {
 					gap={2}
 					textAlign='center'
 				>
-					<Heading
-						as='h1'
-						textStyle='h1'
-					>
-						Entrar
+					<Heading as='h1' textStyle='h1'>
+						Login
 					</Heading>
 
-					<Text
-						color='gray.600'
-						textStyle='small'
-					>
-						Por favor, insira suas credenciais para entrar.
+					<Text color='gray.600' textStyle='small'>
+						Please enter your credentials to log in.
 					</Text>
 				</Flex>
 

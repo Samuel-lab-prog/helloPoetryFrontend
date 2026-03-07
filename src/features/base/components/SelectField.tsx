@@ -36,15 +36,8 @@ export function SelectField<T extends FieldValues>({
 	transformValue,
 }: SelectFieldProps<T>) {
 	return (
-		<Field.Root
-			required={required}
-			invalid={!!error}
-			w='full'
-		>
-			<Field.Label
-				textStyle='small'
-				fontWeight='medium'
-			>
+		<Field.Root required={required} invalid={!!error} w='full'>
+			<Field.Label textStyle='small' fontWeight='medium'>
 				{label}
 				{required && <Field.RequiredIndicator />}
 			</Field.Label>
@@ -63,10 +56,7 @@ export function SelectField<T extends FieldValues>({
 							}}
 						>
 							{placeholder && (
-								<option
-									value=''
-									disabled
-								>
+								<option value='' disabled>
 									{placeholder}
 								</option>
 							)}

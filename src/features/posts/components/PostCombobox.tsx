@@ -86,10 +86,7 @@ export function PostCombobox<T extends FieldValues>({
 										{posts ? 'Nenhum post encontrado.' : 'Carregando posts...'}
 									</Combobox.Empty>
 									{collection.items.map((item) => (
-										<Combobox.Item
-											key={item.id}
-											item={item}
-										>
+										<Combobox.Item key={item.id} item={item}>
 											{item.title}
 											<Combobox.ItemIndicator />
 										</Combobox.Item>

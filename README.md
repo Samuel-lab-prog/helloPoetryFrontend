@@ -1,6 +1,7 @@
 # HelloPoetry — Frontend
 
-This repository contains the **frontend application** of a poetry sharing platform.  
+This repository contains the **frontend application** of a poetry sharing
+platform.  
 It is responsible for the user interface, client-side routing, form handling,
 animations, and data consumption from the backend API.
 

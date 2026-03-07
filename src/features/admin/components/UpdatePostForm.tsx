@@ -44,11 +44,7 @@ export function UpdatePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox
-				name='id'
-				control={control}
-				posts={posts}
-			/>
+			<PostCombobox name='id' control={control} posts={posts} />
 
 			<FormField
 				label='Título'

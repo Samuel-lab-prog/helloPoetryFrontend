@@ -10,17 +10,8 @@ export function PostPage() {
 	const { post, isError, isLoading } = usePost(Number(id));
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			alignItems='center'
-		>
-			<Box
-				as='section'
-				maxW='4xl'
-				w='full'
-			>
+		<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+			<Box as='section' maxW='4xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}
 					isError={!!isError}
@@ -63,12 +54,7 @@ export function PostPage() {
 					justifyContent={['end', undefined, undefined, 'center']}
 					display='flex'
 				>
-					<Link
-						px={4}
-						py={2}
-						asChild
-						color='black'
-					>
+					<Link px={4} py={2} asChild color='black'>
 						<NavLink to='/'>
 							<Icon as={ArrowLeftIcon} /> Voltar
 						</NavLink>

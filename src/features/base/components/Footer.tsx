@@ -23,11 +23,7 @@ function FooterLogo() {
 			cursor='pointer'
 			_hover={{ opacity: 0.6, transition: 'all 0.2s' }}
 		>
-			<Image
-				src={logo}
-				alt='Logo'
-				h='70px'
-			/>
+			<Image src={logo} alt='Logo' h='70px' />
 		</Box>
 	);
 }
@@ -35,11 +31,7 @@ function FooterLogo() {
 /* ---------------- FOOTER LINKS ---------------- */
 function FooterLinks({ links }: { links: { label: string; to: string }[] }) {
 	return (
-		<HStack
-			gap={8}
-			flexWrap='wrap'
-			justify='center'
-		>
+		<HStack gap={8} flexWrap='wrap' justify='center'>
 			{links.map((link) => (
 				<Link
 					asChild
@@ -66,46 +58,30 @@ export function Footer({ links }: { links: { label: string; to: string }[] }) {
 			px={{ base: 6, lg: 12 }}
 			pb={10}
 		>
-			<VStack
-				gap={6}
-				align='center'
-			>
+			<VStack gap={6} align='center'>
 				<FooterLogo />
 
 				<FooterLinks links={links} />
 
 				<HStack gap={4}>
-					<IconButton
-						variant='plain'
-						asChild
-					>
+					<IconButton variant='plain' asChild>
 						<Link href='https://github.com/samuel-lab-prog'>
 							<FaGithub />
 						</Link>
 					</IconButton>
-					<IconButton
-						variant='plain'
-						asChild
-					>
+					<IconButton variant='plain' asChild>
 						<Link href='https://www.linkedin.com/in/samuel-gomes-149251342/'>
 							<FaLinkedin />
 						</Link>
 					</IconButton>
-					<IconButton
-						variant='plain'
-						asChild
-					>
+					<IconButton variant='plain' asChild>
 						<Link href='https://instagram.com/samuelgomes9930'>
 							<FaInstagram />
 						</Link>
 					</IconButton>
 				</HStack>
 
-				<Text
-					fontSize='sm'
-					color='gray.500'
-					textAlign='center'
-				>
+				<Text fontSize='sm' color='gray.500' textAlign='center'>
 					© {new Date().getFullYear()} — Todos os direitos reservados
 				</Text>
 			</VStack>

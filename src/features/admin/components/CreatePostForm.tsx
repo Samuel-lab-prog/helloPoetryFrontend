@@ -105,24 +105,13 @@ export function CreatePostForm() {
 				</Button>
 			</Flex>
 
-			<Heading
-				as='h2'
-				textStyle='h2'
-				mt={12}
-			>
+			<Heading as='h2' textStyle='h2' mt={12}>
 				Preview
 			</Heading>
 
-			<Box
-				as='section'
-				maxW='4xl'
-				w='full'
-			>
+			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
-					<Box
-						textStyle='body'
-						color='gray.500'
-					>
+					<Box textStyle='body' color='gray.500'>
 						Preencha o formulário para visualizar o preview do post
 					</Box>
 				) : (

@@ -35,14 +35,8 @@ export function FormField<T extends FieldValues>({
 	const Component = as === 'textarea' ? Textarea : Input;
 
 	return (
-		<Field.Root
-			required={required}
-			invalid={!!error}
-		>
-			<Field.Label
-				textStyle='small'
-				fontWeight='medium'
-			>
+		<Field.Root required={required} invalid={!!error}>
+			<Field.Label textStyle='small' fontWeight='medium'>
 				{label}
 				{required && <Field.RequiredIndicator />}
 			</Field.Label>

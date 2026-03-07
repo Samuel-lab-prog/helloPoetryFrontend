@@ -46,14 +46,8 @@ export function ProtectedRoutePage() {
 	return isAuthenticated ? (
 		<Outlet />
 	) : (
-		<Center
-			h='100vh'
-			flexDirection='column'
-		>
-			<Heading
-				mb={4}
-				size='lg'
-			>
+		<Center h='100vh' flexDirection='column'>
+			<Heading mb={4} size='lg'>
 				Boa tentativa!
 			</Heading>
 			<Text>Você não tem acesso a esta página.</Text>

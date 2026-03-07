@@ -26,11 +26,7 @@ function Logo() {
 			cursor='pointer'
 			_hover={{ opacity: 0.6, transition: 'all', animationDuration: '0.3s' }}
 		>
-			<Image
-				src={logo}
-				alt='Logo'
-				h={['60px', undefined, undefined, '80px']}
-			/>
+			<Image src={logo} alt='Logo' h={['60px', undefined, undefined, '80px']} />
 		</Box>
 	);
 }
@@ -48,10 +44,7 @@ const MenuLinks = ({
 	const Container = isMobile ? VStack : HStack;
 
 	return (
-		<Container
-			gap={isMobile ? 3 : 12}
-			align='center'
-		>
+		<Container gap={isMobile ? 3 : 12} align='center'>
 			{links.map((link) => (
 				<Link
 					asChild
@@ -95,14 +88,8 @@ const MobileDrawer = ({
 			role='dialog'
 		>
 			<Drawer.Trigger asChild>
-				<Button
-					variant='plain'
-					size='sm'
-				>
-					<Icon
-						as={Menu}
-						size='2xl'
-					/>
+				<Button variant='plain' size='sm'>
+					<Icon as={Menu} size='2xl' />
 				</Button>
 			</Drawer.Trigger>
 
@@ -118,24 +105,14 @@ const MobileDrawer = ({
 						<Drawer.Title>
 							<Logo />
 						</Drawer.Title>
-						<Drawer.CloseTrigger
-							asChild
-							pos='initial'
-						>
+						<Drawer.CloseTrigger asChild pos='initial'>
 							<Button variant='plain'>
-								<Icon
-									as={X}
-									size='2xl'
-								/>
+								<Icon as={X} size='2xl' />
 							</Button>
 						</Drawer.CloseTrigger>
 					</Drawer.Header>
 					<Drawer.Body>
-						<MenuLinks
-							links={links}
-							isMobile
-							onLinkClick={onToggle}
-						/>
+						<MenuLinks links={links} isMobile onLinkClick={onToggle} />
 					</Drawer.Body>
 				</Drawer.Content>
 			</Drawer.Positioner>
@@ -161,10 +138,7 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				<Logo />
 
 				{/* Desktop Menu */}
-				<Box
-					display={{ base: 'none', md: 'block' }}
-					ml={12}
-				>
+				<Box display={{ base: 'none', md: 'block' }} ml={12}>
 					<MenuLinks links={links} />
 				</Box>
 

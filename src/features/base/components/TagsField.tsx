@@ -29,12 +29,7 @@ export function TagsField<T extends FieldValues>({
 	placeholder,
 }: TagsFieldProps<T>) {
 	return (
-		<Field.Root
-			required={required}
-			invalid={!!error}
-			w='full'
-			color='gray.700'
-		>
+		<Field.Root required={required} invalid={!!error} w='full' color='gray.700'>
 			<Field.Label color='gray.700'>
 				{label}
 				{required && <Field.RequiredIndicator />}
@@ -55,10 +50,7 @@ export function TagsField<T extends FieldValues>({
 							field.onChange(value);
 						}}
 					>
-						<TagsInput.Control
-							bg='transparent'
-							color='gray.700'
-						>
+						<TagsInput.Control bg='transparent' color='gray.700'>
 							<TagsInput.Items>
 								{field.value?.map((tag: string, index: number) => (
 									<TagsInput.Item
@@ -76,10 +68,7 @@ export function TagsField<T extends FieldValues>({
 												color: 'gray.700',
 											}}
 										>
-											<TagsInput.ItemText
-												color='white'
-												bg='white'
-											>
+											<TagsInput.ItemText color='white' bg='white'>
 												{tag}
 											</TagsInput.ItemText>
 											<TagsInput.ItemDeleteTrigger />

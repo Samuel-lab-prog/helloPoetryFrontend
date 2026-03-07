@@ -23,11 +23,7 @@ export function LoginForm() {
 			maxW='md'
 		>
 			{generalError && (
-				<Text
-					color='red.500'
-					fontSize='sm'
-					mb={2}
-				>
+				<Text color='red.500' fontSize='sm' mb={2}>
 					{generalError}
 				</Text>
 			)}
