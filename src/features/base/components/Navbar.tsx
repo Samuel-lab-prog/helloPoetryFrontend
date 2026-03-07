@@ -132,7 +132,7 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				borderColor='gray.200'
 				mx='auto'
 				h={110}
-        w='full'
+				w='full'
 			>
 				<Logo />
 

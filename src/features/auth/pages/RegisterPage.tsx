@@ -4,12 +4,7 @@ import { RegisterForm } from '../components/RegisterForm';
 export function RegisterPage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column'>
-			<Flex
-				as='section'
-				px={4}
-				direction='column'
-				align='center'
-			>
+			<Flex as='section' direction='column' align='center'>
 				<Flex
 					direction='column'
 					align='center'

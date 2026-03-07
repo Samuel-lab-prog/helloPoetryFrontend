@@ -6,7 +6,6 @@ export function LoginPage() {
 		<Flex as='main' layerStyle='main' direction='column'>
 			<Flex
 				as='section'
-				px={4}
 				direction='column'
 				align='center'
 				justify='center'
@@ -23,7 +22,7 @@ export function LoginPage() {
 						Login
 					</Heading>
 
-					<Text color='gray.600' textStyle='small'>
+					<Text textStyle='small'>
 						Please enter your credentials to log in.
 					</Text>
 				</Flex>

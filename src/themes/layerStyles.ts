@@ -9,7 +9,7 @@ export const layerStyles = defineLayerStyles({
 			paddingTop: ['8', '8', '12', '12', '12'],
 			paddingBottom: ['12', '12', '12', '12', '12'],
 			display: 'flex',
-      width: 'full',
+			width: 'full',
 		},
 	},
 });

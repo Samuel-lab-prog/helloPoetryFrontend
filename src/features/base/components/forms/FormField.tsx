@@ -12,7 +12,7 @@ interface Props<T extends FieldValues> {
 	name: Path<T>;
 	label: string;
 	required?: boolean;
-  autoFocus?: boolean;
+	autoFocus?: boolean;
 	error?: FieldErrors<T>;
 	as?: 'input' | 'textarea';
 	rows?: number;
@@ -32,7 +32,7 @@ export function FormField<T extends FieldValues>({
 	type,
 	transformValue,
 	disabled,
-  autoFocus,
+	autoFocus,
 }: Props<T>) {
 	const Component = as === 'textarea' ? Textarea : Input;
 	const errorMessage = error?.message?.toString();
@@ -62,7 +62,9 @@ export function FormField<T extends FieldValues>({
 						_hover={{ borderColor: 'borderHover' }}
 						_focusVisible={{
 							borderColor: error ? 'error' : 'pink.300',
-							boxShadow: error ? '0 0 0 5px rgba(239, 68, 68, 1)' : '0 0 0 5px rgba(255, 143, 189, 1)',
+							boxShadow: error
+								? '0 0 0 5px rgba(239, 68, 68, 1)'
+								: '0 0 0 5px rgba(255, 143, 189, 1)',
 						}}
 						_focus={{ borderColor: error ? 'error' : 'pink.300' }}
 						autoFocus={autoFocus}
