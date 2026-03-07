@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
 import { PostPage, PostsPage, HomePage } from '@features/posts';
-import { LoginPage } from '@features/auth';
+import { LoginPage, RegisterPage } from '@features/auth';
 import { AdminPage, ProtectedRoutePage } from '@features/admin';
 
 const navLinks = [
@@ -21,6 +21,7 @@ export default function App() {
 				{ path: 'posts', element: <PostsPage /> },
 				{ path: 'posts/:slug/:id', element: <PostPage /> },
 				{ path: '/login', element: <LoginPage /> },
+				{ path: '/register', element: <RegisterPage /> },
 				{
 					path: 'admin',
 					element: <ProtectedRoutePage />,

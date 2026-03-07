@@ -1,0 +1,35 @@
+import { Flex, Heading, Text } from '@chakra-ui/react';
+import { RegisterForm } from '../components/RegisterForm';
+
+export function RegisterPage() {
+	return (
+		<Flex as='main' layerStyle='main' direction='column'>
+			<Flex
+				as='section'
+				px={4}
+				direction='column'
+				align='center'
+				justify='center'
+				h={['80vh', undefined, '70vh']}
+			>
+				<Flex
+					direction='column'
+					align='center'
+					mb={4}
+					gap={2}
+					textAlign='center'
+				>
+					<Heading as='h1' textStyle='h1' color='tertiary'>
+						Create account
+					</Heading>
+
+					<Text textStyle='small'>
+						Fill in your details to create your account.
+					</Text>
+				</Flex>
+
+				<RegisterForm />
+			</Flex>
+		</Flex>
+	);
+}

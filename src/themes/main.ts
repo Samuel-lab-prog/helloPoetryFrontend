@@ -32,6 +32,11 @@ const tokens = defineTokens({
 			200: { value: '#e6c7b2' },
 			300: { value: '#d7b49e' },
 			400: { value: '#c89f85' },
+			500: { value: '#b98a6c' },
+			600: { value: '#a97553' },
+			700: { value: '#9c603a' },
+			800: { value: '#8d4b21' },
+			900: { value: '#7e3608' },
 		},
 
 		blue: {
@@ -83,7 +88,7 @@ const semanticTokens = defineSemanticTokens({
 		},
 
 		tertiary: {
-			DEFAULT: { value: '{colors.brown.200}' },
+			DEFAULT: { value: '{colors.brown.800}' },
 			_dark: { value: '{colors.brown.400}' },
 		},
 

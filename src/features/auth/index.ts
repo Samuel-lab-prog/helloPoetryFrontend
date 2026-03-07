@@ -3,7 +3,11 @@
  */
 
 export * from './components/LoginForm';
+export * from './components/RegisterForm';
 export * from './hooks/useAuth';
 export * from './hooks/useLoginForm';
+export * from './hooks/useRegisterForm';
 export * from './pages/LoginPage';
+export * from './pages/RegisterPage';
 export * from './schemas/loginSchema';
+export * from './schemas/registerSchema';
