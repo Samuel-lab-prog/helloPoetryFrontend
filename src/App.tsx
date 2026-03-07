@@ -8,6 +8,8 @@ import { AdminPage, ProtectedRoutePage } from '@features/admin';
 const navLinks = [
 	{ to: '/', label: 'Home' },
 	{ to: '/posts', label: 'Posts' },
+	{ label: 'Register', to: '/register' },
+	{ label: 'Login', to: '/login' },
 ];
 
 export default function App() {

@@ -6,10 +6,10 @@ export const layerStyles = defineLayerStyles({
 		value: {
 			paddingLeft: ['4', '4', '8', '8', '8'],
 			paddingRight: ['4', '4', '8', '8', '8'],
-			paddingTop: ['8', '8', '16', '20', '24'],
-			paddingBottom: ['12', '12', '16', '20', '24'],
+			paddingTop: ['8', '8', '12', '12', '12'],
+			paddingBottom: ['12', '12', '12', '12', '12'],
 			display: 'flex',
-			maxWidth: '800px',
+      width: 'full',
 		},
 	},
 });

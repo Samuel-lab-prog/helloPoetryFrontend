@@ -32,6 +32,8 @@ export function HomePage() {
 				links={[
 					{ label: 'Home', to: '/' },
 					{ label: 'Poems', to: '/poems' },
+					{ label: 'Register', to: '/register' },
+					{ label: 'Login', to: '/login' },
 				]}
 			></Footer>
 		</>

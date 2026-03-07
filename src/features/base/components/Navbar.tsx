@@ -44,7 +44,7 @@ const MenuLinks = ({
 	const Container = isMobile ? VStack : HStack;
 
 	return (
-		<Container gap={isMobile ? 3 : 12} align='center'>
+		<Container gap={isMobile ? 3 : 6} align='center'>
 			{links.map((link) => (
 				<Link
 					asChild
@@ -129,11 +129,10 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				justify={{ base: 'space-between', md: 'flex-start' }}
 				wrap='wrap'
 				gap={{ base: 8, lg: 16 }}
-				px={{ base: 6, lg: 12 }}
-				borderBottom='2px solid'
 				borderColor='gray.200'
 				mx='auto'
 				h={110}
+        w='full'
 			>
 				<Logo />
 

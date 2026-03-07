@@ -9,8 +9,6 @@ export function RegisterPage() {
 				px={4}
 				direction='column'
 				align='center'
-				justify='center'
-				h={['80vh', undefined, '70vh']}
 			>
 				<Flex
 					direction='column'
@@ -19,7 +17,7 @@ export function RegisterPage() {
 					gap={2}
 					textAlign='center'
 				>
-					<Heading as='h1' textStyle='h1' color='tertiary'>
+					<Heading as='h1' textStyle='h1' color='accent'>
 						Create account
 					</Heading>
 

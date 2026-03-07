@@ -12,6 +12,7 @@ interface Props<T extends FieldValues> {
 	name: Path<T>;
 	label: string;
 	required?: boolean;
+  autoFocus?: boolean;
 	error?: FieldErrors<T>;
 	as?: 'input' | 'textarea';
 	rows?: number;
@@ -31,12 +32,18 @@ export function FormField<T extends FieldValues>({
 	type,
 	transformValue,
 	disabled,
+  autoFocus,
 }: Props<T>) {
 	const Component = as === 'textarea' ? Textarea : Input;
 
 	return (
 		<Field.Root required={required} invalid={!!error}>
-			<Field.Label textStyle='small' fontWeight='medium'>
+			<Field.Label
+				textStyle='small'
+				fontWeight='medium'
+				color={error ? 'error' : 'text'}
+				transition='color 0.22s ease'
+			>
 				{label}
 				{required && <Field.RequiredIndicator />}
 			</Field.Label>
@@ -47,6 +54,16 @@ export function FormField<T extends FieldValues>({
 				render={({ field }) => (
 					<Component
 						textStyle='small'
+						transition='all 0.22s ease'
+						bg='surface'
+						borderColor={error ? 'error' : 'border'}
+						_hover={{ borderColor: 'borderHover' }}
+						_focusVisible={{
+							borderColor: error ? 'error' : 'pink.300',
+							boxShadow: error ? '0 0 0 5px rgba(239, 68, 68, 1)' : '0 0 0 5px rgba(255, 143, 189, 1)',
+						}}
+						_focus={{ borderColor: error ? 'error' : 'pink.300' }}
+						autoFocus={autoFocus}
 						rows={as === 'textarea' ? rows : undefined}
 						type={type}
 						value={field.value ?? ''}
@@ -59,7 +76,9 @@ export function FormField<T extends FieldValues>({
 				)}
 			/>
 
-			<Field.ErrorText>{error?.message?.toString()}</Field.ErrorText>
+			<Field.ErrorText color='error' transition='color 0.22s ease'>
+				{error?.message?.toString()}
+			</Field.ErrorText>
 		</Field.Root>
 	);
 }
