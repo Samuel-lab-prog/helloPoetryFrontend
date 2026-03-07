@@ -1,4 +1,4 @@
-export type FullPostType = {
+export type FullPoemType = {
 	tags: {
 		name: string;
 		id: number;
@@ -10,6 +10,8 @@ export type FullPostType = {
 	createdAt: Date;
 	content: string;
 	status: 'draft' | 'published';
+	visibility: 'public' | 'friends' | 'private' | 'unlisted';
+	isCommentable: boolean;
 	updatedAt: Date;
 };
 
@@ -18,33 +20,33 @@ export type TagType = {
 	name: string;
 };
 
-export type PostPreviewType = {
-	tags: {
-		name: string;
-		id: number;
-	}[];
+export type PoemPreviewType = {
 	title: string;
 	slug: string;
-	excerpt: string;
 	id: number;
-	createdAt: Date;
+	author: {
+		id: number;
+		name: string;
+		nickname: string;
+		avatarUrl: string;
+	};
 };
 
-export type PostMinimalDataType = {
+export type PoemMinimalDataType = {
 	id: number;
 	title: string;
 };
 
-export type PaginatedPostsType = {
+export type PaginatedPoemsType = {
 	nextCursor?: number | undefined;
-	posts: PostPreviewType[];
+	poems: PoemPreviewType[];
 	hasMore: boolean;
 };
 
-export type PaginatedMinimalPostsType = {
+export type PaginatedMinimalPoemsType = {
 	nextCursor?: number | undefined;
 	hasMore: boolean;
-	posts: {
+	poems: {
 		id: number;
 		title: string;
 	}[];

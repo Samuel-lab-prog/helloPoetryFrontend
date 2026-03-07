@@ -1,29 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import type { PaginatedMinimalPostsType } from '@features/posts';
+import type { FullPoemType } from '@features/posts';
 
 type UsePostsMinimalOptions = {
-	deleted?: 'only' | 'exclude';
-	status?: 'published' | 'draft';
 	limit?: number;
 };
-export function usePostsMinimal({
-	deleted,
-	status,
-	limit = 150,
-}: UsePostsMinimalOptions) {
+
+export function usePostsMinimal({ limit = 150 }: UsePostsMinimalOptions = {}) {
 	const query = useQuery({
-		queryKey: ['posts-minimal', { deleted, status, limit }],
-		staleTime: 1000 * 60 * 30, // 30 minutes
-		queryFn: () =>
-			createHTTPRequest<PaginatedMinimalPostsType>({
-				path: '/posts/minimal',
-				query: { limit, deleted, status },
-			}),
+		queryKey: ['poems-minimal', { limit }],
+		staleTime: 1000 * 60 * 30,
+		queryFn: () => createHTTPRequest<FullPoemType[]>({ path: '/poems/me' }),
 	});
 
+	const poems = (query.data ?? []).slice(0, limit).map((poem) => ({
+		id: poem.id,
+		title: poem.title,
+	}));
+
 	return {
-		posts: query.data?.posts ?? [],
+		poems,
 		isLoading: query.isLoading,
 		isError: query.isError,
 		error: query.error,

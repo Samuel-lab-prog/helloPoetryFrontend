@@ -6,7 +6,7 @@ import { usePost, PostCombobox } from '@features/posts';
 import { FormField, SelectField, TagsField } from '@features/base';
 
 export function UpdatePostForm() {
-	const { posts } = usePostsMinimal({ deleted: 'exclude' });
+	const { poems } = usePostsMinimal();
 
 	const {
 		control,
@@ -20,19 +20,21 @@ export function UpdatePostForm() {
 	} = useUpdatePostForm();
 
 	const postId = watch('id');
-	const { post, isLoading } = usePost(postId);
+	const { poem, isLoading } = usePost(postId);
 
 	useEffect(() => {
-		if (!post) return;
+		if (!poem) return;
 		reset({
-			id: post.id,
-			title: post.title,
-			excerpt: post.excerpt,
-			content: post.content,
-			status: post.status,
-			tags: post.tags?.flatMap((tag) => tag.name),
+			id: poem.id,
+			title: poem.title,
+			excerpt: poem.excerpt,
+			content: poem.content,
+			status: poem.status,
+			visibility: poem.visibility,
+			isCommentable: poem.isCommentable,
+			tags: poem.tags?.flatMap((tag) => tag.name),
 		});
-	}, [post, reset]);
+	}, [poem, reset]);
 
 	return (
 		<Flex
@@ -44,10 +46,10 @@ export function UpdatePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox name='id' control={control} posts={posts} />
+			<PostCombobox name='id' control={control} poems={poems} />
 
 			<FormField
-				label='Título'
+				label='Titulo'
 				control={control}
 				name='title'
 				error={errors.title}
@@ -68,6 +70,35 @@ export function UpdatePostForm() {
 				disabled={isLoading || !postId}
 			/>
 
+			<SelectField
+				label='Visibilidade'
+				name='visibility'
+				control={control}
+				options={[
+					{ value: 'public', label: 'Publico' },
+					{ value: 'friends', label: 'Amigos' },
+					{ value: 'private', label: 'Privado' },
+					{ value: 'unlisted', label: 'Nao listado' },
+				]}
+				error={errors.visibility}
+				required
+				disabled={isLoading || !postId}
+			/>
+
+			<SelectField
+				label='Comentarios'
+				name='isCommentable'
+				control={control}
+				options={[
+					{ value: 'true', label: 'Permitidos' },
+					{ value: 'false', label: 'Desativados' },
+				]}
+				transformValue={(value) => value === 'true'}
+				error={errors.isCommentable}
+				required
+				disabled={isLoading || !postId}
+			/>
+
 			<FormField
 				label='Resumo'
 				as='textarea'
@@ -80,7 +111,7 @@ export function UpdatePostForm() {
 			/>
 
 			<FormField
-				label='Conteúdo (Markdown)'
+				label='Conteudo (Markdown)'
 				as='textarea'
 				rows={20}
 				control={control}
@@ -108,7 +139,7 @@ export function UpdatePostForm() {
 				w='full'
 				mt={4}
 			>
-				Atualizar Post
+				Atualizar Poema
 			</Button>
 		</Flex>
 	);

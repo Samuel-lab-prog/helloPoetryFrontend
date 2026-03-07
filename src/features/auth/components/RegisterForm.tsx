@@ -8,6 +8,7 @@ const registerFields: Field<RegisterDataType>[] = [
 	{ name: 'email', label: 'Email', required: true },
 	{ name: 'password', label: 'Password', required: true, type: 'password' },
 	{ name: 'bio', label: 'Bio', required: true, type: 'textarea' },
+	{ name: 'avatarUrl', label: 'Avatar URL', required: false },
 ];
 
 export function RegisterForm() {

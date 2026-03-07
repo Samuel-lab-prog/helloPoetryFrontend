@@ -10,5 +10,6 @@ export * from './hooks/useDeleteForm';
 export * from './hooks/usePostsMinimal';
 export * from './hooks/useUpdatePostForm';
 export * from './pages/AdminPage';
+export * from './pages/CreatePoemPage';
 export * from './pages/ProtectedPage';
 export * from './schemas/schemas';

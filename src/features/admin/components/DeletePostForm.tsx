@@ -4,7 +4,7 @@ import { usePostsMinimal } from '../hooks/usePostsMinimal';
 import { PostCombobox } from '@features/posts';
 
 export function DeletePostForm() {
-	const { posts } = usePostsMinimal({ deleted: 'exclude' });
+	const { poems } = usePostsMinimal();
 
 	const {
 		handleSubmit,
@@ -25,7 +25,7 @@ export function DeletePostForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PostCombobox name='id' posts={posts} control={control} />
+			<PostCombobox name='id' poems={poems} control={control} />
 
 			<Button
 				type='submit'
@@ -36,7 +36,7 @@ export function DeletePostForm() {
 				w='full'
 				mt={4}
 			>
-				Deletar Post
+				Deletar Poema
 			</Button>
 		</Flex>
 	);

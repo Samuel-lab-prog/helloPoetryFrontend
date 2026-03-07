@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import type { PaginatedPostsType } from '../types/types';
+import type { PaginatedPoemsType } from '../types/types';
 
 type UseRecentPostsOptions = {
 	limit?: number;
@@ -8,18 +8,18 @@ type UseRecentPostsOptions = {
 
 export function useRecentPosts({ limit = 4 }: UseRecentPostsOptions) {
 	const query = useQuery({
-		queryKey: ['posts-recent', { limit }],
+		queryKey: ['poems-recent', { limit }],
 		retry: 3,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		queryFn: () =>
-			createHTTPRequest<PaginatedPostsType>({
-				path: '/posts',
-				query: { limit, deleted: 'false', draft: 'false' },
+			createHTTPRequest<PaginatedPoemsType>({
+				path: '/poems',
+				query: { limit, orderBy: 'createdAt', orderDirection: 'desc' },
 			}),
 	});
 
 	return {
-		posts: query.data?.posts ?? [],
+		poems: query.data?.poems ?? [],
 		isLoading: query.isLoading,
 		isError: query.isError,
 		error: query.error,

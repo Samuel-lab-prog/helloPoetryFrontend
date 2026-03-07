@@ -1,27 +1,20 @@
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { AsyncState, SelectField } from '@features/base';
-import { PostCard } from '../components/PostCard';
+import { PoemCard } from '../components/PoemCard';
 import { PostGrid } from '../components/PostGrid';
 import { useInfinitePosts } from '../hooks/useInfinitePosts';
 import { usePostsFilters } from '../hooks/usePostsFilters';
-import { useTags } from '../hooks/useTags';
 
 export function PostsPage() {
-	const { control, tag, order } = usePostsFilters();
-	const { tags, isLoading: isTagsLoading } = useTags();
+	const { control, order } = usePostsFilters();
 	const {
-		posts,
+		poems,
 		isError,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-	} = useInfinitePosts({ tag: tag || undefined, order });
-
-	const tagOptions: { value: string; label: string }[] = [
-		{ value: '', label: 'Todas' },
-		...tags.map((t) => ({ value: t.name, label: t.name })),
-	];
+	} = useInfinitePosts({ order });
 
 	const orderOptions: { value: 'newest' | 'oldest'; label: string }[] = [
 		{ value: 'newest', label: 'Mais recentes' },
@@ -32,7 +25,7 @@ export function PostsPage() {
 		<Flex as='main' layerStyle='main' direction='column'>
 			<Flex as='section' mb={6} gap={8} direction='column' w='full'>
 				<Heading as='h1' textStyle='h1'>
-					Todas as Publicações
+					Todos os Poemas
 				</Heading>
 
 				<Flex
@@ -41,14 +34,6 @@ export function PostsPage() {
 					gap={[4, undefined, 8]}
 					w='full'
 				>
-					<SelectField
-						label='Filtrar por tag'
-						name='tag'
-						disabled={isTagsLoading}
-						control={control}
-						options={tagOptions}
-					/>
-
 					<SelectField
 						label='Ordenar por'
 						name='order'
@@ -61,15 +46,15 @@ export function PostsPage() {
 			<Flex as='section' w='full' direction='column' gap={4}>
 				<AsyncState
 					isError={isError}
-					isEmpty={posts?.length === 0 && !isLoading}
+					isEmpty={poems?.length === 0 && !isLoading}
 					isLoading={isLoading}
-					emptyElement={<Flex textStyle='body'>Nenhum post encontrado</Flex>}
-					errorElement={<Flex textStyle='body'>Erro ao carregar posts</Flex>}
-					loadingElement={<Flex textStyle='body'>Carregando posts...</Flex>}
+					emptyElement={<Flex textStyle='body'>Nenhum poema encontrado</Flex>}
+					errorElement={<Flex textStyle='body'>Erro ao carregar poemas</Flex>}
+					loadingElement={<Flex textStyle='body'>Carregando poemas...</Flex>}
 				>
 					<PostGrid>
-						{posts.map((post) => (
-							<PostCard key={post.id} post={post} />
+						{poems.map((poem) => (
+							<PoemCard key={poem.id} poem={poem} />
 						))}
 					</PostGrid>
 				</AsyncState>

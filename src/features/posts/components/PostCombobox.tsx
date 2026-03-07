@@ -1,4 +1,4 @@
-import {
+﻿import {
 	Field,
 	Combobox,
 	Portal,
@@ -13,14 +13,11 @@ import {
 	type FieldValues,
 } from 'react-hook-form';
 import { useEffect } from 'react';
-import { type PostMinimalDataType } from '../types/types';
+import { type PoemMinimalDataType } from '../types/types';
 
-// This component is meant to be used within react-hook-form forms
-// Normally you wanna use this to fetch a full post data after selection
-// May turn this into a more generic component in the future
 interface Props<T extends FieldValues> {
 	control: Control<T>;
-	posts?: PostMinimalDataType[];
+	poems?: PoemMinimalDataType[];
 	error?: FieldErrors<T>;
 	name: Path<T>;
 }
@@ -29,7 +26,7 @@ export function PostCombobox<T extends FieldValues>({
 	name,
 	error,
 	control,
-	posts,
+	poems,
 }: Props<T>) {
 	const { contains } = useFilter({
 		sensitivity: 'base',
@@ -37,7 +34,7 @@ export function PostCombobox<T extends FieldValues>({
 		usage: 'search',
 	});
 
-	const { collection, filter, set } = useListCollection<PostMinimalDataType>({
+	const { collection, filter, set } = useListCollection<PoemMinimalDataType>({
 		initialItems: [],
 		itemToValue: (item) => String(item.id),
 		itemToString: (item) => item.title,
@@ -46,14 +43,14 @@ export function PostCombobox<T extends FieldValues>({
 	});
 
 	useEffect(() => {
-		if (!posts) return;
-		set(posts.map((post) => ({ id: post.id, title: post.title })));
-	}, [posts, set]);
+		if (!poems) return;
+		set(poems.map((poem) => ({ id: poem.id, title: poem.title })));
+	}, [poems, set]);
 
 	return (
 		<Field.Root required>
 			<Field.Label>
-				Post <Field.RequiredIndicator />
+				Poema <Field.RequiredIndicator />
 			</Field.Label>
 
 			<Controller
@@ -72,7 +69,7 @@ export function PostCombobox<T extends FieldValues>({
 						w='full'
 					>
 						<Combobox.Control>
-							<Combobox.Input placeholder='Selecione o post' />
+							<Combobox.Input placeholder='Selecione o poema' />
 							<Combobox.IndicatorGroup>
 								<Combobox.ClearTrigger />
 								<Combobox.Trigger />
@@ -83,7 +80,9 @@ export function PostCombobox<T extends FieldValues>({
 							<Combobox.Positioner>
 								<Combobox.Content bg='white'>
 									<Combobox.Empty>
-										{posts ? 'Nenhum post encontrado.' : 'Carregando posts...'}
+										{poems
+											? 'Nenhum poema encontrado.'
+											: 'Carregando poemas...'}
 									</Combobox.Empty>
 									{collection.items.map((item) => (
 										<Combobox.Item key={item.id} item={item}>

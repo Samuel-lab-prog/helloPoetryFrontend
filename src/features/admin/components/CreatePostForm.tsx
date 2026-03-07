@@ -23,7 +23,7 @@ export function CreatePostForm() {
 	const preview = watch();
 
 	const previewPost = {
-		title: preview?.title || 'Título do post',
+		title: preview?.title || 'Titulo do poema',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -46,7 +46,7 @@ export function CreatePostForm() {
 				{generalError && <Text color='red.500'>{generalError}</Text>}
 
 				<FormField
-					label='Título'
+					label='Titulo'
 					required
 					error={errors.title}
 					control={control}
@@ -64,7 +64,7 @@ export function CreatePostForm() {
 				/>
 
 				<FormField
-					label='Conteúdo (Markdown)'
+					label='Conteudo (Markdown)'
 					required
 					as='textarea'
 					rows={20}
@@ -93,6 +93,31 @@ export function CreatePostForm() {
 					error={errors.status}
 				/>
 
+				<SelectField
+					label='Visibilidade'
+					name='visibility'
+					control={control}
+					options={[
+						{ value: 'public', label: 'Publico' },
+						{ value: 'friends', label: 'Amigos' },
+						{ value: 'private', label: 'Privado' },
+						{ value: 'unlisted', label: 'Nao listado' },
+					]}
+					error={errors.visibility}
+				/>
+
+				<SelectField
+					label='Comentarios'
+					name='isCommentable'
+					control={control}
+					options={[
+						{ value: 'true', label: 'Permitidos' },
+						{ value: 'false', label: 'Desativados' },
+					]}
+					transformValue={(value) => value === 'true'}
+					error={errors.isCommentable}
+				/>
+
 				<Button
 					variant='surface'
 					type='submit'
@@ -101,7 +126,7 @@ export function CreatePostForm() {
 					w='full'
 					mt={4}
 				>
-					Criar Post
+					Criar Poema
 				</Button>
 			</Flex>
 
@@ -112,12 +137,12 @@ export function CreatePostForm() {
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formulário para visualizar o preview do post
+						Preencha o formulario para visualizar o preview do poema
 					</Box>
 				) : (
 					<>
 						<PostHeader
-							post={{
+							poem={{
 								title: previewPost.title,
 								excerpt: previewPost.excerpt,
 								tags: previewPost.tags.map((tag: string, index: number) => ({

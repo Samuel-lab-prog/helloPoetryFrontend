@@ -1,18 +1,38 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
-import { Navbar, ErrorPage } from '@features/base';
+import { Navbar, ErrorPage, createHTTPRequest } from '@features/base';
 import { PostPage, PostsPage, HomePage } from '@features/posts';
 import { LoginPage, RegisterPage } from '@features/auth';
-import { AdminPage, ProtectedRoutePage } from '@features/admin';
-
-const navLinks = [
-	{ to: '/', label: 'Home' },
-	{ to: '/posts', label: 'Posts' },
-	{ label: 'Register', to: '/register' },
-	{ label: 'Login', to: '/login' },
-];
+import { AdminPage, CreatePoemPage } from '@features/admin';
 
 export default function App() {
+	const { data: isAuthenticated = false } = useQuery({
+		queryKey: ['auth-navbar'],
+		queryFn: async () => {
+			try {
+				await createHTTPRequest<void>({
+					path: '/auth',
+					method: 'POST',
+					credentials: 'include',
+				});
+				return true;
+			} catch {
+				return false;
+			}
+		},
+		staleTime: 1000 * 60 * 5,
+		retry: false,
+	});
+
+	const navLinks = [
+		{ to: '/', label: 'Home' },
+		{ to: '/poems', label: 'Poems' },
+		...(isAuthenticated ? [{ to: '/poems/new', label: 'Create Poem' }] : []),
+		{ label: 'Register', to: '/register' },
+		{ label: 'Login', to: '/login' },
+	];
+
 	const router = createBrowserRouter([
 		{
 			path: '/',
@@ -20,19 +40,17 @@ export default function App() {
 			errorElement: <ErrorPage />,
 			children: [
 				{ index: true, element: <HomePage /> },
-				{ path: 'posts', element: <PostsPage /> },
-				{ path: 'posts/:slug/:id', element: <PostPage /> },
+				{ path: 'poems', element: <PostsPage /> },
+				{ path: 'poems/:slug/:id', element: <PostPage /> },
 				{ path: '/login', element: <LoginPage /> },
 				{ path: '/register', element: <RegisterPage /> },
 				{
+					path: 'poems/new',
+					element: <CreatePoemPage />,
+				},
+				{
 					path: 'admin',
-					element: <ProtectedRoutePage />,
-					children: [
-						{
-							index: true,
-							element: <AdminPage />,
-						},
-					],
+					element: <AdminPage />,
 				},
 			],
 		},

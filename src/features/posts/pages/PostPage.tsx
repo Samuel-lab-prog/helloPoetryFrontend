@@ -1,4 +1,4 @@
-import { NavLink, useParams } from 'react-router-dom';
+﻿import { NavLink, useParams } from 'react-router-dom';
 import { Box, Link, Flex, Icon } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer } from '@features/base';
@@ -7,7 +7,7 @@ import { PostHeader } from '../components/PostHeader';
 
 export function PostPage() {
 	const { id } = useParams<{ id: string }>();
-	const { post, isError, isLoading } = usePost(Number(id));
+	const { poem, isError, isLoading } = usePost(Number(id));
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
@@ -15,24 +15,24 @@ export function PostPage() {
 				<AsyncState
 					isLoading={isLoading}
 					isError={!!isError}
-					isEmpty={!post}
-					emptyElement={<Box textStyle='body'>Post não encontrado</Box>}
+					isEmpty={!poem}
+					emptyElement={<Box textStyle='body'>Poema nao encontrado</Box>}
 					errorElement={
 						<Box textStyle='body'>
-							Erro ao carregar o post. Tente novamente mais tarde
+							Erro ao carregar o poema. Tente novamente mais tarde
 						</Box>
 					}
-					loadingElement={<Box textStyle='body'>Carregando post...</Box>}
+					loadingElement={<Box textStyle='body'>Carregando poema...</Box>}
 				>
-					{post && (
+					{poem && (
 						<>
 							<PostHeader
-								post={{
-									title: post.title,
-									excerpt: post.excerpt,
-									tags: post.tags,
-									createdAt: post.createdAt,
-									updatedAt: post.updatedAt,
+								poem={{
+									title: poem.title,
+									excerpt: poem.excerpt,
+									tags: poem.tags,
+									createdAt: poem.createdAt,
+									updatedAt: poem.updatedAt,
 								}}
 							/>
 							<Box
@@ -43,7 +43,7 @@ export function PostPage() {
 								wordBreak='break-word'
 								textStyle='small'
 							>
-								<MarkdownRenderer content={post.content} />
+								<MarkdownRenderer content={poem.content} />
 							</Box>
 						</>
 					)}
@@ -55,7 +55,7 @@ export function PostPage() {
 					display='flex'
 				>
 					<Link px={4} py={2} asChild color='black'>
-						<NavLink to='/'>
+						<NavLink to='/poems'>
 							<Icon as={ArrowLeftIcon} /> Voltar
 						</NavLink>
 					</Link>

@@ -1,18 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import type { FullPostType } from '../types/types';
+import type { FullPoemType } from '../types/types';
 
 export function usePost(id: number) {
 	const query = useQuery({
-		queryKey: ['post', id],
+		queryKey: ['poem', id],
 		retry: 3,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,
 		queryFn: () =>
-			createHTTPRequest<FullPostType>({ path: '/posts', params: [id] }),
+			createHTTPRequest<FullPoemType>({ path: '/poems', params: [id] }),
 	});
 	return {
-		post: query.data,
+		poem: query.data,
 		isLoading: query.isLoading,
 		isError: query.isError,
 		error: query.error,

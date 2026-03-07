@@ -19,8 +19,8 @@ export function useDeletePostForm() {
 	async function onSubmit(data: DeletePostType) {
 		try {
 			await mutateAsync(data.id);
-			alert('Post deletado com sucesso!');
-			queryClient.invalidateQueries({ queryKey: ['posts-minimal'] }); // Invalidates for updated posts list
+			alert('Poema deletado com sucesso!');
+			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			form.reset();
 		} catch (err) {
 			handleDeletePostError(err, setGeneralError);
@@ -42,8 +42,8 @@ export function useDeletePostForm() {
 function useDeletePost() {
 	return useMutation({
 		mutationFn: (postId: number) =>
-			createHTTPRequest<{ id: number }>({
-				path: '/posts',
+			createHTTPRequest<void>({
+				path: '/poems',
 				params: [postId],
 				method: 'DELETE',
 			}),
@@ -58,19 +58,19 @@ function handleDeletePostError(
 	const status = error?.statusCode;
 
 	if (status === 401) {
-		setGeneralError('Você não tem permissão para criar posts.');
+		setGeneralError('Voce nao tem permissao para deletar poemas.');
 		return;
 	}
 
 	if (status === 404) {
-		setGeneralError('Post não encontrado.');
+		setGeneralError('Poema nao encontrado.');
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Dados invalidos. Verifique os campos e tente novamente.');
 		return;
 	}
 
-	setGeneralError('Erro ao deletar post. Tente novamente mais tarde.');
+	setGeneralError('Erro ao deletar poema. Tente novamente mais tarde.');
 }

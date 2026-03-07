@@ -3,7 +3,7 @@ import { Tag } from './PostTag';
 import { Heading, Text, Flex, VStack } from '@chakra-ui/react';
 
 type PostHeaderProps = {
-	post: {
+	poem: {
 		title: string;
 		excerpt: string;
 		tags: { id: number; name: string }[];
@@ -12,8 +12,8 @@ type PostHeaderProps = {
 	};
 };
 
-export function PostHeader({ post }: PostHeaderProps) {
-	const { title, excerpt, tags, createdAt, updatedAt } = post;
+export function PostHeader({ poem }: PostHeaderProps) {
+	const { title, excerpt, tags, createdAt, updatedAt } = poem;
 
 	return (
 		<>

@@ -7,7 +7,7 @@ export function useAuth() {
 		queryFn: async () => {
 			try {
 				await createHTTPRequest<{ id: number }>({
-					path: '/auth',
+					path: '/auth/login',
 					method: 'POST',
 				});
 				return true;

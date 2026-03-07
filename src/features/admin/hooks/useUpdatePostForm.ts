@@ -18,10 +18,10 @@ export function useUpdatePostForm() {
 
 	async function onSubmit(data: UpdatePostType) {
 		try {
-			queryClient.invalidateQueries({ queryKey: ['posts-minimal'] }); // Invalidate to refresh posts list
-			queryClient.invalidateQueries({ queryKey: ['post', data.id] }); // Invalidate to refresh the specific post
 			await mutateAsync(data);
-			alert('Post atualizado com sucesso!');
+			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
+			queryClient.invalidateQueries({ queryKey: ['poem', data.id] });
+			alert('Poema atualizado com sucesso!');
 		} catch (err) {
 			handleUpdatePostError(err, form.setError, setGeneralError);
 		}
@@ -49,39 +49,41 @@ function handleUpdatePostError(
 	const message = error?.errorMessages?.join(' ');
 
 	if (status === 401) {
-		setGeneralError('Você não tem permissão para criar posts.');
+		setGeneralError('Voce nao tem permissao para atualizar poemas.');
 		return;
 	}
 
 	if (status === 409 && message?.includes('slug')) {
 		setError('title', {
 			type: 'manual',
-			message: 'Já existe um post com esse novo título.',
+			message: 'Ja existe um poema com esse novo titulo.',
 		});
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Dados invalidos. Verifique os campos e tente novamente.');
 		return;
 	}
 
-	setGeneralError('Erro ao atualizar post. Tente novamente mais tarde.');
+	setGeneralError('Erro ao atualizar poema. Tente novamente mais tarde.');
 }
 
 function useUpdatePost() {
 	return useMutation({
 		mutationFn: (updatedPost: UpdatePostType) =>
 			createHTTPRequest<{ id: number }, Omit<UpdatePostType, 'id'>>({
-				path: '/posts',
+				path: '/poems',
 				params: [Number(updatedPost.id)],
-				method: 'PATCH',
+				method: 'PUT',
 				body: {
 					title: updatedPost.title,
 					excerpt: updatedPost.excerpt,
 					content: updatedPost.content,
 					tags: updatedPost.tags,
 					status: updatedPost.status,
+					visibility: updatedPost.visibility,
+					isCommentable: updatedPost.isCommentable,
 				},
 			}),
 	});

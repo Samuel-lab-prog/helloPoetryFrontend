@@ -1,11 +1,11 @@
 import { Flex } from '@chakra-ui/react';
-import { PostCard } from '../components/PostCard';
+import { PoemCard } from '../components/PoemCard';
 import { PostGrid } from '../components/PostGrid';
 import { useRecentPosts } from '../hooks/useRecentPosts';
 import { AsyncState, Footer } from '@features/base';
 
 export function HomePage() {
-	const { posts, isError, isLoading } = useRecentPosts({ limit: 4 });
+	const { poems, isError, isLoading } = useRecentPosts({ limit: 4 });
 	return (
 		<>
 			<Flex as='main' layerStyle='main' direction='column'>
@@ -14,15 +14,19 @@ export function HomePage() {
 						<AsyncState
 							isLoading={isLoading}
 							isError={isError}
-							isEmpty={!posts || posts?.length === 0}
-							emptyElement={<Flex textStyle='body'>No posts found</Flex>}
-							errorElement={
-								<Flex textStyle='body'>Error at loading posts</Flex>
+							isEmpty={!poems || poems?.length === 0}
+							emptyElement={
+								<Flex textStyle='body'>Nenhum poema encontrado</Flex>
 							}
-							loadingElement={<Flex textStyle='body'>Loading posts...</Flex>}
+							errorElement={
+								<Flex textStyle='body'>Erro ao carregar poemas</Flex>
+							}
+							loadingElement={
+								<Flex textStyle='body'>Carregando poemas...</Flex>
+							}
 						>
-							{posts.map((post) => (
-								<PostCard key={post.id} post={post} />
+							{poems.map((poem) => (
+								<PoemCard key={poem.id} poem={poem} />
 							))}
 						</AsyncState>
 					</PostGrid>

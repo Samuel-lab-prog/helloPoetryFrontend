@@ -22,7 +22,7 @@ export function useRegisterForm() {
 	const registerMutation = useMutation({
 		mutationFn: (data: RegisterDataType) =>
 			createHTTPRequest<void, RegisterDataType>({
-				path: '/auth/register',
+				path: '/users',
 				method: 'POST',
 				body: data,
 			}),

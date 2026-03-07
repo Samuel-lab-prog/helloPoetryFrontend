@@ -23,13 +23,13 @@ export function AdminPage() {
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
 					<Button variant='surface' onClick={() => setActiveForm('create')}>
-						Criar Post
+						Criar Poema
 					</Button>
 					<Button variant='surface' onClick={() => setActiveForm('update')}>
-						Atualizar Post
+						Atualizar Poema
 					</Button>
 					<Button variant='surface' onClick={() => setActiveForm('delete')}>
-						Deletar Post
+						Deletar Poema
 					</Button>
 				</Flex>
 			</Flex>
@@ -44,7 +44,7 @@ export function AdminPage() {
 					{activeForm === 'create' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Criar Post
+								Criar Poema
 							</Heading>
 							<CreatePostForm />
 						</>
@@ -53,7 +53,7 @@ export function AdminPage() {
 					{activeForm === 'update' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Atualizar Post
+								Atualizar Poema
 							</Heading>
 							<UpdatePostForm />
 						</>
@@ -62,7 +62,7 @@ export function AdminPage() {
 					{activeForm === 'delete' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Deletar Post
+								Deletar Poema
 							</Heading>
 							<DeletePostForm />
 						</>
