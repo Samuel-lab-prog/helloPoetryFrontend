@@ -1,0 +1,8 @@
+{
+	"directory": ["./src/features"],
+	"singleQuotes": true,
+	"delete": true,
+	"name": "index",
+	"location": "below",
+	"local": false
+}
