@@ -10,6 +10,7 @@ import {
 	Flex,
 	Image,
 	Link,
+	Text,
 } from '@chakra-ui/react';
 import { Menu, X } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
@@ -35,28 +36,42 @@ function Logo() {
 const MenuLinks = ({
 	links,
 	isMobile = false,
+	isSidebar = false,
 	onLinkClick,
 }: {
 	links: { label: string; to: string }[];
 	isMobile?: boolean;
+	isSidebar?: boolean;
 	onLinkClick?: () => void;
 }) => {
-	const Container = isMobile ? VStack : HStack;
+	const Container = isMobile || isSidebar ? VStack : HStack;
 
 	return (
-		<Container gap={isMobile ? 3 : 6} align='center'>
+		<Container
+			gap={isMobile || isSidebar ? 2 : 6}
+			align={isSidebar ? 'stretch' : 'center'}
+			w={isSidebar ? 'full' : undefined}
+		>
 			{links.map((link) => (
 				<Link
 					asChild
-					color='gray.700'
-					w={['full', undefined, undefined, 'auto']}
-					padding={2}
+					color='pink.100'
+					w={isSidebar || isMobile ? 'full' : 'auto'}
+					px={3}
+					py={2}
+					borderRadius='md'
 					textStyle='small'
 					display='flex'
-					justifyContent='center'
+					justifyContent={isSidebar ? 'flex-start' : 'center'}
 					key={link.label}
 					onClick={onLinkClick}
-					_currentPage={{ fontWeight: 'bold', textDecoration: 'underline' }}
+					transition='all 0.2s ease'
+					_hover={{ bg: 'rgba(255, 255, 255, 0.06)', color: 'pink.50' }}
+					_currentPage={{
+						fontWeight: 'bold',
+						color: 'pink.50',
+						bg: 'rgba(255, 143, 189, 0.14)',
+					}}
 				>
 					<NavLink to={link.to}>{link.label}</NavLink>
 				</Link>
@@ -88,7 +103,7 @@ const MobileDrawer = ({
 			role='dialog'
 		>
 			<Drawer.Trigger asChild>
-				<Button variant='plain' size='sm'>
+				<Button variant='plain' size='sm' color='pink.100'>
 					<Icon as={Menu} size='2xl' />
 				</Button>
 			</Drawer.Trigger>
@@ -96,7 +111,9 @@ const MobileDrawer = ({
 			<Drawer.Backdrop padding='0' />
 			<Drawer.Positioner>
 				<Drawer.Content
-					bg='gray.100'
+					bg='purple.900'
+					borderLeft='1px solid'
+					borderColor='border'
 					maxW='280px'
 					display='flex'
 					flexDirection='column'
@@ -106,7 +123,7 @@ const MobileDrawer = ({
 							<Logo />
 						</Drawer.Title>
 						<Drawer.CloseTrigger asChild pos='initial'>
-							<Button variant='plain'>
+							<Button variant='plain' color='pink.100'>
 								<Icon as={X} size='2xl' />
 							</Button>
 						</Drawer.CloseTrigger>
@@ -122,31 +139,60 @@ const MobileDrawer = ({
 
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	return (
-		<>
+		<Flex minH='100vh' w='full'>
 			<Flex
-				as='nav'
-				align='end'
-				justify={{ base: 'space-between', md: 'flex-start' }}
-				wrap='wrap'
-				gap={{ base: 8, lg: 16 }}
-				borderColor='gray.200'
-				mx='auto'
-				h={110}
-				w='full'
+				as='aside'
+				display={{ base: 'none', md: 'flex' }}
+				direction='column'
+				justify='space-between'
+				w='260px'
+				minH='100vh'
+				position='sticky'
+				top={0}
+				alignSelf='flex-start'
+				p={6}
+				borderRight='1px solid'
+				borderColor='border'
+				bg='rgba(18, 0, 17, 0.86)'
+				backdropFilter='blur(6px)'
 			>
-				<Logo />
+				<Flex direction='column' gap={8}>
+					<Logo />
+					<MenuLinks links={links} isSidebar />
+				</Flex>
 
-				{/* Desktop Menu */}
-				<Box display={{ base: 'none', md: 'block' }} ml={12}>
-					<MenuLinks links={links} />
-				</Box>
-
-				{/* Mobile Drawer */}
-				<Box display={{ base: 'block', md: 'none' }}>
-					<MobileDrawer links={links} />
-				</Box>
+				<Text textStyle='small' color='pink.200' opacity={0.7}>
+					Olapoesia
+				</Text>
 			</Flex>
-			<Outlet />
-		</>
+
+			<Flex flex='1' minW={0} direction='column' w='full'>
+				<Flex
+					as='nav'
+					display={{ base: 'flex', md: 'none' }}
+					align='center'
+					justify='space-between'
+					w='full'
+					px={4}
+					py={3}
+					borderBottom='1px solid'
+					borderColor='border'
+					bg='rgba(18, 0, 17, 0.9)'
+					backdropFilter='blur(6px)'
+					position='sticky'
+					top={0}
+					zIndex={10}
+				>
+					<Logo />
+
+					{/* Mobile Drawer */}
+					<Box display={{ base: 'block', md: 'none' }}>
+						<MobileDrawer links={links} />
+					</Box>
+				</Flex>
+
+				<Outlet />
+			</Flex>
+		</Flex>
 	);
 }

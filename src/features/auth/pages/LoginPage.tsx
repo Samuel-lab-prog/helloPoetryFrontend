@@ -22,7 +22,7 @@ export function LoginPage() {
 						Login
 					</Heading>
 
-					<Text textStyle='small'>
+					<Text textStyle='small' color='pink.100'>
 						Please enter your credentials to log in.
 					</Text>
 				</Flex>

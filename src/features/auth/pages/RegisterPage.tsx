@@ -16,7 +16,7 @@ export function RegisterPage() {
 						Create account
 					</Heading>
 
-					<Text textStyle='small'>
+					<Text textStyle='small' color='pink.100'>
 						Fill in your details to create your account.
 					</Text>
 				</Flex>

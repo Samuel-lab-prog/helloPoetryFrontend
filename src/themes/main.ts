@@ -144,11 +144,9 @@ const globalCss = defineGlobalStyles({
 	'#root': {
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center',
-		maxWidth: '800px',
-		marginRight: 'auto',
-		marginLeft: 'auto',
+		alignItems: 'stretch',
 		width: '100%',
+		minHeight: '100vh',
 	},
 });
 
