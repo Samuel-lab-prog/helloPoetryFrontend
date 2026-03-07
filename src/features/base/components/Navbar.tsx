@@ -1,29 +1,48 @@
-﻿import {
+/* eslint-disable arrow-body-style */
+import {
 	Badge,
 	Box,
-	HStack,
-	VStack,
-	Button,
-	useDisclosure,
-	Drawer,
-	Icon,
 	Flex,
+	HStack,
+	Icon,
 	Link,
 	Text,
+	VStack,
 } from '@chakra-ui/react';
 import {
 	Bell,
 	BookOpen,
 	House,
 	LogIn,
-	Menu,
 	PenSquare,
 	User,
 	UserPlus,
 	Users,
-	X,
 } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+
+function getLinkIcon(to: string) {
+	switch (to) {
+		case '/':
+			return House;
+		case '/poems':
+			return BookOpen;
+		case '/poets':
+			return Users;
+		case '/poems/new':
+			return PenSquare;
+		case '/my-profile':
+			return User;
+		case '/notifications':
+			return Bell;
+		case '/register':
+			return UserPlus;
+		case '/login':
+			return LogIn;
+		default:
+			return BookOpen;
+	}
+}
 
 /* ---------------- LOGO ---------------- */
 function Logo() {
@@ -68,61 +87,26 @@ function Logo() {
 	);
 }
 
-/* ---------------- MENU LINKS ---------------- */
-const MenuLinks = ({
+/* ---------------- SIDEBAR LINKS ---------------- */
+const SidebarLinks = ({
 	links,
-	isMobile = false,
-	isSidebar = false,
-	onLinkClick,
 }: {
 	links: { label: string; to: string }[];
-	isMobile?: boolean;
-	isSidebar?: boolean;
-	onLinkClick?: () => void;
 }) => {
-	const Container = isMobile || isSidebar ? VStack : HStack;
-	const getLinkIcon = (to: string) => {
-		switch (to) {
-			case '/':
-				return House;
-			case '/poems':
-				return BookOpen;
-			case '/poets':
-				return Users;
-			case '/poems/new':
-				return PenSquare;
-			case '/my-profile':
-				return User;
-			case '/notifications':
-				return Bell;
-			case '/register':
-				return UserPlus;
-			case '/login':
-				return LogIn;
-			default:
-				return BookOpen;
-		}
-	};
-
 	return (
-		<Container
-			gap={isMobile || isSidebar ? 2 : 6}
-			align={isSidebar ? 'stretch' : 'center'}
-			w={isSidebar ? 'full' : undefined}
-		>
+		<VStack gap={2} align='stretch' w='full'>
 			{links.map((link) => (
 				<Link
 					asChild
 					color='pink.100'
-					w={isSidebar || isMobile ? 'full' : 'auto'}
+					w='full'
 					px={3}
 					py={2}
 					borderRadius='md'
 					textStyle='small'
 					display='flex'
-					justifyContent={isSidebar ? 'flex-start' : 'center'}
+					justifyContent='flex-start'
 					key={link.label}
-					onClick={onLinkClick}
 					transition='all 0.2s ease'
 					_hover={{ bg: 'rgba(255, 255, 255, 0.06)', color: 'pink.50' }}
 					_currentPage={{
@@ -139,64 +123,66 @@ const MenuLinks = ({
 					</NavLink>
 				</Link>
 			))}
-		</Container>
+		</VStack>
 	);
 };
 
-/* ---------------- MOBILE DRAWER ---------------- */
-const MobileDrawer = ({
+const BottomMobileNav = ({
 	links,
 }: {
 	links: { label: string; to: string }[];
 }) => {
-	const { open, onToggle } = useDisclosure();
-
 	return (
-		<Drawer.Root
-			size='md'
-			open={open}
-			onOpenChange={onToggle}
-			placement='end'
-			aria-label='Menu Drawer'
-			unmountOnExit
-			closeOnEscape
-			closeOnInteractOutside
-			contained
-			restoreFocus
-			role='dialog'
+		<Box
+			as='nav'
+			display={{ base: 'block', md: 'none' }}
+			position='fixed'
+			left={0}
+			right={0}
+			bottom={0}
+			zIndex={20}
+			borderTop='1px solid'
+			borderColor='border'
+			bg='rgba(18, 0, 17, 0.95)'
+			backdropFilter='blur(8px)'
+			pb='calc(env(safe-area-inset-bottom, 0px))'
 		>
-			<Drawer.Trigger asChild>
-				<Button variant='plain' size='sm' color='pink.100'>
-					<Icon as={Menu} size='2xl' />
-				</Button>
-			</Drawer.Trigger>
-
-			<Drawer.Backdrop padding='0' />
-			<Drawer.Positioner>
-				<Drawer.Content
-					bg='purple.900'
-					borderLeft='1px solid'
-					borderColor='border'
-					maxW='280px'
-					display='flex'
-					flexDirection='column'
-				>
-					<Drawer.Header>
-						<Drawer.Title>
-							<Logo />
-						</Drawer.Title>
-						<Drawer.CloseTrigger asChild pos='initial'>
-							<Button variant='plain' color='pink.100'>
-								<Icon as={X} size='2xl' />
-							</Button>
-						</Drawer.CloseTrigger>
-					</Drawer.Header>
-					<Drawer.Body>
-						<MenuLinks links={links} isMobile onLinkClick={onToggle} />
-					</Drawer.Body>
-				</Drawer.Content>
-			</Drawer.Positioner>
-		</Drawer.Root>
+			<HStack
+				px={3}
+				py={2}
+				gap={2}
+				overflowX='auto'
+				scrollbar='hidden'
+				justify='space-between'
+			>
+				{links.map((link) => (
+					<Link
+						key={link.label}
+						asChild
+						flex='1'
+						minW='72px'
+						textAlign='center'
+						px={2}
+						py={3}
+						borderRadius='md'
+						color='pink.100'
+						transition='all 0.2s ease'
+						_hover={{ bg: 'rgba(255, 255, 255, 0.06)', color: 'pink.50' }}
+						_currentPage={{
+							fontWeight: 'bold',
+							color: 'pink.50',
+							bg: 'rgba(255, 143, 189, 0.14)',
+						}}
+					>
+						<NavLink to={link.to}>
+							<Flex direction='column' align='center' gap={0}>
+								<Icon as={getLinkIcon(link.to)} boxSize={5} strokeWidth={2.4} />
+							</Flex>
+						</NavLink>
+					</Link>
+				))}
+			</HStack>
+		</Box>
 	);
 };
 
@@ -221,7 +207,7 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 			>
 				<Flex direction='column' gap={8}>
 					<Logo />
-					<MenuLinks links={links} isSidebar />
+					<SidebarLinks links={links} />
 				</Flex>
 
 				<Text textStyle='small' color='pink.200' opacity={0.7}>
@@ -229,33 +215,17 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				</Text>
 			</Flex>
 
-			<Flex flex='1' minW={0} direction='column' w='full'>
-				<Flex
-					as='nav'
-					display={{ base: 'flex', md: 'none' }}
-					align='center'
-					justify='space-between'
-					w='full'
-					px={4}
-					py={3}
-					borderBottom='1px solid'
-					borderColor='border'
-					bg='rgba(18, 0, 17, 0.9)'
-					backdropFilter='blur(6px)'
-					position='sticky'
-					top={0}
-					zIndex={10}
-				>
-					<Logo />
-
-					{/* Mobile Drawer */}
-					<Box display={{ base: 'block', md: 'none' }}>
-						<MobileDrawer links={links} />
-					</Box>
-				</Flex>
-
+			<Flex
+				flex='1'
+				minW={0}
+				direction='column'
+				w='full'
+				pb={{ base: '84px', md: 0 }}
+			>
 				<Outlet />
 			</Flex>
+
+			<BottomMobileNav links={links} />
 		</Flex>
 	);
 }
