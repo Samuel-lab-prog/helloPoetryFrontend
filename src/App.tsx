@@ -2,7 +2,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
 import { PostPage, PostsPage, HomePage } from '@features/posts';
-import { LoginPage, MyProfilePage, RegisterPage } from '@features/auth';
+import {
+	LoginPage,
+	MyProfilePage,
+	NotificationsPage,
+	RegisterPage,
+} from '@features/auth';
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
 export default function App() {
@@ -13,6 +18,7 @@ export default function App() {
 		{ to: '/poems', label: 'Poems' },
 		...(isAuthenticated ? [{ to: '/poems/new', label: 'Create Poem' }] : []),
 		...(isAuthenticated ? [{ to: '/my-profile', label: 'My Profile' }] : []),
+		...(isAuthenticated ? [{ to: '/notifications', label: 'Notifications' }] : []),
 		{ label: 'Register', to: '/register' },
 		{ label: 'Login', to: '/login' },
 	];
@@ -39,6 +45,10 @@ export default function App() {
 				{
 					path: 'my-profile',
 					element: <MyProfilePage />,
+				},
+				{
+					path: 'notifications',
+					element: <NotificationsPage />,
 				},
 			],
 		},
