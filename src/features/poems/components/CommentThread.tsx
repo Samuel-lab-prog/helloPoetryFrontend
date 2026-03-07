@@ -1,7 +1,14 @@
 ﻿/* eslint-disable max-lines-per-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, Flex, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
+import {
+	ChevronDown,
+	ChevronUp,
+	Heart,
+	MessageCircleReply,
+	SendHorizontal,
+	Trash2,
+} from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
 import { formatDate } from '@features/base';
 
@@ -113,32 +120,54 @@ export const CommentThread = memo(function CommentThread({
 					<Text textStyle='small'>{comment.content}</Text>
 				</Box>
 				{comment.author.id === authClientId && (
-					<Button
+					<IconButton
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
+						aria-label='Excluir comentário'
+						title='Excluir comentário'
 						loading={isDeletingComment}
 						onClick={handleDelete}
 					>
-						Excluir
-					</Button>
+						<Trash2 />
+					</IconButton>
 				)}
 			</Flex>
 
 			<Flex mt={3} justify='space-between' align='center' gap={2} wrap='wrap'>
 				<Flex align='center' gap={2}>
-					<Button
+					<IconButton
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
+						aria-label={
+							activeReplyFor === comment.id
+								? 'Fechar resposta'
+								: 'Responder comentário'
+						}
+						title={
+							activeReplyFor === comment.id
+								? 'Fechar resposta'
+								: 'Responder comentário'
+						}
 						onClick={handleToggleReplies}
 					>
-						Responder
-					</Button>
-					<Button
+						<MessageCircleReply />
+					</IconButton>
+					<IconButton
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
+						aria-label={
+							comment.likedByCurrentUser
+								? 'Descurtir comentário'
+								: 'Curtir comentário'
+						}
+						title={
+							comment.likedByCurrentUser
+								? 'Descurtir comentário'
+								: 'Curtir comentário'
+						}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
 							comment.likedByCurrentUser
@@ -146,9 +175,11 @@ export const CommentThread = memo(function CommentThread({
 								: likeComment(comment.id)
 						}
 					>
-						{comment.likedByCurrentUser ? 'Descurtir' : 'Curtir'} (
-						{comment.likesCount})
-					</Button>
+						<Heart />
+					</IconButton>
+					<Text textStyle='smaller' color='pink.200'>
+						{comment.likesCount}
+					</Text>
 				</Flex>
 				{hasReplies && (
 					<Flex align='center' gap={2}>
@@ -156,14 +187,16 @@ export const CommentThread = memo(function CommentThread({
 							{comment.aggregateChildrenCount} resposta(s)
 						</Text>
 						{!hasLoadedReplies && (
-							<Button
+							<IconButton
 								size='xs'
 								variant='solidPink'
 								colorPalette='gray'
+								aria-label='Ver respostas'
+								title='Ver respostas'
 								onClick={handleToggleReplies}
 							>
-								Ver respostas
-							</Button>
+								{activeReplyFor === comment.id ? <ChevronUp /> : <ChevronDown />}
+							</IconButton>
 						)}
 					</Flex>
 				)}
@@ -185,13 +218,9 @@ export const CommentThread = memo(function CommentThread({
 								fetchReplies={fetchReplies}
 								repliesByCommentId={repliesByCommentId}
 								setRepliesByCommentId={setRepliesByCommentId}
-								likeComment={function (id: number): Promise<void> {
-									throw new Error('Function not implemented.');
-								}}
-								unlikeComment={function (id: number): Promise<void> {
-									throw new Error('Function not implemented.');
-								}}
-								isUpdatingCommentLike={false}
+								likeComment={likeComment}
+								unlikeComment={unlikeComment}
+								isUpdatingCommentLike={isUpdatingCommentLike}
 							/>
 						))}
 					</Flex>
@@ -210,17 +239,19 @@ export const CommentThread = memo(function CommentThread({
 							disabled={!poemIsCommentable || isCreatingComment}
 						/>
 						<Flex justify='flex-end'>
-							<Button
+							<IconButton
 								size='sm'
 								variant='solidPink'
+								aria-label='Enviar resposta'
+								title='Enviar resposta'
 								disabled={
 									!replyInput.trim() || !poemIsCommentable || isCreatingComment
 								}
 								loading={isCreatingComment}
 								onClick={handleCreateReply}
 							>
-								Enviar resposta
-							</Button>
+								<SendHorizontal />
+							</IconButton>
 						</Flex>
 						{replyError && (
 							<Text textStyle='smaller' color='red.400'>

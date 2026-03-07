@@ -1,4 +1,5 @@
-﻿import { Box, Field, NativeSelect } from '@chakra-ui/react';
+import { Box, Field, Icon, NativeSelect } from '@chakra-ui/react';
+import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import {
 	Controller,
@@ -22,7 +23,7 @@ interface SelectFieldProps<T extends FieldValues> {
 	required?: boolean;
 	placeholder?: string;
 	disabled?: boolean;
-	transformValue?: (value: string) => unknown; // â† nova prop
+	transformValue?: (value: string) => unknown;
 }
 
 export function SelectField<T extends FieldValues>({
@@ -73,7 +74,7 @@ export function SelectField<T extends FieldValues>({
 							color='text'
 							px={3}
 							py={2}
-							pe={10}
+							pe={14}
 							transition='all 0.22s ease'
 							_hover={{
 								borderColor: hasError ? 'error' : 'borderHover',
@@ -119,10 +120,25 @@ export function SelectField<T extends FieldValues>({
 						</NativeSelect.Field>
 
 						<NativeSelect.Indicator
-							color={hasError ? 'red.400' : isFocused ? 'pink.300' : 'pink.200'}
-							transition='transform 0.2s ease, color 0.2s ease'
-							transform={isFocused ? 'rotate(180deg)' : 'rotate(0deg)'}
-						/>
+							pointerEvents='none'
+							px={2}
+							h='70%'
+							right={1}
+							borderRadius='md'
+							bg={hasError ? 'rgba(239,68,68,0.14)' : 'rgba(255, 255, 255, 0.05)'}
+							border='1px solid'
+							borderColor={hasError ? 'red.400' : 'purple.600'}
+							color={hasError ? 'red.300' : isFocused ? 'pink.200' : 'pink.300'}
+							transition='transform 0.24s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease'
+							transform={isFocused ? 'translateY(-1px)' : 'translateY(0)'}
+						>
+							<Icon
+								as={ChevronDown}
+								boxSize={4}
+								transition='transform 0.24s ease'
+								transform={isFocused ? 'rotate(180deg)' : 'rotate(0deg)'}
+							/>
+						</NativeSelect.Indicator>
 					</NativeSelect.Root>
 				)}
 			/>

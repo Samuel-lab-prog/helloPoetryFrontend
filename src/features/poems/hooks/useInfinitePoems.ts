@@ -5,12 +5,30 @@ import type { PaginatedPoemsType } from '../types/types';
 type OrderOption = 'newest' | 'oldest';
 type UseInfinitePoemsOption = {
 	order: OrderOption;
+	tags?: string[];
+	searchTitle?: string;
 	limit?: number;
 };
 
-export function useInfinitePoems({ order, limit = 8 }: UseInfinitePoemsOption) {
+export function useInfinitePoems({
+	order,
+	tags = [],
+	searchTitle = '',
+	limit = 8,
+}: UseInfinitePoemsOption) {
+	const normalizedTags = tags.map((tag) => tag.trim()).filter(Boolean);
+	const normalizedSearchTitle = searchTitle.trim();
+
 	const query = useInfiniteQuery({
-		queryKey: ['poems', { order, limit }],
+		queryKey: [
+			'poems',
+			{
+				order,
+				tags: normalizedTags,
+				searchTitle: normalizedSearchTitle,
+				limit,
+			},
+		],
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		retry: 3,
 		initialPageParam: undefined as number | undefined,
@@ -23,6 +41,8 @@ export function useInfinitePoems({ order, limit = 8 }: UseInfinitePoemsOption) {
 					cursor: pageParam,
 					orderBy: 'createdAt',
 					orderDirection: order === 'newest' ? 'desc' : 'asc',
+					tags: normalizedTags.length > 0 ? normalizedTags : undefined,
+					searchTitle: normalizedSearchTitle || undefined,
 				},
 			}),
 

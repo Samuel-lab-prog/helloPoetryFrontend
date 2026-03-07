@@ -63,8 +63,8 @@ export function FormField<T extends FieldValues>({
 						_focusVisible={{
 							borderColor: error ? 'error' : 'pink.300',
 							boxShadow: error
-								? '0 0 0 5px rgba(239, 68, 68, 1)'
-								: '0 0 0 5px rgba(255, 143, 189, 1)',
+								? '0 0 0 3px rgba(239, 68, 68, 1)'
+								: '0 0 0 3px rgba(255, 143, 189, 1)',
 						}}
 						_focus={{ borderColor: error ? 'error' : 'pink.300' }}
 						autoFocus={autoFocus}

@@ -16,13 +16,13 @@ export default function App() {
 	const navLinks = [
 		{ to: '/', label: 'Início' },
 		{ to: '/poems', label: 'Poemas' },
-		...(isAuthenticated ? [{ to: '/poems/new', label: 'Criar Poema' }] : []),
+		...(isAuthenticated ? [{ to: '/poems/new', label: 'Criar' }] : []),
 		...(isAuthenticated ? [{ to: '/my-profile', label: 'Meu Perfil' }] : []),
 		...(isAuthenticated
 			? [{ to: '/notifications', label: 'Notificações' }]
 			: []),
-		{ label: 'Cadastrar', to: '/register' },
-		{ label: 'Entrar', to: '/login' },
+		...(!isAuthenticated ? [{ label: 'Cadastrar', to: '/register' }] : []),
+		...(!isAuthenticated ? [{ label: 'Entrar', to: '/login' }] : []),
 	];
 
 	const router = createBrowserRouter([

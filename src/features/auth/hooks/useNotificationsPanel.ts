@@ -1,7 +1,25 @@
-﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 
-type NotificationType = {
+type NotificationPayload = {
+	title?: string;
+	body?: string;
+	poemId?: number;
+	poemTitle?: string;
+	commentId?: number;
+	parentCommentId?: number;
+	commenterNickname?: string;
+	likerNickname?: string;
+	dedicatorNickname?: string;
+	requesterId?: number;
+	requesterNickname?: string;
+	newFriendId?: number;
+	newFriendNickname?: string;
+	replierId?: number;
+	replierNickname?: string;
+};
+
+export type NotificationItem = {
 	id: number;
 	userId: number;
 	type: string;
@@ -9,14 +27,14 @@ type NotificationType = {
 	entityId: number | null;
 	entityType: 'POEM' | 'COMMENT' | 'USER' | null;
 	aggregatedCount: number;
-	data: unknown;
+	data: NotificationPayload | null;
 	createdAt: string;
 	updatedAt: string;
 	readAt: string | null;
 };
 
 type NotificationsPageType = {
-	notifications: NotificationType[];
+	notifications: NotificationItem[];
 	hasMore: boolean;
 	nextCursor?: number;
 };
@@ -35,7 +53,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
-			createHTTPRequest<NotificationType>({
+			createHTTPRequest<NotificationItem>({
 				path: '/notifications',
 				params: [id, 'read'],
 				method: 'PATCH',
@@ -60,7 +78,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 
 	const deleteMutation = useMutation({
 		mutationFn: (id: number) =>
-			createHTTPRequest<NotificationType>({
+			createHTTPRequest<NotificationItem>({
 				path: '/notifications',
 				params: [id],
 				method: 'DELETE',

@@ -1,12 +1,12 @@
-﻿import { Flex, Heading, Button } from '@chakra-ui/react';
-import { AsyncState, SelectField } from '@features/base';
+import { Flex, Heading, Button } from '@chakra-ui/react';
+import { AsyncState, FormField, SelectField, TagsField } from '@features/base';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
 import { useInfinitePoems } from '../hooks/useInfinitePoems';
 import { usePoemsFilters } from '../hooks/usePoemsFilters';
 
 export function PoemsPage() {
-	const { control, order } = usePoemsFilters();
+	const { control, order, tags, searchTitle } = usePoemsFilters();
 	const {
 		poems,
 		isError,
@@ -14,7 +14,7 @@ export function PoemsPage() {
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-	} = useInfinitePoems({ order });
+	} = useInfinitePoems({ order, tags, searchTitle });
 
 	const orderOptions: { value: 'newest' | 'oldest'; label: string }[] = [
 		{ value: 'newest', label: 'Mais recentes' },
@@ -39,6 +39,18 @@ export function PoemsPage() {
 						name='order'
 						control={control}
 						options={orderOptions}
+					/>
+					<FormField
+						label='Buscar poema'
+						name='searchTitle'
+						control={control}
+						type='text'
+					/>
+					<TagsField
+						label='Filtrar por tags'
+						name='tags'
+						control={control}
+						placeholder='Digite e pressione Enter'
 					/>
 				</Flex>
 			</Flex>

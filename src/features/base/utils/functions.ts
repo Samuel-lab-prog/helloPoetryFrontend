@@ -82,7 +82,9 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	return parsedBody;
 }
 
-type QueryParams = Record<string, string | number | boolean | undefined>;
+type QueryPrimitive = string | number | boolean;
+type QueryValue = QueryPrimitive | QueryPrimitive[] | undefined;
+type QueryParams = Record<string, QueryValue>;
 
 function buildUrl(
 	baseUrl: string,
@@ -97,9 +99,15 @@ function buildUrl(
 	}
 
 	if (query) {
-		const filteredEntries = Object.entries(query)
-			.filter(([, value]) => value !== undefined)
-			.map(([key, value]) => [key, String(value)]);
+		const filteredEntries = Object.entries(query).flatMap(([key, value]) => {
+			if (value === undefined) return [];
+			if (Array.isArray(value)) {
+				return value
+					.filter((item) => item !== undefined)
+					.map((item) => [key, String(item)] as [string, string]);
+			}
+			return [[key, String(value)] as [string, string]];
+		});
 
 		if (filteredEntries.length > 0) {
 			const searchParams = new URLSearchParams(filteredEntries).toString();

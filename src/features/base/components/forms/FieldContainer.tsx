@@ -14,7 +14,7 @@ export function FieldContainer({
 	return (
 		<Box
 			w='full'
-			p='1'
+			p='2'
 			border='1px solid'
 			borderColor={hasError ? 'error' : 'transparent'}
 			bg={hasError ? 'rgba(248, 113, 113, 0.08)' : 'transparent'}

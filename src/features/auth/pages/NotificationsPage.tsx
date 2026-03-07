@@ -1,28 +1,8 @@
-﻿import { useState } from 'react';
-import { Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
-import { AsyncState, formatDate } from '@features/base';
+import { useMemo, useState } from 'react';
+import { Badge, Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import { AsyncState } from '@features/base';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
-
-function getNotificationTitle(type: string) {
-	switch (type) {
-		case 'POEM_COMMENT_CREATED':
-			return 'Novo comentário';
-		case 'NEW_FRIEND':
-			return 'Novo amigo';
-		case 'NEW_FRIEND_REQUEST':
-			return 'Pedido de amizade';
-		case 'POEM_LIKED':
-			return 'Poema curtido';
-		case 'POEM_COMMENT_REPLIED':
-			return 'Resposta em comentário';
-		case 'POEM_DEDICATED':
-			return 'Poema dedicado';
-		case 'USER_MENTION_IN_POEM':
-			return 'Você foi mencionado';
-		default:
-			return 'Notificação';
-	}
-}
+import { NotificationCard } from '../components/NotificationCard';
 
 export function NotificationsPage() {
 	const [onlyUnread, setOnlyUnread] = useState(false);
@@ -38,15 +18,32 @@ export function NotificationsPage() {
 		isDeleting,
 	} = useNotificationsPanel(onlyUnread);
 
+	const unreadCount = useMemo(
+		() => notifications.filter((item) => !item.readAt).length,
+		[notifications],
+	);
+
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='4xl'>
-				<Heading as='h1' textStyle='h1' mb={6}>
-					Notificações
-				</Heading>
+				<Flex
+					align={{ base: 'start', md: 'center' }}
+					justify='space-between'
+					gap={3}
+					mb={6}
+					flexWrap='wrap'
+				>
+					<Heading as='h1' textStyle='h1'>
+						Notificações
+					</Heading>
+					<Badge colorPalette='pink' variant='subtle'>
+						{unreadCount} Não lidas
+					</Badge>
+				</Flex>
 
-				<HStack mb={6} gap={3} wrap='wrap'>
+				<HStack mb={6} gap={2} wrap='wrap'>
 					<Button
+						size={{ base: 'xs', md: 'sm' }}
 						variant='solidPink'
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
@@ -54,8 +51,11 @@ export function NotificationsPage() {
 						{onlyUnread ? 'Mostrar todas' : 'Somente não lidas'}
 					</Button>
 					<Button
+						size={{ base: 'xs', md: 'sm' }}
 						variant='solidPink'
-						onClick={() => markAllAsRead()}
+						onClick={() => {
+							void markAllAsRead();
+						}}
 						disabled={notifications.length === 0}
 						loading={isMarkingAllAsRead}
 					>
@@ -67,67 +67,20 @@ export function NotificationsPage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={notifications.length === 0}
-					loadingElement={
-						<Text textStyle='body'>Carregando notificações...</Text>
-					}
-					errorElement={
-						<Text textStyle='body'>Erro ao carregar notificações.</Text>
-					}
-					emptyElement={
-						<Text textStyle='body'>Nenhuma notificação encontrada.</Text>
-					}
+					loadingElement={<Text textStyle='body'>Carregando notificações...</Text>}
+					errorElement={<Text textStyle='body'>Erro ao carregar notificações.</Text>}
+					emptyElement={<Text textStyle='body'>Nenhuma notificação encontrada.</Text>}
 				>
 					<Flex direction='column' gap={3}>
 						{notifications.map((item) => (
-							<Box
+							<NotificationCard
 								key={item.id}
-								p={4}
-								border='1px solid'
-								borderColor={item.readAt ? 'purple.700' : 'pink.400'}
-								borderRadius='lg'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
-								<Flex justify='space-between' align='start' gap={4}>
-									<Flex direction='column' gap={1}>
-										<Text textStyle='small' color='pink.100'>
-											{getNotificationTitle(item.type)}
-										</Text>
-										<Text textStyle='smaller' color='pink.200'>
-											Tipo: {item.type}
-										</Text>
-										<Text textStyle='smaller' color='pink.200'>
-											{formatDate(item.createdAt)}
-										</Text>
-										{item.aggregatedCount > 1 && (
-											<Text textStyle='smaller' color='pink.200'>
-												Ocorrências: {item.aggregatedCount}
-											</Text>
-										)}
-									</Flex>
-
-									<HStack gap={2}>
-										{!item.readAt && (
-											<Button
-												size='sm'
-												variant='solidPink'
-												onClick={() => markAsRead(item.id)}
-												loading={isMarkingAsRead}
-											>
-												Marcar lida
-											</Button>
-										)}
-										<Button
-											size='sm'
-											variant='solidPink'
-											colorPalette='gray'
-											onClick={() => deleteNotification(item.id)}
-											loading={isDeleting}
-										>
-											Excluir
-										</Button>
-									</HStack>
-								</Flex>
-							</Box>
+								item={item}
+								onMarkAsRead={(id) => markAsRead(id).then(() => {})}
+								onDelete={(id) => deleteNotification(id).then(() => {})}
+								isMarkingAsRead={isMarkingAsRead}
+								isDeleting={isDeleting}
+							/>
 						))}
 					</Flex>
 				</AsyncState>

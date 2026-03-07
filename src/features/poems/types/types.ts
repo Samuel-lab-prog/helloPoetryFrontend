@@ -35,6 +35,10 @@ export type PoemPreviewType = {
 	title: string;
 	slug: string;
 	id: number;
+	tags: {
+		id: number;
+		name: string;
+	}[];
 	author: {
 		id: number;
 		name: string;

@@ -61,6 +61,20 @@ export function PoemCard({ poem }: PoemCardProps) {
 							@{poem.author.nickname}
 						</NavLink>
 					</Link>
+					{poem.tags.length > 0 && (
+						<Flex mt={1} gap={2} wrap='wrap'>
+							{poem.tags.slice(0, 4).map((tag) => (
+								<Badge
+									key={tag.id}
+									size='sm'
+									colorPalette='pink'
+									variant='subtle'
+								>
+									#{tag.name}
+								</Badge>
+							))}
+						</Flex>
+					)}
 				</Flex>
 			</Card.Body>
 
