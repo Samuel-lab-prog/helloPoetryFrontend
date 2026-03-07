@@ -186,14 +186,21 @@ export function RegisterForm() {
 
 			<Button
 				type='submit'
-				variant='solidPink'
+				variant='surface'
 				disabled={!isValid}
 				loading={loading}
 				mt={6}
 				w='full'
-				transition='transform 0.16s ease, box-shadow 0.16s ease'
+				opacity={isValid ? 1 : 0.72}
+				filter={isValid ? 'saturate(1)' : 'saturate(0.72)'}
+				transition='opacity 0.24s ease, filter 0.24s ease, transform 0.16s ease, box-shadow 0.16s ease, background-color 0.24s ease, border-color 0.24s ease'
 				_hover={{ transform: 'translateY(-1px)', boxShadow: 'md' }}
 				_active={{ transform: 'translateY(0)' }}
+				_disabled={{
+					opacity: 0.72,
+					filter: 'saturate(0.72)',
+					cursor: 'not-allowed',
+				}}
 				animationName='slide-from-bottom, fade-in'
 				animationDuration='380ms'
 				animationTimingFunction='ease-out'

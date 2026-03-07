@@ -1,4 +1,4 @@
-import { Field, NativeSelect } from '@chakra-ui/react';
+import { Box, Field, NativeSelect } from '@chakra-ui/react';
 import {
 	Controller,
 	type Control,
@@ -35,6 +35,9 @@ export function SelectField<T extends FieldValues>({
 	placeholder,
 	transformValue,
 }: SelectFieldProps<T>) {
+	const errorMessage = error?.message?.toString();
+	const hasError = Boolean(errorMessage);
+
 	return (
 		<Field.Root required={required} invalid={!!error} w='full'>
 			<Field.Label textStyle='small' fontWeight='medium'>
@@ -75,7 +78,23 @@ export function SelectField<T extends FieldValues>({
 				)}
 			/>
 
-			<Field.ErrorText>{error?.message?.toString()}</Field.ErrorText>
+			<Box
+				display='grid'
+				gridTemplateRows={hasError ? '1fr' : '0fr'}
+				transition='grid-template-rows 0.24s ease'
+			>
+				<Field.ErrorText
+					color='error'
+					opacity={hasError ? 1 : 0}
+					transform={hasError ? 'translateY(0)' : 'translateY(-3px)'}
+					overflow='hidden'
+					minH={0}
+					mt={hasError ? 1 : 0}
+					transition='opacity 0.2s ease, transform 0.2s ease, margin-top 0.2s ease'
+				>
+					{errorMessage}
+				</Field.ErrorText>
+			</Box>
 		</Field.Root>
 	);
 }

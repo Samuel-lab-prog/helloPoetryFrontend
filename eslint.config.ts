@@ -1,62 +1,74 @@
 import js from '@eslint/js';
 import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
 	{
-		files: ['**/*.ts'],
-		ignores: ['dist/**', 'build/**', 'node_modules/**'],
-		extends: [js.configs.recommended, tseslint.configs.recommended],
+		files: ['src/**/*.ts', 'src/**/*.tsx'],
+		ignores: ['dist/**', 'build/**', '.vite/**', 'node_modules/**'],
+		extends: [
+			js.configs.recommended,
+			tseslint.configs.recommended,
+			reactHooks.configs['recommended-latest'],
+			reactRefresh.configs.vite,
+			eslintConfigPrettier,
+		],
 		languageOptions: {
-			ecmaVersion: 2020,
-			globals: {
-				...globals.node,
-			},
+			ecmaVersion: 'latest',
+			sourceType: 'module',
+			globals: globals.browser,
 		},
 		rules: {
+			'@typescript-eslint/no-unused-vars': 'error',
 			'no-var': 'error',
 			'prefer-const': 'error',
+			'no-await-in-loop': 'error',
 			'no-constructor-return': 'error',
 			'no-duplicate-imports': 'error',
 			'no-self-compare': 'error',
 			'no-unmodified-loop-condition': 'error',
 			'no-useless-assignment': 'error',
 			'no-eval': 'error',
-			'@typescript-eslint/no-unused-vars': [
-				'error',
-				{ argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-			],
 
+			'array-callback-return': 'error',
 			'default-case': 'error',
 			eqeqeq: ['error', 'always'],
 
-			'max-classes-per-file': ['error', 10],
+			'max-classes-per-file': ['error', 1],
 			'max-depth': ['error', 4],
 			'max-lines': ['warn', 300],
-			'max-lines-per-function': ['error', { max: 80, skipComments: true }],
-			'max-nested-callbacks': ['error', 3],
-			'max-params': ['error', 5],
+			'max-lines-per-function': ['error', { max: 200, skipComments: true }],
+			'max-nested-callbacks': ['error', 2],
+			'max-params': ['error', 4],
 
 			'require-await': 'warn',
-		},
-	},
-	{
-		files: ['**/*.test.ts', '**/tests/**/*.ts'],
-		rules: {
-			'max-lines': 'off',
-			'max-lines-per-function': 'off',
-			'max-nested-callbacks': 'off',
-			'max-params': 'off',
-			'@typescript-eslint/no-explicit-any': 'off',
-		},
-	},
-	{
-		files: ['**/*asserts.ts'],
-		rules: {
-			'max-lines': 'off',
-			'max-lines-per-function': 'off',
-			'@typescript-eslint/no-unused-vars': 'off',
+			'react-hooks/rules-of-hooks': 'error',
+			'react-hooks/exhaustive-deps': 'warn',
+			'no-unused-vars': 'off',
+			'no-undef': 'off',
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'arrow-body-style': ['error', 'as-needed'],
+			'no-restricted-imports': [
+				'error',
+				{
+					patterns: [
+						{
+							group: ['@features/*/**'],
+							message:
+								'Do not import internal feature paths. Use the public API instead: @features/<feature>',
+						},
+						{
+							group: ['../**/features/**'],
+							message:
+								'Do not bypass feature boundaries using relative imports.',
+						},
+					],
+				},
+			],
 		},
 	},
 ]);

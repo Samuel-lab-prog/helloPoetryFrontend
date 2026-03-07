@@ -1,4 +1,4 @@
-import { Field, Input, Textarea } from '@chakra-ui/react';
+import { Box, Field, Input, Textarea } from '@chakra-ui/react';
 import {
 	Controller,
 	type Control,
@@ -35,6 +35,8 @@ export function FormField<T extends FieldValues>({
   autoFocus,
 }: Props<T>) {
 	const Component = as === 'textarea' ? Textarea : Input;
+	const errorMessage = error?.message?.toString();
+	const hasError = Boolean(errorMessage);
 
 	return (
 		<Field.Root required={required} invalid={!!error}>
@@ -76,9 +78,23 @@ export function FormField<T extends FieldValues>({
 				)}
 			/>
 
-			<Field.ErrorText color='error' transition='color 0.22s ease'>
-				{error?.message?.toString()}
-			</Field.ErrorText>
+			<Box
+				display='grid'
+				gridTemplateRows={hasError ? '1fr' : '0fr'}
+				transition='grid-template-rows 0.24s ease'
+			>
+				<Field.ErrorText
+					color='error'
+					opacity={hasError ? 1 : 0}
+					transform={hasError ? 'translateY(0)' : 'translateY(-3px)'}
+					overflow='hidden'
+					minH={0}
+					mt={hasError ? 1 : 0}
+					transition='opacity 0.2s ease, transform 0.2s ease, margin-top 0.2s ease'
+				>
+					{errorMessage}
+				</Field.ErrorText>
+			</Box>
 		</Field.Root>
 	);
 }
