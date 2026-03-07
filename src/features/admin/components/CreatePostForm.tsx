@@ -1,6 +1,8 @@
 import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
+import { useMemo } from 'react';
 
 import { useCreatePostForm } from '../hooks/useCreatePostForm';
+import { useUsersPreview } from '../hooks/useUsersPreview';
 import {
 	FormField,
 	SelectField,
@@ -19,8 +21,17 @@ export function CreatePostForm() {
 		control,
 		watch,
 	} = useCreatePostForm();
+	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
 
 	const preview = watch();
+	const dedicationOptions = useMemo(
+		() =>
+			users.map((user) => ({
+				value: String(user.id),
+				label: `@${user.nickname}`,
+			})),
+		[users],
+	);
 
 	const previewPost = {
 		title: preview?.title || 'Titulo do poema',
@@ -118,8 +129,31 @@ export function CreatePostForm() {
 					error={errors.isCommentable}
 				/>
 
+				<SelectField
+					label='Dedicado para'
+					name='toUserIds'
+					control={control}
+					placeholder={
+						isLoadingUsers ? 'Carregando usuarios...' : 'Sem dedicacao'
+					}
+					options={[
+						{ value: 'none', label: 'Sem dedicacao' },
+						...dedicationOptions,
+					]}
+					transformValue={(value) =>
+						value === 'none' || value === '' ? [] : [Number(value)]
+					}
+					error={errors.toUserIds}
+					disabled={isPending || isLoadingUsers}
+				/>
+				{isUsersError && (
+					<Text textStyle='small' color='red.400'>
+						Erro ao carregar usuarios para dedicacao.
+					</Text>
+				)}
+
 				<Button
-					variant='surface'
+					variant='solidPink'
 					type='submit'
 					disabled={!isValid}
 					loading={isPending}

@@ -132,7 +132,7 @@ export function UpdatePostForm() {
 
 			<Button
 				type='submit'
-				variant='surface'
+				variant='solidPink'
 				colorPalette='gray'
 				disabled={!isValid || isPending || isLoading}
 				loading={isPending}

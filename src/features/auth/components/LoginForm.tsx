@@ -28,6 +28,7 @@ export function LoginForm() {
 			onSubmit={onSubmit}
 			handleSubmitFn={handleSubmit}
 			buttonLabel='Enter'
+			buttonVariant='surface'
 		/>
 	);
 }

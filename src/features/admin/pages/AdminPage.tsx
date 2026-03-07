@@ -22,13 +22,13 @@ export function AdminPage() {
 					Admin Dashboard
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
-					<Button variant='surface' onClick={() => setActiveForm('create')}>
+					<Button variant='solidPink' onClick={() => setActiveForm('create')}>
 						Criar Poema
 					</Button>
-					<Button variant='surface' onClick={() => setActiveForm('update')}>
+					<Button variant='solidPink' onClick={() => setActiveForm('update')}>
 						Atualizar Poema
 					</Button>
-					<Button variant='surface' onClick={() => setActiveForm('delete')}>
+					<Button variant='solidPink' onClick={() => setActiveForm('delete')}>
 						Deletar Poema
 					</Button>
 				</Flex>

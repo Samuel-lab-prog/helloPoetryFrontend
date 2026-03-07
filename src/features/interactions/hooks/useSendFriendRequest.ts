@@ -27,8 +27,10 @@ export function useSendFriendRequest() {
 		const err = mutation.error as AppErrorType | null;
 		if (!err) return '';
 
-		if (err.statusCode === 409) return 'Pedido ja enviado ou relacao ja existe.';
-		if (err.statusCode === 403) return 'Voce nao pode enviar pedido para este usuario.';
+		if (err.statusCode === 409)
+			return 'Pedido ja enviado ou relacao ja existe.';
+		if (err.statusCode === 403)
+			return 'Voce nao pode enviar pedido para este usuario.';
 		if (err.statusCode === 404) return 'Autor nao encontrado.';
 		return 'Erro ao enviar pedido de amizade.';
 	}

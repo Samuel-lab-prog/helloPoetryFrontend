@@ -1,51 +1,314 @@
-﻿/* eslint-disable max-lines */
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-import { useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import {
 	Avatar,
 	Box,
 	Button,
-	Link,
 	Flex,
+	Heading,
 	Icon,
+	Link,
 	Text,
 	Textarea,
-	Heading,
 } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
-import { AsyncState, formatDate, MarkdownRenderer } from '@features/base';
+import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
 import {
 	type PoemCommentType,
 	usePoemComments,
+	usePoemLike,
 	useSavedPoems,
 } from '@features/interactions';
 import { usePost } from '../hooks/usePost';
 import { PostHeader } from '../components/PostHeader';
+import { CommentThread } from '../components/CommentThread';
+
+function parsePoemId(rawId: string | undefined) {
+	if (!rawId) return -1;
+	const parsed = Number(rawId);
+	if (!Number.isFinite(parsed) || parsed <= 0) return -1;
+	return parsed;
+}
 
 function getAuthClientId() {
 	try {
 		const raw = localStorage.getItem('auth-client');
 		if (!raw) return -1;
-		const parsed = JSON.parse(raw) as { id?: number };
-		return parsed.id ?? -1;
+		const parsed = JSON.parse(raw) as { id?: unknown };
+		const id = Number(parsed.id);
+		if (!Number.isFinite(id) || id <= 0) return -1;
+		return id;
 	} catch {
 		return -1;
 	}
 }
 
+type PostAuthorCardProps = {
+	author: {
+		id: number;
+		name: string;
+		nickname: string;
+		avatarUrl: string | null;
+	};
+	stats: {
+		likesCount: number;
+		commentsCount: number;
+	};
+	children: React.ReactNode;
+};
+
+const PostAuthorCard = memo(function PostAuthorCard({
+	author,
+	stats,
+	children,
+}: PostAuthorCardProps) {
+	return (
+		<Flex
+			mt={6}
+			p={4}
+			gap={3}
+			align='center'
+			border='1px solid'
+			borderColor='purple.700'
+			borderRadius='lg'
+			bg='rgba(255, 255, 255, 0.02)'
+		>
+			<Avatar.Root size='lg'>
+				<Avatar.Image src={author.avatarUrl ?? undefined} />
+				<Avatar.Fallback name={author.name} />
+			</Avatar.Root>
+
+			<Flex direction='column' gap={1} flex='1'>
+				<Text textStyle='small' color='pink.200'>
+					Autor
+				</Text>
+				<Text textStyle='body'>{author.name}</Text>
+				<Text textStyle='smaller' color='pink.200'>
+					@{author.nickname}
+				</Text>
+				<Text textStyle='smaller' color='pink.200'>
+					Curtidas: {stats.likesCount} | Comentarios: {stats.commentsCount}
+				</Text>
+			</Flex>
+
+			<Link asChild textStyle='small' color='pink.100'>
+				<NavLink to={`/authors/${author.id}`}>Ver autor</NavLink>
+			</Link>
+
+			{children}
+		</Flex>
+	);
+});
+
+type PostActionsProps = {
+	authClientId: number;
+	likedPoem: boolean;
+	isSaved: boolean;
+	isUpdatingLike: boolean;
+	isSavingPoem: boolean;
+	onToggleLike: () => Promise<void>;
+	onToggleSave: () => Promise<void>;
+};
+
+const PostActions = memo(function PostActions({
+	authClientId,
+	likedPoem,
+	isSaved,
+	isUpdatingLike,
+	isSavingPoem,
+	onToggleLike,
+	onToggleSave,
+}: PostActionsProps) {
+	if (authClientId <= 0) return null;
+
+	return (
+		<>
+			<Button
+				size='sm'
+				variant='solidPink'
+				colorPalette='gray'
+				loading={isUpdatingLike}
+				onClick={() => {
+					void onToggleLike();
+				}}
+			>
+				{likedPoem ? 'Descurtir poema' : 'Curtir poema'}
+			</Button>
+			<Button
+				size='sm'
+				variant='solidPink'
+				loading={isSavingPoem}
+				onClick={() => {
+					void onToggleSave();
+				}}
+			>
+				{isSaved ? 'Remover dos salvos' : 'Salvar poema'}
+			</Button>
+		</>
+	);
+});
+
+type CommentsSectionProps = {
+	poemIsCommentable: boolean;
+	commentInput: string;
+	authClientId: number;
+	comments: PoemCommentType[];
+	isLoadingComments: boolean;
+	isCommentsError: boolean;
+	isCreatingComment: boolean;
+	isDeletingComment: boolean;
+	isUpdatingCommentLike: boolean;
+	repliesByCommentId: Record<number, PoemCommentType[]>;
+	setRepliesByCommentId: React.Dispatch<
+		React.SetStateAction<Record<number, PoemCommentType[]>>
+	>;
+	onCommentInputChange: (value: string) => void;
+	onPublishComment: () => Promise<void>;
+	createComment: (args: {
+		content: string;
+		parentId?: number;
+	}) => Promise<void>;
+	deleteComment: (id: number) => Promise<void>;
+	likeComment: (id: number) => Promise<void>;
+	unlikeComment: (id: number) => Promise<void>;
+	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
+};
+
+const CommentsSection = memo(function CommentsSection({
+	poemIsCommentable,
+	commentInput,
+	authClientId,
+	comments,
+	isLoadingComments,
+	isCommentsError,
+	isCreatingComment,
+	isDeletingComment,
+	isUpdatingCommentLike,
+	repliesByCommentId,
+	setRepliesByCommentId,
+	onCommentInputChange,
+	onPublishComment,
+	createComment,
+	deleteComment,
+	likeComment,
+	unlikeComment,
+	fetchReplies,
+}: CommentsSectionProps) {
+	const canPublishComment =
+		poemIsCommentable && commentInput.trim().length > 0 && !isCreatingComment;
+
+	const renderedThreads = useMemo(
+		() =>
+			comments.map((comment) => (
+				<CommentThread
+					key={comment.id}
+					comment={comment}
+					authClientId={authClientId}
+					poemIsCommentable={poemIsCommentable}
+					isCreatingComment={isCreatingComment}
+					isDeletingComment={isDeletingComment}
+					createComment={createComment}
+					deleteComment={deleteComment}
+					likeComment={likeComment}
+					unlikeComment={unlikeComment}
+					isUpdatingCommentLike={isUpdatingCommentLike}
+					fetchReplies={fetchReplies}
+					repliesByCommentId={repliesByCommentId}
+					setRepliesByCommentId={setRepliesByCommentId}
+				/>
+			)),
+		[
+			authClientId,
+			comments,
+			createComment,
+			deleteComment,
+			fetchReplies,
+			isCreatingComment,
+			isDeletingComment,
+			isUpdatingCommentLike,
+			likeComment,
+			poemIsCommentable,
+			repliesByCommentId,
+			setRepliesByCommentId,
+			unlikeComment,
+		],
+	);
+
+	return (
+		<Box
+			mt={10}
+			p={[4, 6]}
+			border='1px solid'
+			borderColor='purple.700'
+			borderRadius='xl'
+			bg='rgba(255, 255, 255, 0.03)'
+		>
+			<Heading as='h2' textStyle='h3' mb={4}>
+				Comentarios
+			</Heading>
+
+			<Flex direction='column' gap={3} mb={6}>
+				<Textarea
+					value={commentInput}
+					onChange={(e) => onCommentInputChange(e.target.value)}
+					placeholder='Escreva um comentario (1-300 caracteres)'
+					rows={4}
+					maxLength={300}
+					disabled={!poemIsCommentable || isCreatingComment}
+				/>
+				<Flex align='center' justify='space-between'>
+					<Text textStyle='smaller' color='pink.200'>
+						{commentInput.length}/300
+					</Text>
+					<Button
+						variant='solidPink'
+						disabled={!canPublishComment}
+						loading={isCreatingComment}
+						onClick={() => {
+							void onPublishComment();
+						}}
+					>
+						Publicar comentario
+					</Button>
+				</Flex>
+				{!poemIsCommentable && (
+					<Text textStyle='small' color='pink.200'>
+						Comentarios desativados para este poema.
+					</Text>
+				)}
+			</Flex>
+
+			<AsyncState
+				isLoading={isLoadingComments}
+				isError={isCommentsError}
+				isEmpty={comments.length === 0}
+				loadingElement={<Text textStyle='body'>Carregando comentarios...</Text>}
+				errorElement={
+					<Text textStyle='body'>Erro ao carregar comentarios.</Text>
+				}
+				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
+			>
+				<Flex direction='column' gap={3}>
+					{renderedThreads}
+				</Flex>
+			</AsyncState>
+		</Box>
+	);
+});
+
 export function PostPage() {
 	const { id } = useParams<{ id: string }>();
-	const poemId = Number(id);
-	const authClientId = getAuthClientId();
+	const poemId = useMemo(() => parsePoemId(id), [id]);
+	const authClientId = useMemo(() => getAuthClientId(), []);
+	const isPoemIdValid = poemId > 0;
+
 	const [commentInput, setCommentInput] = useState('');
-	const [activeReplyFor, setActiveReplyFor] = useState<number | null>(null);
-	const [replyInput, setReplyInput] = useState('');
 	const [repliesByCommentId, setRepliesByCommentId] = useState<
 		Record<number, PoemCommentType[]>
 	>({});
-	const [replyError, setReplyError] = useState('');
-	const [saveInfo, setSaveInfo] = useState('');
+	const [likedPoem, setLikedPoem] = useState(false);
 
 	const { poem, isError, isLoading } = usePost(poemId);
 	const {
@@ -58,193 +321,186 @@ export function PostPage() {
 		deleteComment,
 		isDeletingComment,
 		deleteCommentError,
+		likeComment,
+		unlikeComment,
+		isUpdatingCommentLike,
+		likeCommentError,
 		fetchReplies,
 	} = usePoemComments(poemId);
+	const { likePoem, unlikePoem, isUpdatingLike, likeError } =
+		usePoemLike(poemId);
 	const { savedPoems, savePoem, unsavePoem, isSavingPoem, saveError } =
 		useSavedPoems(authClientId > 0);
-	const isSaved = savedPoems.some((p) => p.id === poemId);
+
+	const isSaved = useMemo(
+		() => savedPoems.some((savedPoem) => savedPoem.id === poemId),
+		[savedPoems, poemId],
+	);
+	const postHeaderPoem = useMemo(
+		() =>
+			poem
+				? {
+						title: poem.title,
+						excerpt: poem.excerpt,
+						tags: poem.tags,
+						createdAt: poem.createdAt,
+						updatedAt: poem.updatedAt,
+					}
+				: null,
+		[poem],
+	);
+
+	const loadedReplyParentsRef = useRef<Set<number>>(new Set());
+	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
+	const shownErrorsRef = useRef<Record<string, string>>({});
 
 	useEffect(() => {
-		async function preloadReplies() {
-			const parentsWithReplies = comments.filter(
-				(comment) => comment.aggregateChildrenCount > 0,
-			);
+		if (!poem) return;
+		setLikedPoem(poem.stats.likedByCurrentUser);
+	}, [poem]);
 
-			for (const parent of parentsWithReplies) {
-				if (repliesByCommentId[parent.id]) continue;
-				try {
-					const replies = await fetchReplies(parent.id);
-					setRepliesByCommentId((prev) => ({ ...prev, [parent.id]: replies }));
-				} catch {
-					// Keep the page usable even if a specific replies request fails.
-				}
-			}
+	useEffect(() => {
+		if (!comments.length) return;
+		let isMounted = true;
+
+		for (const parent of comments) {
+			if (parent.aggregateChildrenCount <= 0) continue;
+			if (loadedReplyParentsRef.current.has(parent.id)) continue;
+			if (loadingReplyParentsRef.current.has(parent.id)) continue;
+
+			loadingReplyParentsRef.current.add(parent.id);
+			void fetchReplies(parent.id)
+				.then((replies) => {
+					if (!isMounted) return;
+					setRepliesByCommentId((prev) => {
+						if (prev[parent.id]) return prev;
+						return { ...prev, [parent.id]: replies };
+					});
+					loadedReplyParentsRef.current.add(parent.id);
+				})
+				.catch(() => {
+					if (!isMounted) return;
+					toaster.create({
+						type: 'error',
+						title: 'Erro ao carregar respostas',
+						description: 'Nao foi possivel buscar algumas respostas.',
+						closable: true,
+					});
+				})
+				.finally(() => {
+					loadingReplyParentsRef.current.delete(parent.id);
+				});
 		}
 
-		void preloadReplies();
-	}, [comments, fetchReplies, repliesByCommentId]);
+		return () => {
+			isMounted = false;
+		};
+	}, [comments, fetchReplies]);
 
-	async function handleToggleReplies(commentId: number) {
-		if (activeReplyFor === commentId) {
-			setActiveReplyFor(null);
-			setReplyInput('');
-			setReplyError('');
-			return;
-		}
+	const showErrorToast = useCallback((key: string, message: string) => {
+		if (!message) return;
+		if (shownErrorsRef.current[key] === message) return;
+		shownErrorsRef.current[key] = message;
+		toaster.create({
+			type: 'error',
+			title: 'Operacao falhou',
+			description: message,
+			closable: true,
+		});
+	}, []);
 
-		setActiveReplyFor(commentId);
-		setReplyError('');
-		setReplyInput('');
-		if (!repliesByCommentId[commentId]) {
-			try {
-				const replies = await fetchReplies(commentId);
-				setRepliesByCommentId((prev) => ({ ...prev, [commentId]: replies }));
-			} catch {
-				setReplyError('Erro ao carregar respostas.');
-			}
-		}
-	}
+	useEffect(() => {
+		showErrorToast('likeError', likeError);
+	}, [likeError, showErrorToast]);
 
-	async function handleCreateReply(parentId: number) {
+	useEffect(() => {
+		showErrorToast('saveError', saveError);
+	}, [saveError, showErrorToast]);
+
+	useEffect(() => {
+		showErrorToast('createCommentError', createCommentError);
+	}, [createCommentError, showErrorToast]);
+
+	useEffect(() => {
+		showErrorToast('deleteCommentError', deleteCommentError);
+	}, [deleteCommentError, showErrorToast]);
+
+	useEffect(() => {
+		showErrorToast('likeCommentError', likeCommentError);
+	}, [likeCommentError, showErrorToast]);
+
+	const handlePublishComment = useCallback(async () => {
+		const content = commentInput.trim();
+		if (!content) return;
+
 		try {
-			await createComment({ content: replyInput.trim(), parentId });
-			setReplyInput('');
-			const replies = await fetchReplies(parentId);
-			setRepliesByCommentId((prev) => ({ ...prev, [parentId]: replies }));
+			await createComment({ content });
+			setCommentInput('');
+			toaster.create({
+				type: 'success',
+				title: 'Comentario publicado',
+				closable: true,
+			});
 		} catch {
-			setReplyError('Erro ao enviar resposta.');
+			// Erro tratado por createCommentError + toast consolidado.
 		}
-	}
+	}, [commentInput, createComment]);
 
-	async function handleDelete(comment: PoemCommentType) {
-		await deleteComment(comment.id);
-		if (comment.parentId) {
-			const parentReplies = await fetchReplies(comment.parentId);
-			setRepliesByCommentId((prev) => ({
-				...prev,
-				[comment.parentId!]: parentReplies,
-			}));
-		}
-	}
-
-	async function loadRepliesFor(comment: PoemCommentType) {
+	const handleTogglePoemLike = useCallback(async () => {
 		try {
-			const replies = await fetchReplies(comment.id);
-			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: replies }));
+			if (likedPoem) {
+				await unlikePoem();
+				setLikedPoem(false);
+				toaster.create({
+					type: 'success',
+					title: 'Curtida removida',
+					closable: true,
+				});
+				return;
+			}
+
+			await likePoem();
+			setLikedPoem(true);
+			toaster.create({
+				type: 'success',
+				title: 'Poema curtido',
+				closable: true,
+			});
 		} catch {
-			setReplyError('Erro ao carregar respostas.');
+			// Erro tratado por likeError + toast consolidado.
 		}
-	}
+	}, [likedPoem, likePoem, unlikePoem]);
 
-	function renderCommentThread(comment: PoemCommentType, depth = 0) {
-		const replies = repliesByCommentId[comment.id] ?? [];
-		const hasReplies = comment.aggregateChildrenCount > 0;
-		const hasLoadedReplies = replies.length > 0;
+	const handleToggleSavePoem = useCallback(async () => {
+		try {
+			if (isSaved) {
+				await unsavePoem(poemId);
+				toaster.create({
+					type: 'success',
+					title: 'Poema removido dos salvos',
+					closable: true,
+				});
+				return;
+			}
 
+			await savePoem(poemId);
+			toaster.create({
+				type: 'success',
+				title: 'Poema salvo com sucesso',
+				closable: true,
+			});
+		} catch {
+			// Erro tratado por saveError + toast consolidado.
+		}
+	}, [isSaved, poemId, savePoem, unsavePoem]);
+
+	if (!isPoemIdValid) {
 		return (
-			<Box
-				key={comment.id}
-				p={3}
-				border='1px solid'
-				borderColor='purple.700'
-				borderRadius='md'
-				bg='rgba(255, 255, 255, 0.02)'
-				ml={depth > 0 ? 4 : 0}
-			>
-				<Flex justify='space-between' align='start' gap={3}>
-					<Box flex='1'>
-						<Text textStyle='smaller' color='pink.200' mb={1}>
-							@{comment.author.nickname}
-						</Text>
-						<Text textStyle='smaller' color='pink.200' mb={2}>
-							{formatDate(comment.createdAt)}
-						</Text>
-						<Text textStyle='small'>{comment.content}</Text>
-					</Box>
-					{comment.author.id === authClientId && (
-						<Button
-							size='xs'
-							variant='surface'
-							colorPalette='gray'
-							loading={isDeletingComment}
-							onClick={() => handleDelete(comment)}
-						>
-							Excluir
-						</Button>
-					)}
-				</Flex>
-
-				<Flex mt={3} justify='space-between' align='center' gap={2} wrap='wrap'>
-					<Button
-						size='xs'
-						variant='surface'
-						colorPalette='gray'
-						onClick={() => handleToggleReplies(comment.id)}
-					>
-						Responder
-					</Button>
-					{hasReplies && (
-						<Flex align='center' gap={2}>
-							<Text textStyle='smaller' color='pink.200'>
-								{comment.aggregateChildrenCount} resposta(s)
-							</Text>
-							{!hasLoadedReplies && (
-								<Button
-									size='xs'
-									variant='surface'
-									colorPalette='gray'
-									onClick={() => loadRepliesFor(comment)}
-								>
-									Ver respostas
-								</Button>
-							)}
-						</Flex>
-					)}
-				</Flex>
-
-				{hasLoadedReplies && (
-					<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
-						<Flex direction='column' gap={2}>
-							{replies.map((reply) => renderCommentThread(reply, depth + 1))}
-						</Flex>
-					</Box>
-				)}
-
-				{activeReplyFor === comment.id && (
-					<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
-						<Flex direction='column' gap={2}>
-							<Textarea
-								value={replyInput}
-								onChange={(e) => setReplyInput(e.target.value)}
-								placeholder='Responder comentario'
-								rows={3}
-								maxLength={300}
-								disabled={!poem?.isCommentable || isCreatingComment}
-							/>
-							<Flex justify='flex-end'>
-								<Button
-									size='sm'
-									variant='surface'
-									disabled={
-										replyInput.trim().length === 0 ||
-										!poem?.isCommentable ||
-										isCreatingComment
-									}
-									loading={isCreatingComment}
-									onClick={() => handleCreateReply(comment.id)}
-								>
-									Enviar resposta
-								</Button>
-							</Flex>
-							{replyError && (
-								<Text textStyle='smaller' color='red.400'>
-									{replyError}
-								</Text>
-							)}
-						</Flex>
-					</Box>
-				)}
-			</Box>
+			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+				<Box as='section' maxW='4xl' w='full'>
+					<Box textStyle='body'>ID de poema invalido.</Box>
+				</Box>
+			</Flex>
 		);
 	}
 
@@ -263,7 +519,7 @@ export function PostPage() {
 					}
 					loadingElement={<Box textStyle='body'>Carregando poema...</Box>}
 				>
-					{poem && (
+					{poem && postHeaderPoem && (
 						<>
 							<Box
 								p={[4, 6]}
@@ -274,73 +530,20 @@ export function PostPage() {
 								backdropFilter='blur(4px)'
 								mb={6}
 							>
-								<PostHeader
-									poem={{
-										title: poem.title,
-										excerpt: poem.excerpt,
-										tags: poem.tags,
-										createdAt: poem.createdAt,
-										updatedAt: poem.updatedAt,
-									}}
-								/>
+								<PostHeader poem={postHeaderPoem} />
 							</Box>
 
-							<Flex
-								mt={6}
-								p={4}
-								gap={3}
-								align='center'
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='lg'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
-								<Avatar.Root size='lg'>
-									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-									<Avatar.Fallback name={poem.author.name} />
-								</Avatar.Root>
-
-								<Flex direction='column' gap={1} flex='1'>
-									<Text textStyle='small' color='pink.200'>
-										Autor
-									</Text>
-									<Text textStyle='body'>{poem.author.name}</Text>
-									<Text textStyle='smaller' color='pink.200'>
-										@{poem.author.nickname}
-									</Text>
-									<Text textStyle='smaller' color='pink.200'>
-										Curtidas: {poem.stats.likesCount} | Comentarios:{' '}
-										{poem.stats.commentsCount}
-									</Text>
-								</Flex>
-
-								<Link asChild textStyle='small' color='pink.100'>
-									<NavLink to={`/authors/${poem.author.id}`}>Ver autor</NavLink>
-								</Link>
-								{authClientId > 0 && (
-									<Button
-										size='sm'
-										variant='surface'
-										loading={isSavingPoem}
-										onClick={async () => {
-											if (isSaved) {
-												await unsavePoem(poemId);
-												setSaveInfo('Poema removido dos salvos.');
-											} else {
-												await savePoem(poemId);
-												setSaveInfo('Poema salvo com sucesso.');
-											}
-										}}
-									>
-										{isSaved ? 'Remover dos salvos' : 'Salvar poema'}
-									</Button>
-								)}
-							</Flex>
-							{(saveInfo || saveError) && (
-								<Text mt={2} textStyle='small' color={saveError ? 'red.400' : 'pink.200'}>
-									{saveError || saveInfo}
-								</Text>
-							)}
+							<PostAuthorCard author={poem.author} stats={poem.stats}>
+								<PostActions
+									authClientId={authClientId}
+									likedPoem={likedPoem}
+									isSaved={isSaved}
+									isUpdatingLike={isUpdatingLike}
+									isSavingPoem={isSavingPoem}
+									onToggleLike={handleTogglePoemLike}
+									onToggleSave={handleToggleSavePoem}
+								/>
+							</PostAuthorCard>
 
 							<Box
 								as='article'
@@ -358,88 +561,30 @@ export function PostPage() {
 								<MarkdownRenderer content={poem.content} />
 							</Box>
 
-							<Box
-								mt={10}
-								p={[4, 6]}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='xl'
-								bg='rgba(255, 255, 255, 0.03)'
-							>
-								<Heading as='h2' textStyle='h3' mb={4}>
-									Comentarios
-								</Heading>
-
-								<Flex direction='column' gap={3} mb={6}>
-									<Textarea
-										value={commentInput}
-										onChange={(e) => setCommentInput(e.target.value)}
-										placeholder='Escreva um comentario (1-300 caracteres)'
-										rows={4}
-										maxLength={300}
-										disabled={!poem.isCommentable || isCreatingComment}
-									/>
-									<Flex align='center' justify='space-between'>
-										<Text textStyle='smaller' color='pink.200'>
-											{commentInput.length}/300
-										</Text>
-										<Button
-											variant='surface'
-											disabled={
-												!poem.isCommentable ||
-												commentInput.trim().length === 0 ||
-												isCreatingComment
-											}
-											loading={isCreatingComment}
-											onClick={async () => {
-												await createComment({
-													content: commentInput.trim(),
-												});
-												setCommentInput('');
-											}}
-										>
-											Publicar comentario
-										</Button>
-									</Flex>
-									{!poem.isCommentable && (
-										<Text textStyle='small' color='pink.200'>
-											Comentarios desativados para este poema.
-										</Text>
-									)}
-									{createCommentError && (
-										<Text textStyle='small' color='red.400'>
-											{createCommentError}
-										</Text>
-									)}
-									{deleteCommentError && (
-										<Text textStyle='small' color='red.400'>
-											{deleteCommentError}
-										</Text>
-									)}
-								</Flex>
-
-								<AsyncState
-									isLoading={isLoadingComments}
-									isError={isCommentsError}
-									isEmpty={comments.length === 0}
-									loadingElement={
-										<Text textStyle='body'>Carregando comentarios...</Text>
-									}
-									errorElement={
-										<Text textStyle='body'>Erro ao carregar comentarios.</Text>
-									}
-									emptyElement={
-										<Text textStyle='body'>Seja o primeiro a comentar.</Text>
-									}
-								>
-									<Flex direction='column' gap={3}>
-										{comments.map((comment) => renderCommentThread(comment))}
-									</Flex>
-								</AsyncState>
-							</Box>
+							<CommentsSection
+								poemIsCommentable={poem.isCommentable}
+								commentInput={commentInput}
+								authClientId={authClientId}
+								comments={comments}
+								isLoadingComments={isLoadingComments}
+								isCommentsError={isCommentsError}
+								isCreatingComment={isCreatingComment}
+								isDeletingComment={isDeletingComment}
+								isUpdatingCommentLike={isUpdatingCommentLike}
+								repliesByCommentId={repliesByCommentId}
+								setRepliesByCommentId={setRepliesByCommentId}
+								onCommentInputChange={setCommentInput}
+								onPublishComment={handlePublishComment}
+								createComment={createComment}
+								deleteComment={deleteComment}
+								likeComment={likeComment}
+								unlikeComment={unlikeComment}
+								fetchReplies={fetchReplies}
+							/>
 						</>
 					)}
 				</AsyncState>
+
 				<Box
 					mt={8}
 					w='full'

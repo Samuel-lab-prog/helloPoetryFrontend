@@ -1,4 +1,5 @@
 import { Text } from '@chakra-ui/react';
+import type { ButtonProps } from '@chakra-ui/react';
 import { FieldContainer } from './FieldContainer';
 import { FormCard } from './FormCard';
 import { FormField } from './FormField';
@@ -30,6 +31,7 @@ interface DynamicFormProps<T extends FieldValues> {
 	generalError?: string;
 	onSubmit: SubmitHandler<T>;
 	buttonLabel: string;
+	buttonVariant?: ButtonProps['variant'];
 	handleSubmitFn: (
 		fn: SubmitHandler<T>,
 	) => (e?: React.BaseSyntheticEvent) => Promise<void>;
@@ -44,6 +46,7 @@ export function DynamicForm<T extends FieldValues>({
 	generalError,
 	onSubmit,
 	buttonLabel,
+	buttonVariant,
 	handleSubmitFn,
 }: DynamicFormProps<T>) {
 	return (
@@ -77,7 +80,7 @@ export function DynamicForm<T extends FieldValues>({
 				</FieldContainer>
 			))}
 
-			<FormButton isValid={isValid} loading={loading}>
+			<FormButton isValid={isValid} loading={loading} variant={buttonVariant}>
 				{buttonLabel}
 			</FormButton>
 		</FormCard>

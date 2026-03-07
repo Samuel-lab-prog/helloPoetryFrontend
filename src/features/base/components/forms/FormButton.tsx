@@ -9,12 +9,13 @@ export function FormButton({
 	isValid = true,
 	loading,
 	children,
+	variant = 'solidPink',
 	...props
 }: FormButtonProps) {
 	return (
 		<Button
 			type='submit'
-			variant='surface'
+			variant={variant}
 			loading={loading}
 			disabled={!isValid || loading}
 			mt={6}

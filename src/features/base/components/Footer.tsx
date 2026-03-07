@@ -1,90 +1,224 @@
-import logo from '@assets/logo.svg';
-
-import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
-
+﻿import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import {
+	Badge,
 	Box,
+	Button,
+	Flex,
+	Heading,
 	HStack,
-	VStack,
-	Text,
-	Image,
 	Link,
-	IconButton,
+	SimpleGrid,
+	Text,
+	VStack,
 } from '@chakra-ui/react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-/* ---------------- LOGO ---------------- */
-function FooterLogo() {
-	const navigate = useNavigate();
+type FooterLink = { label: string; to: string };
 
+type FooterProps = {
+	links: FooterLink[];
+};
+
+function FooterBrand() {
 	return (
-		<Box
-			onClick={() => navigate('/')}
-			cursor='pointer'
-			_hover={{ opacity: 0.6, transition: 'all 0.2s' }}
-		>
-			<Image src={logo} alt='Logo' h='70px' />
-		</Box>
+		<VStack align='start' gap={3}>
+			<HStack gap={3}>
+				<Box
+					w='44px'
+					h='44px'
+					display='grid'
+					placeItems='center'
+					borderRadius='full'
+					bg='linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})'
+					color='white'
+					fontWeight='700'
+					fontSize='sm'
+				>
+					OP
+				</Box>
+				<VStack align='start' gap={0}>
+					<Heading as='h3' textStyle='h4' color='pink.100'>
+						Olapoesia
+					</Heading>
+					<Badge size='sm' colorPalette='pink' variant='subtle'>
+						Plataforma de Poemas
+					</Badge>
+				</VStack>
+			</HStack>
+
+			<Text textStyle='small' color='pink.200' maxW='sm'>
+				Publique poemas, salve favoritos, comente e construa conexoes com outros
+				autores.
+			</Text>
+
+			<HStack gap={2} flexWrap='wrap'>
+				<Button size='sm' variant='solidPink' asChild>
+					<NavLink to='/poems'>Explorar poemas</NavLink>
+				</Button>
+				<Button size='sm' variant='solidPink' colorPalette='gray' asChild>
+					<NavLink to='/poems/new'>Criar poema</NavLink>
+				</Button>
+			</HStack>
+		</VStack>
 	);
 }
 
-/* ---------------- FOOTER LINKS ---------------- */
-function FooterLinks({ links }: { links: { label: string; to: string }[] }) {
+function FooterNav({ links }: { links: FooterLink[] }) {
 	return (
-		<HStack gap={8} flexWrap='wrap' justify='center'>
+		<VStack align='start' gap={2}>
+			<Text textStyle='small' color='pink.200'>
+				Navegacao
+			</Text>
 			{links.map((link) => (
 				<Link
 					asChild
 					key={link.label}
-					color='gray.600'
 					textStyle='small'
-					_hover={{ color: 'gray.900', textDecoration: 'underline' }}
-					_currentPage={{ fontWeight: 'bold' }}
+					color='pink.100'
+					opacity={0.9}
+					transition='all 0.2s ease'
+					_hover={{ color: 'pink.50', opacity: 1, textDecoration: 'none' }}
+					_currentPage={{ color: 'pink.50', fontWeight: '600' }}
 				>
 					<NavLink to={link.to}>{link.label}</NavLink>
 				</Link>
+			))}
+		</VStack>
+	);
+}
+
+function FooterCommunity() {
+	return (
+		<VStack align='start' gap={2}>
+			<Text textStyle='small' color='pink.200'>
+				Comunidade
+			</Text>
+			<Link
+				href='https://github.com/samuel-lab-prog'
+				target='_blank'
+				rel='noreferrer'
+				textStyle='small'
+				color='pink.100'
+				opacity={0.9}
+				_hover={{ color: 'pink.50', opacity: 1 }}
+			>
+				Repositorio
+			</Link>
+			<Link
+				href='https://www.linkedin.com/in/samuel-gomes-149251342/'
+				target='_blank'
+				rel='noreferrer'
+				textStyle='small'
+				color='pink.100'
+				opacity={0.9}
+				_hover={{ color: 'pink.50', opacity: 1 }}
+			>
+				LinkedIn
+			</Link>
+			<Link
+				href='https://instagram.com/samuelgomes9930'
+				target='_blank'
+				rel='noreferrer'
+				textStyle='small'
+				color='pink.100'
+				opacity={0.9}
+				_hover={{ color: 'pink.50', opacity: 1 }}
+			>
+				Instagram
+			</Link>
+		</VStack>
+	);
+}
+
+function FooterSocial() {
+	const socials = [
+		{
+			href: 'https://github.com/samuel-lab-prog',
+			icon: FaGithub,
+			label: 'GitHub',
+		},
+		{
+			href: 'https://www.linkedin.com/in/samuel-gomes-149251342/',
+			icon: FaLinkedin,
+			label: 'LinkedIn',
+		},
+		{
+			href: 'https://instagram.com/samuelgomes9930',
+			icon: FaInstagram,
+			label: 'Instagram',
+		},
+	];
+
+	return (
+		<HStack gap={2}>
+			{socials.map((social) => (
+				<Button
+					key={social.label}
+					asChild
+					size='sm'
+					variant='solidPink'
+					aria-label={social.label}
+				>
+					<Link href={social.href} target='_blank' rel='noreferrer'>
+						<social.icon />
+					</Link>
+				</Button>
 			))}
 		</HStack>
 	);
 }
 
-/* ---------------- FOOTER ---------------- */
-export function Footer({ links }: { links: { label: string; to: string }[] }) {
+export function Footer({ links }: FooterProps) {
 	return (
 		<Box
 			as='footer'
-			borderTop='2px solid'
-			borderColor='gray.200'
-			px={{ base: 6, lg: 12 }}
-			pb={10}
+			mt={16}
+			px={{ base: 4, md: 8 }}
+			pb={8}
+			borderTop='1px solid'
+			borderColor='purple.700'
+			bg='linear-gradient(180deg, rgba(18,0,17,0.75) 0%, rgba(18,0,17,0.92) 100%)'
 		>
-			<VStack gap={6} align='center'>
-				<FooterLogo />
+			<Box
+				maxW='6xl'
+				mx='auto'
+				pt={10}
+				pb={6}
+				border='1px solid'
+				borderColor='purple.700'
+				borderRadius='2xl'
+				bg='rgba(255, 255, 255, 0.02)'
+				backdropFilter='blur(4px)'
+				px={{ base: 4, md: 6 }}
+			>
+				<SimpleGrid columns={{ base: 1, md: 3 }} gap={8}>
+					<FooterBrand />
+					<FooterNav links={links} />
+					<VStack align='start' gap={3}>
+						<FooterCommunity />
+						<FooterSocial />
+					</VStack>
+				</SimpleGrid>
 
-				<FooterLinks links={links} />
-
-				<HStack gap={4}>
-					<IconButton variant='plain' asChild>
-						<Link href='https://github.com/samuel-lab-prog'>
-							<FaGithub />
-						</Link>
-					</IconButton>
-					<IconButton variant='plain' asChild>
-						<Link href='https://www.linkedin.com/in/samuel-gomes-149251342/'>
-							<FaLinkedin />
-						</Link>
-					</IconButton>
-					<IconButton variant='plain' asChild>
-						<Link href='https://instagram.com/samuelgomes9930'>
-							<FaInstagram />
-						</Link>
-					</IconButton>
-				</HStack>
-
-				<Text fontSize='sm' color='gray.500' textAlign='center'>
-					© {new Date().getFullYear()} — Todos os direitos reservados
-				</Text>
-			</VStack>
+				<Flex
+					mt={8}
+					pt={4}
+					borderTop='1px solid'
+					borderColor='purple.700'
+					justify='space-between'
+					align={{ base: 'start', md: 'center' }}
+					direction={{ base: 'column', md: 'row' }}
+					gap={2}
+				>
+					<Text textStyle='smaller' color='pink.200'>
+						© {new Date().getFullYear()} Olapoesia. Todos os direitos
+						reservados.
+					</Text>
+					<Text textStyle='smaller' color='pink.200'>
+						Feito para leitores e autores.
+					</Text>
+				</Flex>
+			</Box>
 		</Box>
 	);
 }

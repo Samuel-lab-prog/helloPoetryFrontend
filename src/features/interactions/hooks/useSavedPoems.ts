@@ -24,7 +24,8 @@ export function useSavedPoems(enabled = true) {
 				params: [poemId, 'save'],
 				method: 'POST',
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
 	});
 
 	const unsaveMutation = useMutation({
@@ -34,13 +35,13 @@ export function useSavedPoems(enabled = true) {
 				params: [poemId, 'save'],
 				method: 'DELETE',
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
+		onSuccess: () =>
+			queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
 	});
 
 	function getErrorMessage() {
-		const error = (saveMutation.error || unsaveMutation.error) as
-			| AppErrorType
-			| null;
+		const error = (saveMutation.error ||
+			unsaveMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faca login para salvar poemas.';
 		if (error.statusCode === 404) return 'Poema nao encontrado.';

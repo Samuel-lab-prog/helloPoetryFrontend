@@ -64,6 +64,36 @@ export function usePoemComments(poemId: number) {
 		},
 	});
 
+	const likeCommentMutation = useMutation({
+		mutationFn: (commentId: number) =>
+			createHTTPRequest<void>({
+				path: '/interactions/comments',
+				params: [commentId, 'like'],
+				method: 'POST',
+			}),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
+			queryClient.invalidateQueries({
+				queryKey: ['poem-comments-replies', poemId],
+			});
+		},
+	});
+
+	const unlikeCommentMutation = useMutation({
+		mutationFn: (commentId: number) =>
+			createHTTPRequest<void>({
+				path: '/interactions/comments',
+				params: [commentId, 'like'],
+				method: 'DELETE',
+			}),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
+			queryClient.invalidateQueries({
+				queryKey: ['poem-comments-replies', poemId],
+			});
+		},
+	});
+
 	async function fetchReplies(parentId: number) {
 		return queryClient.fetchQuery({
 			queryKey: ['poem-comments-replies', poemId, parentId],
@@ -89,9 +119,19 @@ export function usePoemComments(poemId: number) {
 	function getDeleteErrorMessage() {
 		const error = deleteMutation.error as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 403) return 'Voce nao pode deletar este comentario.';
+		if (error.statusCode === 403)
+			return 'Voce nao pode deletar este comentario.';
 		if (error.statusCode === 404) return 'Comentario nao encontrado.';
 		return 'Erro ao deletar comentario.';
+	}
+
+	function getLikeCommentErrorMessage() {
+		const error = (likeCommentMutation.error ||
+			unlikeCommentMutation.error) as AppErrorType | null;
+		if (!error) return '';
+		if (error.statusCode === 404) return 'Comentario nao encontrado.';
+		if (error.statusCode === 409) return 'Estado de curtida invalido.';
+		return 'Erro ao atualizar curtida do comentario.';
 	}
 
 	return {
@@ -104,6 +144,11 @@ export function usePoemComments(poemId: number) {
 		deleteComment: deleteMutation.mutateAsync,
 		isDeletingComment: deleteMutation.isPending,
 		deleteCommentError: getDeleteErrorMessage(),
+		likeComment: likeCommentMutation.mutateAsync,
+		unlikeComment: unlikeCommentMutation.mutateAsync,
+		isUpdatingCommentLike:
+			likeCommentMutation.isPending || unlikeCommentMutation.isPending,
+		likeCommentError: getLikeCommentErrorMessage(),
 		fetchReplies,
 		refetchComments: query.refetch,
 	};

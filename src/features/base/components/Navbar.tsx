@@ -1,5 +1,5 @@
-import logo from '@assets/logo.svg';
 import {
+	Badge,
 	Box,
 	HStack,
 	VStack,
@@ -8,7 +8,6 @@ import {
 	Drawer,
 	Icon,
 	Flex,
-	Image,
 	Link,
 	Text,
 } from '@chakra-ui/react';
@@ -21,13 +20,39 @@ function Logo() {
 
 	return (
 		<Box
-			onClick={() => {
-				navigate('/');
-			}}
+			onClick={() => navigate('/')}
 			cursor='pointer'
-			_hover={{ opacity: 0.6, transition: 'all', animationDuration: '0.3s' }}
+			transition='opacity 0.2s ease'
+			_hover={{ opacity: 0.8 }}
 		>
-			<Image src={logo} alt='Logo' h={['60px', undefined, undefined, '80px']} />
+			<HStack gap={3}>
+				<Box
+					w='40px'
+					h='40px'
+					display='grid'
+					placeItems='center'
+					borderRadius='full'
+					bg='linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})'
+					color='white'
+					fontWeight='700'
+					fontSize='xs'
+				>
+					OP
+				</Box>
+				<VStack align='start' gap={0}>
+					<Text
+						textStyle='small'
+						color='pink.100'
+						fontWeight='700'
+						lineHeight='short'
+					>
+						Olapoesia
+					</Text>
+					<Badge size='sm' colorPalette='pink' variant='subtle'>
+						Poemas
+					</Badge>
+				</VStack>
+			</HStack>
 		</Box>
 	);
 }

@@ -6,8 +6,13 @@ import { useFriendRequestActions, useSavedPoems } from '@features/interactions';
 
 export function MyProfilePage() {
 	const { profile, isLoading, isError, isMissingClient } = useMyProfile();
-	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
-		useFriendRequestActions();
+	const {
+		acceptRequest,
+		rejectRequest,
+		isAccepting,
+		isRejecting,
+		errorMessage,
+	} = useFriendRequestActions();
 	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(!isMissingClient);
 
 	if (isMissingClient) {
@@ -83,13 +88,11 @@ export function MyProfilePage() {
 										borderColor='purple.700'
 										borderRadius='md'
 									>
-										<Text textStyle='small'>
-											@{request.requesterNickname}
-										</Text>
+										<Text textStyle='small'>@{request.requesterNickname}</Text>
 										<Flex gap={2}>
 											<Button
 												size='sm'
-												variant='surface'
+												variant='solidPink'
 												onClick={() => acceptRequest(request.requesterId)}
 												loading={isAccepting}
 											>
@@ -97,7 +100,7 @@ export function MyProfilePage() {
 											</Button>
 											<Button
 												size='sm'
-												variant='surface'
+												variant='solidPink'
 												colorPalette='gray'
 												onClick={() => rejectRequest(request.requesterId)}
 												loading={isRejecting}
@@ -140,7 +143,7 @@ export function MyProfilePage() {
 										borderRadius='md'
 									>
 										<Text textStyle='small'>{poem.title}</Text>
-										<Button size='sm' variant='surface' asChild>
+										<Button size='sm' variant='solidPink' asChild>
 											<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 												Abrir
 											</NavLink>

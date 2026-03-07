@@ -29,7 +29,7 @@ export function DeletePostForm() {
 
 			<Button
 				type='submit'
-				variant='surface'
+				variant='solidPink'
 				colorPalette='gray'
 				disabled={!isValid || isPending}
 				loading={isPending}

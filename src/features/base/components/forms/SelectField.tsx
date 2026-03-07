@@ -1,4 +1,5 @@
 import { Box, Field, NativeSelect } from '@chakra-ui/react';
+import { useState } from 'react';
 import {
 	Controller,
 	type Control,
@@ -37,10 +38,16 @@ export function SelectField<T extends FieldValues>({
 }: SelectFieldProps<T>) {
 	const errorMessage = error?.message?.toString();
 	const hasError = Boolean(errorMessage);
+	const [isFocused, setIsFocused] = useState(false);
 
 	return (
 		<Field.Root required={required} invalid={!!error} w='full'>
-			<Field.Label textStyle='small' fontWeight='medium'>
+			<Field.Label
+				textStyle='small'
+				fontWeight='medium'
+				color={hasError ? 'error' : 'text'}
+				transition='color 0.22s ease'
+			>
 				{label}
 				{required && <Field.RequiredIndicator />}
 			</Field.Label>
@@ -50,16 +57,49 @@ export function SelectField<T extends FieldValues>({
 				name={name}
 				control={control}
 				render={({ field }) => (
-					<NativeSelect.Root>
+					<NativeSelect.Root
+						size='md'
+						w='full'
+						animationName='fade-in'
+						animationDuration='260ms'
+						animationTimingFunction='ease-out'
+					>
 						<NativeSelect.Field
+							textStyle='small'
+							bg='surface'
+							border='1px solid'
+							borderColor={hasError ? 'error' : 'border'}
+							borderRadius='md'
+							color='text'
+							px={3}
+							py={2}
+							pe={10}
+							transition='all 0.22s ease'
+							_hover={{
+								borderColor: hasError ? 'error' : 'borderHover',
+								bg: 'rgba(255, 255, 255, 0.03)',
+							}}
+							_focusVisible={{
+								borderColor: hasError ? 'error' : 'pink.300',
+								boxShadow: hasError
+									? '0 0 0 5px rgba(239, 68, 68, 0.25)'
+									: '0 0 0 5px rgba(255, 143, 189, 0.25)',
+								bg: 'rgba(255, 255, 255, 0.04)',
+							}}
+							_disabled={{
+								opacity: 0.65,
+								cursor: 'not-allowed',
+							}}
 							value={field.value ?? ''}
 							onChange={(e) => {
 								const value = e.target.value;
 								field.onChange(transformValue ? transformValue(value) : value);
 							}}
+							onFocus={() => setIsFocused(true)}
+							onBlur={() => setIsFocused(false)}
 						>
 							{placeholder && (
-								<option value='' disabled>
+								<option value='' disabled style={{ color: '#8e6f8c' }}>
 									{placeholder}
 								</option>
 							)}
@@ -68,12 +108,21 @@ export function SelectField<T extends FieldValues>({
 								<option
 									key={option.value}
 									value={option.value}
-									style={{ backgroundColor: 'white' }}
+									style={{
+										backgroundColor: '#1B0019',
+										color: '#ffd6e7',
+									}}
 								>
 									{option.label}
 								</option>
 							))}
 						</NativeSelect.Field>
+
+						<NativeSelect.Indicator
+							color={hasError ? 'red.400' : isFocused ? 'pink.300' : 'pink.200'}
+							transition='transform 0.2s ease, color 0.2s ease'
+							transform={isFocused ? 'rotate(180deg)' : 'rotate(0deg)'}
+						/>
 					</NativeSelect.Root>
 				)}
 			/>

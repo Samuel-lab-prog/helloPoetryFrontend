@@ -47,14 +47,14 @@ export function NotificationsPage() {
 
 				<HStack mb={6} gap={3} wrap='wrap'>
 					<Button
-						variant='surface'
+						variant='solidPink'
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
 					>
 						{onlyUnread ? 'Mostrar todas' : 'Somente nao lidas'}
 					</Button>
 					<Button
-						variant='surface'
+						variant='solidPink'
 						onClick={() => markAllAsRead()}
 						disabled={notifications.length === 0}
 						loading={isMarkingAllAsRead}
@@ -67,9 +67,15 @@ export function NotificationsPage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={notifications.length === 0}
-					loadingElement={<Text textStyle='body'>Carregando notificacoes...</Text>}
-					errorElement={<Text textStyle='body'>Erro ao carregar notificacoes.</Text>}
-					emptyElement={<Text textStyle='body'>Nenhuma notificacao encontrada.</Text>}
+					loadingElement={
+						<Text textStyle='body'>Carregando notificacoes...</Text>
+					}
+					errorElement={
+						<Text textStyle='body'>Erro ao carregar notificacoes.</Text>
+					}
+					emptyElement={
+						<Text textStyle='body'>Nenhuma notificacao encontrada.</Text>
+					}
 				>
 					<Flex direction='column' gap={3}>
 						{notifications.map((item) => (
@@ -103,7 +109,7 @@ export function NotificationsPage() {
 										{!item.readAt && (
 											<Button
 												size='sm'
-												variant='surface'
+												variant='solidPink'
 												onClick={() => markAsRead(item.id)}
 												loading={isMarkingAsRead}
 											>
@@ -112,7 +118,7 @@ export function NotificationsPage() {
 										)}
 										<Button
 											size='sm'
-											variant='surface'
+											variant='solidPink'
 											colorPalette='gray'
 											onClick={() => deleteNotification(item.id)}
 											loading={isDeleting}

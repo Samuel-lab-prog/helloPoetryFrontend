@@ -25,7 +25,7 @@ export function ErrorPage() {
 				</Text>
 
 				<Box mt={6}>
-					<Button asChild variant='surface'>
+					<Button asChild variant='solidPink'>
 						<NavLink to='/'>Go back home</NavLink>
 					</Button>
 				</Box>

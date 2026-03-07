@@ -17,6 +17,7 @@ export function useCreatePostForm() {
 			visibility: 'public',
 			isCommentable: true,
 			tags: [],
+			toUserIds: [],
 		},
 	});
 

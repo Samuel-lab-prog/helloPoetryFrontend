@@ -8,6 +8,10 @@ export const createPostSchema = z.object({
 	status: z.enum(['draft', 'published']),
 	visibility: z.enum(['public', 'friends', 'private', 'unlisted']),
 	isCommentable: z.boolean(),
+	toUserIds: z
+		.array(z.number().int().positive('ID de usuario invalido'))
+		.max(5, 'Voce pode dedicar para no maximo 5 usuarios')
+		.optional(),
 });
 
 export const deletePostSchema = z.object({

@@ -32,6 +32,7 @@ export function RegisterForm() {
 			onSubmit={onSubmit}
 			handleSubmitFn={handleSubmit}
 			buttonLabel='Create account'
+			buttonVariant='surface'
 		/>
 	);
 }

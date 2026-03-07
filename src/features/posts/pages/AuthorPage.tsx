@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/react';
+import {
+	Avatar,
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Link,
+	Text,
+} from '@chakra-ui/react';
 import { NavLink, useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useSendFriendRequest } from '@features/interactions';
@@ -21,10 +29,16 @@ export function AuthorPage() {
 	const authorId = Number(id);
 	const authClientId = getAuthClientId();
 
-	const { author, isLoading: isAuthorLoading, isError: isAuthorError } =
-		useAuthorProfile(authorId);
-	const { poems, isLoading: isPoemsLoading, isError: isPoemsError } =
-		useAuthorPoems(authorId);
+	const {
+		author,
+		isLoading: isAuthorLoading,
+		isError: isAuthorError,
+	} = useAuthorProfile(authorId);
+	const {
+		poems,
+		isLoading: isPoemsLoading,
+		isError: isPoemsError,
+	} = useAuthorPoems(authorId);
 	const { sendFriendRequest, isSending, isSuccess, errorMessage } =
 		useSendFriendRequest();
 
@@ -73,14 +87,15 @@ export function AuthorPage() {
 								<Text textStyle='small'>{author.bio || 'Sem bio'}</Text>
 								<Text textStyle='smaller' color='pink.200'>
 									Poemas: {author.stats.poemsCount} | Comentarios:{' '}
-									{author.stats.commentsCount} | Amigos: {author.stats.friendsCount}
+									{author.stats.commentsCount} | Amigos:{' '}
+									{author.stats.friendsCount}
 								</Text>
 
 								{canSendFriendRequest && (
 									<Flex mt={2} direction='column' gap={2} align='start'>
 										<Button
 											size='sm'
-											variant='surface'
+											variant='solidPink'
 											onClick={() => sendFriendRequest(author.id)}
 											loading={isSending}
 											disabled={isSuccess}

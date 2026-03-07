@@ -18,7 +18,9 @@ export default function App() {
 		{ to: '/poems', label: 'Poems' },
 		...(isAuthenticated ? [{ to: '/poems/new', label: 'Create Poem' }] : []),
 		...(isAuthenticated ? [{ to: '/my-profile', label: 'My Profile' }] : []),
-		...(isAuthenticated ? [{ to: '/notifications', label: 'Notifications' }] : []),
+		...(isAuthenticated
+			? [{ to: '/notifications', label: 'Notifications' }]
+			: []),
 		{ label: 'Register', to: '/register' },
 		{ label: 'Login', to: '/login' },
 	];
