@@ -1,17 +1,40 @@
-import { Avatar, Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/react';
 import { NavLink, useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
+import { useSendFriendRequest } from '@features/interactions';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
 import { useAuthorPoems } from '../hooks/useAuthorPoems';
+
+function getAuthClientId() {
+	try {
+		const raw = localStorage.getItem('auth-client');
+		if (!raw) return -1;
+		const parsed = JSON.parse(raw) as { id?: number };
+		return parsed.id ?? -1;
+	} catch {
+		return -1;
+	}
+}
 
 export function AuthorPage() {
 	const { id } = useParams<{ id: string }>();
 	const authorId = Number(id);
+	const authClientId = getAuthClientId();
 
 	const { author, isLoading: isAuthorLoading, isError: isAuthorError } =
 		useAuthorProfile(authorId);
 	const { poems, isLoading: isPoemsLoading, isError: isPoemsError } =
 		useAuthorPoems(authorId);
+	const { sendFriendRequest, isSending, isSuccess, errorMessage } =
+		useSendFriendRequest();
+
+	const canSendFriendRequest =
+		!!author &&
+		authClientId > 0 &&
+		author.id !== authClientId &&
+		!author.isFriend &&
+		!author.hasBlockedRequester &&
+		!author.isBlockedByRequester;
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center' gap={8}>
@@ -52,6 +75,27 @@ export function AuthorPage() {
 									Poemas: {author.stats.poemsCount} | Comentarios:{' '}
 									{author.stats.commentsCount} | Amigos: {author.stats.friendsCount}
 								</Text>
+
+								{canSendFriendRequest && (
+									<Flex mt={2} direction='column' gap={2} align='start'>
+										<Button
+											size='sm'
+											variant='surface'
+											onClick={() => sendFriendRequest(author.id)}
+											loading={isSending}
+											disabled={isSuccess}
+										>
+											{isSuccess
+												? 'Pedido enviado'
+												: 'Enviar pedido de amizade'}
+										</Button>
+										{errorMessage && (
+											<Text textStyle='smaller' color='red.400'>
+												{errorMessage}
+											</Text>
+										)}
+									</Flex>
+								)}
 							</Flex>
 						</Flex>
 					)}

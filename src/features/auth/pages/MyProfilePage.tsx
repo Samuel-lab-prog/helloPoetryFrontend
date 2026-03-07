@@ -1,9 +1,14 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { NavLink } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useMyProfile } from '../hooks/useMyProfile';
+import { useFriendRequestActions, useSavedPoems } from '@features/interactions';
 
 export function MyProfilePage() {
 	const { profile, isLoading, isError, isMissingClient } = useMyProfile();
+	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
+		useFriendRequestActions();
+	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(!isMissingClient);
 
 	if (isMissingClient) {
 		return (
@@ -56,6 +61,92 @@ export function MyProfilePage() {
 								<Text textStyle='small'>
 									Amigos: {profile.stats.friendsIds.length}
 								</Text>
+							</Flex>
+
+							<Flex direction='column' gap={3} mt={4}>
+								<Heading as='h2' textStyle='h4'>
+									Solicitacoes de amizade recebidas
+								</Heading>
+
+								{profile.friendshipRequestsReceived.length === 0 && (
+									<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+								)}
+
+								{profile.friendshipRequestsReceived.map((request) => (
+									<Flex
+										key={request.requesterId}
+										align='center'
+										justify='space-between'
+										gap={4}
+										p={3}
+										border='1px solid'
+										borderColor='purple.700'
+										borderRadius='md'
+									>
+										<Text textStyle='small'>
+											@{request.requesterNickname}
+										</Text>
+										<Flex gap={2}>
+											<Button
+												size='sm'
+												variant='surface'
+												onClick={() => acceptRequest(request.requesterId)}
+												loading={isAccepting}
+											>
+												Aceitar
+											</Button>
+											<Button
+												size='sm'
+												variant='surface'
+												colorPalette='gray'
+												onClick={() => rejectRequest(request.requesterId)}
+												loading={isRejecting}
+											>
+												Recusar
+											</Button>
+										</Flex>
+									</Flex>
+								))}
+
+								{errorMessage && (
+									<Text textStyle='small' color='red.400'>
+										{errorMessage}
+									</Text>
+								)}
+							</Flex>
+
+							<Flex direction='column' gap={3} mt={4}>
+								<Heading as='h2' textStyle='h4'>
+									Poemas salvos
+								</Heading>
+
+								{isLoadingSavedPoems && (
+									<Text textStyle='small'>Carregando poemas salvos...</Text>
+								)}
+
+								{!isLoadingSavedPoems && savedPoems.length === 0 && (
+									<Text textStyle='small'>Voce ainda nao salvou poemas.</Text>
+								)}
+
+								{savedPoems.map((poem) => (
+									<Flex
+										key={poem.id}
+										align='center'
+										justify='space-between'
+										gap={4}
+										p={3}
+										border='1px solid'
+										borderColor='purple.700'
+										borderRadius='md'
+									>
+										<Text textStyle='small'>{poem.title}</Text>
+										<Button size='sm' variant='surface' asChild>
+											<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+												Abrir
+											</NavLink>
+										</Button>
+									</Flex>
+								))}
 							</Flex>
 						</Flex>
 					)}

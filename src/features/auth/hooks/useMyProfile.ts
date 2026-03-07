@@ -16,6 +16,16 @@ type MyProfileType = {
 		commentsIds: number[];
 		friendsIds: number[];
 	};
+	friendshipRequestsReceived: {
+		requesterId: number;
+		requesterNickname: string;
+		requesterAvatarUrl: string | null;
+	}[];
+	friendshipRequestsSent: {
+		addresseeId: number;
+		addresseeNickname: string;
+		addresseeAvatarUrl: string | null;
+	}[];
 	blockedUsersIds: number[];
 };
 
