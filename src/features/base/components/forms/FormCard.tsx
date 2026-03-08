@@ -6,7 +6,7 @@ export function FormCard(props: FlexProps) {
 			direction='column'
 			align='center'
 			gap={3}
-			p={6}
+			p={3}
 			w='full'
 			maxW='md'
 			border='1px solid'

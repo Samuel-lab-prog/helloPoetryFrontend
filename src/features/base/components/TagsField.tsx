@@ -16,6 +16,7 @@ interface TagsFieldProps<T extends FieldValues> {
 	error?: FieldErrors<T>;
 	required?: boolean;
 	disabled?: boolean;
+	maxTags?: number;
 	transformValue?: (value: string[]) => unknown;
 }
 
@@ -26,12 +27,33 @@ export function TagsField<T extends FieldValues>({
 	error,
 	required,
 	disabled,
+	maxTags = 10,
 	transformValue,
 	placeholder,
 }: TagsFieldProps<T>) {
 	const [isFocused, setIsFocused] = useState(false);
 	const errorMessage = error?.message?.toString();
 	const hasError = Boolean(errorMessage);
+
+	function sanitizeTags(rawTags: string[]) {
+		const seen = new Set<string>();
+		const normalized: string[] = [];
+
+		for (const rawTag of rawTags) {
+			const trimmed = rawTag.trim();
+			if (!trimmed) continue;
+
+			const dedupeKey = trimmed.toLocaleLowerCase();
+			if (seen.has(dedupeKey)) continue;
+
+			seen.add(dedupeKey);
+			normalized.push(trimmed);
+
+			if (normalized.length >= maxTags) break;
+		}
+
+		return normalized;
+	}
 
 	return (
 		<Field.Root required={required} invalid={!!error} w='full'>
@@ -48,86 +70,126 @@ export function TagsField<T extends FieldValues>({
 			<Controller
 				name={name}
 				control={control}
-				render={({ field }) => (
-					<TagsInput.Root
-						w='full'
-						animationName='fade-in'
-						animationDuration='260ms'
-						animationTimingFunction='ease-out'
-						value={field.value ?? []}
-						disabled={disabled}
-						onValueChange={(details) => {
-							const value = transformValue ? transformValue(details.value) : details.value;
-							field.onChange(value);
-						}}
-					>
-						<TagsInput.Control
-							bg='rgba(255, 255, 255, 0.03)'
-							color='text'
-							border='1px solid'
-							borderColor={hasError ? 'error' : isFocused ? 'pink.300' : 'border'}
-							borderRadius='md'
-							px={2}
-							py={2}
-							minH='42px'
-							transition='all 0.22s ease'
-							_hover={{
-								borderColor: hasError ? 'error' : 'borderHover',
-								bg: 'rgba(255, 255, 255, 0.03)',
-							}}
-							_focusWithin={{
-								borderColor: hasError ? 'error' : 'pink.300',
-								boxShadow: hasError
-									? '0 0 0 5px rgba(239, 68, 68, 0.25)'
-									: '0 0 0 5px rgba(255, 143, 189, 0.25)',
-								bg: 'rgba(255, 255, 255, 0.04)',
-							}}
-						>
-							<TagsInput.Items>
-								{field.value?.map((tag: string, index: number) => (
-									<TagsInput.Item
-										key={index}
-										index={index}
-										value={tag}
-										bg='purple.700'
-										color='pink.100'
-										border='1px solid'
-										borderColor='purple.500'
-										borderRadius='full'
-										animationName='fade-in'
-										animationDuration='180ms'
-									>
-										<TagsInput.ItemPreview
-											bg='transparent'
-											color='pink.100'
-											_highlighted={{
-												color: 'pink.50',
-											}}
-										>
-											<TagsInput.ItemText color='pink.100'>{tag}</TagsInput.ItemText>
-											<TagsInput.ItemDeleteTrigger color='pink.200' _hover={{ color: 'pink.50' }} />
-										</TagsInput.ItemPreview>
-										<TagsInput.ItemInput color='pink.100' />
-									</TagsInput.Item>
-								))}
-							</TagsInput.Items>
+				render={({ field }) => {
+					const selectedTags: string[] = Array.isArray(field.value)
+						? field.value.filter((tag: unknown): tag is string => typeof tag === 'string')
+						: [];
+					const tagsCount = selectedTags.length;
+					const limitReached = tagsCount >= maxTags;
 
-							<TagsInput.Input
-								placeholder={placeholder ?? 'Adicione uma tag'}
-								bg='transparent'
-								color='text'
-								_placeholder={{ color: 'pink.200' }}
-								onFocus={() => setIsFocused(true)}
-								onBlur={() => setIsFocused(false)}
-							/>
-							<TagsInput.ClearTrigger
-								color='pink.200'
-								transition='color 0.2s ease'
-								_hover={{ color: 'pink.50' }}
-							/>
-						</TagsInput.Control>
-					</TagsInput.Root>
-				)}
+					return (
+						<>
+							<TagsInput.Root
+								w='full'
+								colorPalette='pink'
+								animationName='fade-in'
+								animationDuration='260ms'
+								animationTimingFunction='ease-out'
+								value={selectedTags}
+								disabled={disabled}
+								css={{
+									"& [data-scope='tags-input'][data-part='item']": {
+										background: 'rgba(122, 19, 66, 0.7) !important',
+										color: 'var(--chakra-colors-pink-50) !important',
+										borderColor: 'var(--chakra-colors-pink-400) !important',
+									},
+									"& [data-scope='tags-input'][data-part='itemPreview']": {
+										background: 'transparent !important',
+										color: 'var(--chakra-colors-pink-50) !important',
+									},
+								}}
+								onValueChange={(details) => {
+									const sanitizedTags = sanitizeTags(details.value);
+									const value = transformValue ? transformValue(sanitizedTags) : sanitizedTags;
+									field.onChange(value);
+								}}
+							>
+								<TagsInput.Control
+									bg='rgba(255, 255, 255, 0.03)'
+									color='text'
+									border='1px solid'
+									borderColor={hasError ? 'error' : isFocused ? 'pink.300' : 'border'}
+									borderRadius='md'
+									px={2}
+									py={2}
+									minH='42px'
+									transition='all 0.22s ease'
+									_hover={{
+										borderColor: hasError ? 'error' : 'borderHover',
+										bg: 'rgba(255, 255, 255, 0.03)',
+									}}
+									_focusWithin={{
+										borderColor: hasError ? 'error' : 'pink.300',
+										boxShadow: hasError
+											? '0 0 0 5px rgba(239, 68, 68, 0.25)'
+											: '0 0 0 5px rgba(255, 143, 189, 0.25)',
+										bg: 'rgba(255, 255, 255, 0.04)',
+									}}
+								>
+									<TagsInput.Items>
+										{selectedTags.map((tag: string, index: number) => (
+											<TagsInput.Item
+												key={index}
+												index={index}
+												value={tag}
+												bg='rgba(122, 19, 66, 0.7)'
+												color='pink.50'
+												border='1px solid'
+												borderColor='pink.400'
+												borderRadius='full'
+												animationName='fade-in'
+												animationDuration='180ms'
+												_highlighted={{
+													bg: 'rgba(154, 26, 83, 0.82)',
+													color: 'pink.50',
+												}}
+												_selected={{
+													bg: 'rgba(154, 26, 83, 0.82)',
+													color: 'pink.50',
+												}}
+											>
+												<TagsInput.ItemPreview
+													bg='transparent'
+													color='pink.50'
+													_highlighted={{
+														color: 'pink.50',
+													}}
+												>
+													<TagsInput.ItemText color='pink.50'>{tag}</TagsInput.ItemText>
+													<TagsInput.ItemDeleteTrigger
+														color='pink.200'
+														_hover={{ color: 'pink.50' }}
+													/>
+												</TagsInput.ItemPreview>
+												<TagsInput.ItemInput bg='transparent' color='pink.50' />
+											</TagsInput.Item>
+										))}
+									</TagsInput.Items>
+
+									<TagsInput.Input
+										placeholder={
+											limitReached ? 'Limite de tags atingido' : (placeholder ?? 'Adicione uma tag')
+										}
+										bg='transparent'
+										color='text'
+										_placeholder={{ color: 'pink.200' }}
+										onFocus={() => setIsFocused(true)}
+										onBlur={() => setIsFocused(false)}
+									/>
+									<TagsInput.ClearTrigger
+										color='pink.200'
+										transition='color 0.2s ease'
+										_hover={{ color: 'pink.50' }}
+									/>
+								</TagsInput.Control>
+							</TagsInput.Root>
+
+							<Field.HelperText color='pink.200' mt={1}>
+								{tagsCount}/{maxTags} tags
+							</Field.HelperText>
+						</>
+					);
+				}}
 			/>
 
 			<Box

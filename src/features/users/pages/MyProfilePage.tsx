@@ -299,7 +299,7 @@ export function MyProfilePage() {
 									<Text textStyle='smaller' color='pink.200'>
 										Poemas
 									</Text>
-									<Text textStyle='h3'>{profile.stats.poemsIds.length}</Text>
+									<Text textStyle='h3'>{profile.stats?.poemsIds?.length ?? 0}</Text>
 								</Box>
 								<Box
 									p={4}
@@ -311,7 +311,7 @@ export function MyProfilePage() {
 									<Text textStyle='smaller' color='pink.200'>
 										Comentarios
 									</Text>
-									<Text textStyle='h3'>{profile.stats.commentsIds.length}</Text>
+									<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
 								</Box>
 								<Box
 									p={4}
@@ -323,7 +323,7 @@ export function MyProfilePage() {
 									<Text textStyle='smaller' color='pink.200'>
 										Amigos
 									</Text>
-									<Text textStyle='h3'>{profile.stats.friendsIds.length}</Text>
+									<Text textStyle='h3'>{profile.stats?.friendsIds?.length ?? 0}</Text>
 								</Box>
 							</Grid>
 
@@ -333,11 +333,11 @@ export function MyProfilePage() {
 								</Heading>
 
 								<Flex direction='column' gap={3}>
-									{profile.friendshipRequestsReceived.length === 0 && (
+									{(profile.friendshipRequestsReceived?.length ?? 0) === 0 && (
 										<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
 									)}
 
-									{profile.friendshipRequestsReceived.map((request) => (
+									{(profile.friendshipRequestsReceived ?? []).map((request) => (
 										<Flex
 											key={request.requesterId}
 											align={{ base: 'start', md: 'center' }}

@@ -1,11 +1,18 @@
-﻿/* eslint-disable max-lines-per-function */
-import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { Text, Heading, Box } from '@chakra-ui/react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview } from '../hooks/useUsersPreview';
-import { FormField, SelectField, TagsField, MarkdownRenderer } from '@features/base';
+import {
+	FormField,
+	SelectField,
+	TagsField,
+	MarkdownRenderer,
+	FieldContainer,
+	FormButton,
+	FormCard,
+} from '@features/base';
 import { PoemHeader } from '@features/poems';
+import { UserDedicationCombobox } from './UserDedicationCombobox';
 
 export function CreatePoemForm() {
 	const {
@@ -18,16 +25,7 @@ export function CreatePoemForm() {
 		watch,
 	} = useCreatePoemForm();
 	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
-
 	const preview = watch();
-	const dedicationOptions = useMemo(
-		() =>
-			users.map((user) => ({
-				value: String(user.id),
-				label: `@${user.nickname}`,
-			})),
-		[users],
-	);
 
 	const previewPoem = {
 		title: preview?.title || 'Título do poema',
@@ -42,103 +40,117 @@ export function CreatePoemForm() {
 
 	return (
 		<>
-			<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
+			<FormCard
+				as='form'
+				w='full'
+				maxW='4xl'
+				direction='column'
+				gap={3}
+				onSubmit={handleSubmit(onSubmit)}
+			>
 				{generalError && <Text color='red.500'>{generalError}</Text>}
 
-				<FormField label='Título' required error={errors.title} control={control} name='title' />
+				<FieldContainer delay={40} hasError={!!errors.title}>
+					<FormField label='Título' required error={errors.title} control={control} name='title' />
+				</FieldContainer>
 
-				<FormField
-					label='Resumo'
-					required
-					as='textarea'
-					rows={5}
-					control={control}
-					name='excerpt'
-					error={errors.excerpt}
-				/>
+				<FieldContainer delay={120} hasError={!!errors.excerpt}>
+					<FormField
+						label='Resumo'
+						required
+						as='textarea'
+						rows={5}
+						control={control}
+						name='excerpt'
+						error={errors.excerpt}
+					/>
+				</FieldContainer>
 
-				<FormField
-					label='Conteúdo (Markdown)'
-					required
-					as='textarea'
-					rows={20}
-					control={control}
-					name='content'
-					error={errors.content}
-				/>
+				<FieldContainer delay={200} hasError={!!errors.content}>
+					<FormField
+						label='Conteúdo (Markdown)'
+						required
+						as='textarea'
+						rows={20}
+						control={control}
+						name='content'
+						error={errors.content}
+					/>
+				</FieldContainer>
 
-				<TagsField
-					label='Tags'
-					control={control}
-					name='tags'
-					error={errors.tags}
-					disabled={isPending}
-					placeholder='Adicione suas tags'
-				/>
+				<FieldContainer delay={280} hasError={!!errors.tags}>
+					<TagsField
+						label='Tags'
+						control={control}
+						name='tags'
+						error={errors.tags}
+						disabled={isPending}
+						placeholder='Adicione suas tags'
+					/>
+				</FieldContainer>
 
-				<SelectField
-					label='Status'
-					name='status'
-					control={control}
-					options={[
-						{ value: 'draft', label: 'Rascunho' },
-						{ value: 'published', label: 'Publicado' },
-					]}
-					error={errors.status}
-				/>
+				<FieldContainer delay={360} hasError={!!errors.status}>
+					<SelectField
+						label='Status'
+						name='status'
+						control={control}
+						options={[
+							{ value: 'draft', label: 'Rascunho' },
+							{ value: 'published', label: 'Publicado' },
+						]}
+						error={errors.status}
+					/>
+				</FieldContainer>
 
-				<SelectField
-					label='Visibilidade'
-					name='visibility'
-					control={control}
-					options={[
-						{ value: 'public', label: 'Público' },
-						{ value: 'friends', label: 'Amigos' },
-						{ value: 'private', label: 'Privado' },
-						{ value: 'unlisted', label: 'Não listado' },
-					]}
-					error={errors.visibility}
-				/>
+				<FieldContainer delay={440} hasError={!!errors.visibility}>
+					<SelectField
+						label='Visibilidade'
+						name='visibility'
+						control={control}
+						options={[
+							{ value: 'public', label: 'Público' },
+							{ value: 'friends', label: 'Amigos' },
+							{ value: 'private', label: 'Privado' },
+							{ value: 'unlisted', label: 'Não listado' },
+						]}
+						error={errors.visibility}
+					/>
+				</FieldContainer>
 
-				<SelectField
-					label='Comentários'
-					name='isCommentable'
-					control={control}
-					options={[
-						{ value: 'true', label: 'Permitidos' },
-						{ value: 'false', label: 'Desativados' },
-					]}
-					transformValue={(value) => value === 'true'}
-					error={errors.isCommentable}
-				/>
+				<FieldContainer delay={520} hasError={!!errors.isCommentable}>
+					<SelectField
+						label='Comentários'
+						name='isCommentable'
+						control={control}
+						options={[
+							{ value: 'true', label: 'Permitidos' },
+							{ value: 'false', label: 'Desativados' },
+						]}
+						transformValue={(value) => value === 'true'}
+						error={errors.isCommentable}
+					/>
+				</FieldContainer>
 
-				<SelectField
-					label='Dedicado a'
-					name='toUserIds'
-					control={control}
-					placeholder={isLoadingUsers ? 'Carregando usuários...' : 'Sem dedicação'}
-					options={[{ value: 'none', label: 'Sem dedicação' }, ...dedicationOptions]}
-					transformValue={(value) => (value === 'none' || value === '' ? [] : [Number(value)])}
-					error={errors.toUserIds}
-					disabled={isPending || isLoadingUsers}
-				/>
+				<FieldContainer delay={600} hasError={!!errors.toUserIds}>
+					<UserDedicationCombobox
+						name='toUserIds'
+						control={control}
+						users={users}
+						error={errors.toUserIds}
+						disabled={isPending || isLoadingUsers}
+						isLoading={isLoadingUsers}
+					/>
+				</FieldContainer>
 				{isUsersError && (
 					<Text textStyle='small' color='red.400'>
 						Erro ao carregar usuários para dedicação.
 					</Text>
 				)}
 
-				<Button
-					variant='solidPink'
-					type='submit'
-					disabled={!isValid}
-					loading={isPending}
-					w='full'
-					mt={4}
-				>
+				<FormButton isValid={isValid} loading={isPending} variant='surface'>
 					Criar Poema
-				</Button>
-			</Flex>
+				</FormButton>
+			</FormCard>
 
 			<Heading as='h2' textStyle='h2' mt={12}>
 				Pré-visualização
@@ -147,7 +159,7 @@ export function CreatePoemForm() {
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formulário para visualizar a pré-visualização do poema
+						Preencha o formulário para ver a pré-visualização do poema
 					</Box>
 				) : (
 					<>

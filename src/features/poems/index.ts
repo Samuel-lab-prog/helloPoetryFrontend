@@ -19,7 +19,6 @@ export * from './hooks/usePoemsFilters';
 export * from './hooks/usePoetsSearch';
 export * from './hooks/useRecentPoems';
 export * from './hooks/useSavedPoems';
-export * from './hooks/useTags';
 export * from './pages/HomePage';
 export * from './pages/PoemPage';
 export * from './pages/PoemsPage';
