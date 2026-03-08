@@ -94,7 +94,7 @@ export function usePoemComments(poemId: number) {
 		},
 	});
 
-	async function fetchReplies(parentId: number) {
+	function fetchReplies(parentId: number) {
 		return queryClient.fetchQuery({
 			queryKey: ['poem-comments-replies', poemId, parentId],
 			queryFn: () =>

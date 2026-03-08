@@ -1,17 +1,15 @@
 ﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
-import {
-	HomePage,
-	PoemPage,
-	PoemsPage,
-} from '@features/poems';
-import {
-	LoginPage,
-	RegisterPage,
-} from '@features/auth';
+import { HomePage, PoemPage, PoemsPage } from '@features/poems';
+import { LoginPage, RegisterPage } from '@features/auth';
 
-import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
+import {
+	AuthorPage,
+	MyProfilePage,
+	NotificationsPage,
+	PoetsPage,
+} from '@features/users';
 
 import { AdminPage, CreatePoemPage } from '@features/admin';
 

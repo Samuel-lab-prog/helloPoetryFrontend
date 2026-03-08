@@ -1,32 +1,32 @@
 ﻿import type { AppErrorType } from './appError';
 
 export function formatDate(
-  date: Date | string,
-  options?: Intl.DateTimeFormatOptions,
-  locale: string = 'pt-BR',
+	date: Date | string,
+	options?: Intl.DateTimeFormatOptions,
+	locale: string = 'pt-BR',
 ): string {
-  const parsedDate = typeof date === 'string' ? new Date(date) : date;
+	const parsedDate = typeof date === 'string' ? new Date(date) : date;
 
-  if (Number.isNaN(parsedDate.getTime())) {
-    return 'Data inválida';
-  }
+	if (Number.isNaN(parsedDate.getTime())) {
+		return 'Data inválida';
+	}
 
-  return parsedDate.toLocaleString(locale, {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-    ...options,
-  });
+	return parsedDate.toLocaleString(locale, {
+		dateStyle: 'medium',
+		timeStyle: 'short',
+		...options,
+	});
 }
 
 export type Options<TBody> = {
-  path: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  query?: QueryParams;
-  params?: (string | number)[];
-  body?: TBody;
-  credentials?: RequestCredentials;
-  signal?: AbortSignal;
-  headers?: HeadersInit;
+	path: string;
+	method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+	query?: QueryParams;
+	params?: (string | number)[];
+	body?: TBody;
+	credentials?: RequestCredentials;
+	signal?: AbortSignal;
+	headers?: HeadersInit;
 };
 
 /**
@@ -39,47 +39,44 @@ export type Options<TBody> = {
  */
 
 export async function createHTTPRequest<TResponse, TBody = undefined>({
-  path,
-  method = 'GET',
-  query,
-  params,
-  body,
-  credentials = 'include',
-  signal,
-  headers,
+	path,
+	method = 'GET',
+	query,
+	params,
+	body,
+	credentials = 'include',
+	signal,
+	headers,
 }: Options<TBody>): Promise<TResponse> {
-  const baseUrl = import.meta.env.VITE_API_URL;
-  if (!baseUrl)
-    throw new Error('VITE_API_URL is not defined');
+	const baseUrl = import.meta.env.VITE_API_URL;
+	if (!baseUrl) throw new Error('VITE_API_URL is not defined');
 
-  const url = buildUrl(baseUrl, path, params, query);
+	const url = buildUrl(baseUrl, path, params, query);
 
-  const response = await fetch(url, {
-    method,
-    credentials,
-    signal,
-    headers: {
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+	const response = await fetch(url, {
+		method,
+		credentials,
+		signal,
+		headers: {
+			...(body ? { 'Content-Type': 'application/json' } : {}),
+			...headers,
+		},
+		body: body ? JSON.stringify(body) : undefined,
+	});
 
-  const contentType = response.headers.get('content-type');
-  const hasJson = contentType?.includes('application/json');
-  const parsedBody = hasJson ? await response.json() : null;
+	const contentType = response.headers.get('content-type');
+	const hasJson = contentType?.includes('application/json');
+	const parsedBody = hasJson ? await response.json() : null;
 
-  if (!response.ok) {
-    const error: AppErrorType = {
-      statusCode: response.status,
-      message: parsedBody?.message ?? [
-        `Erro HTTP ${response.status}`,
-      ],
-      code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
-    };
-    throw error;
-  }
-  return parsedBody;
+	if (!response.ok) {
+		const error: AppErrorType = {
+			statusCode: response.status,
+			message: parsedBody?.message ?? [`Erro HTTP ${response.status}`],
+			code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
+		};
+		throw error;
+	}
+	return parsedBody;
 }
 
 type QueryPrimitive = string | number | boolean;
@@ -87,32 +84,31 @@ type QueryValue = QueryPrimitive | QueryPrimitive[] | undefined;
 type QueryParams = Record<string, QueryValue>;
 
 function buildUrl(
-  baseUrl: string,
-  path: string,
-  params?: (string | number)[],
-  query?: QueryParams,
+	baseUrl: string,
+	path: string,
+	params?: (string | number)[],
+	query?: QueryParams,
 ): string {
-  let url = `${baseUrl}${path}`;
+	let url = `${baseUrl}${path}`;
 
-  if (params && params.length > 0)
-    url += `/${params.join('/')}`;
+	if (params && params.length > 0) url += `/${params.join('/')}`;
 
-  if (query) {
-    const filteredEntries = Object.entries(query).flatMap(([key, value]) => {
-      if (value === undefined) return [];
-      if (Array.isArray(value)) {
-        return value
-          .filter((item) => item !== undefined)
-          .map((item) => [key, String(item)] as [string, string]);
-      }
-      return [[key, String(value)] as [string, string]];
-    });
+	if (query) {
+		const filteredEntries = Object.entries(query).flatMap(([key, value]) => {
+			if (value === undefined) return [];
+			if (Array.isArray(value)) {
+				return value
+					.filter((item) => item !== undefined)
+					.map((item) => [key, String(item)] as [string, string]);
+			}
+			return [[key, String(value)] as [string, string]];
+		});
 
-    if (filteredEntries.length > 0) {
-      const searchParams = new URLSearchParams(filteredEntries).toString();
-      url += `?${searchParams}`;
-    }
-  }
+		if (filteredEntries.length > 0) {
+			const searchParams = new URLSearchParams(filteredEntries).toString();
+			url += `?${searchParams}`;
+		}
+	}
 
-  return url;
+	return url;
 }

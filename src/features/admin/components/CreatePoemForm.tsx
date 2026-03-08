@@ -1,4 +1,5 @@
-﻿import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
+﻿/* eslint-disable max-lines-per-function */
+import { Flex, Button, Text, Heading, Box } from '@chakra-ui/react';
 import { useMemo } from 'react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';

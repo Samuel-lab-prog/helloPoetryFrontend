@@ -2,17 +2,17 @@
 import type { TagType } from '../types';
 
 export function useTags() {
-  const query = useQuery({
-    queryKey: ['tags'],
-    staleTime: 1000 * 60 * 30,
-    queryFn: async () => [] as TagType[],
-  });
+	const query = useQuery({
+		queryKey: ['tags'],
+		staleTime: 1000 * 60 * 30,
+		queryFn: async () => [] as TagType[],
+	});
 
-  return {
-    tags: query.data ?? [],
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
-  };
+	return {
+		tags: query.data ?? [],
+		isLoading: query.isLoading,
+		isError: query.isError,
+		error: query.error,
+		refetch: query.refetch,
+	};
 }
