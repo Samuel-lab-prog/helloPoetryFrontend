@@ -8,14 +8,7 @@ const loginFields: Field<LoginDataType>[] = [
 ];
 
 export function LoginForm() {
-	const {
-		control,
-		formState,
-		onSubmit,
-		isPending,
-		generalError,
-		handleSubmit,
-	} = useLoginForm();
+	const { control, formState, onSubmit, isPending, generalError, handleSubmit } = useLoginForm();
 
 	return (
 		<DynamicForm<LoginDataType>

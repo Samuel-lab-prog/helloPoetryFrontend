@@ -54,24 +54,9 @@ export function HomePage() {
 		: 'Descubra novos textos publicados na comunidade.';
 
 	return (
-		<Flex
-			direction='column'
-			minH='100%'
-		>
-			<Flex
-				as='main'
-				layerStyle='main'
-				direction='column'
-				flex='1'
-			>
-				<VStack
-					as='section'
-					w='full'
-					maxW='6xl'
-					mx='auto'
-					align='stretch'
-					gap={{ base: 6, md: 8 }}
-				>
+		<Flex direction='column' minH='100%'>
+			<Flex as='main' layerStyle='main' direction='column' flex='1'>
+				<VStack as='section' w='full' maxW='6xl' mx='auto' align='stretch' gap={{ base: 6, md: 8 }}>
 					<Box
 						border='1px solid'
 						borderColor='purple.700'
@@ -80,20 +65,11 @@ export function HomePage() {
 						py={{ base: 5, md: 7 }}
 						bg='linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)'
 					>
-						<VStack
-							align='start'
-							gap={2}
-						>
-							<Heading
-								as='h1'
-								textStyle='h2'
-							>
+						<VStack align='start' gap={2}>
+							<Heading as='h1' textStyle='h2'>
 								{feedTitle}
 							</Heading>
-							<Text
-								textStyle='lead'
-								color='pink.200'
-							>
+							<Text textStyle='lead' color='pink.200'>
 								{feedSubtitle}
 							</Text>
 						</VStack>
@@ -104,22 +80,13 @@ export function HomePage() {
 							isLoading={isLoading}
 							isError={isError}
 							isEmpty={!poems || poems.length === 0}
-							emptyElement={
-								<Flex textStyle='body'>Nenhum poema encontrado</Flex>
-							}
-							errorElement={
-								<Flex textStyle='body'>Erro ao carregar poemas</Flex>
-							}
-							loadingElement={
-								<Flex textStyle='body'>Carregando poemas...</Flex>
-							}
+							emptyElement={<Flex textStyle='body'>Nenhum poema encontrado</Flex>}
+							errorElement={<Flex textStyle='body'>Erro ao carregar poemas</Flex>}
+							loadingElement={<Flex textStyle='body'>Carregando poemas...</Flex>}
 						>
 							<PoemGrid>
 								{poems.map((poem) => (
-									<PoemCard
-										key={poem.id}
-										poem={poem}
-									/>
+									<PoemCard key={poem.id} poem={poem} />
 								))}
 							</PoemGrid>
 						</AsyncState>

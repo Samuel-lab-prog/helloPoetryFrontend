@@ -11,8 +11,7 @@ export function useFriendRequestActions() {
 				params: [requesterId],
 				method: 'PATCH',
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
 	});
 
 	const rejectMutation = useMutation({
@@ -22,14 +21,11 @@ export function useFriendRequestActions() {
 				params: [requesterId],
 				method: 'PATCH',
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
 	});
 
 	function getErrorMessage() {
-		const err = (acceptMutation.error || rejectMutation.error) as
-			| AppErrorType
-			| undefined;
+		const err = (acceptMutation.error || rejectMutation.error) as AppErrorType | undefined;
 		if (!err) return '';
 		if (err.statusCode === 404) return 'Solicitação não encontrada.';
 		if (err.statusCode === 403) return 'Você não pode executar esta ação.';

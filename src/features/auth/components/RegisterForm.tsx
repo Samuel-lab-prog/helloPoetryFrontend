@@ -2,9 +2,7 @@
 import { useRegisterForm } from '../hooks/useRegisterForm';
 import type { RegisterDataType } from '../schemas/registerSchema';
 
-async function checkNicknameAvailability(
-	nickname: string,
-): Promise<string | null> {
+async function checkNicknameAvailability(nickname: string): Promise<string | null> {
 	if (!nickname || nickname.length < 3) return null;
 	const res = await createHTTPRequest<boolean>({
 		path: `/users/check-nickname`,

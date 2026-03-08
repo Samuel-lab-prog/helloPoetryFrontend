@@ -63,8 +63,7 @@ export default defineConfig([
 						},
 						{
 							group: ['../**/features/**'],
-							message:
-								'Do not bypass feature boundaries using relative imports.',
+							message: 'Do not bypass feature boundaries using relative imports.',
 						},
 					],
 				},

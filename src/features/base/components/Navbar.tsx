@@ -1,24 +1,6 @@
 /* eslint-disable arrow-body-style */
-import {
-	Badge,
-	Box,
-	Flex,
-	HStack,
-	Icon,
-	Link,
-	Text,
-	VStack,
-} from '@chakra-ui/react';
-import {
-	Bell,
-	BookOpen,
-	House,
-	LogIn,
-	PenSquare,
-	User,
-	UserPlus,
-	Users,
-} from 'lucide-react';
+import { Badge, Box, Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
+import { Bell, BookOpen, House, LogIn, PenSquare, User, UserPlus, Users } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 
 function getLinkIcon(to: string) {
@@ -68,23 +50,11 @@ function Logo() {
 				>
 					OP
 				</Box>
-				<VStack
-					align='start'
-					gap={0}
-				>
-					<Text
-						textStyle='small'
-						color='pink.100'
-						fontWeight='700'
-						lineHeight='short'
-					>
+				<VStack align='start' gap={0}>
+					<Text textStyle='small' color='pink.100' fontWeight='700' lineHeight='short'>
 						Olapoesia
 					</Text>
-					<Badge
-						size='sm'
-						colorPalette='pink'
-						variant='subtle'
-					>
+					<Badge size='sm' colorPalette='pink' variant='subtle'>
 						Poemas
 					</Badge>
 				</VStack>
@@ -93,30 +63,14 @@ function Logo() {
 	);
 }
 
-const SidebarLinks = ({
-	links,
-}: {
-	links: { label: string; to: string }[];
-}) => {
+const SidebarLinks = ({ links }: { links: { label: string; to: string }[] }) => {
 	return (
-		<VStack
-			gap={2}
-			align='stretch'
-			w='full'
-		>
+		<VStack gap={2} align='stretch' w='full'>
 			{links.map((link) => (
-				<Link
-					asChild
-					variant='nav'
-					size='sm'
-					key={link.label}
-				>
+				<Link asChild variant='nav' size='sm' key={link.label}>
 					<NavLink to={link.to}>
 						<HStack gap={2}>
-							<Icon
-								as={getLinkIcon(link.to)}
-								boxSize={4}
-							/>
+							<Icon as={getLinkIcon(link.to)} boxSize={4} />
 							<Text>{link.label}</Text>
 						</HStack>
 					</NavLink>
@@ -126,11 +80,7 @@ const SidebarLinks = ({
 	);
 };
 
-const BottomMobileNav = ({
-	links,
-}: {
-	links: { label: string; to: string }[];
-}) => {
+const BottomMobileNav = ({ links }: { links: { label: string; to: string }[] }) => {
 	return (
 		<Box
 			as='nav'
@@ -146,36 +96,12 @@ const BottomMobileNav = ({
 			backdropFilter='blur(8px)'
 			pb='calc(env(safe-area-inset-bottom, 0px))'
 		>
-			<HStack
-				px={2}
-				py={2}
-				gap={1}
-				overflowX='auto'
-				scrollbar='hidden'
-				justify='center'
-			>
+			<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
 				{links.map((link) => (
-					<Link
-						key={link.label}
-						asChild
-						variant='navIcon'
-						size='sm'
-					>
-						<NavLink
-							to={link.to}
-							style={{ display: 'block' }}
-						>
-							<Flex
-								direction='column'
-								align='center'
-								justifyContent='center'
-								gap={0}
-							>
-								<Icon
-									as={getLinkIcon(link.to)}
-									boxSize={4.5}
-									strokeWidth={2.2}
-								/>
+					<Link key={link.label} asChild variant='navIcon' size='sm'>
+						<NavLink to={link.to} style={{ display: 'block' }}>
+							<Flex direction='column' align='center' justifyContent='center' gap={0}>
+								<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
 							</Flex>
 						</NavLink>
 					</Link>
@@ -187,10 +113,7 @@ const BottomMobileNav = ({
 
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	return (
-		<Flex
-			minH='100vh'
-			w='full'
-		>
+		<Flex minH='100vh' w='full'>
 			<Flex
 				as='aside'
 				display={{ base: 'none', md: 'flex' }}
@@ -207,30 +130,17 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				bg='rgba(18, 0, 17, 0.86)'
 				backdropFilter='blur(6px)'
 			>
-				<Flex
-					direction='column'
-					gap={8}
-				>
+				<Flex direction='column' gap={8}>
 					<Logo />
 					<SidebarLinks links={links} />
 				</Flex>
 
-				<Text
-					textStyle='small'
-					color='pink.200'
-					opacity={0.7}
-				>
+				<Text textStyle='small' color='pink.200' opacity={0.7}>
 					Olapoesia
 				</Text>
 			</Flex>
 
-			<Flex
-				flex='1'
-				minW={0}
-				direction='column'
-				w='full'
-				pb={{ base: '84px', md: 0 }}
-			>
+			<Flex flex='1' minW={0} direction='column' w='full' pb={{ base: '84px', md: 0 }}>
 				<Outlet />
 			</Flex>
 

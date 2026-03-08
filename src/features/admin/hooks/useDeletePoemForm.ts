@@ -50,10 +50,7 @@ function useDeletePoem() {
 	});
 }
 
-function handleDeletePoemError(
-	err: unknown,
-	setGeneralError: (msg: string) => void,
-) {
+function handleDeletePoemError(err: unknown, setGeneralError: (msg: string) => void) {
 	const error = err as AppError;
 	const status = error?.statusCode;
 

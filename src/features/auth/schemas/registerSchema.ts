@@ -6,10 +6,7 @@ export const registerSchema = z.object({
 		.trim()
 		.min(3, 'Apelido deve ter pelo menos 3 caracteres')
 		.max(30, 'Apelido deve ter no máximo 30 caracteres')
-		.regex(
-			/^[a-zA-Z0-9_]+$/,
-			'Apelido pode conter apenas letras, números e underscores',
-		),
+		.regex(/^[a-zA-Z0-9_]+$/, 'Apelido pode conter apenas letras, números e underscores'),
 	name: z
 		.string()
 		.trim()

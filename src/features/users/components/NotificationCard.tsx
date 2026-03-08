@@ -41,14 +41,12 @@ function getNotificationLink(item: NotificationItem) {
 	const poemId = item.data?.poemId;
 	if (poemId && poemId > 0) return `/poems/${poemId}`;
 
-	if (item.entityType === 'POEM' && item.entityId)
-		return `/poems/${item.entityId}`;
+	if (item.entityType === 'POEM' && item.entityId) return `/poems/${item.entityId}`;
 
 	const userId = item.data?.newFriendId ?? item.data?.requesterId;
 	if (userId && userId > 0) return `/authors/${userId}`;
 
-	if (item.entityType === 'USER' && item.entityId)
-		return `/authors/${item.entityId}`;
+	if (item.entityType === 'USER' && item.entityId) return `/authors/${item.entityId}`;
 
 	return null;
 }
@@ -98,79 +96,37 @@ export function NotificationCard({
 			borderRadius='lg'
 			bg='rgba(255, 255, 255, 0.02)'
 		>
-			<Flex
-				justify='space-between'
-				align='start'
-				gap={4}
-				direction={{ base: 'column', md: 'row' }}
-			>
-				<Flex
-					direction='column'
-					gap={1}
-					flex='1'
-				>
-					<Text
-						textStyle='small'
-						color='pink.100'
-						fontWeight='semibold'
-					>
+			<Flex justify='space-between' align='start' gap={4} direction={{ base: 'column', md: 'row' }}>
+				<Flex direction='column' gap={1} flex='1'>
+					<Text textStyle='small' color='pink.100' fontWeight='semibold'>
 						{getNotificationTitle(item)}
 					</Text>
-					<Text
-						textStyle='small'
-						color='pink.200'
-					>
+					<Text textStyle='small' color='pink.200'>
 						{getNotificationBody(item)}
 					</Text>
-					<Text
-						textStyle='smaller'
-						color='pink.300'
-					>
+					<Text textStyle='smaller' color='pink.300'>
 						{formatDate(item.createdAt)}
 					</Text>
-					<HStack
-						gap={2}
-						wrap='wrap'
-						mt={1}
-					>
-						<Badge
-							size='sm'
-							colorPalette='purple'
-							variant='subtle'
-						>
+					<HStack gap={2} wrap='wrap' mt={1}>
+						<Badge size='sm' colorPalette='purple' variant='subtle'>
 							{item.type}
 						</Badge>
 						{item.aggregatedCount > 1 && (
-							<Badge
-								size='sm'
-								colorPalette='pink'
-								variant='subtle'
-							>
+							<Badge size='sm' colorPalette='pink' variant='subtle'>
 								{item.aggregatedCount} notificações
 							</Badge>
 						)}
 						{item.readAt && (
-							<Badge
-								size='sm'
-								colorPalette='gray'
-								variant='subtle'
-							>
+							<Badge size='sm' colorPalette='gray' variant='subtle'>
 								Lida
 							</Badge>
 						)}
 					</HStack>
 				</Flex>
 
-				<HStack
-					gap={2}
-					alignSelf={{ base: 'stretch', md: 'start' }}
-				>
+				<HStack gap={2} alignSelf={{ base: 'stretch', md: 'start' }}>
 					{link && (
-						<Button
-							size={{ base: 'xs', md: 'sm' }}
-							variant='solidPink'
-							asChild
-						>
+						<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' asChild>
 							<NavLink to={link}>Abrir</NavLink>
 						</Button>
 					)}

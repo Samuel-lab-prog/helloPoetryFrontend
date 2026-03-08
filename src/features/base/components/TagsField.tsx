@@ -34,11 +34,7 @@ export function TagsField<T extends FieldValues>({
 	const hasError = Boolean(errorMessage);
 
 	return (
-		<Field.Root
-			required={required}
-			invalid={!!error}
-			w='full'
-		>
+		<Field.Root required={required} invalid={!!error} w='full'>
 			<Field.Label
 				textStyle='small'
 				fontWeight='medium'
@@ -61,9 +57,7 @@ export function TagsField<T extends FieldValues>({
 						value={field.value ?? []}
 						disabled={disabled}
 						onValueChange={(details) => {
-							const value = transformValue
-								? transformValue(details.value)
-								: details.value;
+							const value = transformValue ? transformValue(details.value) : details.value;
 							field.onChange(value);
 						}}
 					>
@@ -71,9 +65,7 @@ export function TagsField<T extends FieldValues>({
 							bg='rgba(255, 255, 255, 0.03)'
 							color='text'
 							border='1px solid'
-							borderColor={
-								hasError ? 'error' : isFocused ? 'pink.300' : 'border'
-							}
+							borderColor={hasError ? 'error' : isFocused ? 'pink.300' : 'border'}
 							borderRadius='md'
 							px={2}
 							py={2}
@@ -112,13 +104,8 @@ export function TagsField<T extends FieldValues>({
 												color: 'pink.50',
 											}}
 										>
-											<TagsInput.ItemText color='pink.100'>
-												{tag}
-											</TagsInput.ItemText>
-											<TagsInput.ItemDeleteTrigger
-												color='pink.200'
-												_hover={{ color: 'pink.50' }}
-											/>
+											<TagsInput.ItemText color='pink.100'>{tag}</TagsInput.ItemText>
+											<TagsInput.ItemDeleteTrigger color='pink.200' _hover={{ color: 'pink.50' }} />
 										</TagsInput.ItemPreview>
 										<TagsInput.ItemInput color='pink.100' />
 									</TagsInput.Item>

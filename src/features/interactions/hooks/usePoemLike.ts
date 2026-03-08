@@ -29,8 +29,7 @@ export function usePoemLike(poemId: number) {
 	});
 
 	function getErrorMessage() {
-		const error = (likeMutation.error ||
-			unlikeMutation.error) as AppErrorType | null;
+		const error = (likeMutation.error || unlikeMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 404) return 'Poema não encontrado.';
 		if (error.statusCode === 409) return 'Poema ja curtido.';

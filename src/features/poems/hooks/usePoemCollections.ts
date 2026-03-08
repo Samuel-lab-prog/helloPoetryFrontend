@@ -27,8 +27,7 @@ export function usePoemCollections(enabled = true) {
 	const query = useQuery({
 		queryKey: ['poem-collections'],
 		enabled,
-		queryFn: () =>
-			createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
+		queryFn: () => createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
 	});
 
 	const createCollectionMutation = useMutation({
@@ -38,8 +37,7 @@ export function usePoemCollections(enabled = true) {
 				method: 'POST',
 				body: data,
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const deleteCollectionMutation = useMutation({
@@ -49,8 +47,7 @@ export function usePoemCollections(enabled = true) {
 				method: 'DELETE',
 				params: [collectionId],
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const addCollectionItemMutation = useMutation({
@@ -61,8 +58,7 @@ export function usePoemCollections(enabled = true) {
 				method: 'POST',
 				body: { poemId: data.poemId },
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const removeCollectionItemMutation = useMutation({
@@ -73,8 +69,7 @@ export function usePoemCollections(enabled = true) {
 				method: 'DELETE',
 				body: { poemId: data.poemId },
 			}),
-		onSuccess: () =>
-			queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	function getErrorMessage() {
@@ -85,8 +80,7 @@ export function usePoemCollections(enabled = true) {
 			removeCollectionItemMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faça login para gerenciar coleções.';
-		if (error.statusCode === 403)
-			return 'Você não tem permissão para alterar esta coleção.';
+		if (error.statusCode === 403) return 'Você não tem permissão para alterar esta coleção.';
 		if (error.statusCode === 404) return 'Coleção ou poema não encontrado.';
 		if (error.statusCode === 409)
 			return 'Já existe uma coleção com esse nome ou o poema já foi adicionado.';

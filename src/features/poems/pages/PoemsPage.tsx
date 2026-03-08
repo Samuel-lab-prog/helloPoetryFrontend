@@ -7,14 +7,8 @@ import { usePoemsFilters } from '../hooks/usePoemsFilters';
 
 export function PoemsPage() {
 	const { control, order, tags, searchTitle } = usePoemsFilters();
-	const {
-		poems,
-		isError,
-		isLoading,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-	} = useInfinitePoems({ order, tags, searchTitle });
+	const { poems, isError, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useInfinitePoems({ order, tags, searchTitle });
 
 	const orderOptions: { value: 'newest' | 'oldest'; label: string }[] = [
 		{ value: 'newest', label: 'Mais recentes' },
@@ -22,43 +16,15 @@ export function PoemsPage() {
 	];
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-		>
-			<Flex
-				as='section'
-				mb={6}
-				gap={8}
-				direction='column'
-				w='full'
-			>
-				<Heading
-					as='h1'
-					textStyle='h2'
-				>
+		<Flex as='main' layerStyle='main' direction='column'>
+			<Flex as='section' mb={6} gap={8} direction='column' w='full'>
+				<Heading as='h1' textStyle='h2'>
 					Todos os Poemas
 				</Heading>
 
-				<Flex
-					as='form'
-					direction={['column', undefined, 'row']}
-					gap={[4, undefined, 8]}
-					w='full'
-				>
-					<SelectField
-						label='Ordenar por'
-						name='order'
-						control={control}
-						options={orderOptions}
-					/>
-					<FormField
-						label='Buscar poema'
-						name='searchTitle'
-						control={control}
-						type='text'
-					/>
+				<Flex as='form' direction={['column', undefined, 'row']} gap={[4, undefined, 8]} w='full'>
+					<SelectField label='Ordenar por' name='order' control={control} options={orderOptions} />
+					<FormField label='Buscar poema' name='searchTitle' control={control} type='text' />
 					<TagsField
 						label='Filtrar por tags'
 						name='tags'
@@ -68,12 +34,7 @@ export function PoemsPage() {
 				</Flex>
 			</Flex>
 
-			<Flex
-				as='section'
-				w='full'
-				direction='column'
-				gap={4}
-			>
+			<Flex as='section' w='full' direction='column' gap={4}>
 				<AsyncState
 					isError={isError}
 					isEmpty={poems?.length === 0 && !isLoading}
@@ -84,10 +45,7 @@ export function PoemsPage() {
 				>
 					<PoemGrid>
 						{poems.map((poem) => (
-							<PoemCard
-								key={poem.id}
-								poem={poem}
-							/>
+							<PoemCard key={poem.id} poem={poem} />
 						))}
 					</PoemGrid>
 				</AsyncState>

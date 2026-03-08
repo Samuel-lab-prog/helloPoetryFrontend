@@ -38,9 +38,7 @@ interface DynamicFormProps<T extends FieldValues> {
 	buttonVariant?: ButtonProps['variant'];
 	setError?: UseFormSetError<T>;
 	clearErrors?: UseFormClearErrors<T>;
-	handleSubmitFn: (
-		fn: SubmitHandler<T>,
-	) => (e?: React.BaseSyntheticEvent) => Promise<void>;
+	handleSubmitFn: (fn: SubmitHandler<T>) => (e?: React.BaseSyntheticEvent) => Promise<void>;
 }
 
 export function DynamicForm<T extends FieldValues>({
@@ -58,10 +56,7 @@ export function DynamicForm<T extends FieldValues>({
 	handleSubmitFn,
 }: DynamicFormProps<T>) {
 	return (
-		<FormCard
-			as='form'
-			onSubmit={handleSubmitFn(onSubmit)}
-		>
+		<FormCard as='form' onSubmit={handleSubmitFn(onSubmit)}>
 			{generalError && (
 				<Text
 					color='red.500'
@@ -93,11 +88,7 @@ export function DynamicForm<T extends FieldValues>({
 				</FieldContainer>
 			))}
 
-			<FormButton
-				isValid={isValid}
-				loading={loading}
-				variant={buttonVariant}
-			>
+			<FormButton isValid={isValid} loading={loading} variant={buttonVariant}>
 				{buttonLabel}
 			</FormButton>
 		</FormCard>

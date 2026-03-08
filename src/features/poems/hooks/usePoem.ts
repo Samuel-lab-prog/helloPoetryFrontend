@@ -8,8 +8,7 @@ export function usePoem(id: number) {
 		retry: 3,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,
-		queryFn: () =>
-			createHTTPRequest<FullPoemType>({ path: '/poems', params: [id] }),
+		queryFn: () => createHTTPRequest<FullPoemType>({ path: '/poems', params: [id] }),
 	});
 	return {
 		poem: query.data,

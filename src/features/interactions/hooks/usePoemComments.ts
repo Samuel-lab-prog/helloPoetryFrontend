@@ -119,15 +119,13 @@ export function usePoemComments(poemId: number) {
 	function getDeleteErrorMessage() {
 		const error = deleteMutation.error as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 403)
-			return 'Você não pode deletar este comentário.';
+		if (error.statusCode === 403) return 'Você não pode deletar este comentário.';
 		if (error.statusCode === 404) return 'Comentário não encontrado.';
 		return 'Erro ao deletar comentário.';
 	}
 
 	function getLikeCommentErrorMessage() {
-		const error = (likeCommentMutation.error ||
-			unlikeCommentMutation.error) as AppErrorType | null;
+		const error = (likeCommentMutation.error || unlikeCommentMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 404) return 'Comentário não encontrado.';
 		if (error.statusCode === 409) return 'Estado de curtida inválido.';
@@ -146,8 +144,7 @@ export function usePoemComments(poemId: number) {
 		deleteCommentError: getDeleteErrorMessage(),
 		likeComment: likeCommentMutation.mutateAsync,
 		unlikeComment: unlikeCommentMutation.mutateAsync,
-		isUpdatingCommentLike:
-			likeCommentMutation.isPending || unlikeCommentMutation.isPending,
+		isUpdatingCommentLike: likeCommentMutation.isPending || unlikeCommentMutation.isPending,
 		likeCommentError: getLikeCommentErrorMessage(),
 		fetchReplies,
 		refetchComments: query.refetch,

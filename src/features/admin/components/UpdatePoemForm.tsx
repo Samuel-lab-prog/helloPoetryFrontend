@@ -37,20 +37,10 @@ export function UpdatePoemForm() {
 	}, [poem, reset]);
 
 	return (
-		<Flex
-			as='form'
-			w='full'
-			direction='column'
-			gap={6}
-			onSubmit={handleSubmit(onSubmit)}
-		>
+		<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PoemCombobox
-				name='id'
-				control={control}
-				poems={poems}
-			/>
+			<PoemCombobox name='id' control={control} poems={poems} />
 
 			<FormField
 				label='Título'

@@ -16,20 +16,10 @@ export function DeletePoemForm() {
 	} = useDeletePoemForm();
 
 	return (
-		<Flex
-			as='form'
-			w='full'
-			direction='column'
-			gap={6}
-			onSubmit={handleSubmit(onSubmit)}
-		>
+		<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PoemCombobox
-				name='id'
-				poems={poems}
-				control={control}
-			/>
+			<PoemCombobox name='id' poems={poems} control={control} />
 
 			<Button
 				type='submit'

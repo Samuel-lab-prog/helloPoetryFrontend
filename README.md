@@ -1,13 +1,11 @@
 # HelloPoetry — Frontend
 
-This repository contains the **frontend application** of a poetry sharing
-platform.  
-It is responsible for the user interface, client-side routing, form handling,
-animations, and data consumption from the backend API.
+This repository contains the **frontend application** of a poetry sharing platform.  
+It is responsible for the user interface, client-side routing, form handling, animations, and data
+consumption from the backend API.
 
-The project was built with a strong focus on **performance**, **scalability**,
-**type safety**, and **developer experience**, following modern best practices
-from the React ecosystem.
+The project was built with a strong focus on **performance**, **scalability**, **type safety**, and
+**developer experience**, following modern best practices from the React ecosystem.
 
 ---
 
@@ -33,8 +31,8 @@ from the React ecosystem.
 
 ## Project Structure (Overview)
 
-The project follows a **feature-based architecture**, aiming for better
-scalability and separation of concerns.
+The project follows a **feature-based architecture**, aiming for better scalability and separation
+of concerns.
 
 ## How to Run Locally
 
@@ -59,8 +57,8 @@ bun run dev
 
 ## Code Quality & Best Practices
 
-This project adopts several conventions and patterns to keep the codebase
-**clean, maintainable, and easy to scale**.
+This project adopts several conventions and patterns to keep the codebase **clean, maintainable, and
+easy to scale**.
 
 ### General Practices
 
@@ -76,8 +74,8 @@ This project adopts several conventions and patterns to keep the codebase
 
 ## Commit Message Guidelines
 
-This repository follows a **conventional commit pattern** to maintain a clean,
-readable, and meaningful commit history.
+This repository follows a **conventional commit pattern** to maintain a clean, readable, and
+meaningful commit history.
 
 ### 🔹 Commit Prefixes
 

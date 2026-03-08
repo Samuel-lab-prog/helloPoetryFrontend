@@ -22,9 +22,7 @@ export function FieldContainer({
 			transition='border-color 0.22s ease, background-color 0.22s ease, box-shadow 0.22s ease'
 			_focusWithin={{
 				borderColor: hasError ? 'error' : 'pink.300',
-				bg: hasError
-					? 'rgba(248, 113, 113, 0.08)'
-					: 'rgba(255, 143, 189, 0.06)',
+				bg: hasError ? 'rgba(248, 113, 113, 0.08)' : 'rgba(255, 143, 189, 0.06)',
 			}}
 			animationName='slide-from-bottom, fade-in'
 			animationDuration='380ms'

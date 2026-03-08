@@ -4,12 +4,7 @@ import { useMemo } from 'react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview } from '../hooks/useUsersPreview';
-import {
-	FormField,
-	SelectField,
-	TagsField,
-	MarkdownRenderer,
-} from '@features/base';
+import { FormField, SelectField, TagsField, MarkdownRenderer } from '@features/base';
 import { PoemHeader } from '@features/poems';
 
 export function CreatePoemForm() {
@@ -43,27 +38,14 @@ export function CreatePoemForm() {
 		createdAt: new Date().toISOString(),
 	};
 
-	const isEmptyPreview =
-		!preview?.title && !preview?.excerpt && !preview?.content;
+	const isEmptyPreview = !preview?.title && !preview?.excerpt && !preview?.content;
 
 	return (
 		<>
-			<Flex
-				as='form'
-				w='full'
-				direction='column'
-				gap={6}
-				onSubmit={handleSubmit(onSubmit)}
-			>
+			<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
 				{generalError && <Text color='red.500'>{generalError}</Text>}
 
-				<FormField
-					label='Título'
-					required
-					error={errors.title}
-					control={control}
-					name='title'
-				/>
+				<FormField label='Título' required error={errors.title} control={control} name='title' />
 
 				<FormField
 					label='Resumo'
@@ -134,24 +116,14 @@ export function CreatePoemForm() {
 					label='Dedicado a'
 					name='toUserIds'
 					control={control}
-					placeholder={
-						isLoadingUsers ? 'Carregando usuários...' : 'Sem dedicação'
-					}
-					options={[
-						{ value: 'none', label: 'Sem dedicação' },
-						...dedicationOptions,
-					]}
-					transformValue={(value) =>
-						value === 'none' || value === '' ? [] : [Number(value)]
-					}
+					placeholder={isLoadingUsers ? 'Carregando usuários...' : 'Sem dedicação'}
+					options={[{ value: 'none', label: 'Sem dedicação' }, ...dedicationOptions]}
+					transformValue={(value) => (value === 'none' || value === '' ? [] : [Number(value)])}
 					error={errors.toUserIds}
 					disabled={isPending || isLoadingUsers}
 				/>
 				{isUsersError && (
-					<Text
-						textStyle='small'
-						color='red.400'
-					>
+					<Text textStyle='small' color='red.400'>
 						Erro ao carregar usuários para dedicação.
 					</Text>
 				)}
@@ -168,24 +140,13 @@ export function CreatePoemForm() {
 				</Button>
 			</Flex>
 
-			<Heading
-				as='h2'
-				textStyle='h2'
-				mt={12}
-			>
+			<Heading as='h2' textStyle='h2' mt={12}>
 				Pré-visualização
 			</Heading>
 
-			<Box
-				as='section'
-				maxW='4xl'
-				w='full'
-			>
+			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
-					<Box
-						textStyle='body'
-						color='gray.500'
-					>
+					<Box textStyle='body' color='gray.500'>
 						Preencha o formulário para visualizar a pré-visualização do poema
 					</Box>
 				) : (

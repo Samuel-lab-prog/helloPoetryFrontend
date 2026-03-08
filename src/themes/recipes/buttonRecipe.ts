@@ -51,18 +51,15 @@ export const buttonRecipe = defineRecipe({
 			surface: {
 				color: 'white',
 				borderColor: 'purple.600',
-				background:
-					'linear-gradient(135deg, {colors.purple.700}, {colors.pink.500})',
+				background: 'linear-gradient(135deg, {colors.purple.700}, {colors.pink.500})',
 				boxShadow: '0 4px 14px rgba(81, 53, 79, 0.28)',
 				_hover: {
-					background:
-						'linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})',
+					background: 'linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})',
 					boxShadow: '0 8px 24px rgba(240, 68, 142, 0.35)',
 					transform: 'translateY(-1px)',
 				},
 				_active: {
-					background:
-						'linear-gradient(135deg, {colors.purple.800}, {colors.pink.600})',
+					background: 'linear-gradient(135deg, {colors.purple.800}, {colors.pink.600})',
 					transform: 'translateY(1px) scale(0.99)',
 					boxShadow: '0 2px 10px rgba(58, 33, 56, 0.32)',
 				},

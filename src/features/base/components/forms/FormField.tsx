@@ -70,10 +70,7 @@ export function FormField<T extends FieldValues>({
 				const hasError = Boolean(errorMessage);
 
 				return (
-					<Field.Root
-						required={required}
-						invalid={hasError}
-					>
+					<Field.Root required={required} invalid={hasError}>
 						<Field.Label
 							textStyle='small'
 							fontWeight='medium'
@@ -112,9 +109,7 @@ export function FormField<T extends FieldValues>({
 							disabled={disabled}
 							onChange={(e) => {
 								const rawValue = e.target.value;
-								const nextValue = transformValue
-									? transformValue(rawValue)
-									: rawValue;
+								const nextValue = transformValue ? transformValue(rawValue) : rawValue;
 
 								field.onChange(nextValue);
 

@@ -42,64 +42,27 @@ export function PoemCard({ poem }: PoemCardProps) {
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header
-				p={0}
-				mb={3}
-				gap={3}
-			>
-				<Badge
-					size='sm'
-					colorPalette='pink'
-					w='fit-content'
-					variant='subtle'
-				>
+			<Card.Header p={0} mb={3} gap={3}>
+				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poema
 				</Badge>
-				<Card.Title
-					as='h3'
-					textStyle='h3'
-				>
+				<Card.Title as='h3' textStyle='h3'>
 					{poem.title}
 				</Card.Title>
 			</Card.Header>
 
-			<Card.Body
-				p={0}
-				flex='1'
-			>
-				<Flex
-					direction='column'
-					gap={2}
-				>
-					<Text
-						textStyle='small'
-						color='pink.100'
-					>
+			<Card.Body p={0} flex='1'>
+				<Flex direction='column' gap={2}>
+					<Text textStyle='small' color='pink.100'>
 						{poem.author.name}
 					</Text>
-					<Link
-						asChild
-						textStyle='smaller'
-						color='pink.200'
-						opacity={0.8}
-					>
-						<NavLink to={`/authors/${poem.author.id}`}>
-							@{poem.author.nickname}
-						</NavLink>
+					<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
+						<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
 					</Link>
 					{poem.tags.length > 0 && (
-						<Flex
-							mt={1}
-							gap={2}
-							wrap='wrap'
-						>
+						<Flex mt={1} gap={2} wrap='wrap'>
 							{poem.tags.slice(0, 4).map((tag) => (
-								<Badge
-									key={tag.id}
-									size='sm'
-									colorPalette='pink'
-									variant='subtle'
-								>
+								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
 									#{tag.name}
 								</Badge>
 							))}
@@ -108,11 +71,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				</Flex>
 			</Card.Body>
 
-			<Card.Footer
-				p={0}
-				justifyContent='flex-end'
-				mt={3}
-			>
+			<Card.Footer p={0} justifyContent='flex-end' mt={3}>
 				<Link
 					asChild
 					textStyle='small'

@@ -5,10 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { createHTTPRequest, type AppErrorType } from '@features/base';
-import {
-	registerSchema,
-	type RegisterDataType,
-} from '../schemas/registerSchema';
+import { registerSchema, type RegisterDataType } from '../schemas/registerSchema';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');

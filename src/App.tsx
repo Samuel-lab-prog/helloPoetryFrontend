@@ -4,12 +4,7 @@ import { Navbar, ErrorPage } from '@features/base';
 import { HomePage, PoemPage, PoemsPage } from '@features/poems';
 import { LoginPage, RegisterPage } from '@features/auth';
 
-import {
-	AuthorPage,
-	MyProfilePage,
-	NotificationsPage,
-	PoetsPage,
-} from '@features/users';
+import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
 
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
@@ -29,7 +24,6 @@ function generateNavLinks(isAuthenticated: boolean) {
 	}
 	return links;
 }
-
 
 export default function App() {
 	const isAuthenticated = !!localStorage.getItem('auth-client');

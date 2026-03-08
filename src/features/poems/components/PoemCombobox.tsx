@@ -1,10 +1,4 @@
-﻿import {
-	Field,
-	Combobox,
-	Portal,
-	useListCollection,
-	useFilter,
-} from '@chakra-ui/react';
+﻿import { Field, Combobox, Portal, useListCollection, useFilter } from '@chakra-ui/react';
 import {
 	Controller,
 	type Control,
@@ -22,12 +16,7 @@ interface Props<T extends FieldValues> {
 	name: Path<T>;
 }
 
-export function PoemCombobox<T extends FieldValues>({
-	name,
-	error,
-	control,
-	poems,
-}: Props<T>) {
+export function PoemCombobox<T extends FieldValues>({ name, error, control, poems }: Props<T>) {
 	const { contains } = useFilter({
 		sensitivity: 'base',
 		ignorePunctuation: false,
@@ -114,9 +103,7 @@ export function PoemCombobox<T extends FieldValues>({
 									overflow='hidden'
 								>
 									<Combobox.Empty>
-										{poems
-											? 'Nenhum poema encontrado.'
-											: 'Carregando poemas...'}
+										{poems ? 'Nenhum poema encontrado.' : 'Carregando poemas...'}
 									</Combobox.Empty>
 									{collection.items.map((item) => (
 										<Combobox.Item

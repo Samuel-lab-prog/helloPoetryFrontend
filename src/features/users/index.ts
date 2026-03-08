@@ -3,6 +3,7 @@
  */
 
 export * from './components/NotificationCard';
+export * from './components/PoetCard';
 export * from './hooks/useAuthorProfile';
 export * from './hooks/useMyProfile';
 export * from './hooks/useNotificationsPanel';

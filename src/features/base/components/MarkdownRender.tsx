@@ -10,141 +10,77 @@ type MarkdownRendererProps = {
 
 const components: Components = {
 	h1: ({ children }) => (
-		<Heading
-			as='h1'
-			textStyle='h1'
-			mt={8}
-			mb={4}
-		>
+		<Heading as='h1' textStyle='h1' mt={8} mb={4}>
 			{children}
 		</Heading>
 	),
 	h2: ({ children }) => (
-		<Heading
-			as='h2'
-			textStyle='h2'
-			mt={7}
-			mb={3}
-		>
+		<Heading as='h2' textStyle='h2' mt={7} mb={3}>
 			{children}
 		</Heading>
 	),
 	h3: ({ children }) => (
-		<Heading
-			as='h3'
-			textStyle='h3'
-			mt={6}
-			mb={3}
-		>
+		<Heading as='h3' textStyle='h3' mt={6} mb={3}>
 			{children}
 		</Heading>
 	),
 	h4: ({ children }) => (
-		<Heading
-			as='h4'
-			textStyle='h4'
-			mt={5}
-			mb={2}
-		>
+		<Heading as='h4' textStyle='h4' mt={5} mb={2}>
 			{children}
 		</Heading>
 	),
 	h5: ({ children }) => (
-		<Heading
-			as='h5'
-			textStyle='h5'
-			mt={4}
-			mb={2}
-		>
+		<Heading as='h5' textStyle='h5' mt={4} mb={2}>
 			{children}
 		</Heading>
 	),
 	h6: ({ children }) => (
-		<Heading
-			as='h6'
-			textStyle='h6'
-			mt={4}
-			mb={2}
-		>
+		<Heading as='h6' textStyle='h6' mt={4} mb={2}>
 			{children}
 		</Heading>
 	),
 
 	p: ({ children }) => (
-		<Text
-			as='p'
-			textStyle='body'
-			my={3}
-		>
+		<Text as='p' textStyle='body' my={3}>
 			{children}
 		</Text>
 	),
 
 	strong: ({ children }) => (
-		<Text
-			as='strong'
-			fontWeight='700'
-			display='inline'
-		>
+		<Text as='strong' fontWeight='700' display='inline'>
 			{children}
 		</Text>
 	),
 	em: ({ children }) => (
-		<Text
-			as='em'
-			fontStyle='italic'
-			display='inline'
-		>
+		<Text as='em' fontStyle='italic' display='inline'>
 			{children}
 		</Text>
 	),
 
 	mark: ({ children }) => (
-		<Mark
-			as='mark'
-			bg='pink.200'
-			color='purple.900'
-			textStyle='body'
-		>
+		<Mark as='mark' bg='pink.200' color='purple.900' textStyle='body'>
 			{children}
 		</Mark>
 	),
 
 	ul: ({ children }) => (
-		<Box
-			as='ul'
-			textStyle='body'
-			pl={6}
-			my={3}
-		>
+		<Box as='ul' textStyle='body' pl={6} my={3}>
 			{children}
 		</Box>
 	),
 	ol: ({ children }) => (
-		<Box
-			as='ol'
-			textStyle='body'
-			pl={6}
-			my={3}
-		>
+		<Box as='ol' textStyle='body' pl={6} my={3}>
 			{children}
 		</Box>
 	),
 	li: ({ children }) => (
-		<Box
-			as='li'
-			mb={1.5}
-		>
+		<Box as='li' mb={1.5}>
 			{children}
 		</Box>
 	),
 
 	a: ({ children, href }) => (
-		<Link
-			variant='inline'
-			size='md'
-			href={href}
-		>
+		<Link variant='inline' size='md' href={href}>
 			{children}
 		</Link>
 	),
@@ -167,11 +103,7 @@ const components: Components = {
 		const isBlock = className?.includes('language-');
 		if (isBlock) {
 			return (
-				<Box
-					as='code'
-					textStyle='code'
-					whiteSpace='pre'
-				>
+				<Box as='code' textStyle='code' whiteSpace='pre'>
 					{children}
 				</Box>
 			);
@@ -207,23 +139,14 @@ const components: Components = {
 			{children}
 		</Box>
 	),
-	hr: () => (
-		<Box
-			as='hr'
-			my={6}
-			borderColor='purple.700'
-		/>
-	),
+	hr: () => <Box as='hr' my={6} borderColor='purple.700' />,
 };
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 	if (!content) return null;
 
 	return (
-		<ReactMarkdown
-			remarkPlugins={[remarkGfm]}
-			components={components}
-		>
+		<ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
 			{content}
 		</ReactMarkdown>
 	);

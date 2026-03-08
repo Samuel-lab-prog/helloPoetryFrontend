@@ -51,9 +51,7 @@ export function useLoginForm() {
 			}
 
 			if (error.statusCode === 429) {
-				setGeneralError(
-					'Muitas tentativas. Por favor, tente novamente mais tarde.',
-				);
+				setGeneralError('Muitas tentativas. Por favor, tente novamente mais tarde.');
 				return;
 			}
 

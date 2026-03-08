@@ -72,10 +72,7 @@ function normalizePoemsPayload(payload: unknown): PoemPreviewType[] {
 	return [];
 }
 
-export function useHomeFeed({
-	isAuthenticated,
-	limit = 8,
-}: UseHomeFeedOptions) {
+export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) {
 	const query = useQuery({
 		queryKey: ['home-feed', { isAuthenticated, limit }],
 		retry: 2,

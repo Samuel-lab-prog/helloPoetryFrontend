@@ -3,24 +3,10 @@
 /* eslint-disable max-lines-per-function */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import {
-	Avatar,
-	Box,
-	Button,
-	Flex,
-	Heading,
-	Icon,
-	Link,
-	Text,
-	Textarea,
-} from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Heading, Icon, Link, Text, Textarea } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
-import {
-	type PoemCommentType,
-	usePoemComments,
-	usePoemLike,
-} from '@features/interactions';
+import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
 import { usePoem } from '../hooks/usePoem';
 import { useSavedPoems } from '../hooks/useSavedPoems';
@@ -82,37 +68,20 @@ const PoemAuthorCard = memo(function PoemAuthorCard({
 				<Avatar.Fallback name={author.name} />
 			</Avatar.Root>
 
-			<Flex
-				direction='column'
-				gap={1}
-				flex='1'
-			>
-				<Text
-					textStyle='small'
-					color='pink.200'
-				>
+			<Flex direction='column' gap={1} flex='1'>
+				<Text textStyle='small' color='pink.200'>
 					Autor
 				</Text>
 				<Text textStyle='body'>{author.name}</Text>
-				<Text
-					textStyle='smaller'
-					color='pink.200'
-				>
+				<Text textStyle='smaller' color='pink.200'>
 					@{author.nickname}
 				</Text>
-				<Text
-					textStyle='smaller'
-					color='pink.200'
-				>
+				<Text textStyle='smaller' color='pink.200'>
 					Curtidas: {stats.likesCount} | Comentários: {stats.commentsCount}
 				</Text>
 			</Flex>
 
-			<Link
-				asChild
-				textStyle='small'
-				color='pink.100'
-			>
+			<Link asChild textStyle='small' color='pink.100'>
 				<NavLink to={`/authors/${author.id}`}>Ver autor</NavLink>
 			</Link>
 
@@ -180,15 +149,10 @@ type CommentsSectionProps = {
 	isDeletingComment: boolean;
 	isUpdatingCommentLike: boolean;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
-	setRepliesByCommentId: React.Dispatch<
-		React.SetStateAction<Record<number, PoemCommentType[]>>
-	>;
+	setRepliesByCommentId: React.Dispatch<React.SetStateAction<Record<number, PoemCommentType[]>>>;
 	onCommentInputChange: (value: string) => void;
 	onPublishComment: () => Promise<void>;
-	createComment: (args: {
-		content: string;
-		parentId?: number;
-	}) => Promise<void>;
+	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
 	deleteComment: (id: number) => Promise<void>;
 	likeComment: (id: number) => Promise<void>;
 	unlikeComment: (id: number) => Promise<void>;
@@ -264,19 +228,11 @@ const CommentsSection = memo(function CommentsSection({
 			borderRadius='xl'
 			bg='rgba(255, 255, 255, 0.03)'
 		>
-			<Heading
-				as='h2'
-				textStyle='h3'
-				mb={4}
-			>
+			<Heading as='h2' textStyle='h3' mb={4}>
 				Comentários
 			</Heading>
 
-			<Flex
-				direction='column'
-				gap={3}
-				mb={6}
-			>
+			<Flex direction='column' gap={3} mb={6}>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
@@ -285,14 +241,8 @@ const CommentsSection = memo(function CommentsSection({
 					maxLength={300}
 					disabled={!poemIsCommentable || isCreatingComment}
 				/>
-				<Flex
-					align='center'
-					justify='space-between'
-				>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-					>
+				<Flex align='center' justify='space-between'>
+					<Text textStyle='smaller' color='pink.200'>
 						{commentInput.length}/300
 					</Text>
 					<Button
@@ -307,10 +257,7 @@ const CommentsSection = memo(function CommentsSection({
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
-					<Text
-						textStyle='small'
-						color='pink.200'
-					>
+					<Text textStyle='small' color='pink.200'>
 						Comentários desativados para este poema.
 					</Text>
 				)}
@@ -321,15 +268,10 @@ const CommentsSection = memo(function CommentsSection({
 				isError={isCommentsError}
 				isEmpty={comments.length === 0}
 				loadingElement={<Text textStyle='body'>Carregando comentários...</Text>}
-				errorElement={
-					<Text textStyle='body'>Erro ao carregar comentários.</Text>
-				}
+				errorElement={<Text textStyle='body'>Erro ao carregar comentários.</Text>}
 				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
 			>
-				<Flex
-					direction='column'
-					gap={3}
-				>
+				<Flex direction='column' gap={3}>
 					{renderedThreads}
 				</Flex>
 			</AsyncState>
@@ -344,9 +286,9 @@ export function PoemPage() {
 	const isPoemIdValid = poemId > 0;
 
 	const [commentInput, setCommentInput] = useState('');
-	const [repliesByCommentId, setRepliesByCommentId] = useState<
-		Record<number, PoemCommentType[]>
-	>({});
+	const [repliesByCommentId, setRepliesByCommentId] = useState<Record<number, PoemCommentType[]>>(
+		{},
+	);
 	const [likedPoem, setLikedPoem] = useState(false);
 
 	const { poem, isError, isLoading } = usePoem(poemId);
@@ -366,14 +308,13 @@ export function PoemPage() {
 		likeCommentError,
 		fetchReplies,
 	} = usePoemComments(poemId);
-	const { likePoem, unlikePoem, isUpdatingLike, likeError } =
-		usePoemLike(poemId);
-	const { savedPoems, savePoem, unsavePoem, isSavingPoem, saveError } =
-		useSavedPoems(authClientId > 0);
+	const { likePoem, unlikePoem, isUpdatingLike, likeError } = usePoemLike(poemId);
+	const { savedPoems, savePoem, unsavePoem, isSavingPoem, saveError } = useSavedPoems(
+		authClientId > 0,
+	);
 
 	const isSaved = useMemo(
-		() =>
-			savedPoems.some((savedPoem: { id: number }) => savedPoem.id === poemId),
+		() => savedPoems.some((savedPoem: { id: number }) => savedPoem.id === poemId),
 		[savedPoems, poemId],
 	);
 	const poemHeaderPoem = useMemo(
@@ -536,17 +477,8 @@ export function PoemPage() {
 
 	if (!isPoemIdValid) {
 		return (
-			<Flex
-				as='main'
-				layerStyle='main'
-				direction='column'
-				alignItems='center'
-			>
-				<Box
-					as='section'
-					maxW='4xl'
-					w='full'
-				>
+			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+				<Box as='section' maxW='4xl' w='full'>
 					<Box textStyle='body'>ID de poema inválido.</Box>
 				</Box>
 			</Flex>
@@ -554,26 +486,15 @@ export function PoemPage() {
 	}
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			alignItems='center'
-		>
-			<Box
-				as='section'
-				maxW='4xl'
-				w='full'
-			>
+		<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+			<Box as='section' maxW='4xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
 					emptyElement={<Box textStyle='body'>Poema não encontrado</Box>}
 					errorElement={
-						<Box textStyle='body'>
-							Erro ao carregar o poema. Tente novamente mais tarde
-						</Box>
+						<Box textStyle='body'>Erro ao carregar o poema. Tente novamente mais tarde</Box>
 					}
 					loadingElement={<Box textStyle='body'>Carregando poema...</Box>}
 				>
@@ -591,10 +512,7 @@ export function PoemPage() {
 								<PoemHeader poem={poemHeaderPoem} />
 							</Box>
 
-							<PoemAuthorCard
-								author={poem.author}
-								stats={poem.stats}
-							>
+							<PoemAuthorCard author={poem.author} stats={poem.stats}>
 								<PoemActions
 									authClientId={authClientId}
 									likedPoem={likedPoem}

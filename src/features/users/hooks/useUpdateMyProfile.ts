@@ -42,8 +42,7 @@ export function useUpdateMyProfile() {
 		const error = mutation.error as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faça login para editar seu perfil.';
-		if (error.statusCode === 403)
-			return 'Você não tem permissão para editar este perfil.';
+		if (error.statusCode === 403) return 'Você não tem permissão para editar este perfil.';
 		if (error.statusCode === 409) return 'Este apelido já está em uso.';
 		if (error.statusCode === 422) return 'Dados inválidos. Revise os campos.';
 		return 'Erro ao atualizar perfil.';

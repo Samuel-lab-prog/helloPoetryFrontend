@@ -1,12 +1,5 @@
 ﻿/* eslint-disable max-lines-per-function */
-import {
-	Box,
-	Button,
-	Flex,
-	IconButton,
-	Text,
-	Textarea,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import {
 	ChevronDown,
@@ -25,19 +18,14 @@ interface CommentThreadProps {
 	poemIsCommentable: boolean;
 	isCreatingComment: boolean;
 	isDeletingComment: boolean;
-	createComment: (args: {
-		content: string;
-		parentId?: number;
-	}) => Promise<void>;
+	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
 	deleteComment: (id: number) => Promise<void>;
 	likeComment: (id: number) => Promise<void>;
 	unlikeComment: (id: number) => Promise<void>;
 	isUpdatingCommentLike: boolean;
 	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
-	setRepliesByCommentId: React.Dispatch<
-		React.SetStateAction<Record<number, PoemCommentType[]>>
-	>;
+	setRepliesByCommentId: React.Dispatch<React.SetStateAction<Record<number, PoemCommentType[]>>>;
 }
 
 export const CommentThread = memo(function CommentThread({
@@ -116,24 +104,12 @@ export const CommentThread = memo(function CommentThread({
 			bg='rgba(255,255,255,0.02)'
 			ml={0}
 		>
-			<Flex
-				justify='space-between'
-				align='start'
-				gap={3}
-			>
+			<Flex justify='space-between' align='start' gap={3}>
 				<Box flex='1'>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-						mb={1}
-					>
+					<Text textStyle='smaller' color='pink.200' mb={1}>
 						@{comment.author.nickname}
 					</Text>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-						mb={2}
-					>
+					<Text textStyle='smaller' color='pink.200' mb={2}>
 						{formatDate(comment.createdAt)}
 					</Text>
 					<Text textStyle='small'>{comment.content}</Text>
@@ -153,31 +129,14 @@ export const CommentThread = memo(function CommentThread({
 				)}
 			</Flex>
 
-			<Flex
-				mt={3}
-				justify='space-between'
-				align='center'
-				gap={2}
-				wrap='wrap'
-			>
-				<Flex
-					align='center'
-					gap={2}
-				>
+			<Flex mt={3} justify='space-between' align='center' gap={2} wrap='wrap'>
+				<Flex align='center' gap={2}>
 					<IconButton
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={
-							activeReplyFor === comment.id
-								? 'Fechar resposta'
-								: 'Responder comentário'
-						}
-						title={
-							activeReplyFor === comment.id
-								? 'Fechar resposta'
-								: 'Responder comentário'
-						}
+						aria-label={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
+						title={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
 						onClick={handleToggleReplies}
 					>
 						<MessageCircleReply />
@@ -186,41 +145,22 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={
-							comment.likedByCurrentUser
-								? 'Descurtir comentário'
-								: 'Curtir comentário'
-						}
-						title={
-							comment.likedByCurrentUser
-								? 'Descurtir comentário'
-								: 'Curtir comentário'
-						}
+						aria-label={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
+						title={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
-							comment.likedByCurrentUser
-								? unlikeComment(comment.id)
-								: likeComment(comment.id)
+							comment.likedByCurrentUser ? unlikeComment(comment.id) : likeComment(comment.id)
 						}
 					>
 						<Heart />
 					</IconButton>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-					>
+					<Text textStyle='smaller' color='pink.200'>
 						{comment.likesCount}
 					</Text>
 				</Flex>
 				{hasReplies && (
-					<Flex
-						align='center'
-						gap={2}
-					>
-						<Text
-							textStyle='smaller'
-							color='pink.200'
-						>
+					<Flex align='center' gap={2}>
+						<Text textStyle='smaller' color='pink.200'>
 							{comment.aggregateChildrenCount} resposta(s)
 						</Text>
 						{!hasLoadedReplies && (
@@ -232,11 +172,7 @@ export const CommentThread = memo(function CommentThread({
 								title='Ver respostas'
 								onClick={handleToggleReplies}
 							>
-								{activeReplyFor === comment.id ? (
-									<ChevronUp />
-								) : (
-									<ChevronDown />
-								)}
+								{activeReplyFor === comment.id ? <ChevronUp /> : <ChevronDown />}
 							</IconButton>
 						)}
 					</Flex>
@@ -244,16 +180,8 @@ export const CommentThread = memo(function CommentThread({
 			</Flex>
 
 			{hasLoadedReplies && (
-				<Box
-					mt={3}
-					pl={4}
-					borderLeft='1px solid'
-					borderColor='purple.700'
-				>
-					<Flex
-						direction='column'
-						gap={2}
-					>
+				<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
+					<Flex direction='column' gap={2}>
 						{replies.map((reply) => (
 							<CommentThread
 								key={reply.id}
@@ -277,16 +205,8 @@ export const CommentThread = memo(function CommentThread({
 			)}
 
 			{activeReplyFor === comment.id && (
-				<Box
-					mt={3}
-					pl={4}
-					borderLeft='1px solid'
-					borderColor='purple.700'
-				>
-					<Flex
-						direction='column'
-						gap={2}
-					>
+				<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
+					<Flex direction='column' gap={2}>
 						<Textarea
 							value={replyInput}
 							onChange={(e) => setReplyInput(e.target.value)}
@@ -301,9 +221,7 @@ export const CommentThread = memo(function CommentThread({
 								variant='solidPink'
 								aria-label='Enviar resposta'
 								title='Enviar resposta'
-								disabled={
-									!replyInput.trim() || !poemIsCommentable || isCreatingComment
-								}
+								disabled={!replyInput.trim() || !poemIsCommentable || isCreatingComment}
 								loading={isCreatingComment}
 								onClick={handleCreateReply}
 							>
@@ -311,10 +229,7 @@ export const CommentThread = memo(function CommentThread({
 							</IconButton>
 						</Flex>
 						{replyError && (
-							<Text
-								textStyle='smaller'
-								color='red.400'
-							>
+							<Text textStyle='smaller' color='red.400'>
 								{replyError}
 							</Text>
 						)}

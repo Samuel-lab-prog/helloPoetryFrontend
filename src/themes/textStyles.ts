@@ -29,8 +29,7 @@ export const textStyles = defineTextStyles({
 		},
 	},
 	small: {
-		description:
-			'The small text style - used in descriptions and less prominent text',
+		description: 'The small text style - used in descriptions and less prominent text',
 		value: {
 			...baseText,
 			fontWeight: '400',

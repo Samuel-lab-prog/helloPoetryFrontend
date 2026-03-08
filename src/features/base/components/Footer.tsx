@@ -21,10 +21,7 @@ type FooterProps = {
 
 function FooterBrand() {
 	return (
-		<VStack
-			align='start'
-			gap={3}
-		>
+		<VStack align='start' gap={3}>
 			<HStack gap={3}>
 				<Box
 					w='44px'
@@ -39,53 +36,25 @@ function FooterBrand() {
 				>
 					OP
 				</Box>
-				<VStack
-					align='start'
-					gap={0}
-				>
-					<Heading
-						as='h3'
-						textStyle='h4'
-						color='pink.100'
-					>
+				<VStack align='start' gap={0}>
+					<Heading as='h3' textStyle='h4' color='pink.100'>
 						Olapoesia
 					</Heading>
-					<Badge
-						size='sm'
-						colorPalette='pink'
-						variant='subtle'
-					>
+					<Badge size='sm' colorPalette='pink' variant='subtle'>
 						Plataforma de Poemas
 					</Badge>
 				</VStack>
 			</HStack>
 
-			<Text
-				textStyle='small'
-				color='pink.200'
-				maxW='sm'
-			>
-				Publique poemas, salve favoritos, comente e construa conexoes com outros
-				autores.
+			<Text textStyle='small' color='pink.200' maxW='sm'>
+				Publique poemas, salve favoritos, comente e construa conexoes com outros autores.
 			</Text>
 
-			<HStack
-				gap={2}
-				flexWrap='wrap'
-			>
-				<Button
-					size='sm'
-					variant='solidPink'
-					asChild
-				>
+			<HStack gap={2} flexWrap='wrap'>
+				<Button size='sm' variant='solidPink' asChild>
 					<NavLink to='/poems'>Explorar poemas</NavLink>
 				</Button>
-				<Button
-					size='sm'
-					variant='solidPink'
-					colorPalette='gray'
-					asChild
-				>
+				<Button size='sm' variant='solidPink' colorPalette='gray' asChild>
 					<NavLink to='/poems/new'>Criar poema</NavLink>
 				</Button>
 			</HStack>
@@ -95,14 +64,8 @@ function FooterBrand() {
 
 function FooterNav({ links }: { links: FooterLink[] }) {
 	return (
-		<VStack
-			align='start'
-			gap={2}
-		>
-			<Text
-				textStyle='small'
-				color='pink.200'
-			>
+		<VStack align='start' gap={2}>
+			<Text textStyle='small' color='pink.200'>
 				Navegação
 			</Text>
 			{links.map((link) => (
@@ -122,14 +85,8 @@ function FooterNav({ links }: { links: FooterLink[] }) {
 
 function FooterCommunity() {
 	return (
-		<VStack
-			align='start'
-			gap={2}
-		>
-			<Text
-				textStyle='small'
-				color='pink.200'
-			>
+		<VStack align='start' gap={2}>
+			<Text textStyle='small' color='pink.200'>
 				Comunidade
 			</Text>
 			<Link
@@ -185,18 +142,8 @@ function FooterSocial() {
 	return (
 		<HStack gap={2}>
 			{socials.map((social) => (
-				<Button
-					key={social.label}
-					asChild
-					size='sm'
-					variant='solidPink'
-					aria-label={social.label}
-				>
-					<Link
-						href={social.href}
-						target='_blank'
-						rel='noreferrer'
-					>
+				<Button key={social.label} asChild size='sm' variant='solidPink' aria-label={social.label}>
+					<Link href={social.href} target='_blank' rel='noreferrer'>
 						<social.icon />
 					</Link>
 				</Button>
@@ -229,16 +176,10 @@ export function Footer({ links }: FooterProps) {
 				backdropFilter='blur(4px)'
 				px={{ base: 4, md: 6 }}
 			>
-				<SimpleGrid
-					columns={{ base: 1, md: 3 }}
-					gap={8}
-				>
+				<SimpleGrid columns={{ base: 1, md: 3 }} gap={8}>
 					<FooterBrand />
 					<FooterNav links={links} />
-					<VStack
-						align='start'
-						gap={3}
-					>
+					<VStack align='start' gap={3}>
 						<FooterCommunity />
 						<FooterSocial />
 					</VStack>
@@ -254,17 +195,10 @@ export function Footer({ links }: FooterProps) {
 					direction={{ base: 'column', md: 'row' }}
 					gap={2}
 				>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-					>
-						© {new Date().getFullYear()} Olapoesia. Todos os direitos
-						reservados.
+					<Text textStyle='smaller' color='pink.200'>
+						© {new Date().getFullYear()} Olapoesia. Todos os direitos reservados.
 					</Text>
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-					>
+					<Text textStyle='smaller' color='pink.200'>
 						Feito para leitores e autores.
 					</Text>
 				</Flex>
