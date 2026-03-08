@@ -26,26 +26,31 @@ export function useRegisterForm() {
 				method: 'POST',
 				body: data,
 			}),
+
 		onSuccess: () => {
 			navigate('/login');
 		},
+
 		onError: (err: unknown) => {
 			const error = err as AppErrorType;
 
 			if (error.statusCode === 409) {
-				if (error.message?.includes('Nickname')) {
+				const msg = error.message?.toLowerCase() ?? '';
+
+				if (msg.includes('nickname')) {
 					form.setError('nickname', {
 						type: 'manual',
 						message: 'Apelido já está em uso',
 					});
 				}
 
-				if (error.message?.includes('Email')) {
+				if (msg.includes('email')) {
 					form.setError('email', {
 						type: 'manual',
 						message: 'E-mail já está em uso',
 					});
 				}
+
 				return;
 			}
 
@@ -55,6 +60,9 @@ export function useRegisterForm() {
 
 	function onSubmit(data: RegisterDataType) {
 		setGeneralError('');
+
+		if (!form.formState.isValid) return;
+
 		registerMutation.mutate(data);
 	}
 
@@ -65,5 +73,7 @@ export function useRegisterForm() {
 		formState: form.formState,
 		control: form.control,
 		isPending: registerMutation.isPending,
+		setError: form.setError,
+		clearErrors: form.clearErrors,
 	};
 }

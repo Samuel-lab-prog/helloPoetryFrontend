@@ -3,27 +3,32 @@ import { FieldContainer } from './FieldContainer';
 import { FormCard } from './FormCard';
 import { FormField } from './FormField';
 import { FormButton } from './FormButton';
+
 import type {
 	FieldValues,
 	Control,
 	SubmitHandler,
 	Path,
+	UseFormClearErrors,
+	UseFormSetError,
 } from 'react-hook-form';
 
 type FieldType = 'text' | 'password' | 'textarea';
 
-export type Field<T> = {
+export type Field<T extends FieldValues> = {
 	name: Path<T>;
 	label: string;
 	required?: boolean;
 	autoFocus?: boolean;
 	type?: FieldType;
+
+	asyncValidator?: (value: string) => Promise<string | null>;
+	debounce?: number;
 };
 
 interface DynamicFormProps<T extends FieldValues> {
 	fields: Field<T>[];
 	control: Control<T>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	errors: any;
 	isValid: boolean;
 	loading: boolean;
@@ -31,6 +36,8 @@ interface DynamicFormProps<T extends FieldValues> {
 	onSubmit: SubmitHandler<T>;
 	buttonLabel: string;
 	buttonVariant?: ButtonProps['variant'];
+	setError?: UseFormSetError<T>;
+	clearErrors?: UseFormClearErrors<T>;
 	handleSubmitFn: (
 		fn: SubmitHandler<T>,
 	) => (e?: React.BaseSyntheticEvent) => Promise<void>;
@@ -46,6 +53,8 @@ export function DynamicForm<T extends FieldValues>({
 	onSubmit,
 	buttonLabel,
 	buttonVariant,
+	setError,
+	clearErrors,
 	handleSubmitFn,
 }: DynamicFormProps<T>) {
 	return (
@@ -75,6 +84,8 @@ export function DynamicForm<T extends FieldValues>({
 						{...field}
 						control={control}
 						error={errors[field.name]}
+						setError={setError}
+						clearErrors={clearErrors}
 						type={field.type || 'text'}
 						as={field.type === 'textarea' ? 'textarea' : 'input'}
 						rows={5}
