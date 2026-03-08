@@ -1,124 +1,217 @@
-﻿import ReactMarkdown from 'react-markdown';
+import { Box, Heading, Link, Mark, Text } from '@chakra-ui/react';
+import ReactMarkdown from 'react-markdown';
 // eslint-disable-next-line no-duplicate-imports
 import { type Components } from 'react-markdown';
-import { Heading, Text, Mark } from '@chakra-ui/react';
+import remarkGfm from 'remark-gfm';
 
 type MarkdownRendererProps = {
 	content: string;
 };
 
 const components: Components = {
-	h1: (p) => (
+	h1: ({ children }) => (
 		<Heading
 			as='h1'
 			textStyle='h1'
-			{...p}
-		/>
+			mt={8}
+			mb={4}
+		>
+			{children}
+		</Heading>
 	),
-	h2: (p) => (
+	h2: ({ children }) => (
 		<Heading
 			as='h2'
 			textStyle='h2'
-			{...p}
-		/>
+			mt={7}
+			mb={3}
+		>
+			{children}
+		</Heading>
 	),
-	h3: (p) => (
+	h3: ({ children }) => (
 		<Heading
 			as='h3'
 			textStyle='h3'
-			{...p}
-		/>
+			mt={6}
+			mb={3}
+		>
+			{children}
+		</Heading>
 	),
-	h4: (p) => (
+	h4: ({ children }) => (
 		<Heading
 			as='h4'
 			textStyle='h4'
-			{...p}
-		/>
+			mt={5}
+			mb={2}
+		>
+			{children}
+		</Heading>
 	),
-	h5: (p) => (
+	h5: ({ children }) => (
 		<Heading
 			as='h5'
 			textStyle='h5'
-			{...p}
-		/>
+			mt={4}
+			mb={2}
+		>
+			{children}
+		</Heading>
 	),
-	h6: (p) => (
+	h6: ({ children }) => (
 		<Heading
 			as='h6'
 			textStyle='h6'
-			{...p}
-		/>
+			mt={4}
+			mb={2}
+		>
+			{children}
+		</Heading>
 	),
 
-	p: (p) => (
+	p: ({ children }) => (
 		<Text
 			as='p'
 			textStyle='body'
-			{...p}
-		/>
+			my={3}
+		>
+			{children}
+		</Text>
 	),
 
-	strong: (p) => (
-		<Mark
+	strong: ({ children }) => (
+		<Text
 			as='strong'
-			textStyle='body'
-			fontWeight='bold'
+			fontWeight='700'
 			display='inline'
-			whiteSpace='normal'
-			{...p}
-		/>
+		>
+			{children}
+		</Text>
 	),
-	em: (p) => (
-		<Mark
+	em: ({ children }) => (
+		<Text
 			as='em'
-			textStyle='body'
 			fontStyle='italic'
 			display='inline'
-			whiteSpace='normal'
-			{...p}
-		/>
+		>
+			{children}
+		</Text>
 	),
 
-	mark: (p) => (
+	mark: ({ children }) => (
 		<Mark
 			as='mark'
-			bg='yellow.200'
+			bg='pink.200'
+			color='purple.900'
 			textStyle='body'
-			{...p}
-		/>
+		>
+			{children}
+		</Mark>
 	),
 
-	ul: (p) => (
-		<Mark
+	ul: ({ children }) => (
+		<Box
 			as='ul'
+			textStyle='body'
 			pl={6}
-			my={2}
-			{...p}
-		/>
+			my={3}
+		>
+			{children}
+		</Box>
 	),
-	ol: (p) => (
-		<Mark
+	ol: ({ children }) => (
+		<Box
 			as='ol'
+			textStyle='body'
 			pl={6}
-			my={2}
-			{...p}
-		/>
+			my={3}
+		>
+			{children}
+		</Box>
 	),
-	li: (p) => (
-		<Mark
+	li: ({ children }) => (
+		<Box
 			as='li'
-			mb={1}
-			{...p}
-		/>
+			mb={1.5}
+		>
+			{children}
+		</Box>
 	),
 
-	a: (p) => (
-		<Mark
-			as='a'
-			color='blue.500'
-			textDecoration='underline'
-			{...p}
+	a: ({ children, href }) => (
+		<Link
+			variant='inline'
+			size='md'
+			href={href}
+		>
+			{children}
+		</Link>
+	),
+	pre: ({ children }) => (
+		<Box
+			as='pre'
+			my={4}
+			px={4}
+			py={3}
+			borderRadius='md'
+			bg='rgba(255, 255, 255, 0.04)'
+			border='1px solid'
+			borderColor='purple.700'
+			overflowX='auto'
+		>
+			{children}
+		</Box>
+	),
+	code: ({ children, className }) => {
+		const isBlock = className?.includes('language-');
+		if (isBlock) {
+			return (
+				<Box
+					as='code'
+					textStyle='code'
+					whiteSpace='pre'
+				>
+					{children}
+				</Box>
+			);
+		}
+
+		return (
+			<Box
+				as='code'
+				textStyle='code'
+				px={1.5}
+				py={0.5}
+				borderRadius='sm'
+				bg='rgba(255, 255, 255, 0.08)'
+				color='pink.100'
+			>
+				{children}
+			</Box>
+		);
+	},
+	blockquote: ({ children }) => (
+		<Box
+			as='blockquote'
+			my={4}
+			pl={4}
+			py={1}
+			borderLeft='3px solid'
+			borderColor='pink.400'
+			bg='rgba(255, 255, 255, 0.03)'
+			borderRadius='sm'
+			textStyle='body'
+			fontStyle='italic'
+		>
+			{children}
+		</Box>
+	),
+	hr: () => (
+		<Box
+			as='hr'
+			my={6}
+			borderColor='purple.700'
 		/>
 	),
 };
@@ -126,5 +219,12 @@ const components: Components = {
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 	if (!content) return null;
 
-	return <ReactMarkdown components={components}>{content}</ReactMarkdown>;
+	return (
+		<ReactMarkdown
+			remarkPlugins={[remarkGfm]}
+			components={components}
+		>
+			{content}
+		</ReactMarkdown>
+	);
 }

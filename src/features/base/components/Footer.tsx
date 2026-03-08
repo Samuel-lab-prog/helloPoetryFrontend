@@ -109,11 +109,8 @@ function FooterNav({ links }: { links: FooterLink[] }) {
 				<Link
 					asChild
 					key={link.label}
-					textStyle='small'
-					color='pink.100'
-					opacity={0.9}
-					transition='all 0.2s ease'
-					_hover={{ color: 'pink.50', opacity: 1, textDecoration: 'none' }}
+					variant='muted'
+					size='sm'
 					_currentPage={{ color: 'pink.50', fontWeight: '600' }}
 				>
 					<NavLink to={link.to}>{link.label}</NavLink>
@@ -139,10 +136,8 @@ function FooterCommunity() {
 				href='https://github.com/samuel-lab-prog'
 				target='_blank'
 				rel='noreferrer'
-				textStyle='small'
-				color='pink.100'
-				opacity={0.9}
-				_hover={{ color: 'pink.50', opacity: 1 }}
+				variant='muted'
+				size='sm'
 			>
 				Repositorio
 			</Link>
@@ -150,10 +145,8 @@ function FooterCommunity() {
 				href='https://www.linkedin.com/in/samuel-gomes-149251342/'
 				target='_blank'
 				rel='noreferrer'
-				textStyle='small'
-				color='pink.100'
-				opacity={0.9}
-				_hover={{ color: 'pink.50', opacity: 1 }}
+				variant='muted'
+				size='sm'
 			>
 				LinkedIn
 			</Link>
@@ -161,10 +154,8 @@ function FooterCommunity() {
 				href='https://instagram.com/samuelgomes9930'
 				target='_blank'
 				rel='noreferrer'
-				textStyle='small'
-				color='pink.100'
-				opacity={0.9}
-				_hover={{ color: 'pink.50', opacity: 1 }}
+				variant='muted'
+				size='sm'
 			>
 				Instagram
 			</Link>

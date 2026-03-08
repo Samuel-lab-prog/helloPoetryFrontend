@@ -44,7 +44,6 @@ function getLinkIcon(to: string) {
 	}
 }
 
-/* ---------------- LOGO ---------------- */
 function Logo() {
 	const navigate = useNavigate();
 
@@ -94,7 +93,6 @@ function Logo() {
 	);
 }
 
-/* ---------------- SIDEBAR LINKS ---------------- */
 const SidebarLinks = ({
 	links,
 }: {
@@ -109,22 +107,9 @@ const SidebarLinks = ({
 			{links.map((link) => (
 				<Link
 					asChild
-					color='pink.100'
-					w='full'
-					px={3}
-					py={2}
-					borderRadius='md'
-					textStyle='small'
-					display='flex'
-					justifyContent='flex-start'
+					variant='nav'
+					size='sm'
 					key={link.label}
-					transition='all 0.2s ease'
-					_hover={{ bg: 'rgba(255, 255, 255, 0.06)', color: 'pink.50' }}
-					_currentPage={{
-						fontWeight: 'bold',
-						color: 'pink.50',
-						bg: 'rgba(255, 143, 189, 0.14)',
-					}}
 				>
 					<NavLink to={link.to}>
 						<HStack gap={2}>
@@ -173,20 +158,8 @@ const BottomMobileNav = ({
 					<Link
 						key={link.label}
 						asChild
-						flex='1'
-						minW='58px'
-						textAlign='center'
-						px={1}
-						py={2}
-						borderRadius='md'
-						color='pink.100'
-						transition='all 0.2s ease'
-						_hover={{ bg: 'rgba(255, 255, 255, 0.06)', color: 'pink.50' }}
-						_currentPage={{
-							fontWeight: 'bold',
-							color: 'pink.50',
-							bg: 'rgba(255, 143, 189, 0.14)',
-						}}
+						variant='navIcon'
+						size='sm'
 					>
 						<NavLink
 							to={link.to}

@@ -14,6 +14,7 @@ export * from './components/forms/FormCard';
 export * from './components/forms/FormField';
 export * from './components/forms/SelectField';
 export * from './components/ui/color-mode';
+export * from './components/Button';
 export * from './components/ui/provider';
 export * from './components/ui/toaster';
 export * from './components/ui/tooltip';

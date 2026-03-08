@@ -1,4 +1,5 @@
-﻿import { Button, type ButtonProps } from '@chakra-ui/react';
+import { type ButtonProps } from '@chakra-ui/react';
+import { BaseButton } from '../Button';
 
 interface FormButtonProps extends ButtonProps {
 	isValid?: boolean;
@@ -13,13 +14,13 @@ export function FormButton({
 	...props
 }: FormButtonProps) {
 	return (
-		<Button
+		<BaseButton
 			type='submit'
 			variant={variant}
 			loading={loading}
 			disabled={!isValid || loading}
 			mt={6}
-			w='full'
+			fullWidth
 			opacity={isValid ? 1 : 0.72}
 			filter={isValid ? 'saturate(1)' : 'saturate(0.72)'}
 			transition='opacity 0.24s ease, filter 0.24s ease, transform 0.16s ease, box-shadow 0.16s ease, background-color 0.24s ease, border-color 0.24s ease'
@@ -33,6 +34,6 @@ export function FormButton({
 			{...props}
 		>
 			{children}
-		</Button>
+		</BaseButton>
 	);
 }

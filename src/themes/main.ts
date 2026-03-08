@@ -1,15 +1,15 @@
-﻿import {
+import {
 	createSystem,
 	defaultConfig,
 	defineConfig,
 	defineGlobalStyles,
-	defineRecipe,
 	defineSemanticTokens,
 	defineTokens,
 } from '@chakra-ui/react';
 
 import { animationStyles } from './animationStyles';
 import { layerStyles } from './layerStyles';
+import { recipes } from './recipes';
 import { textStyles } from './textStyles';
 
 const tokens = defineTokens({
@@ -39,18 +39,6 @@ const tokens = defineTokens({
 			800: { value: '#2a0f27' },
 			900: { value: '#1B0019' },
 			950: { value: '#120011' },
-		},
-		brown: {
-			50: { value: '#f7ede7' },
-			100: { value: '#f0d9c8' },
-			200: { value: '#e6c7b2' },
-			300: { value: '#d7b49e' },
-			400: { value: '#c89f85' },
-			500: { value: '#b98a6c' },
-			600: { value: '#a97553' },
-			700: { value: '#9c603a' },
-			800: { value: '#8d4b21' },
-			900: { value: '#7e3608' },
 		},
 		neutral: {
 			50: { value: '#fffdfa' },
@@ -150,107 +138,6 @@ const globalCss = defineGlobalStyles({
 	},
 });
 
-const buttonRecipe = defineRecipe({
-	base: {
-		transition: 'all 0.2s ease',
-		fontWeight: 'semibold',
-	},
-	variants: {
-		variant: {
-			surface: {
-				color: 'white',
-				border: '1px solid',
-				borderColor: 'purple.600',
-				background:
-					'linear-gradient(135deg, {colors.purple.700}, {colors.pink.500})',
-				_hover: {
-					background:
-						'linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})',
-					boxShadow: '0 6px 20px rgba(240, 68, 142, 0.35)',
-					transform: 'translateY(-1px)',
-				},
-				_active: {
-					background:
-						'linear-gradient(135deg, {colors.purple.800}, {colors.pink.600})',
-					transform: 'translateY(0)',
-				},
-			},
-			solidPurple: {
-				bg: 'purple.700',
-				color: 'white',
-				border: '1px solid',
-				borderColor: 'purple.600',
-				_hover: {
-					bg: 'purple.600',
-					boxShadow: '0 6px 18px rgba(58, 33, 56, 0.4)',
-					transform: 'translateY(-1px)',
-				},
-				_active: {
-					bg: 'purple.800',
-					transform: 'translateY(0)',
-				},
-			},
-			solidPink: {
-				bg: 'pink.400',
-				color: 'white',
-				border: '1px solid',
-				borderColor: 'pink.600',
-				_hover: {
-					bg: 'pink.400',
-					boxShadow: '0 6px 18px rgba(240, 68, 142, 0.35)',
-					transform: 'translateY(-1px)',
-				},
-				_active: {
-					bg: 'pink.600',
-					transform: 'translateY(0)',
-				},
-			},
-			outlinePurple: {
-				bg: 'transparent',
-				color: 'purple.200',
-				border: '1px solid',
-				borderColor: 'purple.500',
-				_hover: {
-					bg: 'purple.900',
-					color: 'pink.200',
-					borderColor: 'pink.400',
-				},
-				_active: {
-					bg: 'purple.800',
-				},
-			},
-			ghostPink: {
-				bg: 'transparent',
-				color: 'pink.300',
-				border: '1px solid transparent',
-				_hover: {
-					bg: 'purple.900',
-					color: 'pink.200',
-				},
-				_active: {
-					bg: 'purple.800',
-				},
-			},
-			danger: {
-				bg: 'red.500',
-				color: 'white',
-				border: '1px solid',
-				borderColor: 'red.500',
-				_hover: {
-					bg: 'red.400',
-				},
-				_active: {
-					bg: 'red.500',
-					filter: 'brightness(0.92)',
-				},
-			},
-		},
-	},
-	defaultVariants: {
-		variant: 'surface',
-	},
-});
-
 const config = defineConfig({
 	globalCss,
 	theme: {
@@ -259,9 +146,7 @@ const config = defineConfig({
 		layerStyles,
 		textStyles,
 		animationStyles,
-		recipes: {
-			button: buttonRecipe,
-		},
+		recipes,
 	},
 });
 

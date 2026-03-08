@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { AsyncState, Footer } from '@features/base';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
@@ -26,7 +26,7 @@ export function HomePage() {
 
 	const footerLinks = useMemo(
 		() => [
-			{ label: 'Início', to: '/' },
+			{ label: 'Inicio', to: '/' },
 			{ label: 'Poemas', to: '/poems' },
 			...(isAuthenticated
 				? [
@@ -41,44 +41,65 @@ export function HomePage() {
 		[isAuthenticated],
 	);
 
+	const feedTitle = isAuthenticated
+		? isPersonalizedFeed
+			? 'Seu feed'
+			: 'Início'
+		: 'Poemas recentes';
+
+	const feedSubtitle = isAuthenticated
+		? isPersonalizedFeed
+			? 'Poemas de amigos e autores que você acompanha.'
+			: 'Mostrando poemas mais recentes enquanto o feed personalizado não estiver disponível.'
+		: 'Descubra novos textos publicados na comunidade.';
+
 	return (
-		<>
+		<Flex
+			direction='column'
+			minH='100%'
+		>
 			<Flex
 				as='main'
 				layerStyle='main'
 				direction='column'
+				flex='1'
 			>
-				<Flex
+				<VStack
 					as='section'
-					direction='column'
 					w='full'
-					py='4'
-					gap={4}
+					maxW='6xl'
+					mx='auto'
+					align='stretch'
+					gap={{ base: 6, md: 8 }}
 				>
-					{isAuthenticated && (
-						<Flex
-							direction='column'
-							gap={1}
-							px={{ base: 1, md: 2 }}
+					<Box
+						border='1px solid'
+						borderColor='purple.700'
+						borderRadius='2xl'
+						px={{ base: 4, md: 6 }}
+						py={{ base: 5, md: 7 }}
+						bg='linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)'
+					>
+						<VStack
+							align='start'
+							gap={2}
 						>
 							<Heading
 								as='h1'
 								textStyle='h2'
 							>
-								{isPersonalizedFeed ? 'Seu feed' : 'Início'}
+								{feedTitle}
 							</Heading>
 							<Text
-								textStyle='small'
+								textStyle='lead'
 								color='pink.200'
 							>
-								{isPersonalizedFeed
-									? 'Poemas de amigos e autores que você acompanha.'
-									: 'Mostrando poemas mais recentes enquanto o feed personalizado não estiver disponível.'}
+								{feedSubtitle}
 							</Text>
-						</Flex>
-					)}
+						</VStack>
+					</Box>
 
-					<PoemGrid>
+					<Box>
 						<AsyncState
 							isLoading={isLoading}
 							isError={isError}
@@ -93,17 +114,20 @@ export function HomePage() {
 								<Flex textStyle='body'>Carregando poemas...</Flex>
 							}
 						>
-							{poems.map((poem) => (
-								<PoemCard
-									key={poem.id}
-									poem={poem}
-								/>
-							))}
+							<PoemGrid>
+								{poems.map((poem) => (
+									<PoemCard
+										key={poem.id}
+										poem={poem}
+									/>
+								))}
+							</PoemGrid>
 						</AsyncState>
-					</PoemGrid>
-				</Flex>
+					</Box>
+				</VStack>
 			</Flex>
+
 			<Footer links={footerLinks} />
-		</>
+		</Flex>
 	);
 }

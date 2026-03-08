@@ -13,21 +13,28 @@ import {
 
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
-export default function App() {
-	const isAuthenticated = !!localStorage.getItem('auth-client');
-
-	const navLinks = [
+function generateNavLinks(isAuthenticated: boolean) {
+	const links = [
 		{ to: '/', label: 'Início' },
 		{ to: '/poems', label: 'Poemas' },
 		{ to: '/poets', label: 'Poetas' },
-		...(isAuthenticated ? [{ to: '/poems/new', label: 'Criar' }] : []),
-		...(isAuthenticated ? [{ to: '/my-profile', label: 'Meu Perfil' }] : []),
-		...(isAuthenticated
-			? [{ to: '/notifications', label: 'Notificações' }]
-			: []),
-		...(!isAuthenticated ? [{ label: 'Cadastrar', to: '/register' }] : []),
-		...(!isAuthenticated ? [{ label: 'Entrar', to: '/login' }] : []),
 	];
+	if (isAuthenticated) {
+		links.push({ to: '/poems/new', label: 'Criar' });
+		links.push({ to: '/my-profile', label: 'Meu Perfil' });
+		links.push({ to: '/notifications', label: 'Notificações' });
+	} else {
+		links.push({ to: '/register', label: 'Cadastrar' });
+		links.push({ to: '/login', label: 'Entrar' });
+	}
+	return links;
+}
+
+
+export default function App() {
+	const isAuthenticated = !!localStorage.getItem('auth-client');
+
+	const navLinks = generateNavLinks(isAuthenticated);
 
 	const router = createBrowserRouter([
 		{
