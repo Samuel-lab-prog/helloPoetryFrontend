@@ -148,22 +148,22 @@ const BottomMobileNav = ({
 			pb='calc(env(safe-area-inset-bottom, 0px))'
 		>
 			<HStack
-				px={3}
+				px={2}
 				py={2}
-				gap={2}
+				gap={1}
 				overflowX='auto'
 				scrollbar='hidden'
-				justify='space-between'
+				justify='center'
 			>
 				{links.map((link) => (
 					<Link
 						key={link.label}
 						asChild
 						flex='1'
-						minW='72px'
+						minW='58px'
 						textAlign='center'
-						px={2}
-						py={3}
+						px={1}
+						py={2}
 						borderRadius='md'
 						color='pink.100'
 						transition='all 0.2s ease'
@@ -175,8 +175,12 @@ const BottomMobileNav = ({
 						}}
 					>
 						<NavLink to={link.to}>
-							<Flex direction='column' align='center' gap={0}>
-								<Icon as={getLinkIcon(link.to)} boxSize={5} strokeWidth={2.4} />
+							<Flex direction='column' align='center' justify='center' gap={0}>
+								<Icon
+									as={getLinkIcon(link.to)}
+									boxSize={4.5}
+									strokeWidth={2.2}
+								/>
 							</Flex>
 						</NavLink>
 					</Link>
