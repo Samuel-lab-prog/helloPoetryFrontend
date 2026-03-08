@@ -81,20 +81,37 @@ const PoemAuthorCard = memo(function PoemAuthorCard({
 				<Avatar.Fallback name={author.name} />
 			</Avatar.Root>
 
-			<Flex direction='column' gap={1} flex='1'>
-				<Text textStyle='small' color='pink.200'>
+			<Flex
+				direction='column'
+				gap={1}
+				flex='1'
+			>
+				<Text
+					textStyle='small'
+					color='pink.200'
+				>
 					Autor
 				</Text>
 				<Text textStyle='body'>{author.name}</Text>
-				<Text textStyle='smaller' color='pink.200'>
+				<Text
+					textStyle='smaller'
+					color='pink.200'
+				>
 					@{author.nickname}
 				</Text>
-				<Text textStyle='smaller' color='pink.200'>
+				<Text
+					textStyle='smaller'
+					color='pink.200'
+				>
 					Curtidas: {stats.likesCount} | Comentários: {stats.commentsCount}
 				</Text>
 			</Flex>
 
-			<Link asChild textStyle='small' color='pink.100'>
+			<Link
+				asChild
+				textStyle='small'
+				color='pink.100'
+			>
 				<NavLink to={`/authors/${author.id}`}>Ver autor</NavLink>
 			</Link>
 
@@ -246,11 +263,19 @@ const CommentsSection = memo(function CommentsSection({
 			borderRadius='xl'
 			bg='rgba(255, 255, 255, 0.03)'
 		>
-			<Heading as='h2' textStyle='h3' mb={4}>
+			<Heading
+				as='h2'
+				textStyle='h3'
+				mb={4}
+			>
 				Comentários
 			</Heading>
 
-			<Flex direction='column' gap={3} mb={6}>
+			<Flex
+				direction='column'
+				gap={3}
+				mb={6}
+			>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
@@ -259,8 +284,14 @@ const CommentsSection = memo(function CommentsSection({
 					maxLength={300}
 					disabled={!poemIsCommentable || isCreatingComment}
 				/>
-				<Flex align='center' justify='space-between'>
-					<Text textStyle='smaller' color='pink.200'>
+				<Flex
+					align='center'
+					justify='space-between'
+				>
+					<Text
+						textStyle='smaller'
+						color='pink.200'
+					>
 						{commentInput.length}/300
 					</Text>
 					<Button
@@ -275,7 +306,10 @@ const CommentsSection = memo(function CommentsSection({
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
-					<Text textStyle='small' color='pink.200'>
+					<Text
+						textStyle='small'
+						color='pink.200'
+					>
 						Comentários desativados para este poema.
 					</Text>
 				)}
@@ -291,7 +325,10 @@ const CommentsSection = memo(function CommentsSection({
 				}
 				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
 			>
-				<Flex direction='column' gap={3}>
+				<Flex
+					direction='column'
+					gap={3}
+				>
 					{renderedThreads}
 				</Flex>
 			</AsyncState>
@@ -498,8 +535,17 @@ export function PoemPage() {
 
 	if (!isPoemIdValid) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
-				<Box as='section' maxW='4xl' w='full'>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				alignItems='center'
+			>
+				<Box
+					as='section'
+					maxW='4xl'
+					w='full'
+				>
 					<Box textStyle='body'>ID de poema inválido.</Box>
 				</Box>
 			</Flex>
@@ -507,8 +553,17 @@ export function PoemPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
-			<Box as='section' maxW='4xl' w='full'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			alignItems='center'
+		>
+			<Box
+				as='section'
+				maxW='4xl'
+				w='full'
+			>
 				<AsyncState
 					isLoading={isLoading}
 					isError={!!isError}
@@ -535,7 +590,10 @@ export function PoemPage() {
 								<PoemHeader poem={poemHeaderPoem} />
 							</Box>
 
-							<PoemAuthorCard author={poem.author} stats={poem.stats}>
+							<PoemAuthorCard
+								author={poem.author}
+								stats={poem.stats}
+							>
 								<PoemActions
 									authClientId={authClientId}
 									likedPoem={likedPoem}

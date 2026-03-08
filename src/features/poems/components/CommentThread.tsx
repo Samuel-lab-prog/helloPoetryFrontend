@@ -116,12 +116,24 @@ export const CommentThread = memo(function CommentThread({
 			bg='rgba(255,255,255,0.02)'
 			ml={0}
 		>
-			<Flex justify='space-between' align='start' gap={3}>
+			<Flex
+				justify='space-between'
+				align='start'
+				gap={3}
+			>
 				<Box flex='1'>
-					<Text textStyle='smaller' color='pink.200' mb={1}>
+					<Text
+						textStyle='smaller'
+						color='pink.200'
+						mb={1}
+					>
 						@{comment.author.nickname}
 					</Text>
-					<Text textStyle='smaller' color='pink.200' mb={2}>
+					<Text
+						textStyle='smaller'
+						color='pink.200'
+						mb={2}
+					>
 						{formatDate(comment.createdAt)}
 					</Text>
 					<Text textStyle='small'>{comment.content}</Text>
@@ -141,8 +153,17 @@ export const CommentThread = memo(function CommentThread({
 				)}
 			</Flex>
 
-			<Flex mt={3} justify='space-between' align='center' gap={2} wrap='wrap'>
-				<Flex align='center' gap={2}>
+			<Flex
+				mt={3}
+				justify='space-between'
+				align='center'
+				gap={2}
+				wrap='wrap'
+			>
+				<Flex
+					align='center'
+					gap={2}
+				>
 					<IconButton
 						size='xs'
 						variant='solidPink'
@@ -184,13 +205,22 @@ export const CommentThread = memo(function CommentThread({
 					>
 						<Heart />
 					</IconButton>
-					<Text textStyle='smaller' color='pink.200'>
+					<Text
+						textStyle='smaller'
+						color='pink.200'
+					>
 						{comment.likesCount}
 					</Text>
 				</Flex>
 				{hasReplies && (
-					<Flex align='center' gap={2}>
-						<Text textStyle='smaller' color='pink.200'>
+					<Flex
+						align='center'
+						gap={2}
+					>
+						<Text
+							textStyle='smaller'
+							color='pink.200'
+						>
 							{comment.aggregateChildrenCount} resposta(s)
 						</Text>
 						{!hasLoadedReplies && (
@@ -214,8 +244,16 @@ export const CommentThread = memo(function CommentThread({
 			</Flex>
 
 			{hasLoadedReplies && (
-				<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
-					<Flex direction='column' gap={2}>
+				<Box
+					mt={3}
+					pl={4}
+					borderLeft='1px solid'
+					borderColor='purple.700'
+				>
+					<Flex
+						direction='column'
+						gap={2}
+					>
 						{replies.map((reply) => (
 							<CommentThread
 								key={reply.id}
@@ -239,8 +277,16 @@ export const CommentThread = memo(function CommentThread({
 			)}
 
 			{activeReplyFor === comment.id && (
-				<Box mt={3} pl={4} borderLeft='1px solid' borderColor='purple.700'>
-					<Flex direction='column' gap={2}>
+				<Box
+					mt={3}
+					pl={4}
+					borderLeft='1px solid'
+					borderColor='purple.700'
+				>
+					<Flex
+						direction='column'
+						gap={2}
+					>
 						<Textarea
 							value={replyInput}
 							onChange={(e) => setReplyInput(e.target.value)}
@@ -265,7 +311,10 @@ export const CommentThread = memo(function CommentThread({
 							</IconButton>
 						</Flex>
 						{replyError && (
-							<Text textStyle='smaller' color='red.400'>
+							<Text
+								textStyle='smaller'
+								color='red.400'
+							>
 								{replyError}
 							</Text>
 						)}

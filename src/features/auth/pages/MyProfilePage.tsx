@@ -93,7 +93,8 @@ export function MyProfilePage() {
 	const [bioDraft, setBioDraft] = useState('');
 	const [avatarUrlDraft, setAvatarUrlDraft] = useState('');
 	const [collectionNameDraft, setCollectionNameDraft] = useState('');
-	const [collectionDescriptionDraft, setCollectionDescriptionDraft] = useState('');
+	const [collectionDescriptionDraft, setCollectionDescriptionDraft] =
+		useState('');
 	const [collectionPoemIdDrafts, setCollectionPoemIdDrafts] = useState<
 		Record<number, string>
 	>({});
@@ -108,7 +109,12 @@ export function MyProfilePage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center'>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				align='center'
+			>
 				<Box
 					w='full'
 					maxW='2xl'
@@ -118,18 +124,33 @@ export function MyProfilePage() {
 					borderRadius='2xl'
 					bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
 				>
-					<VStack align='start' gap={4}>
-						<Badge colorPalette='pink' variant='subtle'>
+					<VStack
+						align='start'
+						gap={4}
+					>
+						<Badge
+							colorPalette='pink'
+							variant='subtle'
+						>
 							Perfil
 						</Badge>
-						<Heading as='h1' textStyle='h2'>
+						<Heading
+							as='h1'
+							textStyle='h2'
+						>
 							Entre para ver seu perfil
 						</Heading>
-						<Text textStyle='body' color='pink.100'>
+						<Text
+							textStyle='body'
+							color='pink.100'
+						>
 							Acompanhe poemas salvos, pedidos de amizade e suas estatísticas em
 							um único lugar.
 						</Text>
-						<HStack gap={3} wrap='wrap'>
+						<HStack
+							gap={3}
+							wrap='wrap'
+						>
 							<Button
 								size={{ base: 'sm', md: 'md' }}
 								variant='solidPink'
@@ -153,8 +174,17 @@ export function MyProfilePage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center'>
-			<Box as='section' w='full' maxW='5xl'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+		>
+			<Box
+				as='section'
+				w='full'
+				maxW='5xl'
+			>
 				<Flex
 					mb={8}
 					align={{ base: 'start', md: 'center' }}
@@ -162,10 +192,17 @@ export function MyProfilePage() {
 					direction={{ base: 'column', md: 'row' }}
 					gap={3}
 				>
-					<Heading as='h1' textStyle='h2'>
+					<Heading
+						as='h1'
+						textStyle='h2'
+					>
 						Meu Perfil
 					</Heading>
-					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
+					<Button
+						size={{ base: 'sm', md: 'md' }}
+						variant='solidPink'
+						asChild
+					>
 						<NavLink to='/login'>Entrar</NavLink>
 					</Button>
 				</Flex>
@@ -179,7 +216,10 @@ export function MyProfilePage() {
 					emptyElement={<Text textStyle='body'>Perfil nao encontrado.</Text>}
 				>
 					{profile && (
-						<Flex direction='column' gap={6}>
+						<Flex
+							direction='column'
+							gap={6}
+						>
 							<Box
 								p={{ base: 5, md: 6 }}
 								border='1px solid'
@@ -188,8 +228,16 @@ export function MyProfilePage() {
 								bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
 								backdropFilter='blur(4px)'
 							>
-								<Flex justify='space-between' align='start' gap={4}>
-									<VStack align='start' gap={2} flex='1'>
+								<Flex
+									justify='space-between'
+									align='start'
+									gap={4}
+								>
+									<VStack
+										align='start'
+										gap={2}
+										flex='1'
+									>
 										{isEditingProfile ? (
 											<>
 												<Input
@@ -208,7 +256,10 @@ export function MyProfilePage() {
 													}
 												/>
 												{conflictField === 'nickname' && (
-													<Text textStyle='smaller' color='red.400'>
+													<Text
+														textStyle='smaller'
+														color='red.400'
+													>
 														Este apelido já está em uso. Escolha outro.
 													</Text>
 												)}
@@ -226,7 +277,10 @@ export function MyProfilePage() {
 													bg='surface'
 												/>
 												{updateProfileError && (
-													<Text textStyle='small' color='red.400'>
+													<Text
+														textStyle='small'
+														color='red.400'
+													>
 														{updateProfileError}
 													</Text>
 												)}
@@ -234,10 +288,16 @@ export function MyProfilePage() {
 										) : (
 											<>
 												<Text textStyle='h3'>{profile.name}</Text>
-												<Text textStyle='small' color='pink.200'>
+												<Text
+													textStyle='small'
+													color='pink.200'
+												>
 													@{profile.nickname}
 												</Text>
-												<Text textStyle='small' color='pink.100'>
+												<Text
+													textStyle='small'
+													color='pink.100'
+												>
 													{profile.email}
 												</Text>
 												<Text textStyle='body'>
@@ -247,7 +307,10 @@ export function MyProfilePage() {
 										)}
 									</VStack>
 
-									<Flex direction='column' gap={2}>
+									<Flex
+										direction='column'
+										gap={2}
+									>
 										{isEditingProfile ? (
 											<>
 												<Button
@@ -309,7 +372,10 @@ export function MyProfilePage() {
 									borderRadius='xl'
 									bg='rgba(255, 255, 255, 0.02)'
 								>
-									<Text textStyle='smaller' color='pink.200'>
+									<Text
+										textStyle='smaller'
+										color='pink.200'
+									>
 										Poemas
 									</Text>
 									<Text textStyle='h3'>{profile.stats.poemsIds.length}</Text>
@@ -321,7 +387,10 @@ export function MyProfilePage() {
 									borderRadius='xl'
 									bg='rgba(255, 255, 255, 0.02)'
 								>
-									<Text textStyle='smaller' color='pink.200'>
+									<Text
+										textStyle='smaller'
+										color='pink.200'
+									>
 										Comentarios
 									</Text>
 									<Text textStyle='h3'>{profile.stats.commentsIds.length}</Text>
@@ -333,7 +402,10 @@ export function MyProfilePage() {
 									borderRadius='xl'
 									bg='rgba(255, 255, 255, 0.02)'
 								>
-									<Text textStyle='smaller' color='pink.200'>
+									<Text
+										textStyle='smaller'
+										color='pink.200'
+									>
 										Amigos
 									</Text>
 									<Text textStyle='h3'>{profile.stats.friendsIds.length}</Text>
@@ -347,11 +419,19 @@ export function MyProfilePage() {
 								borderRadius='xl'
 								bg='rgba(255, 255, 255, 0.02)'
 							>
-								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
+								<Heading
+									as='h2'
+									textStyle='h4'
+									mb={4}
+									color='pink.300'
+								>
 									Solicitacoes de amizade recebidas
 								</Heading>
 
-								<Flex direction='column' gap={3}>
+								<Flex
+									direction='column'
+									gap={3}
+								>
 									{profile.friendshipRequestsReceived.length === 0 && (
 										<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
 									)}
@@ -395,7 +475,11 @@ export function MyProfilePage() {
 								</Flex>
 
 								{errorMessage && (
-									<Text mt={3} textStyle='small' color='red.400'>
+									<Text
+										mt={3}
+										textStyle='small'
+										color='red.400'
+									>
 										{errorMessage}
 									</Text>
 								)}
@@ -408,11 +492,19 @@ export function MyProfilePage() {
 								borderRadius='xl'
 								bg='rgba(255, 255, 255, 0.02)'
 							>
-								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
+								<Heading
+									as='h2'
+									textStyle='h4'
+									mb={4}
+									color='pink.300'
+								>
 									Meus poemas
 								</Heading>
 
-								<Flex direction='column' gap={3}>
+								<Flex
+									direction='column'
+									gap={3}
+								>
 									{isLoadingMyPoems && (
 										<Text textStyle='small'>Carregando meus poemas...</Text>
 									)}
@@ -424,7 +516,10 @@ export function MyProfilePage() {
 											</Text>
 										)}
 									{isMyPoemsError && (
-										<Text textStyle='small' color='red.400'>
+										<Text
+											textStyle='small'
+											color='red.400'
+										>
 											Erro ao carregar seus poemas.
 										</Text>
 									)}
@@ -440,21 +535,34 @@ export function MyProfilePage() {
 											borderColor='purple.700'
 											borderRadius='md'
 										>
-											<Flex direction='column' gap={1} flex='1'>
+											<Flex
+												direction='column'
+												gap={1}
+												flex='1'
+											>
 												<Text textStyle='small'>{poem.title}</Text>
-												<Text textStyle='smaller' color='pink.200'>
+												<Text
+													textStyle='smaller'
+													color='pink.200'
+												>
 													{formatDate(poem.createdAt)} •{' '}
 													{translateStatus(poem.status)} •{' '}
 													{translateVisibility(poem.visibility)}
 												</Text>
 												{'stats' in poem && poem.stats && (
-													<Text textStyle='smaller' color='pink.200'>
+													<Text
+														textStyle='smaller'
+														color='pink.200'
+													>
 														{poem.stats.likesCount} curtidas •{' '}
 														{poem.stats.commentsCount} comentários
 													</Text>
 												)}
 												{poem.tags?.length > 0 && (
-													<HStack gap={1} wrap='wrap'>
+													<HStack
+														gap={1}
+														wrap='wrap'
+													>
 														{poem.tags.slice(0, 4).map((tag) => (
 															<Badge
 																key={tag.id}
@@ -536,11 +644,20 @@ export function MyProfilePage() {
 								borderRadius='xl'
 								bg='rgba(255, 255, 255, 0.02)'
 							>
-								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
+								<Heading
+									as='h2'
+									textStyle='h4'
+									mb={4}
+									color='pink.300'
+								>
 									Colecoes de poemas
 								</Heading>
 
-								<Flex direction='column' gap={3} mb={5}>
+								<Flex
+									direction='column'
+									gap={3}
+									mb={5}
+								>
 									<Input
 										value={collectionNameDraft}
 										onChange={(event) =>
@@ -577,12 +694,17 @@ export function MyProfilePage() {
 									</Button>
 								</Flex>
 
-								<Flex direction='column' gap={4}>
+								<Flex
+									direction='column'
+									gap={4}
+								>
 									{isLoadingCollections && (
 										<Text textStyle='small'>Carregando colecoes...</Text>
 									)}
 									{!isLoadingCollections && collections.length === 0 && (
-										<Text textStyle='small'>Voce ainda nao criou colecoes.</Text>
+										<Text textStyle='small'>
+											Voce ainda nao criou colecoes.
+										</Text>
 									)}
 
 									{collections.map((collection) => (
@@ -600,12 +722,21 @@ export function MyProfilePage() {
 												gap={3}
 												mb={3}
 											>
-												<Flex direction='column' gap={1}>
+												<Flex
+													direction='column'
+													gap={1}
+												>
 													<Text textStyle='small'>{collection.name}</Text>
-													<Text textStyle='smaller' color='pink.200'>
+													<Text
+														textStyle='smaller'
+														color='pink.200'
+													>
 														{collection.description || 'Sem descricao.'}
 													</Text>
-													<Text textStyle='smaller' color='pink.200'>
+													<Text
+														textStyle='smaller'
+														color='pink.200'
+													>
 														{collection.poemIds.length} poemas
 													</Text>
 												</Flex>
@@ -620,9 +751,16 @@ export function MyProfilePage() {
 												</Button>
 											</Flex>
 
-											<Flex direction='column' gap={2} mb={3}>
+											<Flex
+												direction='column'
+												gap={2}
+												mb={3}
+											>
 												{collection.poemIds.length === 0 && (
-													<Text textStyle='smaller' color='pink.200'>
+													<Text
+														textStyle='smaller'
+														color='pink.200'
+													>
 														Nenhum poema nesta colecao.
 													</Text>
 												)}
@@ -642,7 +780,10 @@ export function MyProfilePage() {
 															borderColor='purple.800'
 															borderRadius='md'
 														>
-															<Text textStyle='smaller' color='pink.100'>
+															<Text
+																textStyle='smaller'
+																color='pink.100'
+															>
 																{poem ? poem.title : `Poema #${poemId}`}
 															</Text>
 															<Flex gap={2}>
@@ -652,7 +793,9 @@ export function MyProfilePage() {
 																		variant='solidPink'
 																		asChild
 																	>
-																		<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+																		<NavLink
+																			to={`/poems/${poem.slug}/${poem.id}`}
+																		>
 																			Abrir
 																		</NavLink>
 																	</Button>
@@ -721,7 +864,11 @@ export function MyProfilePage() {
 								</Flex>
 
 								{collectionsError && (
-									<Text mt={3} textStyle='small' color='red.400'>
+									<Text
+										mt={3}
+										textStyle='small'
+										color='red.400'
+									>
 										{collectionsError}
 									</Text>
 								)}
@@ -734,11 +881,19 @@ export function MyProfilePage() {
 								borderRadius='xl'
 								bg='rgba(255, 255, 255, 0.02)'
 							>
-								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
+								<Heading
+									as='h2'
+									textStyle='h4'
+									mb={4}
+									color='pink.300'
+								>
 									Poemas salvos
 								</Heading>
 
-								<Flex direction='column' gap={3}>
+								<Flex
+									direction='column'
+									gap={3}
+								>
 									{isLoadingSavedPoems && (
 										<Text textStyle='small'>Carregando poemas salvos...</Text>
 									)}
@@ -758,9 +913,15 @@ export function MyProfilePage() {
 											borderColor='purple.700'
 											borderRadius='md'
 										>
-											<Flex direction='column' gap={1}>
+											<Flex
+												direction='column'
+												gap={1}
+											>
 												<Text textStyle='small'>{poem.title}</Text>
-												<Text textStyle='smaller' color='pink.200'>
+												<Text
+													textStyle='smaller'
+													color='pink.200'
+												>
 													Salvo em {formatDate(poem.savedAt)}
 												</Text>
 											</Flex>
@@ -784,4 +945,3 @@ export function MyProfilePage() {
 		</Flex>
 	);
 }
-

@@ -31,12 +31,28 @@ export function PoetsPage() {
 	const { poets, isLoading, isError } = usePoetsSearch(debouncedSearch);
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column'>
-			<Flex as='section' mb={6} gap={6} direction='column' w='full'>
-				<Heading as='h1' textStyle='h2'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+		>
+			<Flex
+				as='section'
+				mb={6}
+				gap={6}
+				direction='column'
+				w='full'
+			>
+				<Heading
+					as='h1'
+					textStyle='h2'
+				>
 					Buscar Poetas
 				</Heading>
-				<Text textStyle='small' color='pink.200'>
+				<Text
+					textStyle='small'
+					color='pink.200'
+				>
 					Encontre outros poetas por nickname.
 				</Text>
 				<FormField
@@ -55,7 +71,10 @@ export function PoetsPage() {
 				errorElement={<Text textStyle='body'>Erro ao buscar poetas.</Text>}
 				emptyElement={<Text textStyle='body'>Nenhum poeta encontrado.</Text>}
 			>
-				<Flex direction='column' gap={3}>
+				<Flex
+					direction='column'
+					gap={3}
+				>
 					{poets.map((poet) => (
 						<Box
 							key={poet.id}
@@ -65,15 +84,25 @@ export function PoetsPage() {
 							borderRadius='xl'
 							bg='rgba(255, 255, 255, 0.02)'
 						>
-							<Flex align='center' justify='space-between' gap={3}>
-								<Flex align='center' gap={3}>
+							<Flex
+								align='center'
+								justify='space-between'
+								gap={3}
+							>
+								<Flex
+									align='center'
+									gap={3}
+								>
 									<Avatar.Root size='md'>
 										<Avatar.Image src={poet.avatarUrl ?? undefined} />
 										<Avatar.Fallback name={poet.nickname} />
 									</Avatar.Root>
 									<Flex direction='column'>
 										<Text textStyle='small'>@{poet.nickname}</Text>
-										<Text textStyle='smaller' color='pink.200'>
+										<Text
+											textStyle='smaller'
+											color='pink.200'
+										>
 											Perfil publico
 										</Text>
 									</Flex>

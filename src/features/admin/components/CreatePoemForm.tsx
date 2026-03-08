@@ -147,7 +147,10 @@ export function CreatePoemForm() {
 					disabled={isPending || isLoadingUsers}
 				/>
 				{isUsersError && (
-					<Text textStyle='small' color='red.400'>
+					<Text
+						textStyle='small'
+						color='red.400'
+					>
 						Erro ao carregar usuários para dedicação.
 					</Text>
 				)}
@@ -164,13 +167,24 @@ export function CreatePoemForm() {
 				</Button>
 			</Flex>
 
-			<Heading as='h2' textStyle='h2' mt={12}>
+			<Heading
+				as='h2'
+				textStyle='h2'
+				mt={12}
+			>
 				Pré-visualização
 			</Heading>
 
-			<Box as='section' maxW='4xl' w='full'>
+			<Box
+				as='section'
+				maxW='4xl'
+				w='full'
+			>
 				{isEmptyPreview ? (
-					<Box textStyle='body' color='gray.500'>
+					<Box
+						textStyle='body'
+						color='gray.500'
+					>
 						Preencha o formulário para visualizar a pré-visualização do poema
 					</Box>
 				) : (

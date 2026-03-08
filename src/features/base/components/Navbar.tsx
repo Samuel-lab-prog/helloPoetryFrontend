@@ -69,7 +69,10 @@ function Logo() {
 				>
 					OP
 				</Box>
-				<VStack align='start' gap={0}>
+				<VStack
+					align='start'
+					gap={0}
+				>
 					<Text
 						textStyle='small'
 						color='pink.100'
@@ -78,7 +81,11 @@ function Logo() {
 					>
 						Olapoesia
 					</Text>
-					<Badge size='sm' colorPalette='pink' variant='subtle'>
+					<Badge
+						size='sm'
+						colorPalette='pink'
+						variant='subtle'
+					>
 						Poemas
 					</Badge>
 				</VStack>
@@ -94,7 +101,11 @@ const SidebarLinks = ({
 	links: { label: string; to: string }[];
 }) => {
 	return (
-		<VStack gap={2} align='stretch' w='full'>
+		<VStack
+			gap={2}
+			align='stretch'
+			w='full'
+		>
 			{links.map((link) => (
 				<Link
 					asChild
@@ -117,7 +128,10 @@ const SidebarLinks = ({
 				>
 					<NavLink to={link.to}>
 						<HStack gap={2}>
-							<Icon as={getLinkIcon(link.to)} boxSize={4} />
+							<Icon
+								as={getLinkIcon(link.to)}
+								boxSize={4}
+							/>
 							<Text>{link.label}</Text>
 						</HStack>
 					</NavLink>
@@ -174,7 +188,10 @@ const BottomMobileNav = ({
 							bg: 'rgba(255, 143, 189, 0.14)',
 						}}
 					>
-						<NavLink to={link.to} style={{ display: 'block' }}>
+						<NavLink
+							to={link.to}
+							style={{ display: 'block' }}
+						>
 							<Flex
 								direction='column'
 								align='center'
@@ -197,7 +214,10 @@ const BottomMobileNav = ({
 
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	return (
-		<Flex minH='100vh' w='full'>
+		<Flex
+			minH='100vh'
+			w='full'
+		>
 			<Flex
 				as='aside'
 				display={{ base: 'none', md: 'flex' }}
@@ -214,12 +234,19 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				bg='rgba(18, 0, 17, 0.86)'
 				backdropFilter='blur(6px)'
 			>
-				<Flex direction='column' gap={8}>
+				<Flex
+					direction='column'
+					gap={8}
+				>
 					<Logo />
 					<SidebarLinks links={links} />
 				</Flex>
 
-				<Text textStyle='small' color='pink.200' opacity={0.7}>
+				<Text
+					textStyle='small'
+					color='pink.200'
+					opacity={0.7}
+				>
 					Olapoesia
 				</Text>
 			</Flex>

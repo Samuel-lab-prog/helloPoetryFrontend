@@ -34,7 +34,11 @@ export function TagsField<T extends FieldValues>({
 	const hasError = Boolean(errorMessage);
 
 	return (
-		<Field.Root required={required} invalid={!!error} w='full'>
+		<Field.Root
+			required={required}
+			invalid={!!error}
+			w='full'
+		>
 			<Field.Label
 				textStyle='small'
 				fontWeight='medium'

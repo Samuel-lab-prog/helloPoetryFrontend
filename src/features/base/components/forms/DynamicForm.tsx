@@ -49,7 +49,10 @@ export function DynamicForm<T extends FieldValues>({
 	handleSubmitFn,
 }: DynamicFormProps<T>) {
 	return (
-		<FormCard as='form' onSubmit={handleSubmitFn(onSubmit)}>
+		<FormCard
+			as='form'
+			onSubmit={handleSubmitFn(onSubmit)}
+		>
 			{generalError && (
 				<Text
 					color='red.500'
@@ -79,7 +82,11 @@ export function DynamicForm<T extends FieldValues>({
 				</FieldContainer>
 			))}
 
-			<FormButton isValid={isValid} loading={loading} variant={buttonVariant}>
+			<FormButton
+				isValid={isValid}
+				loading={loading}
+				variant={buttonVariant}
+			>
 				{buttonLabel}
 			</FormButton>
 		</FormCard>

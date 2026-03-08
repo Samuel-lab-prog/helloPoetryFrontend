@@ -25,7 +25,11 @@ export function DeletePoemForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PoemCombobox name='id' poems={poems} control={control} />
+			<PoemCombobox
+				name='id'
+				poems={poems}
+				control={control}
+			/>
 
 			<Button
 				type='submit'

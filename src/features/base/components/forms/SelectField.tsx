@@ -42,7 +42,11 @@ export function SelectField<T extends FieldValues>({
 	const [isFocused, setIsFocused] = useState(false);
 
 	return (
-		<Field.Root required={required} invalid={!!error} w='full'>
+		<Field.Root
+			required={required}
+			invalid={!!error}
+			w='full'
+		>
 			<Field.Label
 				textStyle='small'
 				fontWeight='medium'
@@ -100,7 +104,11 @@ export function SelectField<T extends FieldValues>({
 							onBlur={() => setIsFocused(false)}
 						>
 							{placeholder && (
-								<option value='' disabled style={{ color: '#8e6f8c' }}>
+								<option
+									value=''
+									disabled
+									style={{ color: '#8e6f8c' }}
+								>
 									{placeholder}
 								</option>
 							)}

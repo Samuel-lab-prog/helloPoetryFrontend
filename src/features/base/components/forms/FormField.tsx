@@ -39,7 +39,10 @@ export function FormField<T extends FieldValues>({
 	const hasError = Boolean(errorMessage);
 
 	return (
-		<Field.Root required={required} invalid={!!error}>
+		<Field.Root
+			required={required}
+			invalid={!!error}
+		>
 			<Field.Label
 				textStyle='small'
 				fontWeight='medium'

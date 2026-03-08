@@ -17,29 +17,46 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 
 	return (
 		<>
-			<Heading as='h1' textStyle='h1' mb={[2, 3, 4]}>
+			<Heading
+				as='h1'
+				textStyle='h1'
+				mb={[2, 3, 4]}
+			>
 				{title}
 			</Heading>
 
 			{excerpt && (
-				<Text textStyle='body' my={[2, 3, 4]}>
+				<Text
+					textStyle='body'
+					my={[2, 3, 4]}
+				>
 					{excerpt}
 				</Text>
 			)}
 
-			<Flex gap={[1.5, 2]} flexWrap='wrap' mb={[3, 4]}>
+			<Flex
+				gap={[1.5, 2]}
+				flexWrap='wrap'
+				mb={[3, 4]}
+			>
 				{tags.map((tag) => (
 					<Tag key={tag.id}>{tag.name}</Tag>
 				))}
 			</Flex>
 
 			<VStack align='start'>
-				<Text fontStyle='italic' textStyle='small'>
+				<Text
+					fontStyle='italic'
+					textStyle='small'
+				>
 					Criado em {formatDate(createdAt)}
 				</Text>
 
 				{updatedAt !== createdAt && (
-					<Text fontSize={['xs', 'sm']} fontStyle='italic'>
+					<Text
+						fontSize={['xs', 'sm']}
+						fontStyle='italic'
+					>
 						Última atualização em {formatDate(updatedAt)}
 					</Text>
 				)}

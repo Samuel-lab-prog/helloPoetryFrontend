@@ -46,7 +46,11 @@ export function UpdatePoemForm() {
 		>
 			{generalError && <Text color='red.500'>{generalError}</Text>}
 
-			<PoemCombobox name='id' control={control} poems={poems} />
+			<PoemCombobox
+				name='id'
+				control={control}
+				poems={poems}
+			/>
 
 			<FormField
 				label='Título'

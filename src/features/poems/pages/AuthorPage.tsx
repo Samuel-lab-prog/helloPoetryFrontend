@@ -51,8 +51,17 @@ export function AuthorPage() {
 		!author.isBlockedByRequester;
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' gap={8}>
-			<Box w='full' maxW='4xl'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+			gap={8}
+		>
+			<Box
+				w='full'
+				maxW='4xl'
+			>
 				<AsyncState
 					isLoading={isAuthorLoading}
 					isError={isAuthorError}
@@ -77,22 +86,39 @@ export function AuthorPage() {
 								<Avatar.Fallback name={author.name} />
 							</Avatar.Root>
 
-							<Flex direction='column' gap={1}>
-								<Heading as='h1' textStyle='h2'>
+							<Flex
+								direction='column'
+								gap={1}
+							>
+								<Heading
+									as='h1'
+									textStyle='h2'
+								>
 									{author.name}
 								</Heading>
-								<Text textStyle='small' color='pink.200'>
+								<Text
+									textStyle='small'
+									color='pink.200'
+								>
 									@{author.nickname}
 								</Text>
 								<Text textStyle='small'>{author.bio || 'Sem bio'}</Text>
-								<Text textStyle='smaller' color='pink.200'>
+								<Text
+									textStyle='smaller'
+									color='pink.200'
+								>
 									Poemas: {author.stats.poemsCount} | Comentários:{' '}
 									{author.stats.commentsCount} | Amigos:{' '}
 									{author.stats.friendsCount}
 								</Text>
 
 								{canSendFriendRequest && (
-									<Flex mt={2} direction='column' gap={2} align='start'>
+									<Flex
+										mt={2}
+										direction='column'
+										gap={2}
+										align='start'
+									>
 										<Button
 											size='sm'
 											variant='solidPink'
@@ -105,7 +131,10 @@ export function AuthorPage() {
 												: 'Enviar pedido de amizade'}
 										</Button>
 										{errorMessage && (
-											<Text textStyle='smaller' color='red.400'>
+											<Text
+												textStyle='smaller'
+												color='red.400'
+											>
 												{errorMessage}
 											</Text>
 										)}
@@ -117,8 +146,15 @@ export function AuthorPage() {
 				</AsyncState>
 			</Box>
 
-			<Box w='full' maxW='4xl'>
-				<Heading as='h2' textStyle='h3' mb={4}>
+			<Box
+				w='full'
+				maxW='4xl'
+			>
+				<Heading
+					as='h2'
+					textStyle='h3'
+					mb={4}
+				>
 					Poemas do autor
 				</Heading>
 
@@ -130,7 +166,10 @@ export function AuthorPage() {
 					errorElement={<Text textStyle='body'>Erro ao carregar poemas.</Text>}
 					emptyElement={<Text textStyle='body'>Sem poemas publicados.</Text>}
 				>
-					<Flex direction='column' gap={3}>
+					<Flex
+						direction='column'
+						gap={3}
+					>
 						{poems.map((poem) => (
 							<Box
 								key={poem.id}
@@ -140,13 +179,24 @@ export function AuthorPage() {
 								borderRadius='lg'
 								bg='rgba(255, 255, 255, 0.02)'
 							>
-								<Heading as='h3' textStyle='h4' mb={2}>
+								<Heading
+									as='h3'
+									textStyle='h4'
+									mb={2}
+								>
 									{poem.title}
 								</Heading>
-								<Text textStyle='small' mb={3}>
+								<Text
+									textStyle='small'
+									mb={3}
+								>
 									{poem.excerpt}
 								</Text>
-								<Link asChild textStyle='small' color='pink.100'>
+								<Link
+									asChild
+									textStyle='small'
+									color='pink.100'
+								>
 									<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 										Abrir poema
 									</NavLink>

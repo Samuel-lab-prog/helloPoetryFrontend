@@ -32,8 +32,17 @@ export function NotificationsPage() {
 	);
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center'>
-			<Box as='section' w='full' maxW='4xl'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+		>
+			<Box
+				as='section'
+				w='full'
+				maxW='4xl'
+			>
 				<Flex
 					align={{ base: 'start', md: 'center' }}
 					justify='space-between'
@@ -41,15 +50,25 @@ export function NotificationsPage() {
 					mb={6}
 					flexWrap='wrap'
 				>
-					<Heading as='h1' textStyle='h2'>
+					<Heading
+						as='h1'
+						textStyle='h2'
+					>
 						Notificações
 					</Heading>
-					<Badge colorPalette='pink' variant='subtle'>
+					<Badge
+						colorPalette='pink'
+						variant='subtle'
+					>
 						{unreadCount} Não lidas
 					</Badge>
 				</Flex>
 
-				<HStack mb={6} gap={2} wrap='wrap'>
+				<HStack
+					mb={6}
+					gap={2}
+					wrap='wrap'
+				>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
 						variant='solidPink'
@@ -85,7 +104,10 @@ export function NotificationsPage() {
 						<Text textStyle='body'>Nenhuma notificação encontrada.</Text>
 					}
 				>
-					<Flex direction='column' gap={3}>
+					<Flex
+						direction='column'
+						gap={3}
+					>
 						{notifications.map((item) => (
 							<NotificationCard
 								key={item.id}
@@ -102,4 +124,3 @@ export function NotificationsPage() {
 		</Flex>
 	);
 }
-

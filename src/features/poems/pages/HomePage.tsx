@@ -43,14 +43,34 @@ export function HomePage() {
 
 	return (
 		<>
-			<Flex as='main' layerStyle='main' direction='column'>
-				<Flex as='section' direction='column' w='full' py='4' gap={4}>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+			>
+				<Flex
+					as='section'
+					direction='column'
+					w='full'
+					py='4'
+					gap={4}
+				>
 					{isAuthenticated && (
-						<Flex direction='column' gap={1} px={{ base: 1, md: 2 }}>
-							<Heading as='h1' textStyle='h2'>
+						<Flex
+							direction='column'
+							gap={1}
+							px={{ base: 1, md: 2 }}
+						>
+							<Heading
+								as='h1'
+								textStyle='h2'
+							>
 								{isPersonalizedFeed ? 'Seu feed' : 'Início'}
 							</Heading>
-							<Text textStyle='small' color='pink.200'>
+							<Text
+								textStyle='small'
+								color='pink.200'
+							>
 								{isPersonalizedFeed
 									? 'Poemas de amigos e autores que você acompanha.'
 									: 'Mostrando poemas mais recentes enquanto o feed personalizado não estiver disponível.'}
@@ -74,7 +94,10 @@ export function HomePage() {
 							}
 						>
 							{poems.map((poem) => (
-								<PoemCard key={poem.id} poem={poem} />
+								<PoemCard
+									key={poem.id}
+									poem={poem}
+								/>
 							))}
 						</AsyncState>
 					</PoemGrid>

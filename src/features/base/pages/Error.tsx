@@ -12,20 +12,33 @@ export function ErrorPage() {
 			textAlign='center'
 		>
 			<Box maxW='md'>
-				<Heading as='h1' textStyle='h2'>
+				<Heading
+					as='h1'
+					textStyle='h2'
+				>
 					Ops!
 				</Heading>
 
-				<Heading as='h2' textStyle='h5' mt={3}>
+				<Heading
+					as='h2'
+					textStyle='h5'
+					mt={3}
+				>
 					Algo deu errado ou esta página não existe.
 				</Heading>
 
-				<Text textStyle='small' mt={1}>
+				<Text
+					textStyle='small'
+					mt={1}
+				>
 					Tente voltar para a página inicial ou conferir a URL.
 				</Text>
 
 				<Box mt={6}>
-					<Button asChild variant='solidPink'>
+					<Button
+						asChild
+						variant='solidPink'
+					>
 						<NavLink to='/'>Voltar para o início</NavLink>
 					</Button>
 				</Box>

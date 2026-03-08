@@ -22,9 +22,22 @@ export function PoemsPage() {
 	];
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column'>
-			<Flex as='section' mb={6} gap={8} direction='column' w='full'>
-				<Heading as='h1' textStyle='h2'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+		>
+			<Flex
+				as='section'
+				mb={6}
+				gap={8}
+				direction='column'
+				w='full'
+			>
+				<Heading
+					as='h1'
+					textStyle='h2'
+				>
 					Todos os Poemas
 				</Heading>
 
@@ -55,7 +68,12 @@ export function PoemsPage() {
 				</Flex>
 			</Flex>
 
-			<Flex as='section' w='full' direction='column' gap={4}>
+			<Flex
+				as='section'
+				w='full'
+				direction='column'
+				gap={4}
+			>
 				<AsyncState
 					isError={isError}
 					isEmpty={poems?.length === 0 && !isLoading}
@@ -66,7 +84,10 @@ export function PoemsPage() {
 				>
 					<PoemGrid>
 						{poems.map((poem) => (
-							<PoemCard key={poem.id} poem={poem} />
+							<PoemCard
+								key={poem.id}
+								poem={poem}
+							/>
 						))}
 					</PoemGrid>
 				</AsyncState>

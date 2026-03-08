@@ -3,7 +3,12 @@ import { CreatePoemForm } from '../components/CreatePoemForm';
 
 export function CreatePoemPage() {
 	return (
-		<Flex as='main' layerStyle='main' direction='column' gap={8}>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			gap={8}
+		>
 			<Flex
 				as='section'
 				direction='column'
@@ -11,7 +16,11 @@ export function CreatePoemPage() {
 				justify='center'
 				w='full'
 			>
-				<Heading as='h1' textStyle='h2' mb={6}>
+				<Heading
+					as='h1'
+					textStyle='h2'
+					mb={6}
+				>
 					Criar Poema
 				</Heading>
 			</Flex>
@@ -23,7 +32,11 @@ export function CreatePoemPage() {
 				justify='center'
 				w='full'
 			>
-				<Flex direction='column' w='full' maxW='4xl'>
+				<Flex
+					direction='column'
+					w='full'
+					maxW='4xl'
+				>
 					<CreatePoemForm />
 				</Flex>
 			</Flex>
