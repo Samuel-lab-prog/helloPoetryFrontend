@@ -174,8 +174,8 @@ const BottomMobileNav = ({
 							bg: 'rgba(255, 143, 189, 0.14)',
 						}}
 					>
-						<NavLink to={link.to}>
-							<Flex direction='column' align='center' justify='center' gap={0}>
+						<NavLink to={link.to} style={{ display: 'block' }}>
+							<Flex direction='column' align='center' justifyContent='center' gap={0}>
 								<Icon
 									as={getLinkIcon(link.to)}
 									boxSize={4.5}
