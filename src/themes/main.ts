@@ -9,7 +9,7 @@ import {
 
 import { animationStyles } from './animationStyles';
 import { layerStyles } from './layerStyles';
-import { recipes } from './recipes';
+import { recipes, slotRecipes } from './recipes';
 import { textStyles } from './textStyles';
 
 const tokens = defineTokens({
@@ -147,6 +147,7 @@ const config = defineConfig({
 		textStyles,
 		animationStyles,
 		recipes,
+		slotRecipes,
 	},
 });
 
