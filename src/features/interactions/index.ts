@@ -5,5 +5,6 @@
 export * from './hooks/useFriendRequestActions';
 export * from './hooks/usePoemLike';
 export * from './hooks/usePoemComments';
+export * from './hooks/usePoemCollections';
 export * from './hooks/useSavedPoems';
 export * from './hooks/useSendFriendRequest';

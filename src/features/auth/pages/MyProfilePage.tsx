@@ -22,7 +22,11 @@ import { EllipsisVertical } from 'lucide-react';
 import { AsyncState, formatDate } from '@features/base';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
-import { useFriendRequestActions, useSavedPoems } from '@features/interactions';
+import {
+	useFriendRequestActions,
+	usePoemCollections,
+	useSavedPoems,
+} from '@features/interactions';
 import { useMyPoems } from '@features/poems';
 
 function translateStatus(status: string) {
@@ -73,11 +77,26 @@ export function MyProfilePage() {
 		isError: isMyPoemsError,
 	} = useMyPoems(!isMissingClient);
 	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(!isMissingClient);
+	const {
+		collections,
+		isLoadingCollections,
+		createCollection,
+		deleteCollection,
+		addPoemToCollection,
+		removePoemFromCollection,
+		isUpdatingCollections,
+		collectionsError,
+	} = usePoemCollections(!isMissingClient);
 	const [isEditingProfile, setIsEditingProfile] = useState(false);
 	const [nameDraft, setNameDraft] = useState('');
 	const [nicknameDraft, setNicknameDraft] = useState('');
 	const [bioDraft, setBioDraft] = useState('');
 	const [avatarUrlDraft, setAvatarUrlDraft] = useState('');
+	const [collectionNameDraft, setCollectionNameDraft] = useState('');
+	const [collectionDescriptionDraft, setCollectionDescriptionDraft] = useState('');
+	const [collectionPoemIdDrafts, setCollectionPoemIdDrafts] = useState<
+		Record<number, string>
+	>({});
 
 	useEffect(() => {
 		if (!profile) return;
@@ -107,8 +126,8 @@ export function MyProfilePage() {
 							Entre para ver seu perfil
 						</Heading>
 						<Text textStyle='body' color='pink.100'>
-							Acompanhe poemas salvos, pedidos de amizade e suas estatisticas em
-							um unico lugar.
+							Acompanhe poemas salvos, pedidos de amizade e suas estatísticas em
+							um único lugar.
 						</Text>
 						<HStack gap={3} wrap='wrap'>
 							<Button
@@ -508,6 +527,204 @@ export function MyProfilePage() {
 										</Flex>
 									))}
 								</Flex>
+							</Box>
+
+							<Box
+								p={5}
+								border='1px solid'
+								borderColor='purple.700'
+								borderRadius='xl'
+								bg='rgba(255, 255, 255, 0.02)'
+							>
+								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
+									Colecoes de poemas
+								</Heading>
+
+								<Flex direction='column' gap={3} mb={5}>
+									<Input
+										value={collectionNameDraft}
+										onChange={(event) =>
+											setCollectionNameDraft(event.target.value)
+										}
+										placeholder='Nome da colecao'
+										bg='surface'
+									/>
+									<Textarea
+										value={collectionDescriptionDraft}
+										onChange={(event) =>
+											setCollectionDescriptionDraft(event.target.value)
+										}
+										placeholder='Descricao da colecao'
+										rows={3}
+										bg='surface'
+									/>
+									<Button
+										size={{ base: 'xs', md: 'sm' }}
+										variant='solidPink'
+										loading={isUpdatingCollections}
+										onClick={async () => {
+											if (!profile || !collectionNameDraft.trim()) return;
+											await createCollection({
+												userId: profile.id,
+												name: collectionNameDraft.trim(),
+												description: collectionDescriptionDraft.trim(),
+											});
+											setCollectionNameDraft('');
+											setCollectionDescriptionDraft('');
+										}}
+									>
+										Criar colecao
+									</Button>
+								</Flex>
+
+								<Flex direction='column' gap={4}>
+									{isLoadingCollections && (
+										<Text textStyle='small'>Carregando colecoes...</Text>
+									)}
+									{!isLoadingCollections && collections.length === 0 && (
+										<Text textStyle='small'>Voce ainda nao criou colecoes.</Text>
+									)}
+
+									{collections.map((collection) => (
+										<Box
+											key={collection.id}
+											p={4}
+											border='1px solid'
+											borderColor='purple.700'
+											borderRadius='md'
+										>
+											<Flex
+												align={{ base: 'start', md: 'center' }}
+												justify='space-between'
+												direction={{ base: 'column', md: 'row' }}
+												gap={3}
+												mb={3}
+											>
+												<Flex direction='column' gap={1}>
+													<Text textStyle='small'>{collection.name}</Text>
+													<Text textStyle='smaller' color='pink.200'>
+														{collection.description || 'Sem descricao.'}
+													</Text>
+													<Text textStyle='smaller' color='pink.200'>
+														{collection.poemIds.length} poemas
+													</Text>
+												</Flex>
+												<Button
+													size={{ base: 'xs', md: 'sm' }}
+													variant='solidPink'
+													colorPalette='gray'
+													loading={isUpdatingCollections}
+													onClick={() => deleteCollection(collection.id)}
+												>
+													Excluir
+												</Button>
+											</Flex>
+
+											<Flex direction='column' gap={2} mb={3}>
+												{collection.poemIds.length === 0 && (
+													<Text textStyle='smaller' color='pink.200'>
+														Nenhum poema nesta colecao.
+													</Text>
+												)}
+												{collection.poemIds.map((poemId) => {
+													const poem =
+														myPoems.find((item) => item.id === poemId) ??
+														savedPoems.find((item) => item.id === poemId);
+													return (
+														<Flex
+															key={`${collection.id}-${poemId}`}
+															align={{ base: 'start', md: 'center' }}
+															justify='space-between'
+															direction={{ base: 'column', md: 'row' }}
+															gap={2}
+															p={2}
+															border='1px solid'
+															borderColor='purple.800'
+															borderRadius='md'
+														>
+															<Text textStyle='smaller' color='pink.100'>
+																{poem ? poem.title : `Poema #${poemId}`}
+															</Text>
+															<Flex gap={2}>
+																{poem?.slug && (
+																	<Button
+																		size={{ base: 'xs', md: 'sm' }}
+																		variant='solidPink'
+																		asChild
+																	>
+																		<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+																			Abrir
+																		</NavLink>
+																	</Button>
+																)}
+																<Button
+																	size={{ base: 'xs', md: 'sm' }}
+																	variant='solidPink'
+																	colorPalette='gray'
+																	loading={isUpdatingCollections}
+																	onClick={() =>
+																		removePoemFromCollection({
+																			collectionId: collection.id,
+																			poemId,
+																		})
+																	}
+																>
+																	Remover
+																</Button>
+															</Flex>
+														</Flex>
+													);
+												})}
+											</Flex>
+
+											<Flex
+												align={{ base: 'stretch', md: 'center' }}
+												direction={{ base: 'column', md: 'row' }}
+												gap={2}
+											>
+												<Input
+													value={collectionPoemIdDrafts[collection.id] ?? ''}
+													onChange={(event) =>
+														setCollectionPoemIdDrafts((previous) => ({
+															...previous,
+															[collection.id]: event.target.value,
+														}))
+													}
+													placeholder='ID do poema'
+													inputMode='numeric'
+													bg='surface'
+												/>
+												<Button
+													size={{ base: 'xs', md: 'sm' }}
+													variant='solidPink'
+													loading={isUpdatingCollections}
+													onClick={async () => {
+														const rawValue =
+															collectionPoemIdDrafts[collection.id] ?? '';
+														const poemId = Number(rawValue);
+														if (!Number.isFinite(poemId) || poemId <= 0) return;
+														await addPoemToCollection({
+															collectionId: collection.id,
+															poemId,
+														});
+														setCollectionPoemIdDrafts((previous) => ({
+															...previous,
+															[collection.id]: '',
+														}));
+													}}
+												>
+													Adicionar poema
+												</Button>
+											</Flex>
+										</Box>
+									))}
+								</Flex>
+
+								{collectionsError && (
+									<Text mt={3} textStyle='small' color='red.400'>
+										{collectionsError}
+									</Text>
+								)}
 							</Box>
 
 							<Box
