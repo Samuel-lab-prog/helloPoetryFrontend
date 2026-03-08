@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
+import { useEffect } from 'react';
+import { useAuthClientStore } from '@features/auth';
 
 type NotificationPayload = {
 	title?: string;
@@ -41,6 +43,12 @@ type NotificationsPageType = {
 
 export function useNotificationsPanel(onlyUnread: boolean) {
 	const queryClient = useQueryClient();
+	const setUnreadNotificationsCount = useAuthClientStore(
+		(state) => state.setUnreadNotificationsCount,
+	);
+	const decrementUnreadNotificationsCount = useAuthClientStore(
+		(state) => state.decrementUnreadNotificationsCount,
+	);
 
 	const query = useQuery({
 		queryKey: ['notifications', { onlyUnread }],
@@ -58,10 +66,22 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 				params: [id, 'read'],
 				method: 'PATCH',
 			}),
-		onSuccess: () =>
+		onSuccess: (_, notificationId) => {
+			const cachedNotifications = queryClient.getQueriesData<NotificationsPageType>({
+				queryKey: ['notifications'],
+			});
+			const wasUnread = cachedNotifications.some(([, cachedPage]) =>
+				cachedPage?.notifications.some(
+					(notification) => notification.id === notificationId && !notification.readAt,
+				),
+			);
+
+			if (wasUnread) decrementUnreadNotificationsCount(1);
+
 			queryClient.invalidateQueries({
 				queryKey: ['notifications'],
-			}),
+			});
+		},
 	});
 
 	const markAllReadMutation = useMutation({
@@ -70,10 +90,12 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 				path: '/notifications/mark-all-read',
 				method: 'PATCH',
 			}),
-		onSuccess: () =>
+		onSuccess: () => {
+			setUnreadNotificationsCount(0);
 			queryClient.invalidateQueries({
 				queryKey: ['notifications'],
-			}),
+			});
+		},
 	});
 
 	const deleteMutation = useMutation({
@@ -83,11 +105,20 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 				params: [id],
 				method: 'DELETE',
 			}),
-		onSuccess: () =>
+		onSuccess: (notification) => {
+			if (!notification.readAt) decrementUnreadNotificationsCount(1);
 			queryClient.invalidateQueries({
 				queryKey: ['notifications'],
-			}),
+			});
+		},
 	});
+
+	useEffect(() => {
+		if (!query.data) return;
+		if (onlyUnread) return;
+		const unreadCount = query.data.notifications.filter((item) => !item.readAt).length;
+		setUnreadNotificationsCount(unreadCount);
+	}, [onlyUnread, query.data, setUnreadNotificationsCount]);
 
 	return {
 		notifications: query.data?.notifications ?? [],

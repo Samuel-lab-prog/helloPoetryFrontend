@@ -1,7 +1,7 @@
-/* eslint-disable arrow-body-style */
 import { Badge, Box, Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
 import { Bell, BookOpen, House, LogIn, PenSquare, User, UserPlus, Users } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { useAuthClientStore } from '@features/auth';
 
 function getLinkIcon(to: string) {
 	switch (to) {
@@ -63,55 +63,9 @@ function Logo() {
 	);
 }
 
-const SidebarLinks = ({ links }: { links: { label: string; to: string }[] }) => {
-	return (
-		<VStack gap={2} align='stretch' w='full'>
-			{links.map((link) => (
-				<Link asChild variant='nav' size='sm' key={link.label}>
-					<NavLink to={link.to}>
-						<HStack gap={2}>
-							<Icon as={getLinkIcon(link.to)} boxSize={4} />
-							<Text>{link.label}</Text>
-						</HStack>
-					</NavLink>
-				</Link>
-			))}
-		</VStack>
-	);
-};
-
-const BottomMobileNav = ({ links }: { links: { label: string; to: string }[] }) => {
-	return (
-		<Box
-			as='nav'
-			display={{ base: 'block', md: 'none' }}
-			position='fixed'
-			left={0}
-			right={0}
-			bottom={0}
-			zIndex={20}
-			borderTop='1px solid'
-			borderColor='border'
-			bg='rgba(18, 0, 17, 0.95)'
-			backdropFilter='blur(8px)'
-			pb='calc(env(safe-area-inset-bottom, 0px))'
-		>
-			<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
-				{links.map((link) => (
-					<Link key={link.label} asChild variant='navIcon' size='sm'>
-						<NavLink to={link.to} style={{ display: 'block' }}>
-							<Flex direction='column' align='center' justifyContent='center' gap={0}>
-								<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
-							</Flex>
-						</NavLink>
-					</Link>
-				))}
-			</HStack>
-		</Box>
-	);
-};
-
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
+	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
+
 	return (
 		<Flex minH='100vh' w='full'>
 			<Flex
@@ -132,7 +86,25 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 			>
 				<Flex direction='column' gap={8}>
 					<Logo />
-					<SidebarLinks links={links} />
+					<VStack gap={2} align='stretch' w='full'>
+						{links.map((link) => (
+							<Link asChild variant='nav' size='sm' key={link.label}>
+								<NavLink to={link.to}>
+									<HStack gap={2} justify='space-between' w='full'>
+										<HStack gap={2}>
+											<Icon as={getLinkIcon(link.to)} boxSize={4} />
+											<Text>{link.label}</Text>
+										</HStack>
+										{link.to === '/notifications' && unreadCount > 0 && (
+											<Badge size='sm' colorPalette='pink' variant='solid'>
+												{unreadCount > 99 ? '99+' : unreadCount}
+											</Badge>
+										)}
+									</HStack>
+								</NavLink>
+							</Link>
+						))}
+					</VStack>
 				</Flex>
 
 				<Text textStyle='small' color='pink.200' opacity={0.7}>
@@ -144,7 +116,57 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				<Outlet />
 			</Flex>
 
-			<BottomMobileNav links={links} />
+			<Box
+				as='nav'
+				display={{ base: 'block', md: 'none' }}
+				position='fixed'
+				left={0}
+				right={0}
+				bottom={0}
+				zIndex={20}
+				borderTop='1px solid'
+				borderColor='border'
+				bg='rgba(18, 0, 17, 0.95)'
+				backdropFilter='blur(8px)'
+				pb='calc(env(safe-area-inset-bottom, 0px))'
+			>
+				<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
+					{links.map((link) => (
+						<Link key={link.label} asChild variant='navIcon' size='sm'>
+							<NavLink to={link.to} style={{ display: 'block' }}>
+								<Flex
+									direction='column'
+									align='center'
+									justifyContent='center'
+									gap={0}
+									position='relative'
+								>
+									<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
+									{link.to === '/notifications' && unreadCount > 0 && (
+										<Badge
+											position='absolute'
+											top='-2'
+											right='-2'
+											minW='1.1rem'
+											h='1.1rem'
+											px='1'
+											display='inline-flex'
+											alignItems='center'
+											justifyContent='center'
+											borderRadius='full'
+											colorPalette='pink'
+											variant='solid'
+											fontSize='2xs'
+										>
+											{unreadCount > 9 ? '9+' : unreadCount}
+										</Badge>
+									)}
+								</Flex>
+							</NavLink>
+						</Link>
+					))}
+				</HStack>
+			</Box>
 		</Flex>
 	);
 }

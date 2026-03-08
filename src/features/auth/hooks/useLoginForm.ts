@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 import { useAuthClientStore, type AuthClient } from '../stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
+import { getUnreadNotificationsCount } from '@features/users/utils/getUnreadNotificationsCount';
 
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -25,8 +26,18 @@ export function useLoginForm() {
 				body: data,
 			}),
 
-		onSuccess: (client) => {
-			useAuthClientStore.getState().setAuthClient(client);
+		onSuccess: async (client) => {
+			const authStore = useAuthClientStore.getState();
+			authStore.setAuthClient(client);
+			authStore.setUnreadNotificationsCount(0);
+
+			try {
+				const unreadCount = await getUnreadNotificationsCount();
+				authStore.setUnreadNotificationsCount(unreadCount);
+			} catch {
+				// If unread count fails, keep login successful and fallback to zero.
+			}
+
 			navigate('/');
 		},
 
