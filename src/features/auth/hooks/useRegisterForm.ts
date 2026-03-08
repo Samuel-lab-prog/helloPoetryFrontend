@@ -33,7 +33,19 @@ export function useRegisterForm() {
 			const error = err as AppErrorType;
 
 			if (error.statusCode === 409) {
-				setGeneralError('Apelido ou e-mail já está em uso.');
+				if (error.message?.includes('Nickname')) {
+					form.setError('nickname', {
+						type: 'manual',
+						message: 'Apelido já está em uso',
+					});
+				}
+
+				if (error.message?.includes('Email')) {
+					form.setError('email', {
+						type: 'manual',
+						message: 'E-mail já está em uso',
+					});
+				}
 				return;
 			}
 
