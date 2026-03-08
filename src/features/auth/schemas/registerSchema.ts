@@ -9,7 +9,7 @@ export const registerSchema = z.object({
 		.regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'E-mail inválido'),
 	password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
 	bio: z.string().trim().min(1, 'Bio é obrigatória'),
-	avatarUrl: z.string().url('URL inválida').optional(),
+	avatarUrl: z.url('URL inválida').optional(),
 });
 
 export type RegisterDataType = z.infer<typeof registerSchema>;

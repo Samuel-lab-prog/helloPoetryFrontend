@@ -2,18 +2,17 @@
 
 import { Navbar, ErrorPage } from '@features/base';
 import {
-	AuthorPage,
 	HomePage,
 	PoemPage,
 	PoemsPage,
-	PoetsPage,
 } from '@features/poems';
 import {
 	LoginPage,
-	MyProfilePage,
-	NotificationsPage,
 	RegisterPage,
 } from '@features/auth';
+
+import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
+
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
 export default function App() {

@@ -1,22 +1,22 @@
 ﻿import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import type { FullPoemType } from '../types';
+import type { AuthorProfileType } from '../../poems/types';
 
-export function useAuthorPoems(authorId: number) {
+export function useAuthorProfile(authorId: number) {
   const query = useQuery({
-    queryKey: ['author-poems', authorId],
+    queryKey: ['author-profile', authorId],
     enabled: !!authorId,
     retry: 2,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     queryFn: () =>
-      createHTTPRequest<FullPoemType[]>({
-        path: '/poems/authors',
-        params: [authorId],
+      createHTTPRequest<AuthorProfileType>({
+        path: '/users',
+        params: [authorId, 'profile'],
       }),
   });
 
   return {
-    poems: query.data ?? [],
+    author: query.data,
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error,

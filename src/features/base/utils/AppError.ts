@@ -1,21 +1,24 @@
 ﻿export type AppErrorType = {
-	statusCode?: number;
-	errorMessages?: string[];
+  statusCode?: number;
+  message?: string;
+  code?: string;
 };
 
 export class AppError extends Error {
-	public statusCode: number;
-	public errorMessages: string[];
-	public originalError?: Error;
+  public statusCode: number;
+  public message: string;
+  public code: string;
 
-	constructor({
-		statusCode = 500,
-		errorMessages = ['Erro na aplicação'],
-	}: AppErrorType = {}) {
-		super(errorMessages.join(', '));
+  constructor({
+    statusCode = 500,
+    message = 'Erro na aplicação',
+    code = 'INTERNAL_SERVER_ERROR',
+  }: AppErrorType = {}) {
+    super(message);
 
-		this.name = 'AppError';
-		this.statusCode = statusCode;
-		this.errorMessages = errorMessages;
-	}
+    this.name = 'AppError';
+    this.statusCode = statusCode;
+    this.message = message;
+    this.code = code;
+  }
 }
