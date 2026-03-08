@@ -3,9 +3,11 @@ import { createHTTPRequest } from '@features/base';
 import type { AuthorProfileType } from '../../poems/types';
 
 export function useAuthorProfile(authorId: number) {
+	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;
+
 	const query = useQuery({
 		queryKey: ['author-profile', authorId],
-		enabled: !!authorId,
+		enabled: isValidAuthorId,
 		retry: 2,
 		staleTime: 1000 * 60 * 10,
 		queryFn: () =>

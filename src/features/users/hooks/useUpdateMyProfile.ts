@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
 
 type UpdateMyProfileInput = {
 	name?: string;
@@ -10,20 +11,9 @@ type UpdateMyProfileInput = {
 
 type ConflictField = 'nickname' | null;
 
-function getClientId() {
-	try {
-		const raw = localStorage.getItem('auth-client');
-		if (!raw) return null;
-		const parsed = JSON.parse(raw) as { id?: number };
-		return parsed.id ?? null;
-	} catch {
-		return null;
-	}
-}
-
 export function useUpdateMyProfile() {
 	const queryClient = useQueryClient();
-	const clientId = getClientId();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const mutation = useMutation({
 		mutationFn: (data: UpdateMyProfileInput) =>
@@ -41,10 +31,10 @@ export function useUpdateMyProfile() {
 	function getErrorMessage() {
 		const error = mutation.error as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 401) return 'Faça login para editar seu perfil.';
-		if (error.statusCode === 403) return 'Você não tem permissão para editar este perfil.';
-		if (error.statusCode === 409) return 'Este apelido já está em uso.';
-		if (error.statusCode === 422) return 'Dados inválidos. Revise os campos.';
+		if (error.statusCode === 401) return 'Faca login para editar seu perfil.';
+		if (error.statusCode === 403) return 'Voce nao tem permissao para editar este perfil.';
+		if (error.statusCode === 409) return 'Este apelido ja esta em uso.';
+		if (error.statusCode === 422) return 'Dados invalidos. Revise os campos.';
 		return 'Erro ao atualizar perfil.';
 	}
 

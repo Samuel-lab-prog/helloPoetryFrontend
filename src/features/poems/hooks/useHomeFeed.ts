@@ -13,6 +13,7 @@ type RawFeedPoem = {
 	id: number;
 	title: string;
 	slug: string;
+	createdAt?: string;
 	tags?: string[];
 	author?: {
 		id: number;
@@ -27,6 +28,7 @@ function toPoemPreviewType(item: RawFeedPoem): PoemPreviewType {
 		id: item.id,
 		title: item.title,
 		slug: item.slug,
+		createdAt: item.createdAt,
 		tags: (item.tags ?? []).map((name, index) => ({
 			id: index + 1,
 			name,

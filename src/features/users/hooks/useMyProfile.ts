@@ -1,5 +1,6 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
+import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
 
 type MyProfileType = {
 	id: number;
@@ -29,19 +30,8 @@ type MyProfileType = {
 	blockedUsersIds: number[];
 };
 
-function getClientId() {
-	try {
-		const raw = localStorage.getItem('auth-client');
-		if (!raw) return null;
-		const parsed = JSON.parse(raw) as { id?: number };
-		return parsed.id ?? null;
-	} catch {
-		return null;
-	}
-}
-
 export function useMyProfile() {
-	const clientId = getClientId();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
 		queryKey: ['my-profile', clientId],

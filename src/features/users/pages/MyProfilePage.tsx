@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
+	Avatar,
 	Badge,
 	Box,
 	Button,
@@ -20,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
 import { AsyncState, Surface, formatDate } from '@features/base';
+import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 import { useFriendRequestActions } from '@features/interactions';
@@ -53,6 +55,7 @@ function translateVisibility(visibility: string) {
 
 export function MyProfilePage() {
 	const navigate = useNavigate();
+	const clearAuthClient = useAuthClientStore((state) => state.clearAuthClient);
 	const { profile, isLoading, isError, isMissingClient } = useMyProfile();
 	const { updateMyProfile, isUpdatingProfile, updateProfileError, conflictField } =
 		useUpdateMyProfile();
@@ -143,8 +146,15 @@ export function MyProfilePage() {
 					<Heading as='h1' textStyle='h2'>
 						Meu Perfil
 					</Heading>
-					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-						<NavLink to='/login'>Entrar</NavLink>
+					<Button
+						size={{ base: 'sm', md: 'md' }}
+						variant='solidPink'
+						onClick={() => {
+							clearAuthClient();
+							navigate('/login');
+						}}
+					>
+						Sair
 					</Button>
 				</Flex>
 
@@ -165,6 +175,15 @@ export function MyProfilePage() {
 							>
 								<Flex justify='space-between' align='start' gap={4}>
 									<VStack align='start' gap={2} flex='1'>
+										<Avatar.Root
+											size='2xl'
+											w={{ base: '6rem', md: '8rem' }}
+											h={{ base: '6rem', md: '8rem' }}
+										>
+											<Avatar.Image src={profile.avatarUrl ?? undefined} />
+											<Avatar.Fallback name={profile.name} />
+										</Avatar.Root>
+
 										{isEditingProfile ? (
 											<>
 												<Input

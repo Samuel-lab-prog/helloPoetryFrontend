@@ -6,6 +6,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Avatar, Box, Button, Flex, Heading, Icon, Link, Text, Textarea } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
+import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
 import { usePoem } from '../hooks/usePoem';
@@ -18,19 +19,6 @@ function parsePoemId(rawId: string | undefined) {
 	const parsed = Number(rawId);
 	if (!Number.isFinite(parsed) || parsed <= 0) return -1;
 	return parsed;
-}
-
-function getAuthClientId() {
-	try {
-		const raw = localStorage.getItem('auth-client');
-		if (!raw) return -1;
-		const parsed = JSON.parse(raw) as { id?: unknown };
-		const id = Number(parsed.id);
-		if (!Number.isFinite(id) || id <= 0) return -1;
-		return id;
-	} catch {
-		return -1;
-	}
 }
 
 type PoemAuthorCardProps = {
@@ -63,7 +51,7 @@ const PoemAuthorCard = memo(function PoemAuthorCard({
 			borderRadius='lg'
 			bg='rgba(255, 255, 255, 0.02)'
 		>
-			<Avatar.Root size='lg'>
+			<Avatar.Root size='xl'>
 				<Avatar.Image src={author.avatarUrl ?? undefined} />
 				<Avatar.Fallback name={author.name} />
 			</Avatar.Root>
@@ -282,7 +270,7 @@ const CommentsSection = memo(function CommentsSection({
 export function PoemPage() {
 	const { id } = useParams<{ id: string }>();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
-	const authClientId = useMemo(() => getAuthClientId(), []);
+	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
 	const isPoemIdValid = poemId > 0;
 
 	const [commentInput, setCommentInput] = useState('');

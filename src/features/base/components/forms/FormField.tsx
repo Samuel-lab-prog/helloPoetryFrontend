@@ -23,7 +23,7 @@ interface Props<T extends FieldValues> {
 	disabled?: boolean;
 	type?: string;
 	transformValue?: (value: string) => unknown;
-	asyncValidator?: (value: unknown) => Promise<string | null>;
+	asyncValidator?: (value: string) => Promise<string | null>;
 	debounce?: number;
 	setError?: UseFormSetError<T>;
 	clearErrors?: UseFormClearErrors<T>;
@@ -123,7 +123,7 @@ export function FormField<T extends FieldValues>({
 								debounceRef.current = window.setTimeout(async () => {
 									let validationError: string | null = null;
 									try {
-										validationError = await asyncValidator(nextValue);
+										validationError = await asyncValidator(rawValue);
 									} catch {
 										validationError = null;
 									}

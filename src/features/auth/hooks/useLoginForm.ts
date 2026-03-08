@@ -1,17 +1,12 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { useAuthClientStore, type AuthClient } from '../stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
-
-type AuthClient = {
-	id: number;
-	role: string;
-	status: string;
-};
 
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -31,7 +26,7 @@ export function useLoginForm() {
 			}),
 
 		onSuccess: (client) => {
-			localStorage.setItem('auth-client', JSON.stringify(client));
+			useAuthClientStore.getState().setAuthClient(client);
 			navigate('/');
 		},
 

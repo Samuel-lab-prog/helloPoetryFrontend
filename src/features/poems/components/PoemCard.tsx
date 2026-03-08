@@ -1,4 +1,4 @@
-﻿import { Card, Text, Badge, Flex, Link, Box } from '@chakra-ui/react';
+import { Card, Text, Badge, Flex, Link, Box } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import type { PoemPreviewType } from '../types';
 
@@ -6,7 +6,32 @@ type PoemCardProps = {
 	poem: PoemPreviewType;
 };
 
+function formatRelativeTime(input?: string | Date) {
+	if (!input) return '';
+
+	const date = input instanceof Date ? input : new Date(input);
+	if (Number.isNaN(date.getTime())) return '';
+
+	const diffMs = Date.now() - date.getTime();
+	if (diffMs < 0) return 'agora';
+
+	const minute = 60 * 1000;
+	const hour = 60 * minute;
+	const day = 24 * hour;
+	const month = 30 * day;
+	const year = 365 * day;
+
+	if (diffMs < minute) return 'agora';
+	if (diffMs < hour) return `${Math.floor(diffMs / minute)}m atrás`;
+	if (diffMs < day) return `${Math.floor(diffMs / hour)}h atrás`;
+	if (diffMs < month) return `${Math.floor(diffMs / day)}d atrás`;
+	if (diffMs < year) return `${Math.floor(diffMs / month)}mo atrás`;
+	return `${Math.floor(diffMs / year)}a atrás`;
+}
+
 export function PoemCard({ poem }: PoemCardProps) {
+	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
+
 	return (
 		<Card.Root
 			p={5}
@@ -60,6 +85,11 @@ export function PoemCard({ poem }: PoemCardProps) {
 						<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
 							<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
 						</Link>
+						{relativeCreatedAt && (
+							<Text textStyle='smaller' color='pink.300'>
+								• {relativeCreatedAt}
+							</Text>
+						)}
 					</Flex>
 					{poem.tags.length > 0 && (
 						<Flex mt={1} gap={2} wrap='wrap'>

@@ -10,7 +10,7 @@ export function LoginPage() {
 				direction='column'
 				align='center'
 				justify='center'
-				h={['70vh', undefined, '60vh']}
+				h={['70vh', undefined, '80vh']}
 			>
 				<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 					<Heading as='h1' textStyle='h2' color='accent'>

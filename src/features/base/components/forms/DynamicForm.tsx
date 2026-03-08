@@ -1,4 +1,5 @@
-﻿import { Text, type ButtonProps } from '@chakra-ui/react';
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Text, type ButtonProps } from '@chakra-ui/react';
 import { FieldContainer } from './FieldContainer';
 import { FormCard } from './FormCard';
 import { FormField } from './FormField';

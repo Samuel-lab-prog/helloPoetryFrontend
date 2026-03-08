@@ -1,4 +1,4 @@
-﻿export type FullPoemType = {
+export type FullPoemType = {
 	tags: {
 		name: string;
 		id: number;
@@ -35,6 +35,7 @@ export type PoemPreviewType = {
 	title: string;
 	slug: string;
 	id: number;
+	createdAt?: string | Date;
 	tags: {
 		id: number;
 		name: string;

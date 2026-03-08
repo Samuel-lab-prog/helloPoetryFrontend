@@ -17,7 +17,7 @@ export function PoetCard({ poet }: PoetCardProps) {
 			<Card.Body>
 				<Flex align='center' justify='space-between' gap={2}>
 					<Flex align='center' gap={3}>
-						<Avatar.Root>
+						<Avatar.Root size='lg'>
 							<Avatar.Image src={poet.avatarUrl ?? undefined} />
 							<Avatar.Fallback name={poet.nickname} />
 						</Avatar.Root>

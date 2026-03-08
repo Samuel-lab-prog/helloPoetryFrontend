@@ -1,8 +1,8 @@
-﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
 import { HomePage, PoemPage, PoemsPage } from '@features/poems';
-import { LoginPage, RegisterPage } from '@features/auth';
+import { LoginPage, RegisterPage, useAuthClientStore } from '@features/auth';
 
 import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
 
@@ -26,8 +26,7 @@ function generateNavLinks(isAuthenticated: boolean) {
 }
 
 export default function App() {
-	const isAuthenticated = !!localStorage.getItem('auth-client');
-
+	const isAuthenticated = useAuthClientStore((state) => Boolean(state.authClient));
 	const navLinks = generateNavLinks(isAuthenticated);
 
 	const router = createBrowserRouter([
@@ -43,22 +42,10 @@ export default function App() {
 				{ path: 'authors/:id', element: <AuthorPage /> },
 				{ path: '/login', element: <LoginPage /> },
 				{ path: '/register', element: <RegisterPage /> },
-				{
-					path: 'poems/new',
-					element: <CreatePoemPage />,
-				},
-				{
-					path: 'admin',
-					element: <AdminPage />,
-				},
-				{
-					path: 'my-profile',
-					element: <MyProfilePage />,
-				},
-				{
-					path: 'notifications',
-					element: <NotificationsPage />,
-				},
+				{ path: 'poems/new', element: <CreatePoemPage /> },
+				{ path: 'admin', element: <AdminPage /> },
+				{ path: 'my-profile', element: <MyProfilePage /> },
+				{ path: 'notifications', element: <NotificationsPage /> },
 			],
 		},
 	]);

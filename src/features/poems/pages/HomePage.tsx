@@ -1,22 +1,12 @@
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { AsyncState, Footer, Surface } from '@features/base';
+import { useAuthClientStore } from '@features/auth';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
 import { useHomeFeed } from '../hooks/useHomeFeed';
 
-function getAuthClientId() {
-	try {
-		const raw = localStorage.getItem('auth-client');
-		if (!raw) return -1;
-		const parsed = JSON.parse(raw) as { id?: number };
-		return typeof parsed.id === 'number' && parsed.id > 0 ? parsed.id : -1;
-	} catch {
-		return -1;
-	}
-}
-
 export function HomePage() {
-	const authClientId = getAuthClientId();
+	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
 	const isAuthenticated = authClientId > 0;
 	const { poems, isError, isLoading, isPersonalizedFeed } = useHomeFeed({
 		isAuthenticated,
@@ -43,13 +33,13 @@ export function HomePage() {
 	const feedTitle = isAuthenticated
 		? isPersonalizedFeed
 			? 'Seu feed'
-			: 'Início'
+			: 'Inicio'
 		: 'Poemas recentes';
 
 	const feedSubtitle = isAuthenticated
 		? isPersonalizedFeed
-			? 'Poemas de amigos e autores que você acompanha.'
-			: 'Mostrando poemas mais recentes enquanto o feed personalizado não estiver disponível.'
+			? 'Poemas de amigos e autores que voce acompanha.'
+			: 'Mostrando poemas mais recentes enquanto o feed personalizado nao estiver disponivel.'
 		: 'Descubra novos textos publicados na comunidade.';
 
 	return (
@@ -72,7 +62,7 @@ export function HomePage() {
 							isEmpty={!poems || poems.length === 0}
 							emptyElement={<Flex>Nenhum poema encontrado</Flex>}
 							errorElement={<Flex>Erro ao carregar poemas</Flex>}
-							loadingElement={<Flex>Nenhum poema encontrado</Flex>}
+							loadingElement={<Flex>Carregando poemas...</Flex>}
 						>
 							<PoemGrid>
 								{poems.map((poem) => (
