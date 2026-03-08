@@ -10,6 +10,7 @@ export * from './hooks/useLoginForm';
 export * from './hooks/useMyProfile';
 export * from './hooks/useNotificationsPanel';
 export * from './hooks/useRegisterForm';
+export * from './hooks/useUpdateMyProfile';
 export * from './pages/LoginPage';
 export * from './pages/MyProfilePage';
 export * from './pages/NotificationsPage';

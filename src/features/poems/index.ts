@@ -10,6 +10,7 @@ export * from './components/PoemTag';
 export * from './hooks/useInfinitePoems';
 export * from './hooks/useAuthorPoems';
 export * from './hooks/useAuthorProfile';
+export * from './hooks/useMyPoems';
 export * from './hooks/usePoem';
 export * from './hooks/usePoemsFilters';
 export * from './hooks/usePoetsSearch';

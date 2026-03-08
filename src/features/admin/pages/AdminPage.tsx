@@ -1,5 +1,6 @@
-﻿import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex, Heading, Button } from '@chakra-ui/react';
+import { useSearchParams } from 'react-router-dom';
 import { CreatePoemForm } from '../components/CreatePoemForm';
 import { UpdatePoemForm } from '../components/UpdatePoemForm';
 import { DeletePoemForm } from '../components/DeletePoemForm';
@@ -7,7 +8,26 @@ import { DeletePoemForm } from '../components/DeletePoemForm';
 type ActiveForm = 'create' | 'update' | 'delete';
 
 export function AdminPage() {
+	const [searchParams, setSearchParams] = useSearchParams();
 	const [activeForm, setActiveForm] = useState<ActiveForm>('create');
+	const modeParam = searchParams.get('mode');
+
+	useEffect(() => {
+		if (
+			modeParam === 'create' ||
+			modeParam === 'update' ||
+			modeParam === 'delete'
+		) {
+			setActiveForm(modeParam);
+		}
+	}, [modeParam]);
+
+	function changeForm(mode: ActiveForm) {
+		const params = new URLSearchParams(searchParams);
+		params.set('mode', mode);
+		setSearchParams(params, { replace: true });
+		setActiveForm(mode);
+	}
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' gap={8}>
@@ -22,13 +42,13 @@ export function AdminPage() {
 					Painel Administrativo
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
-					<Button variant='solidPink' onClick={() => setActiveForm('create')}>
+					<Button variant='solidPink' onClick={() => changeForm('create')}>
 						Criar Poema
 					</Button>
-					<Button variant='solidPink' onClick={() => setActiveForm('update')}>
+					<Button variant='solidPink' onClick={() => changeForm('update')}>
 						Atualizar Poema
 					</Button>
-					<Button variant='solidPink' onClick={() => setActiveForm('delete')}>
+					<Button variant='solidPink' onClick={() => changeForm('delete')}>
 						Deletar Poema
 					</Button>
 				</Flex>

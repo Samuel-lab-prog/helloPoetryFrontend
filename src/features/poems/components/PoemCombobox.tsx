@@ -49,7 +49,12 @@ export function PoemCombobox<T extends FieldValues>({
 
 	return (
 		<Field.Root required>
-			<Field.Label>
+			<Field.Label
+				textStyle='small'
+				fontWeight='medium'
+				color={error ? 'error' : 'text'}
+				transition='color 0.22s ease'
+			>
 				Poema <Field.RequiredIndicator />
 			</Field.Label>
 
@@ -68,26 +73,57 @@ export function PoemCombobox<T extends FieldValues>({
 						}}
 						w='full'
 					>
-						<Combobox.Control>
-							<Combobox.Input placeholder='Selecione o poema' />
+						<Combobox.Control
+							bg='surface'
+							border='1px solid'
+							borderColor={error ? 'error' : 'border'}
+							borderRadius='md'
+							transition='all 0.22s ease'
+							_hover={{ borderColor: error ? 'error' : 'borderHover' }}
+							_focusWithin={{
+								borderColor: error ? 'error' : 'pink.300',
+								boxShadow: error
+									? '0 0 0 5px rgba(239, 68, 68, 0.25)'
+									: '0 0 0 5px rgba(255, 143, 189, 0.25)',
+							}}
+						>
+							<Combobox.Input
+								placeholder='Selecione o poema'
+								textStyle='small'
+								color='text'
+								_placeholder={{ color: 'pink.200' }}
+							/>
 							<Combobox.IndicatorGroup>
-								<Combobox.ClearTrigger />
-								<Combobox.Trigger />
+								<Combobox.ClearTrigger color='pink.200' />
+								<Combobox.Trigger color='pink.200' />
 							</Combobox.IndicatorGroup>
 						</Combobox.Control>
 
 						<Portal>
 							<Combobox.Positioner>
-								<Combobox.Content bg='white'>
+								<Combobox.Content
+									bg='rgba(27, 0, 25, 0.98)'
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='md'
+									backdropFilter='blur(6px)'
+									overflow='hidden'
+								>
 									<Combobox.Empty>
 										{poems
 											? 'Nenhum poema encontrado.'
 											: 'Carregando poemas...'}
 									</Combobox.Empty>
 									{collection.items.map((item) => (
-										<Combobox.Item key={item.id} item={item}>
+										<Combobox.Item
+											key={item.id}
+											item={item}
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											_highlighted={{ bg: 'rgba(255, 143, 189, 0.14)' }}
+										>
 											{item.title}
-											<Combobox.ItemIndicator />
+											<Combobox.ItemIndicator color='pink.200' />
 										</Combobox.Item>
 									))}
 								</Combobox.Content>
@@ -96,7 +132,14 @@ export function PoemCombobox<T extends FieldValues>({
 					</Combobox.Root>
 				)}
 			/>
-			<Field.ErrorText>{error?.message?.toString()}</Field.ErrorText>
+			<Field.ErrorText
+				color='error'
+				opacity={error ? 1 : 0}
+				transform={error ? 'translateY(0)' : 'translateY(-3px)'}
+				transition='opacity 0.2s ease, transform 0.2s ease'
+			>
+				{error?.message?.toString()}
+			</Field.ErrorText>
 		</Field.Root>
 	);
 }

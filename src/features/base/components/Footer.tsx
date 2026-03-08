@@ -172,15 +172,16 @@ export function Footer({ links }: FooterProps) {
 	return (
 		<Box
 			as='footer'
-			mt={16}
+			mt={{ base: 10, md: 14 }}
 			px={{ base: 4, md: 8 }}
-			pb={8}
+			pb={{ base: 'calc(92px + env(safe-area-inset-bottom, 0px))', md: 8 }}
 			borderTop='1px solid'
 			borderColor='purple.700'
 			bg='linear-gradient(180deg, rgba(18,0,17,0.75) 0%, rgba(18,0,17,0.92) 100%)'
 		>
 			<Box
-				maxW='6xl'
+				maxW='5xl'
+				w='full'
 				mx='auto'
 				pt={10}
 				pb={6}
