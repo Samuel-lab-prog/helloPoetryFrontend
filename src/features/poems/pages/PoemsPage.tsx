@@ -24,7 +24,7 @@ export function PoemsPage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column'>
 			<Flex as='section' mb={6} gap={8} direction='column' w='full'>
-				<Heading as='h1' textStyle='h1'>
+				<Heading as='h1' textStyle='h2'>
 					Todos os Poemas
 				</Heading>
 

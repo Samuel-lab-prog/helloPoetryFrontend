@@ -74,17 +74,21 @@ export function PoemCombobox<T extends FieldValues>({
 						w='full'
 					>
 						<Combobox.Control
-							bg='surface'
+							bg='rgba(255, 255, 255, 0.03)'
 							border='1px solid'
 							borderColor={error ? 'error' : 'border'}
 							borderRadius='md'
 							transition='all 0.22s ease'
-							_hover={{ borderColor: error ? 'error' : 'borderHover' }}
+							_hover={{
+								borderColor: error ? 'error' : 'borderHover',
+								bg: 'rgba(255, 255, 255, 0.05)',
+							}}
 							_focusWithin={{
 								borderColor: error ? 'error' : 'pink.300',
 								boxShadow: error
 									? '0 0 0 5px rgba(239, 68, 68, 0.25)'
 									: '0 0 0 5px rgba(255, 143, 189, 0.25)',
+								bg: 'rgba(255, 255, 255, 0.06)',
 							}}
 						>
 							<Combobox.Input

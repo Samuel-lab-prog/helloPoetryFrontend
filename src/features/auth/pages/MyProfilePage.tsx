@@ -136,9 +136,20 @@ export function MyProfilePage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
-				<Heading as='h1' textStyle='h1' mb={8}>
-					Meu Perfil
-				</Heading>
+				<Flex
+					mb={8}
+					align={{ base: 'start', md: 'center' }}
+					justify='space-between'
+					direction={{ base: 'column', md: 'row' }}
+					gap={3}
+				>
+					<Heading as='h1' textStyle='h2'>
+						Meu Perfil
+					</Heading>
+					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
+						<NavLink to='/login'>Entrar</NavLink>
+					</Button>
+				</Flex>
 
 				<AsyncState
 					isLoading={isLoading}
@@ -556,3 +567,4 @@ export function MyProfilePage() {
 		</Flex>
 	);
 }
+

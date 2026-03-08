@@ -41,7 +41,7 @@ export function NotificationsPage() {
 					mb={6}
 					flexWrap='wrap'
 				>
-					<Heading as='h1' textStyle='h1'>
+					<Heading as='h1' textStyle='h2'>
 						Notificações
 					</Heading>
 					<Badge colorPalette='pink' variant='subtle'>
@@ -102,3 +102,4 @@ export function NotificationsPage() {
 		</Flex>
 	);
 }
+

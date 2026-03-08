@@ -57,16 +57,23 @@ export function FormField<T extends FieldValues>({
 					<Component
 						textStyle='small'
 						transition='all 0.22s ease'
-						bg='surface'
+						bg='rgba(255, 255, 255, 0.03)'
 						borderColor={error ? 'error' : 'border'}
-						_hover={{ borderColor: 'borderHover' }}
+						_hover={{
+							borderColor: 'borderHover',
+							bg: 'rgba(255, 255, 255, 0.05)',
+						}}
 						_focusVisible={{
 							borderColor: error ? 'error' : 'pink.300',
 							boxShadow: error
 								? '0 0 0 3px rgba(239, 68, 68, 1)'
 								: '0 0 0 3px rgba(255, 143, 189, 1)',
+							bg: 'rgba(255, 255, 255, 0.06)',
 						}}
-						_focus={{ borderColor: error ? 'error' : 'pink.300' }}
+						_focus={{
+							borderColor: error ? 'error' : 'pink.300',
+							bg: 'rgba(255, 255, 255, 0.06)',
+						}}
 						autoFocus={autoFocus}
 						rows={as === 'textarea' ? rows : undefined}
 						type={type}

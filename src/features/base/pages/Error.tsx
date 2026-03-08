@@ -12,7 +12,7 @@ export function ErrorPage() {
 			textAlign='center'
 		>
 			<Box maxW='md'>
-				<Heading as='h1' textStyle='h1'>
+				<Heading as='h1' textStyle='h2'>
 					Ops!
 				</Heading>
 

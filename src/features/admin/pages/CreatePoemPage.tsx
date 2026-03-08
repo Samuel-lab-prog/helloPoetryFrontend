@@ -11,7 +11,7 @@ export function CreatePoemPage() {
 				justify='center'
 				w='full'
 			>
-				<Heading as='h1' textStyle='h1' mb={6}>
+				<Heading as='h1' textStyle='h2' mb={6}>
 					Criar Poema
 				</Heading>
 			</Flex>

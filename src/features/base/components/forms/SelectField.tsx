@@ -67,7 +67,7 @@ export function SelectField<T extends FieldValues>({
 					>
 						<NativeSelect.Field
 							textStyle='small'
-							bg='surface'
+							bg='rgba(255, 255, 255, 0.03)'
 							border='1px solid'
 							borderColor={hasError ? 'error' : 'border'}
 							borderRadius='md'

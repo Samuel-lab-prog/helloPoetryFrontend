@@ -64,7 +64,7 @@ export function TagsField<T extends FieldValues>({
 						}}
 					>
 						<TagsInput.Control
-							bg='surface'
+							bg='rgba(255, 255, 255, 0.03)'
 							color='text'
 							border='1px solid'
 							borderColor={

@@ -38,7 +38,7 @@ export function AdminPage() {
 				justify='center'
 				w='full'
 			>
-				<Heading as='h1' textStyle='h1' mb={6}>
+				<Heading as='h1' textStyle='h2' mb={6}>
 					Painel Administrativo
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>

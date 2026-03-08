@@ -32,7 +32,7 @@ export function useLoginForm() {
 
 		onSuccess: (client) => {
 			localStorage.setItem('auth-client', JSON.stringify(client));
-			navigate('/admin');
+			navigate('/');
 		},
 
 		onError: (err: unknown) => {
