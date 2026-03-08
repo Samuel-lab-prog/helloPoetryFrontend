@@ -1,12 +1,13 @@
 import { NavLink } from 'react-router-dom';
-import { Badge, Box, Button, Flex, HStack, Text } from '@chakra-ui/react';
+import { Eye, Check, Trash2 } from 'lucide-react';
+import { Badge, Card, Flex, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
 import { formatDate } from '@features/base';
 import type { NotificationItem } from '../hooks/useNotificationsPanel';
 
 function getFallbackTitle(type: string) {
 	switch (type) {
 		case 'POEM_COMMENT_CREATED':
-			return 'Novo comentário';
+			return 'Novo comentario';
 		case 'NEW_FRIEND':
 			return 'Novo amigo';
 		case 'NEW_FRIEND_REQUEST':
@@ -14,25 +15,25 @@ function getFallbackTitle(type: string) {
 		case 'POEM_LIKED':
 			return 'Poema curtido';
 		case 'POEM_COMMENT_REPLIED':
-			return 'Resposta em comentário';
+			return 'Resposta em comentario';
 		case 'POEM_DEDICATED':
 			return 'Poema dedicado';
 		case 'USER_MENTION_IN_POEM':
-			return 'Você foi mencionado';
+			return 'Voce foi mencionado';
 		default:
-			return 'Notificação';
+			return 'Notificacao';
 	}
 }
 
-function getNotificationTitle(item: NotificationItem) {
+function getNotificationTitle(item: NotificationItem): string {
 	return item.data?.title?.trim() || getFallbackTitle(item.type);
 }
 
-function getNotificationBody(item: NotificationItem) {
+function getNotificationBody(item: NotificationItem): string {
 	const body = item.data?.body?.trim();
 	if (body) return body;
 	if (item.aggregatedCount > 1) {
-		return `Você recebeu ${item.aggregatedCount} notificações desse tipo.`;
+		return `Voce recebeu ${item.aggregatedCount} notificacoes desse tipo.`;
 	}
 	return 'Sem detalhes adicionais.';
 }
@@ -87,74 +88,88 @@ export function NotificationCard({
 	const accentColor = getAccentForType(item.type);
 
 	return (
-		<Box
-			p={4}
-			border='1px solid'
+		<Card.Root
+			variant='interactive'
+			size='sm'
 			borderColor={item.readAt ? 'purple.700' : 'pink.400'}
 			borderLeft='4px solid'
 			borderLeftColor={accentColor}
-			borderRadius='lg'
-			bg='rgba(255, 255, 255, 0.02)'
 		>
-			<Flex justify='space-between' align='start' gap={4} direction={{ base: 'column', md: 'row' }}>
+			<Card.Header pb={2}>
 				<Flex direction='column' gap={1} flex='1'>
-					<Text textStyle='small' color='pink.100' fontWeight='semibold'>
+					<Text color='pink.100' fontWeight='semibold'>
 						{getNotificationTitle(item)}
 					</Text>
-					<Text textStyle='small' color='pink.200'>
-						{getNotificationBody(item)}
-					</Text>
-					<Text textStyle='smaller' color='pink.300'>
-						{formatDate(item.createdAt)}
-					</Text>
-					<HStack gap={2} wrap='wrap' mt={1}>
-						<Badge size='sm' colorPalette='purple' variant='subtle'>
-							{item.type}
-						</Badge>
-						{item.aggregatedCount > 1 && (
-							<Badge size='sm' colorPalette='pink' variant='subtle'>
-								{item.aggregatedCount} notificações
+					<Text variant='muted'>{getNotificationBody(item)}</Text>
+				</Flex>
+			</Card.Header>
+
+			<Card.Body pt={0}>
+				<Flex align='start' justify='space-between' gap={3}>
+					<VStack align='start' gap={2} flex='1' minW={0}>
+						<Text variant='caption' color='pink.300'>
+							{formatDate(item.createdAt)}
+						</Text>
+						<HStack gap={2} wrap='wrap'>
+							<Badge size='sm' colorPalette='purple' variant='subtle'>
+								{item.type}
 							</Badge>
+							{item.aggregatedCount > 1 && (
+								<Badge size='sm' colorPalette='pink' variant='subtle'>
+									{item.aggregatedCount} notificacoes
+								</Badge>
+							)}
+							{item.readAt && (
+								<Badge size='sm' colorPalette='gray' variant='subtle'>
+									Lida
+								</Badge>
+							)}
+						</HStack>
+					</VStack>
+
+					<HStack gap={2} align='start'>
+						{link && (
+							<IconButton
+								asChild
+								size='sm'
+								variant='solidPink'
+								aria-label='Abrir notificacao'
+								title='Abrir'
+							>
+								<NavLink to={link}>
+									<Eye size={16} />
+								</NavLink>
+							</IconButton>
 						)}
-						{item.readAt && (
-							<Badge size='sm' colorPalette='gray' variant='subtle'>
-								Lida
-							</Badge>
+						{!item.readAt && (
+							<IconButton
+								size='sm'
+								variant='solidPink'
+								aria-label='Marcar como lida'
+								title='Marcar como lida'
+								onClick={() => {
+									void onMarkAsRead(item.id);
+								}}
+								loading={isMarkingAsRead}
+							>
+								<Check size={16} />
+							</IconButton>
 						)}
+						<IconButton
+							size='sm'
+							variant='danger'
+							aria-label='Excluir notificacao'
+							title='Excluir'
+							onClick={() => {
+								void onDelete(item.id);
+							}}
+							loading={isDeleting}
+						>
+							<Trash2 size={16} />
+						</IconButton>
 					</HStack>
 				</Flex>
-
-				<HStack gap={2} alignSelf={{ base: 'stretch', md: 'start' }}>
-					{link && (
-						<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' asChild>
-							<NavLink to={link}>Abrir</NavLink>
-						</Button>
-					)}
-					{!item.readAt && (
-						<Button
-							size={{ base: 'xs', md: 'sm' }}
-							variant='solidPink'
-							onClick={() => {
-								void onMarkAsRead(item.id);
-							}}
-							loading={isMarkingAsRead}
-						>
-							Marcar como lida
-						</Button>
-					)}
-					<Button
-						size={{ base: 'xs', md: 'sm' }}
-						variant='solidPink'
-						colorPalette='gray'
-						onClick={() => {
-							void onDelete(item.id);
-						}}
-						loading={isDeleting}
-					>
-						Excluir
-					</Button>
-				</HStack>
-			</Flex>
-		</Box>
+			</Card.Body>
+		</Card.Root>
 	);
 }

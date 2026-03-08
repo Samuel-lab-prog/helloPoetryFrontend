@@ -1,6 +1,5 @@
-import { useMemo } from 'react';
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
-import { AsyncState, Footer } from '@features/base';
+import { AsyncState, Footer, Surface } from '@features/base';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
 import { useHomeFeed } from '../hooks/useHomeFeed';
@@ -24,22 +23,22 @@ export function HomePage() {
 		limit: isAuthenticated ? 8 : 4,
 	});
 
-	const footerLinks = useMemo(
-		() => [
+	function generateFooterLinks(isAuthenticated: boolean) {
+		const links = [
 			{ label: 'Inicio', to: '/' },
 			{ label: 'Poemas', to: '/poems' },
-			...(isAuthenticated
-				? [
-						{ label: 'Criar poema', to: '/poems/new' },
-						{ label: 'Meu perfil', to: '/my-profile' },
-					]
-				: [
-						{ label: 'Cadastrar', to: '/register' },
-						{ label: 'Entrar', to: '/login' },
-					]),
-		],
-		[isAuthenticated],
-	);
+		];
+		if (isAuthenticated) {
+			links.push({ label: 'Criar poema', to: '/poems/new' });
+			links.push({ label: 'Meu perfil', to: '/my-profile' });
+		} else {
+			links.push({ label: 'Cadastrar', to: '/register' });
+			links.push({ label: 'Entrar', to: '/login' });
+		}
+		return links;
+	}
+
+	const footerLinks = generateFooterLinks(isAuthenticated);
 
 	const feedTitle = isAuthenticated
 		? isPersonalizedFeed
@@ -57,32 +56,23 @@ export function HomePage() {
 		<Flex direction='column' minH='100%'>
 			<Flex as='main' layerStyle='main' direction='column' flex='1'>
 				<VStack as='section' w='full' maxW='6xl' mx='auto' align='stretch' gap={{ base: 6, md: 8 }}>
-					<Box
-						border='1px solid'
-						borderColor='purple.700'
-						borderRadius='2xl'
-						px={{ base: 4, md: 6 }}
-						py={{ base: 5, md: 7 }}
-						bg='linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)'
-					>
+					<Surface>
 						<VStack align='start' gap={2}>
 							<Heading as='h1' textStyle='h2'>
 								{feedTitle}
 							</Heading>
-							<Text textStyle='lead' color='pink.200'>
-								{feedSubtitle}
-							</Text>
+							<Text color='pink.200'>{feedSubtitle}</Text>
 						</VStack>
-					</Box>
+					</Surface>
 
 					<Box>
 						<AsyncState
 							isLoading={isLoading}
 							isError={isError}
 							isEmpty={!poems || poems.length === 0}
-							emptyElement={<Flex textStyle='body'>Nenhum poema encontrado</Flex>}
-							errorElement={<Flex textStyle='body'>Erro ao carregar poemas</Flex>}
-							loadingElement={<Flex textStyle='body'>Carregando poemas...</Flex>}
+							emptyElement={<Flex>Nenhum poema encontrado</Flex>}
+							errorElement={<Flex>Erro ao carregar poemas</Flex>}
+							loadingElement={<Flex>Nenhum poema encontrado</Flex>}
 						>
 							<PoemGrid>
 								{poems.map((poem) => (

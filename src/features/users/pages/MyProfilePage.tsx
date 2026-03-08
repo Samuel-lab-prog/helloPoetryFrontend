@@ -19,7 +19,7 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
-import { AsyncState, formatDate } from '@features/base';
+import { AsyncState, Surface, formatDate } from '@features/base';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 import { useFriendRequestActions } from '@features/interactions';
@@ -94,13 +94,11 @@ export function MyProfilePage() {
 	if (isMissingClient) {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' align='center'>
-				<Box
+				<Surface
 					w='full'
 					maxW='2xl'
 					p={{ base: 6, md: 8 }}
-					border='1px solid'
-					borderColor='purple.700'
-					borderRadius='2xl'
+					variant='gradient'
 					bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
 				>
 					<VStack align='start' gap={4}>
@@ -127,7 +125,7 @@ export function MyProfilePage() {
 							</Button>
 						</HStack>
 					</VStack>
-				</Box>
+				</Surface>
 			</Flex>
 		);
 	}
@@ -160,13 +158,10 @@ export function MyProfilePage() {
 				>
 					{profile && (
 						<Flex direction='column' gap={6}>
-							<Box
+							<Surface
 								p={{ base: 5, md: 6 }}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='2xl'
+								variant='gradient'
 								bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
-								backdropFilter='blur(4px)'
 							>
 								<Flex justify='space-between' align='start' gap={4}>
 									<VStack align='start' gap={2} flex='1'>
@@ -272,7 +267,7 @@ export function MyProfilePage() {
 										)}
 									</Flex>
 								</Flex>
-							</Box>
+							</Surface>
 
 							<Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
 								<Box
@@ -313,13 +308,7 @@ export function MyProfilePage() {
 								</Box>
 							</Grid>
 
-							<Box
-								p={5}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='xl'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
+							<Surface p={5} variant='panel'>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Solicitacoes de amizade recebidas
 								</Heading>
@@ -370,15 +359,9 @@ export function MyProfilePage() {
 										{errorMessage}
 									</Text>
 								)}
-							</Box>
+							</Surface>
 
-							<Box
-								p={5}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='xl'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
+							<Surface p={5} variant='panel'>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Meus poemas
 								</Heading>
@@ -476,15 +459,9 @@ export function MyProfilePage() {
 										</Flex>
 									))}
 								</Flex>
-							</Box>
+							</Surface>
 
-							<Box
-								p={5}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='xl'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
+							<Surface p={5} variant='panel'>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Colecoes de poemas
 								</Heading>
@@ -665,15 +642,9 @@ export function MyProfilePage() {
 										{collectionsError}
 									</Text>
 								)}
-							</Box>
+							</Surface>
 
-							<Box
-								p={5}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='xl'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
+							<Surface p={5} variant='panel'>
 								<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
 									Poemas salvos
 								</Heading>
@@ -710,7 +681,7 @@ export function MyProfilePage() {
 										</Flex>
 									))}
 								</Flex>
-							</Box>
+							</Surface>
 						</Flex>
 					)}
 				</AsyncState>

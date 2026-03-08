@@ -13,7 +13,7 @@ export const textStyles = defineTextStyles({
 		value: {
 			...baseText,
 			fontWeight: '400',
-			fontSize: ['sm', 'sm', 'md', 'md', 'lg'],
+			fontSize: ['xs', 'xs', 'sm', 'md', 'md'],
 			lineHeight: ['tall', 'tall', 'tall', 'shorter', 'shorter'],
 			letterSpacing: '0',
 		},

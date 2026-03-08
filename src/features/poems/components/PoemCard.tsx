@@ -53,12 +53,14 @@ export function PoemCard({ poem }: PoemCardProps) {
 
 			<Card.Body p={0} flex='1'>
 				<Flex direction='column' gap={2}>
-					<Text textStyle='small' color='pink.100'>
-						{poem.author.name}
-					</Text>
-					<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
-						<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-					</Link>
+					<Flex align='center' gap={2} wrap='wrap'>
+						<Text textStyle='small' color='pink.100'>
+							{poem.author.name}
+						</Text>
+						<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
+							<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
+						</Link>
+					</Flex>
 					{poem.tags.length > 0 && (
 						<Flex mt={1} gap={2} wrap='wrap'>
 							{poem.tags.slice(0, 4).map((tag) => (

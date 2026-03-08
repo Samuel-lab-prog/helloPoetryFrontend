@@ -6,6 +6,7 @@ export * from './components/AsyncState';
 export * from './components/Footer';
 export * from './components/MarkdownRender';
 export * from './components/Navbar';
+export * from './components/Surface';
 export * from './components/TagsField';
 export * from './components/forms/DynamicForm';
 export * from './components/forms/FieldContainer';
