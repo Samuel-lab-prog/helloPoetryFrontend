@@ -7,6 +7,7 @@ type NotificationPayload = {
 	title?: string;
 	body?: string;
 	poemId?: number;
+	poemSlug?: string;
 	poemTitle?: string;
 	commentId?: number;
 	parentCommentId?: number;

@@ -40,6 +40,8 @@ function getNotificationBody(item: NotificationItem): string {
 
 function getNotificationLink(item: NotificationItem) {
 	const poemId = item.data?.poemId;
+	const poemSlug = item.data?.poemSlug;
+	if (poemId && poemId > 0 && poemSlug) return `/poems/${poemSlug}/${poemId}`;
 	if (poemId && poemId > 0) return `/poems/${poemId}`;
 
 	if (item.entityType === 'POEM' && item.entityId) return `/poems/${item.entityId}`;

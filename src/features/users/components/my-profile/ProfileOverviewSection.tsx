@@ -23,6 +23,26 @@ export function ProfileOverviewSection({
 	conflictField,
 	onUpdateProfile,
 }: ProfileOverviewSectionProps) {
+	const profileInputStyles = {
+		textStyle: 'small',
+		transition: 'all 0.22s ease',
+		bg: 'rgba(255, 255, 255, 0.03)',
+		borderColor: 'border',
+		_hover: {
+			borderColor: 'borderHover',
+			bg: 'rgba(255, 255, 255, 0.05)',
+		},
+		_focusVisible: {
+			borderColor: 'pink.300',
+			boxShadow: '0 0 0 3px rgba(255, 143, 189, 1)',
+			bg: 'rgba(255, 255, 255, 0.06)',
+		},
+		_focus: {
+			borderColor: 'pink.300',
+			bg: 'rgba(255, 255, 255, 0.06)',
+		},
+	} as const;
+
 	const [isEditingProfile, setIsEditingProfile] = useState(false);
 	const [nameDraft, setNameDraft] = useState('');
 	const [nicknameDraft, setNicknameDraft] = useState('');
@@ -83,14 +103,28 @@ export function ProfileOverviewSection({
 									value={nameDraft}
 									onChange={(e) => setNameDraft(e.target.value)}
 									placeholder='Nome'
-									bg='surface'
+									{...profileInputStyles}
 								/>
 								<Input
 									value={nicknameDraft}
 									onChange={(e) => setNicknameDraft(e.target.value)}
 									placeholder='Apelido'
-									bg='surface'
+									{...profileInputStyles}
 									borderColor={conflictField === 'nickname' ? 'red.400' : undefined}
+									_focusVisible={
+										conflictField === 'nickname'
+											? {
+													borderColor: 'error',
+													boxShadow: '0 0 0 3px rgba(239, 68, 68, 1)',
+													bg: 'rgba(255, 255, 255, 0.06)',
+											  }
+											: profileInputStyles._focusVisible
+									}
+									_focus={
+										conflictField === 'nickname'
+											? { borderColor: 'error', bg: 'rgba(255, 255, 255, 0.06)' }
+											: profileInputStyles._focus
+									}
 								/>
 								{conflictField === 'nickname' && (
 									<Text textStyle='smaller' color='red.400'>
@@ -101,14 +135,14 @@ export function ProfileOverviewSection({
 									value={avatarUrlDraft}
 									onChange={(e) => setAvatarUrlDraft(e.target.value)}
 									placeholder='URL do avatar'
-									bg='surface'
+									{...profileInputStyles}
 								/>
 								<Textarea
 									value={bioDraft}
 									onChange={(e) => setBioDraft(e.target.value)}
 									placeholder='Bio'
 									rows={4}
-									bg='surface'
+									{...profileInputStyles}
 								/>
 								{updateProfileError && (
 									<Text textStyle='small' color='red.400'>

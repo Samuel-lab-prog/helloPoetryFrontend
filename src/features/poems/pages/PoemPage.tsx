@@ -1,9 +1,9 @@
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Avatar, Box, Button, Flex, Heading, Icon, Link, Text, Textarea } from '@chakra-ui/react';
+import { Box, Flex, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -12,7 +12,9 @@ import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/in
 import { usePoem } from '../hooks/usePoem';
 import { useSavedPoems } from '../hooks/useSavedPoems';
 import { PoemHeader } from '../components/PoemHeader';
-import { CommentThread } from '../components/CommentThread';
+import { PoemAuthorCard } from '../components/poem-page/PoemAuthorCard';
+import { PoemActions } from '../components/poem-page/PoemActions';
+import { CommentsSection } from '../components/poem-page/CommentsSection';
 
 function parsePoemId(rawId: string | undefined) {
 	if (!rawId) return -1;
@@ -20,252 +22,6 @@ function parsePoemId(rawId: string | undefined) {
 	if (!Number.isFinite(parsed) || parsed <= 0) return -1;
 	return parsed;
 }
-
-type PoemAuthorCardProps = {
-	author: {
-		id: number;
-		name: string;
-		nickname: string;
-		avatarUrl: string | null;
-	};
-	stats: {
-		likesCount: number;
-		commentsCount: number;
-	};
-	children: React.ReactNode;
-};
-
-const PoemAuthorCard = memo(function PoemAuthorCard({
-	author,
-	stats,
-	children,
-}: PoemAuthorCardProps) {
-	return (
-		<Flex
-			mt={6}
-			p={4}
-			gap={3}
-			align='center'
-			border='1px solid'
-			borderColor='purple.700'
-			borderRadius='lg'
-			bg='rgba(255, 255, 255, 0.02)'
-		>
-			<Avatar.Root size='xl'>
-				<Avatar.Image src={author.avatarUrl ?? undefined} />
-				<Avatar.Fallback name={author.name} />
-			</Avatar.Root>
-
-			<Flex direction='column' gap={1} flex='1'>
-				<Text textStyle='small' color='pink.200'>
-					Autor
-				</Text>
-				<Text textStyle='body'>{author.name}</Text>
-				<Text textStyle='smaller' color='pink.200'>
-					@{author.nickname}
-				</Text>
-				<Text textStyle='smaller' color='pink.200'>
-					Curtidas: {stats.likesCount} | Coment�rios: {stats.commentsCount}
-				</Text>
-			</Flex>
-
-			<Link asChild textStyle='small' color='pink.100'>
-				<NavLink to={`/authors/${author.id}`}>Ver autor</NavLink>
-			</Link>
-
-			{children}
-		</Flex>
-	);
-});
-
-type PoemActionsProps = {
-	authClientId: number;
-	likedPoem: boolean;
-	isSaved: boolean;
-	isUpdatingLike: boolean;
-	isSavingPoem: boolean;
-	onToggleLike: () => Promise<void>;
-	onToggleSave: () => Promise<void>;
-};
-
-const PoemActions = memo(function PoemActions({
-	authClientId,
-	likedPoem,
-	isSaved,
-	isUpdatingLike,
-	isSavingPoem,
-	onToggleLike,
-	onToggleSave,
-}: PoemActionsProps) {
-	if (authClientId <= 0) return null;
-
-	return (
-		<>
-			<Button
-				size='sm'
-				variant='solidPink'
-				colorPalette='gray'
-				loading={isUpdatingLike}
-				onClick={() => {
-					void onToggleLike();
-				}}
-			>
-				{likedPoem ? 'Descurtir poema' : 'Curtir poema'}
-			</Button>
-			<Button
-				size='sm'
-				variant='solidPink'
-				loading={isSavingPoem}
-				onClick={() => {
-					void onToggleSave();
-				}}
-			>
-				{isSaved ? 'Remover dos salvos' : 'Salvar poema'}
-			</Button>
-		</>
-	);
-});
-
-type CommentsSectionProps = {
-	poemIsCommentable: boolean;
-	commentInput: string;
-	authClientId: number;
-	comments: PoemCommentType[];
-	isLoadingComments: boolean;
-	isCommentsError: boolean;
-	isCreatingComment: boolean;
-	isDeletingComment: boolean;
-	isUpdatingCommentLike: boolean;
-	repliesByCommentId: Record<number, PoemCommentType[]>;
-	setRepliesByCommentId: React.Dispatch<React.SetStateAction<Record<number, PoemCommentType[]>>>;
-	onCommentInputChange: (value: string) => void;
-	onPublishComment: () => Promise<void>;
-	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
-	deleteComment: (id: number) => Promise<void>;
-	likeComment: (id: number) => Promise<void>;
-	unlikeComment: (id: number) => Promise<void>;
-	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
-};
-
-const CommentsSection = memo(function CommentsSection({
-	poemIsCommentable,
-	commentInput,
-	authClientId,
-	comments,
-	isLoadingComments,
-	isCommentsError,
-	isCreatingComment,
-	isDeletingComment,
-	isUpdatingCommentLike,
-	repliesByCommentId,
-	setRepliesByCommentId,
-	onCommentInputChange,
-	onPublishComment,
-	createComment,
-	deleteComment,
-	likeComment,
-	unlikeComment,
-	fetchReplies,
-}: CommentsSectionProps) {
-	const canPublishComment =
-		poemIsCommentable && commentInput.trim().length > 0 && !isCreatingComment;
-
-	const renderedThreads = useMemo(
-		() =>
-			comments.map((comment) => (
-				<CommentThread
-					key={comment.id}
-					comment={comment}
-					authClientId={authClientId}
-					poemIsCommentable={poemIsCommentable}
-					isCreatingComment={isCreatingComment}
-					isDeletingComment={isDeletingComment}
-					createComment={createComment}
-					deleteComment={deleteComment}
-					likeComment={likeComment}
-					unlikeComment={unlikeComment}
-					isUpdatingCommentLike={isUpdatingCommentLike}
-					fetchReplies={fetchReplies}
-					repliesByCommentId={repliesByCommentId}
-					setRepliesByCommentId={setRepliesByCommentId}
-				/>
-			)),
-		[
-			authClientId,
-			comments,
-			createComment,
-			deleteComment,
-			fetchReplies,
-			isCreatingComment,
-			isDeletingComment,
-			isUpdatingCommentLike,
-			likeComment,
-			poemIsCommentable,
-			repliesByCommentId,
-			setRepliesByCommentId,
-			unlikeComment,
-		],
-	);
-
-	return (
-		<Box
-			mt={10}
-			p={[4, 6]}
-			border='1px solid'
-			borderColor='purple.700'
-			borderRadius='xl'
-			bg='rgba(255, 255, 255, 0.03)'
-		>
-			<Heading as='h2' textStyle='h3' mb={4}>
-				Coment�rios
-			</Heading>
-
-			<Flex direction='column' gap={3} mb={6}>
-				<Textarea
-					value={commentInput}
-					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Escreva um coment�rio (1-300 caracteres)'
-					rows={4}
-					maxLength={300}
-					disabled={!poemIsCommentable || isCreatingComment}
-				/>
-				<Flex align='center' justify='space-between'>
-					<Text textStyle='smaller' color='pink.200'>
-						{commentInput.length}/300
-					</Text>
-					<Button
-						variant='solidPink'
-						disabled={!canPublishComment}
-						loading={isCreatingComment}
-						onClick={() => {
-							void onPublishComment();
-						}}
-					>
-						Publicar coment�rio
-					</Button>
-				</Flex>
-				{!poemIsCommentable && (
-					<Text textStyle='small' color='pink.200'>
-						Coment�rios desativados para este poema.
-					</Text>
-				)}
-			</Flex>
-
-			<AsyncState
-				isLoading={isLoadingComments}
-				isError={isCommentsError}
-				isEmpty={comments.length === 0}
-				loadingElement={<Text textStyle='body'>Carregando coment�rios...</Text>}
-				errorElement={<Text textStyle='body'>Erro ao carregar coment�rios.</Text>}
-				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
-			>
-				<Flex direction='column' gap={3}>
-					{renderedThreads}
-				</Flex>
-			</AsyncState>
-		</Box>
-	);
-});
 
 export function PoemPage() {
 	const { id } = useParams<{ id: string }>();
@@ -278,6 +34,7 @@ export function PoemPage() {
 		{},
 	);
 	const [likedPoem, setLikedPoem] = useState(false);
+	const [likesCount, setLikesCount] = useState(0);
 
 	const { poem, isError, isLoading } = usePoem(poemId);
 	const {
@@ -314,7 +71,7 @@ export function PoemPage() {
 						tags: poem.tags,
 						createdAt: poem.createdAt,
 						updatedAt: poem.updatedAt,
-					}
+				  }
 				: null,
 		[poem],
 	);
@@ -326,6 +83,7 @@ export function PoemPage() {
 	useEffect(() => {
 		if (!poem) return;
 		setLikedPoem(poem.stats.likedByCurrentUser);
+		setLikesCount(poem.stats.likesCount);
 	}, [poem]);
 
 	useEffect(() => {
@@ -352,7 +110,7 @@ export function PoemPage() {
 					toaster.create({
 						type: 'error',
 						title: 'Erro ao carregar respostas',
-						description: 'N�o foi possivel buscar algumas respostas.',
+						description: 'Nao foi possivel buscar algumas respostas.',
 						closable: true,
 					});
 				})
@@ -372,7 +130,7 @@ export function PoemPage() {
 		shownErrorsRef.current[key] = message;
 		toaster.create({
 			type: 'error',
-			title: 'Opera��o falhou',
+			title: 'Operacao falhou',
 			description: message,
 			closable: true,
 		});
@@ -407,7 +165,7 @@ export function PoemPage() {
 			setCommentInput('');
 			toaster.create({
 				type: 'success',
-				title: 'Coment�rio publicado',
+				title: 'Comentario publicado',
 				closable: true,
 			});
 		} catch {
@@ -416,10 +174,18 @@ export function PoemPage() {
 	}, [commentInput, createComment]);
 
 	const handleTogglePoemLike = useCallback(async () => {
+		if (isUpdatingLike) return;
+		const nextLiked = !likedPoem;
+		const previousLiked = likedPoem;
+		const previousLikesCount = likesCount;
+		const nextLikesCount = Math.max(0, previousLikesCount + (nextLiked ? 1 : -1));
+
+		setLikedPoem(nextLiked);
+		setLikesCount(nextLikesCount);
+
 		try {
-			if (likedPoem) {
+			if (!nextLiked) {
 				await unlikePoem();
-				setLikedPoem(false);
 				toaster.create({
 					type: 'success',
 					title: 'Curtida removida',
@@ -429,16 +195,17 @@ export function PoemPage() {
 			}
 
 			await likePoem();
-			setLikedPoem(true);
 			toaster.create({
 				type: 'success',
 				title: 'Poema curtido',
 				closable: true,
 			});
 		} catch {
+			setLikedPoem(previousLiked);
+			setLikesCount(previousLikesCount);
 			// Erro tratado por likeError + toast consolidado.
 		}
-	}, [likedPoem, likePoem, unlikePoem]);
+	}, [isUpdatingLike, likedPoem, likesCount, likePoem, unlikePoem]);
 
 	const handleToggleSavePoem = useCallback(async () => {
 		try {
@@ -467,7 +234,7 @@ export function PoemPage() {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>ID de poema inv�lido.</Box>
+					<Box textStyle='body'>ID de poema invalido.</Box>
 				</Box>
 			</Flex>
 		);
@@ -480,7 +247,7 @@ export function PoemPage() {
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
-					emptyElement={<Box textStyle='body'>Poema n�o encontrado</Box>}
+					emptyElement={<Box textStyle='body'>Poema nao encontrado</Box>}
 					errorElement={
 						<Box textStyle='body'>Erro ao carregar o poema. Tente novamente mais tarde</Box>
 					}
@@ -498,19 +265,26 @@ export function PoemPage() {
 								mb={6}
 							>
 								<PoemHeader poem={poemHeaderPoem} />
-							</Box>
 
-							<PoemAuthorCard author={poem.author} stats={poem.stats}>
-								<PoemActions
-									authClientId={authClientId}
-									likedPoem={likedPoem}
-									isSaved={isSaved}
-									isUpdatingLike={isUpdatingLike}
-									isSavingPoem={isSavingPoem}
-									onToggleLike={handleTogglePoemLike}
-									onToggleSave={handleToggleSavePoem}
-								/>
-							</PoemAuthorCard>
+								<PoemAuthorCard
+									embedded
+									author={poem.author}
+									stats={{
+										...poem.stats,
+										likesCount,
+									}}
+								>
+									<PoemActions
+										authClientId={authClientId}
+										likedPoem={likedPoem}
+										isSaved={isSaved}
+										isUpdatingLike={isUpdatingLike}
+										isSavingPoem={isSavingPoem}
+										onToggleLike={handleTogglePoemLike}
+										onToggleSave={handleToggleSavePoem}
+									/>
+								</PoemAuthorCard>
+							</Box>
 
 							<Box
 								as='article'
@@ -524,6 +298,13 @@ export function PoemPage() {
 								whiteSpace='pre-wrap'
 								wordBreak='break-word'
 								textStyle='small'
+								overflowX='hidden'
+								css={{
+									'& pre, & table': {
+										maxWidth: '100%',
+										overflowX: 'auto',
+									},
+								}}
 							>
 								<MarkdownRenderer content={poem.content} />
 							</Box>

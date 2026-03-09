@@ -63,6 +63,11 @@ export function AuthorPage() {
 								gap={6}
 								align={{ base: 'start', md: 'center' }}
 								direction={{ base: 'column', md: 'row' }}
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='30ms'
 							>
 								<Avatar.Root
 									size='2xl'
@@ -160,8 +165,17 @@ export function AuthorPage() {
 					}
 				>
 					<Grid templateColumns={['1fr', undefined, '1fr 1fr', '1fr 1fr 1fr']} gap={3}>
-						{poems.map((poem) => (
-							<PoemCard key={poem.id} poem={toPreviewPoem(poem)} hideAuthorMeta />
+						{poems.map((poem, index) => (
+							<Box
+								key={poem.id}
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay={`${30 + index * 30}ms`}
+							>
+								<PoemCard poem={toPreviewPoem(poem)} hideAuthorMeta />
+							</Box>
 						))}
 					</Grid>
 				</AsyncState>

@@ -48,6 +48,7 @@ export default function App() {
 				{ index: true, element: <HomePage /> },
 				{ path: 'poems', element: <PoemsPage /> },
 				{ path: 'poets', element: <PoetsPage /> },
+				{ path: 'poems/:id', element: <PoemPage /> },
 				{ path: 'poems/:slug/:id', element: <PoemPage /> },
 				{ path: 'authors/:id', element: <AuthorPage /> },
 				{ path: '/login', element: <LoginPage /> },
