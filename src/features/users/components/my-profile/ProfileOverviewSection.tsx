@@ -61,7 +61,12 @@ export function ProfileOverviewSection({
 				variant='gradient'
 				bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
 			>
-				<Flex justify='space-between' align='start' gap={4}>
+				<Flex
+					justify='space-between'
+					align='start'
+					direction={{ base: 'column', md: 'row' }}
+					gap={4}
+				>
 					<VStack align='start' gap={2} flex='1'>
 						<Avatar.Root
 							size='2xl'
@@ -125,13 +130,14 @@ export function ProfileOverviewSection({
 						)}
 					</VStack>
 
-					<Flex direction='column' gap={2}>
+					<Flex direction='column' gap={2} w={{ base: 'full', md: 'auto' }}>
 						{isEditingProfile ? (
 							<>
 								<Button
 									size={{ base: 'xs', md: 'sm' }}
 									variant='solidPink'
 									loading={isUpdatingProfile}
+									w={{ base: 'full', md: 'auto' }}
 									onClick={() => {
 										void handleSaveProfile();
 									}}
@@ -142,6 +148,7 @@ export function ProfileOverviewSection({
 									size={{ base: 'xs', md: 'sm' }}
 									variant='solidPink'
 									colorPalette='gray'
+									w={{ base: 'full', md: 'auto' }}
 									onClick={handleCancelEdit}
 								>
 									Cancelar
@@ -151,6 +158,7 @@ export function ProfileOverviewSection({
 							<Button
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
+								w={{ base: 'full', md: 'auto' }}
 								onClick={() => setIsEditingProfile(true)}
 							>
 								Editar perfil
@@ -160,7 +168,7 @@ export function ProfileOverviewSection({
 				</Flex>
 			</Surface>
 
-			<Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
+			<Grid mt={5} templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
 				<Box
 					p={4}
 					border='1px solid'

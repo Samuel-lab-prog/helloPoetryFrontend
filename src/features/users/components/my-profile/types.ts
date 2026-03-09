@@ -65,4 +65,7 @@ export type SavedPoemsSectionProps = {
 	totalSavedPoemsCount?: number;
 	viewAllHref?: string;
 	isLoadingSavedPoems: boolean;
+	isSavingPoem?: boolean;
+	saveError?: string;
+	onUnsavePoem?: (poemId: number) => Promise<void>;
 };

@@ -18,7 +18,13 @@ export function FriendRequestsSection({
 }: FriendRequestsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Flex align='center' justify='space-between' gap={3} mb={4}>
+			<Flex
+				align={{ base: 'start', md: 'center' }}
+				justify='space-between'
+				direction={{ base: 'column', md: 'row' }}
+				gap={3}
+				mb={4}
+			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
 					Solicitacoes de amizade recebidas
 				</Heading>

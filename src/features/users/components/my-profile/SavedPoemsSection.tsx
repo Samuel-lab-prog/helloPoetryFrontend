@@ -1,5 +1,6 @@
-import { Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
+import { ExternalLink, X } from 'lucide-react';
 import { Surface, formatDate } from '@features/base';
 import type { SavedPoemsSectionProps } from './types';
 
@@ -8,17 +9,32 @@ export function SavedPoemsSection({
 	totalSavedPoemsCount,
 	viewAllHref,
 	isLoadingSavedPoems,
+	isSavingPoem = false,
+	saveError = '',
+	onUnsavePoem,
 }: SavedPoemsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Flex align='center' justify='space-between' gap={3} mb={4}>
+			<Flex
+				align={{ base: 'start', md: 'center' }}
+				justify='space-between'
+				direction={{ base: 'column', md: 'row' }}
+				gap={3}
+				mb={4}
+			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
 					Poemas salvos
 				</Heading>
 				{viewAllHref && (
-					<Button asChild size={{ base: 'xs', md: 'sm' }} variant='ghost'>
+					<Link
+						asChild
+						textStyle='small'
+						color='pink.200'
+						textDecoration='underline'
+						textUnderlineOffset='3px'
+					>
 						<NavLink to={viewAllHref}>Ver todos</NavLink>
-					</Button>
+					</Link>
 				)}
 			</Flex>
 
@@ -56,12 +72,40 @@ export function SavedPoemsSection({
 								Salvo em {formatDate(poem.savedAt)}
 							</Text>
 						</Flex>
-						<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' asChild>
-							<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Abrir</NavLink>
-						</Button>
+						<Flex gap={2}>
+							<IconButton
+								aria-label='Abrir poema salvo'
+								size={{ base: 'xs', md: 'sm' }}
+								variant='solidPink'
+								asChild
+							>
+								<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+									<ExternalLink />
+								</NavLink>
+							</IconButton>
+							{onUnsavePoem && (
+								<IconButton
+									aria-label='Remover dos salvos'
+									size={{ base: 'xs', md: 'sm' }}
+									variant='solidPink'
+									colorPalette='gray'
+									loading={isSavingPoem}
+									onClick={() => {
+										void onUnsavePoem(poem.id);
+									}}
+								>
+									<X />
+								</IconButton>
+							)}
+						</Flex>
 					</Flex>
 				))}
 			</Flex>
+			{saveError && (
+				<Text mt={3} textStyle='small' color='red.400'>
+					{saveError}
+				</Text>
+			)}
 		</Surface>
 	);
 }

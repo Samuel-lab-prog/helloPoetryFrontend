@@ -7,7 +7,9 @@ import { SavedPoemsSection } from '../components/my-profile/SavedPoemsSection';
 
 export function MyProfileSavedPoemsPage() {
 	const authClient = useAuthClientStore((state) => state.authClient);
-	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(Boolean(authClient?.id));
+	const { savedPoems, isLoadingSavedPoems, unsavePoem, isSavingPoem, saveError } = useSavedPoems(
+		Boolean(authClient?.id),
+	);
 
 	if (!authClient?.id) {
 		return (
@@ -35,7 +37,13 @@ export function MyProfileSavedPoemsPage() {
 					</Button>
 				</Flex>
 
-				<SavedPoemsSection savedPoems={savedPoems} isLoadingSavedPoems={isLoadingSavedPoems} />
+				<SavedPoemsSection
+					savedPoems={savedPoems}
+					isLoadingSavedPoems={isLoadingSavedPoems}
+					isSavingPoem={isSavingPoem}
+					saveError={saveError}
+					onUnsavePoem={unsavePoem}
+				/>
 			</Box>
 		</Flex>
 	);

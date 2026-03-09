@@ -37,7 +37,8 @@ export function MyProfilePage() {
 		isLoading: isLoadingMyPoems,
 		isError: isMyPoemsError,
 	} = useMyPoems(!isMissingClient);
-	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(!isMissingClient);
+	const { savedPoems, isLoadingSavedPoems, unsavePoem, isSavingPoem, saveError } =
+		useSavedPoems(!isMissingClient);
 	const {
 		collections,
 		isLoadingCollections,
@@ -193,6 +194,9 @@ export function MyProfilePage() {
 									totalSavedPoemsCount={savedPoems.length}
 									viewAllHref='/my-profile/saved-poems'
 									isLoadingSavedPoems={isLoadingSavedPoems}
+									isSavingPoem={isSavingPoem}
+									saveError={saveError}
+									onUnsavePoem={unsavePoem}
 								/>
 							</Box>
 						</Flex>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import { ExternalLink, Plus, Trash2, X } from 'lucide-react';
@@ -108,14 +108,26 @@ export function CollectionsSection({
 
 	return (
 		<Surface p={5} variant='panel'>
-			<Flex align='center' justify='space-between' gap={3} mb={4}>
+			<Flex
+				align={{ base: 'start', md: 'center' }}
+				justify='space-between'
+				direction={{ base: 'column', md: 'row' }}
+				gap={3}
+				mb={4}
+			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
 					Colecoes de poemas
 				</Heading>
 				{viewAllHref && (
-					<Button asChild size={{ base: 'xs', md: 'sm' }} variant='ghost'>
+					<Link
+						asChild
+						textStyle='small'
+						color='pink.200'
+						textDecoration='underline'
+						textUnderlineOffset='3px'
+					>
 						<NavLink to={viewAllHref}>Ver todas</NavLink>
-					</Button>
+					</Link>
 				)}
 			</Flex>
 

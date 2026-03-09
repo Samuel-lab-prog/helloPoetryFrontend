@@ -52,7 +52,13 @@ export function MyPoemsSection({
 }: MyPoemsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Flex align='center' justify='space-between' gap={3} mb={4}>
+			<Flex
+				align={{ base: 'start', md: 'center' }}
+				justify='space-between'
+				direction={{ base: 'column', md: 'row' }}
+				gap={3}
+				mb={4}
+			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
 					Meus poemas
 				</Heading>
@@ -83,8 +89,9 @@ export function MyPoemsSection({
 				{myPoems.map((poem, index) => (
 					<Flex
 						key={poem.id}
-						align='center'
+						align={{ base: 'start', md: 'center' }}
 						justify='space-between'
+						direction={{ base: 'column', md: 'row' }}
 						gap={3}
 						p={3}
 						border='1px solid'
@@ -123,7 +130,8 @@ export function MyPoemsSection({
 								<IconButton
 									aria-label='Abrir menu de a��es'
 									variant='solidPink'
-									size={{ base: 'xs', md: 'sm' }}
+									size={{ base: 'xs', md: 'sm' }} 
+									alignSelf={{ base: 'end', md: 'auto' }}
 								>
 									<EllipsisVertical />
 								</IconButton>
