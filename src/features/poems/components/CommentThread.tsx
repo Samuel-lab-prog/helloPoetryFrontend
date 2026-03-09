@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
 import { formatRelativeTime } from '@features/base';
-import { findForbiddenWords } from '@features/admin';
+import { findForbiddenWords } from '@features/base';
 
 interface CommentThreadProps {
 	comment: PoemCommentType;

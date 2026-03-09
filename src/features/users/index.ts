@@ -4,11 +4,13 @@
 
 export * from './components/NotificationCard';
 export * from './components/PoetCard';
+export * from './components/UserDedicationCombobox';
 export * from './hooks/useAuthorProfile';
 export * from './hooks/useMyFriendRequests';
 export * from './hooks/useMyProfile';
 export * from './hooks/useNotificationsPanel';
 export * from './hooks/useUpdateMyProfile';
+export * from './hooks/useUsersPreview';
 export * from './pages/AuthorPage';
 export * from './pages/MyProfilePage';
 export * from './pages/MyProfileFriendRequestsPage';

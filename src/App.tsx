@@ -1,7 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
-import { HomePage, PoemPage, PoemsPage } from '@features/poems';
+import { AdminPage, CreatePoemPage, HomePage, PoemPage, PoemsPage } from '@features/poems';
 import { LoginPage, RegisterPage } from '@features/auth';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
@@ -16,18 +16,16 @@ import {
 	PoetsPage,
 } from '@features/users';
 
-import { AdminPage, CreatePoemPage } from '@features/admin';
-
 function generateNavLinks(isAuthenticated: boolean) {
 	const links = [
-		{ to: '/', label: 'Início' },
+		{ to: '/', label: 'InÃ­cio' },
 		{ to: '/poems', label: 'Poemas' },
 		{ to: '/poets', label: 'Poetas' },
 	];
 	if (isAuthenticated) {
 		links.push({ to: '/poems/new', label: 'Criar' });
 		links.push({ to: '/my-profile', label: 'Meu Perfil' });
-		links.push({ to: '/notifications', label: 'Notificações' });
+		links.push({ to: '/notifications', label: 'NotificaÃ§Ãµes' });
 	} else {
 		links.push({ to: '/register', label: 'Cadastrar' });
 		links.push({ to: '/login', label: 'Entrar' });

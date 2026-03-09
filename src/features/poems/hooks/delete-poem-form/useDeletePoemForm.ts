@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePoemSchema, type DeletePoemType } from '../../schemas/schemas';
+import { deletePoemSchema, type DeletePoemType } from '../../schemas/managePoemSchemas';
 import { createHTTPRequest } from '@features/base';
 import { handleDeletePoemError } from './handleDeletePoemError';
 

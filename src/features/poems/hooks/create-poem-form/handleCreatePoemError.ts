@@ -1,6 +1,6 @@
 ﻿import type { UseFormSetError } from 'react-hook-form';
 import type { AppErrorType } from '@features/base';
-import type { CreatePoemType } from '../../schemas/schemas';
+import type { CreatePoemType } from '../../schemas/managePoemSchemas';
 
 export function handleCreatePoemError(
 	err: unknown,
@@ -124,10 +124,7 @@ function mapCreatePoemValidationError(
 function normalizeErrorMessage(message: unknown) {
 	if (typeof message === 'string') return message;
 	if (Array.isArray(message)) {
-		return message
-			.filter((part): part is string => typeof part === 'string')
-			.join(' ');
+		return message.filter((part): part is string => typeof part === 'string').join(' ');
 	}
 	return '';
 }
-

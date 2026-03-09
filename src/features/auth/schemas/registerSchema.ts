@@ -1,12 +1,12 @@
 ﻿import { z } from 'zod';
-import { FORBIDDEN_WORDS } from '../../admin/constants/forbiddenWords';
+import { FORBIDDEN_WORDS } from '@features/base';
 
 export const REGISTER_NICKNAME_MIN_LENGTH = 3;
 export const REGISTER_NICKNAME_MAX_LENGTH = 30;
 export const REGISTER_NAME_MIN_LENGTH = 3;
 export const REGISTER_NAME_MAX_LENGTH = 30;
 export const REGISTER_PASSWORD_MIN_LENGTH = 8;
-export const REGISTER_PASSWORD_MAX_LENGTH = 72;
+export const REGISTER_PASSWORD_MAX_LENGTH = 30;
 export const REGISTER_BIO_MIN_LENGTH = 0;
 export const REGISTER_BIO_MAX_LENGTH = 300;
 

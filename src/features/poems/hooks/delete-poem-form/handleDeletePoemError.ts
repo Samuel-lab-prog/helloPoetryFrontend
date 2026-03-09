@@ -1,9 +1,6 @@
 import type { AppErrorType } from '@features/base';
 
-export function handleDeletePoemError(
-	err: unknown,
-	setGeneralError: (msg: string) => void,
-) {
+export function handleDeletePoemError(err: unknown, setGeneralError: (msg: string) => void) {
 	const error = err as AppErrorType;
 	const status = error?.statusCode;
 

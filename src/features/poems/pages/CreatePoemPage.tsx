@@ -1,5 +1,5 @@
-import { Flex, Heading, Text } from '@chakra-ui/react';
-import { CreatePoemForm } from '../components/CreatePoemForm';
+﻿import { Flex, Heading, Text } from '@chakra-ui/react';
+import { CreatePoemForm } from '../components/manage/CreatePoemForm';
 
 export function CreatePoemPage() {
 	return (

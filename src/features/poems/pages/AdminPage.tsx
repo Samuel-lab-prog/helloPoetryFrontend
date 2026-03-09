@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
-import { CreatePoemForm } from '../components/CreatePoemForm';
-import { UpdatePoemForm } from '../components/UpdatePoemForm';
-import { DeletePoemForm } from '../components/DeletePoemForm';
+import { CreatePoemForm } from '../components/manage/CreatePoemForm';
+import { UpdatePoemForm } from '../components/manage/UpdatePoemForm';
+import { DeletePoemForm } from '../components/manage/DeletePoemForm';
 
 type ActiveForm = 'create' | 'update' | 'delete';
 

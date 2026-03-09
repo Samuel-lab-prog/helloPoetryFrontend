@@ -8,7 +8,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
-import { findForbiddenWords } from '@features/admin';
+import { findForbiddenWords } from '@features/base';
 
 import { usePoem } from '../hooks/usePoem';
 import { useSavedPoems } from '../hooks/useSavedPoems';

@@ -1,8 +1,8 @@
 ﻿/* eslint-disable max-lines-per-function */
 import { Text, Heading, Box } from '@chakra-ui/react';
 
-import { useCreatePoemForm } from '../hooks/create-poem-form';
-import { useUsersPreview } from '../hooks/useUsersPreview';
+import { useCreatePoemForm } from '../../hooks/create-poem-form';
+import { useUsersPreview, UserDedicationCombobox } from '@features/users';
 import {
 	FormField,
 	SelectField,
@@ -13,7 +13,6 @@ import {
 	FormCard,
 } from '@features/base';
 import { PoemHeader } from '@features/poems';
-import { UserDedicationCombobox } from './UserDedicationCombobox';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,
@@ -23,7 +22,7 @@ import {
 	POEM_TAGS_MAX_AMOUNT,
 	POEM_TITLE_MIN_LENGTH,
 	POEM_TITLE_MAX_LENGTH,
-} from '../constants/poemConstants';
+} from '../../constants/poemConstants';
 
 export function CreatePoemForm() {
 	const {

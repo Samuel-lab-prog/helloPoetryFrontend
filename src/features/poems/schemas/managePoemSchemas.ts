@@ -1,5 +1,5 @@
 ﻿import { z } from 'zod';
-import { FORBIDDEN_WORDS } from '../constants/forbiddenWords';
+import { FORBIDDEN_WORDS } from '@features/base';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,
@@ -55,10 +55,7 @@ const createOrUpdatePoemSchemaBase = z.object({
 	title: z
 		.string()
 		.min(POEM_TITLE_MIN_LENGTH, `O título deve ter pelo menos ${POEM_TITLE_MIN_LENGTH} caracteres`)
-		.max(
-			POEM_TITLE_MAX_LENGTH,
-			`O título deve ter no máximo ${POEM_TITLE_MAX_LENGTH} caracteres`,
-		),
+		.max(POEM_TITLE_MAX_LENGTH, `O título deve ter no máximo ${POEM_TITLE_MAX_LENGTH} caracteres`),
 	excerpt: z
 		.string()
 		.min(
@@ -93,10 +90,7 @@ const createOrUpdatePoemSchemaBase = z.object({
 	isCommentable: z.boolean(),
 	toUserIds: z
 		.array(z.number().int().positive('ID de usuário inválido'))
-		.max(
-			POEM_TAGS_MAX_AMOUNT,
-			`Você pode dedicar para no máximo ${POEM_TAGS_MAX_AMOUNT} usuários`,
-		)
+		.max(POEM_TAGS_MAX_AMOUNT, `Você pode dedicar para no máximo ${POEM_TAGS_MAX_AMOUNT} usuários`)
 		.optional(),
 });
 
