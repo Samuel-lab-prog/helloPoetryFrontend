@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 import { useSearchParams } from 'react-router-dom';
 import { useForm, type Control } from 'react-hook-form';
 import { useEffect } from 'react';
@@ -40,16 +41,26 @@ export function usePoemsFilters(): UsePoemFiltersReturn {
 	const searchTitle = form.watch('searchTitle');
 
 	useEffect(() => {
-		const params = new URLSearchParams();
-		params.set('order', order);
-		tags
-			.map((tag) => tag.trim())
-			.filter(Boolean)
-			.forEach((tag) => params.append('tags', tag));
-		const normalizedSearchTitle = searchTitle.trim();
-		if (normalizedSearchTitle) params.set('searchTitle', normalizedSearchTitle);
-		setSearchParams(params, { replace: true });
-	}, [order, searchTitle, setSearchParams, tags]);
+		const timeoutId = window.setTimeout(() => {
+			const params = new URLSearchParams();
+			params.set('order', order);
+			tags
+				.map((tag) => tag.trim())
+				.filter(Boolean)
+				.forEach((tag) => params.append('tags', tag));
+
+			const normalizedSearchTitle = searchTitle.trim();
+			if (normalizedSearchTitle) params.set('searchTitle', normalizedSearchTitle);
+
+			const nextParams = params.toString();
+			const currentParams = searchParams.toString();
+			if (nextParams !== currentParams) {
+				setSearchParams(params, { replace: true });
+			}
+		}, 250);
+
+		return () => window.clearTimeout(timeoutId);
+	}, [order, searchParams, searchTitle, setSearchParams, tags]);
 
 	return { control: form.control, order, tags, searchTitle };
 }

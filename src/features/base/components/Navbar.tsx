@@ -69,8 +69,8 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	const location = useLocation();
 
 	useEffect(() => {
-		window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-	}, [location.pathname, location.search]);
+		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+	}, [location.pathname]);
 
 	return (
 		<Flex minH='100vh' w='full'>
@@ -176,4 +176,3 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 		</Flex>
 	);
 }
-
