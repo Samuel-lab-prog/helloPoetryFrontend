@@ -28,21 +28,21 @@ export function useLoginForm() {
 				body: data,
 			}),
 
-		onSuccess: (client) => {
+		onSuccess: async (client) => {
 			const authStore = useAuthClientStore.getState();
 			authStore.setAuthClient(client);
 			authStore.setUnreadNotificationsCount(0);
 
-			void eventBus
-				.publish('userLoggedIn', {
+			try {
+				await eventBus.publish('userLoggedIn', {
 					userId: client.id,
 					role: client.role,
 					status: client.status,
 					loggedInAt: new Date().toISOString(),
-				})
-				.catch(() => {
-					// Do not block login redirect if listeners fail.
 				});
+			} catch {
+				// Do not block login if any listener fails.
+			}
 
 			navigate(FEED_ROUTE, { replace: true });
 		},
