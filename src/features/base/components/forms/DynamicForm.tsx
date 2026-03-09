@@ -22,6 +22,9 @@ export type Field<T extends FieldValues> = {
 	required?: boolean;
 	autoFocus?: boolean;
 	type?: FieldType;
+	minLength?: number;
+	maxLength?: number;
+	showCharacterCount?: boolean;
 
 	asyncValidator?: (value: string) => Promise<string | null>;
 	debounce?: number;

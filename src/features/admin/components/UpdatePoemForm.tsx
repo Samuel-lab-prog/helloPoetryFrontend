@@ -4,6 +4,7 @@ import { useUpdatePoemForm } from '../hooks/useUpdatePoemForm';
 import { usePoemsMinimal } from '../hooks/usePoemsMinimal';
 import { usePoem, PoemCombobox } from '@features/poems';
 import { FormField, SelectField, TagsField } from '@features/base';
+import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../constants/poemConstants';
 
 export function UpdatePoemForm() {
 	const { poems } = usePoemsMinimal();
@@ -121,6 +122,8 @@ export function UpdatePoemForm() {
 				name='tags'
 				error={errors.tags}
 				disabled={isLoading || !poemId}
+				maxTags={POEM_TAGS_MAX_AMOUNT}
+				maxTagLength={POEM_TAG_MAX_LENGTH}
 				placeholder='Adicione suas tags'
 			/>
 

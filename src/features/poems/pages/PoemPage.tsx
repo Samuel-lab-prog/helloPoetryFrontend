@@ -73,7 +73,7 @@ export function PoemPage() {
 						tags: poem.tags,
 						createdAt: poem.createdAt,
 						updatedAt: poem.updatedAt,
-				  }
+					}
 				: null,
 		[poem],
 	);
@@ -380,4 +380,3 @@ export function PoemPage() {
 		</Flex>
 	);
 }
-

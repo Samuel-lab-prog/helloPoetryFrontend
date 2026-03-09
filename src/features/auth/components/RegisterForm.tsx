@@ -1,9 +1,19 @@
 ﻿import { DynamicForm, type Field, createHTTPRequest } from '@features/base';
 import { useRegisterForm } from '../hooks/useRegisterForm';
-import type { RegisterDataType } from '../schemas/registerSchema';
+import {
+	REGISTER_BIO_MAX_LENGTH,
+	REGISTER_BIO_MIN_LENGTH,
+	REGISTER_NAME_MAX_LENGTH,
+	REGISTER_NAME_MIN_LENGTH,
+	REGISTER_NICKNAME_MAX_LENGTH,
+	REGISTER_NICKNAME_MIN_LENGTH,
+	REGISTER_PASSWORD_MAX_LENGTH,
+	REGISTER_PASSWORD_MIN_LENGTH,
+	type RegisterDataType,
+} from '../schemas/registerSchema';
 
 async function checkNicknameAvailability(nickname: string): Promise<string | null> {
-	if (!nickname || nickname.length < 3) return null;
+	if (!nickname || nickname.length < REGISTER_NICKNAME_MIN_LENGTH) return null;
 	const res = await createHTTPRequest<boolean>({
 		path: `/users/check-nickname`,
 		query: { nickname: String(nickname) },
@@ -29,6 +39,9 @@ const registerFields: Field<RegisterDataType>[] = [
 		label: 'Apelido',
 		required: true,
 		autoFocus: true,
+		minLength: REGISTER_NICKNAME_MIN_LENGTH,
+		maxLength: REGISTER_NICKNAME_MAX_LENGTH,
+		showCharacterCount: true,
 		asyncValidator: checkNicknameAvailability,
 		debounce: 300,
 	},
@@ -37,6 +50,9 @@ const registerFields: Field<RegisterDataType>[] = [
 		name: 'name',
 		label: 'Nome',
 		required: true,
+		minLength: REGISTER_NAME_MIN_LENGTH,
+		maxLength: REGISTER_NAME_MAX_LENGTH,
+		showCharacterCount: true,
 	},
 
 	{
@@ -52,6 +68,9 @@ const registerFields: Field<RegisterDataType>[] = [
 		label: 'Senha',
 		required: true,
 		type: 'password',
+		minLength: REGISTER_PASSWORD_MIN_LENGTH,
+		maxLength: REGISTER_PASSWORD_MAX_LENGTH,
+		showCharacterCount: true,
 	},
 
 	{
@@ -59,6 +78,9 @@ const registerFields: Field<RegisterDataType>[] = [
 		label: 'Bio',
 		required: false,
 		type: 'textarea',
+		minLength: REGISTER_BIO_MIN_LENGTH,
+		maxLength: REGISTER_BIO_MAX_LENGTH,
+		showCharacterCount: true,
 	},
 
 	{

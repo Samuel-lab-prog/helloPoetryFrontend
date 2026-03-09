@@ -130,7 +130,7 @@ export function MyPoemsSection({
 								<IconButton
 									aria-label='Abrir menu de a��es'
 									variant='solidPink'
-									size={{ base: 'xs', md: 'sm' }} 
+									size={{ base: 'xs', md: 'sm' }}
 									alignSelf={{ base: 'end', md: 'auto' }}
 								>
 									<EllipsisVertical />

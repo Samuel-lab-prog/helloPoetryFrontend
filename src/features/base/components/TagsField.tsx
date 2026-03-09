@@ -17,6 +17,7 @@ interface TagsFieldProps<T extends FieldValues> {
 	required?: boolean;
 	disabled?: boolean;
 	maxTags?: number;
+	maxTagLength?: number;
 	transformValue?: (value: string[]) => unknown;
 }
 
@@ -28,6 +29,7 @@ export function TagsField<T extends FieldValues>({
 	required,
 	disabled,
 	maxTags = 10,
+	maxTagLength,
 	transformValue,
 	placeholder,
 }: TagsFieldProps<T>) {
@@ -42,12 +44,14 @@ export function TagsField<T extends FieldValues>({
 		for (const rawTag of rawTags) {
 			const trimmed = rawTag.trim();
 			if (!trimmed) continue;
+			const normalizedTag = maxTagLength ? trimmed.slice(0, maxTagLength) : trimmed;
+			if (!normalizedTag) continue;
 
-			const dedupeKey = trimmed.toLocaleLowerCase();
+			const dedupeKey = normalizedTag.toLocaleLowerCase();
 			if (seen.has(dedupeKey)) continue;
 
 			seen.add(dedupeKey);
-			normalized.push(trimmed);
+			normalized.push(normalizedTag);
 
 			if (normalized.length >= maxTags) break;
 		}
@@ -172,6 +176,8 @@ export function TagsField<T extends FieldValues>({
 										}
 										bg='transparent'
 										color='text'
+										disabled={disabled || limitReached}
+										maxLength={maxTagLength}
 										_placeholder={{ color: 'pink.200' }}
 										onFocus={() => setIsFocused(true)}
 										onBlur={() => setIsFocused(false)}

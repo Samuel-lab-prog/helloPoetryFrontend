@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-assignment */
-import { Box, Field, Input, Textarea } from '@chakra-ui/react';
+import { Box, Field, Input, Text, Textarea } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import {
 	Controller,
@@ -20,6 +20,9 @@ interface Props<T extends FieldValues> {
 	error?: FieldError;
 	as?: 'input' | 'textarea';
 	rows?: number;
+	minLength?: number;
+	maxLength?: number;
+	showCharacterCount?: boolean;
 	disabled?: boolean;
 	type?: string;
 	transformValue?: (value: string) => unknown;
@@ -37,6 +40,9 @@ export function FormField<T extends FieldValues>({
 	error,
 	as = 'input',
 	rows,
+	minLength,
+	maxLength,
+	showCharacterCount = false,
 	type,
 	transformValue,
 	asyncValidator,
@@ -68,6 +74,10 @@ export function FormField<T extends FieldValues>({
 				const resolvedError = fieldState.error ?? error;
 				const errorMessage = resolvedError?.message?.toString();
 				const hasError = Boolean(errorMessage);
+				const valueAsString = typeof field.value === 'string' ? field.value : '';
+				const currentLength = valueAsString.length;
+				const isBelowMinLength = typeof minLength === 'number' && currentLength < minLength;
+				const shouldShowCharacterCount = showCharacterCount && typeof maxLength === 'number';
 
 				return (
 					<Field.Root required={required} invalid={hasError}>
@@ -104,6 +114,8 @@ export function FormField<T extends FieldValues>({
 							}}
 							autoFocus={autoFocus}
 							rows={as === 'textarea' ? rows : undefined}
+							minLength={minLength}
+							maxLength={maxLength}
 							type={type}
 							value={field.value ?? ''}
 							disabled={disabled}
@@ -164,6 +176,18 @@ export function FormField<T extends FieldValues>({
 								{errorMessage}
 							</Field.ErrorText>
 						</Box>
+
+						{shouldShowCharacterCount && (
+							<Text
+								textStyle='small'
+								color={isBelowMinLength ? 'error' : 'pink.300'}
+								w='full'
+								textAlign='right'
+								mt={1}
+							>
+								{currentLength}/{maxLength} caracteres
+							</Text>
+						)}
 					</Field.Root>
 				);
 			}}

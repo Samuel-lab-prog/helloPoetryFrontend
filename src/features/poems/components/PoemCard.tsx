@@ -123,4 +123,3 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 		</Card.Root>
 	);
 }
-

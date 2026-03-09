@@ -15,7 +15,7 @@ export function CreatePoemPage() {
 			</Flex>
 
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Flex direction='column' w='full' maxW='4xl'>
+				<Flex direction='column' w='full' maxW='xl'>
 					<CreatePoemForm />
 				</Flex>
 			</Flex>

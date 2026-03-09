@@ -1,6 +1,15 @@
 ﻿import { z } from 'zod';
 import { FORBIDDEN_WORDS } from '../../admin/constants/forbiddenWords';
 
+export const REGISTER_NICKNAME_MIN_LENGTH = 3;
+export const REGISTER_NICKNAME_MAX_LENGTH = 30;
+export const REGISTER_NAME_MIN_LENGTH = 3;
+export const REGISTER_NAME_MAX_LENGTH = 30;
+export const REGISTER_PASSWORD_MIN_LENGTH = 8;
+export const REGISTER_PASSWORD_MAX_LENGTH = 72;
+export const REGISTER_BIO_MIN_LENGTH = 0;
+export const REGISTER_BIO_MAX_LENGTH = 300;
+
 const LEET_CHAR_MAP: Record<string, string> = {
 	'0': 'o',
 	'1': 'i',
@@ -11,7 +20,7 @@ const LEET_CHAR_MAP: Record<string, string> = {
 	'8': 'b',
 	'9': 'g',
 	'@': 'a',
-	'$': 's',
+	$: 's',
 	'!': 'i',
 	'+': 't',
 };
@@ -46,17 +55,42 @@ export const registerSchema = z
 		nickname: z
 			.string()
 			.trim()
-			.min(3, 'Apelido deve ter pelo menos 3 caracteres')
-			.max(30, 'Apelido deve ter no máximo 30 caracteres')
+			.min(
+				REGISTER_NICKNAME_MIN_LENGTH,
+				`Apelido deve ter pelo menos ${REGISTER_NICKNAME_MIN_LENGTH} caracteres`,
+			)
+			.max(
+				REGISTER_NICKNAME_MAX_LENGTH,
+				`Apelido deve ter no máximo ${REGISTER_NICKNAME_MAX_LENGTH} caracteres`,
+			)
 			.regex(/^[a-zA-Z0-9_]+$/, 'Apelido pode conter apenas letras, números e underscores'),
 		name: z
 			.string()
 			.trim()
-			.min(3, 'Nome deve ter pelo menos 3 caracteres')
-			.max(30, 'Nome deve ter no máximo 30 caracteres'),
+			.min(
+				REGISTER_NAME_MIN_LENGTH,
+				`Nome deve ter pelo menos ${REGISTER_NAME_MIN_LENGTH} caracteres`,
+			)
+			.max(
+				REGISTER_NAME_MAX_LENGTH,
+				`Nome deve ter no máximo ${REGISTER_NAME_MAX_LENGTH} caracteres`,
+			),
 		email: z.email('E-mail inválido').trim(),
-		password: z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
-		bio: z.string().trim(),
+		password: z
+			.string()
+			.min(
+				REGISTER_PASSWORD_MIN_LENGTH,
+				`A senha deve ter pelo menos ${REGISTER_PASSWORD_MIN_LENGTH} caracteres`,
+			)
+			.max(
+				REGISTER_PASSWORD_MAX_LENGTH,
+				`A senha deve ter no máximo ${REGISTER_PASSWORD_MAX_LENGTH} caracteres`,
+			),
+		bio: z
+			.string()
+			.trim()
+			.min(REGISTER_BIO_MIN_LENGTH, `Bio deve ter pelo menos ${REGISTER_BIO_MIN_LENGTH} caracteres`)
+			.max(REGISTER_BIO_MAX_LENGTH, `Bio deve ter no máximo ${REGISTER_BIO_MAX_LENGTH} caracteres`),
 		avatarUrl: z.url('URL inválida').optional(),
 	})
 	.superRefine((data, ctx) => {

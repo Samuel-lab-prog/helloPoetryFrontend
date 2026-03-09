@@ -1,3 +1,4 @@
+﻿/* eslint-disable max-lines-per-function */
 import { Text, Heading, Box } from '@chakra-ui/react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
@@ -13,6 +14,16 @@ import {
 } from '@features/base';
 import { PoemHeader } from '@features/poems';
 import { UserDedicationCombobox } from './UserDedicationCombobox';
+import {
+	POEM_CONTENT_MAX_LENGTH,
+	POEM_CONTENT_MIN_LENGTH,
+	POEM_EXCERPT_MAX_LENGTH,
+	POEM_EXCERPT_MIN_LENGTH,
+	POEM_TAG_MAX_LENGTH,
+	POEM_TAGS_MAX_AMOUNT,
+	POEM_TITLE_MIN_LENGTH,
+	POEM_TITLE_MAX_LENGTH,
+} from '../constants/poemConstants';
 
 export function CreatePoemForm() {
 	const {
@@ -26,9 +37,16 @@ export function CreatePoemForm() {
 	} = useCreatePoemForm();
 	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
 	const preview = watch();
+	const titleLength = preview?.title?.length ?? 0;
+	const excerptLength = preview?.excerpt?.length ?? 0;
+	const contentLength = preview?.content?.length ?? 0;
+
+	const isTitleBelowMinLength = titleLength < POEM_TITLE_MIN_LENGTH;
+	const isExcerptBelowMinLength = excerptLength < POEM_EXCERPT_MIN_LENGTH;
+	const isContentBelowMinLength = contentLength < POEM_CONTENT_MIN_LENGTH;
 
 	const previewPoem = {
-		title: preview?.title || 'Título do poema',
+		title: preview?.title || 'Tí­tulo do poema',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -51,7 +69,22 @@ export function CreatePoemForm() {
 				{generalError && <Text color='red.500'>{generalError}</Text>}
 
 				<FieldContainer delay={40} hasError={!!errors.title}>
-					<FormField label='Título' required error={errors.title} control={control} name='title' />
+					<FormField
+						label='Tí­tulo'
+						required
+						error={errors.title}
+						control={control}
+						name='title'
+						maxLength={POEM_TITLE_MAX_LENGTH}
+					/>
+					<Text
+						textStyle='small'
+						color={isTitleBelowMinLength ? 'error' : 'pink.300'}
+						textAlign='right'
+						mt={1}
+					>
+						{titleLength}/{POEM_TITLE_MAX_LENGTH} caracteres
+					</Text>
 				</FieldContainer>
 
 				<FieldContainer delay={120} hasError={!!errors.excerpt}>
@@ -63,7 +96,16 @@ export function CreatePoemForm() {
 						control={control}
 						name='excerpt'
 						error={errors.excerpt}
+						maxLength={POEM_EXCERPT_MAX_LENGTH}
 					/>
+					<Text
+						textStyle='small'
+						color={isExcerptBelowMinLength ? 'error' : 'pink.300'}
+						textAlign='right'
+						mt={1}
+					>
+						{excerptLength}/{POEM_EXCERPT_MAX_LENGTH} caracteres
+					</Text>
 				</FieldContainer>
 
 				<FieldContainer delay={200} hasError={!!errors.content}>
@@ -75,7 +117,16 @@ export function CreatePoemForm() {
 						control={control}
 						name='content'
 						error={errors.content}
+						maxLength={POEM_CONTENT_MAX_LENGTH}
 					/>
+					<Text
+						textStyle='small'
+						color={isContentBelowMinLength ? 'error' : 'pink.300'}
+						textAlign='right'
+						mt={1}
+					>
+						{contentLength}/{POEM_CONTENT_MAX_LENGTH} caracteres
+					</Text>
 				</FieldContainer>
 
 				<FieldContainer delay={280} hasError={!!errors.tags}>
@@ -85,6 +136,8 @@ export function CreatePoemForm() {
 						name='tags'
 						error={errors.tags}
 						disabled={isPending}
+						maxTags={POEM_TAGS_MAX_AMOUNT}
+						maxTagLength={POEM_TAG_MAX_LENGTH}
 						placeholder='Adicione suas tags'
 					/>
 				</FieldContainer>
@@ -153,13 +206,13 @@ export function CreatePoemForm() {
 			</FormCard>
 
 			<Heading as='h2' textStyle='h2' mt={12}>
-				Pré-visualização
+				Preview
 			</Heading>
 
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formulário para ver a pré-visualização do poema
+						Preencha o formulário para ver o preview do poema
 					</Box>
 				) : (
 					<>

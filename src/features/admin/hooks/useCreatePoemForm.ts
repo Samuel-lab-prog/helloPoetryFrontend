@@ -53,7 +53,7 @@ function handleCreatePoemError(
 ) {
 	const error = err as AppError;
 	const status = error?.statusCode;
-	const message = error?.errorMessages?.join(' ');
+	const message = error?.message;
 
 	if (status === 401) {
 		setGeneralError('Você não tem permissao para criar poemas.');
