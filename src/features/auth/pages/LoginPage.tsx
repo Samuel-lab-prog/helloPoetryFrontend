@@ -11,6 +11,7 @@ export function LoginPage() {
 				align='center'
 				justify='center'
 				mt='120px'
+				
 			>
 				<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 					<Heading as='h1' textStyle='h1' color='accent'>

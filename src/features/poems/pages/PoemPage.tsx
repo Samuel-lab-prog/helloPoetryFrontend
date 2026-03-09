@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
@@ -66,7 +65,7 @@ const PoemAuthorCard = memo(function PoemAuthorCard({
 					@{author.nickname}
 				</Text>
 				<Text textStyle='smaller' color='pink.200'>
-					Curtidas: {stats.likesCount} | Comentários: {stats.commentsCount}
+					Curtidas: {stats.likesCount} | Comentï¿½rios: {stats.commentsCount}
 				</Text>
 			</Flex>
 
@@ -218,14 +217,14 @@ const CommentsSection = memo(function CommentsSection({
 			bg='rgba(255, 255, 255, 0.03)'
 		>
 			<Heading as='h2' textStyle='h3' mb={4}>
-				Comentários
+				Comentï¿½rios
 			</Heading>
 
 			<Flex direction='column' gap={3} mb={6}>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Escreva um comentário (1-300 caracteres)'
+					placeholder='Escreva um comentï¿½rio (1-300 caracteres)'
 					rows={4}
 					maxLength={300}
 					disabled={!poemIsCommentable || isCreatingComment}
@@ -242,12 +241,12 @@ const CommentsSection = memo(function CommentsSection({
 							void onPublishComment();
 						}}
 					>
-						Publicar comentário
+						Publicar comentï¿½rio
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>
-						Comentários desativados para este poema.
+						Comentï¿½rios desativados para este poema.
 					</Text>
 				)}
 			</Flex>
@@ -256,8 +255,8 @@ const CommentsSection = memo(function CommentsSection({
 				isLoading={isLoadingComments}
 				isError={isCommentsError}
 				isEmpty={comments.length === 0}
-				loadingElement={<Text textStyle='body'>Carregando comentários...</Text>}
-				errorElement={<Text textStyle='body'>Erro ao carregar comentários.</Text>}
+				loadingElement={<Text textStyle='body'>Carregando comentï¿½rios...</Text>}
+				errorElement={<Text textStyle='body'>Erro ao carregar comentï¿½rios.</Text>}
 				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
 			>
 				<Flex direction='column' gap={3}>
@@ -353,7 +352,7 @@ export function PoemPage() {
 					toaster.create({
 						type: 'error',
 						title: 'Erro ao carregar respostas',
-						description: 'Não foi possivel buscar algumas respostas.',
+						description: 'Nï¿½o foi possivel buscar algumas respostas.',
 						closable: true,
 					});
 				})
@@ -373,7 +372,7 @@ export function PoemPage() {
 		shownErrorsRef.current[key] = message;
 		toaster.create({
 			type: 'error',
-			title: 'Operação falhou',
+			title: 'Operaï¿½ï¿½o falhou',
 			description: message,
 			closable: true,
 		});
@@ -408,7 +407,7 @@ export function PoemPage() {
 			setCommentInput('');
 			toaster.create({
 				type: 'success',
-				title: 'Comentário publicado',
+				title: 'Comentï¿½rio publicado',
 				closable: true,
 			});
 		} catch {
@@ -468,7 +467,7 @@ export function PoemPage() {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>ID de poema inválido.</Box>
+					<Box textStyle='body'>ID de poema invï¿½lido.</Box>
 				</Box>
 			</Flex>
 		);
@@ -481,7 +480,7 @@ export function PoemPage() {
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
-					emptyElement={<Box textStyle='body'>Poema não encontrado</Box>}
+					emptyElement={<Box textStyle='body'>Poema nï¿½o encontrado</Box>}
 					errorElement={
 						<Box textStyle='body'>Erro ao carregar o poema. Tente novamente mais tarde</Box>
 					}

@@ -45,7 +45,7 @@ export function HomePage() {
 	return (
 		<Flex direction='column' minH='100%'>
 			<Flex as='main' layerStyle='main' direction='column' flex='1'>
-				<VStack as='section' w='full' maxW='6xl' mx='auto' align='stretch' gap={{ base: 6, md: 8 }}>
+				<VStack as='section' w='full' align='stretch' gap={{ base: 6, md: 8 }}>
 					<Surface>
 						<VStack align='start' gap={2}>
 							<Heading as='h1' textStyle='h2'>
@@ -60,9 +60,6 @@ export function HomePage() {
 							isLoading={isLoading}
 							isError={isError}
 							isEmpty={!poems || poems.length === 0}
-							emptyElement={<Flex>Nenhum poema encontrado</Flex>}
-							errorElement={<Flex>Erro ao carregar poemas</Flex>}
-							loadingElement={<Flex>Carregando poemas...</Flex>}
 						>
 							<PoemGrid>
 								{poems.map((poem) => (

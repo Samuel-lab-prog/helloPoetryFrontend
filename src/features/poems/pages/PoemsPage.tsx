@@ -39,9 +39,6 @@ export function PoemsPage() {
 					isError={isError}
 					isEmpty={poems?.length === 0 && !isLoading}
 					isLoading={isLoading}
-					emptyElement={<Flex textStyle='body'>Nenhum poema encontrado</Flex>}
-					errorElement={<Flex textStyle='body'>Erro ao carregar poemas</Flex>}
-					loadingElement={<Flex textStyle='body'>Carregando poemas...</Flex>}
 				>
 					<PoemGrid>
 						{poems.map((poem) => (
