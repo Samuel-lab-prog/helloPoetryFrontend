@@ -1,4 +1,4 @@
-import { Card, Text, Badge, Flex, Link, Box } from '@chakra-ui/react';
+﻿import { Card, Text, Badge, Flex, Link, Box, Avatar } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import type { PoemPreviewType } from '../types';
 
@@ -31,10 +31,11 @@ function formatRelativeTime(input?: string | Date) {
 
 export function PoemCard({ poem }: PoemCardProps) {
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
+	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
 
 	return (
 		<Card.Root
-			p={5}
+			p={6}
 			h='full'
 			border='1px solid'
 			borderColor='purple.700'
@@ -67,7 +68,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header p={0} mb={3} gap={3}>
+			<Card.Header p={0} mb={4} gap={2}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poema
 				</Badge>
@@ -77,22 +78,36 @@ export function PoemCard({ poem }: PoemCardProps) {
 			</Card.Header>
 
 			<Card.Body p={0} flex='1'>
-				<Flex direction='column' gap={2}>
-					<Flex align='center' gap={2} wrap='wrap'>
-						<Text textStyle='small' color='pink.100'>
-							{poem.author.name}
-						</Text>
-						<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
-							<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-						</Link>
-						{relativeCreatedAt && (
-							<Text textStyle='smaller' color='pink.300'>
-								• {relativeCreatedAt}
+				<Flex direction='column' gap={4}>
+					<Flex align='center' gap={3}>
+						<Avatar.Root size='xs'>
+							<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+							<Avatar.Fallback name={poem.author.nickname} />
+						</Avatar.Root>
+						<Flex direction='column' minW={0} gap={0.5}>
+							<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+								{poem.author.name}
 							</Text>
-						)}
+							<Flex align='center' gap={2} wrap='wrap'>
+								<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
+									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
+								</Link>
+								{typeof likesCount === 'number' && (
+									<Text textStyle='smaller' color='pink.300'>
+										• {likesCount} curtidas
+									</Text>
+								)}
+								{relativeCreatedAt && (
+									<Text textStyle='smaller' color='pink.300'>
+										• {relativeCreatedAt}
+									</Text>
+								)}
+							</Flex>
+						</Flex>
 					</Flex>
+
 					{poem.tags.length > 0 && (
-						<Flex mt={1} gap={2} wrap='wrap'>
+						<Flex gap={2} wrap='wrap'>
 							{poem.tags.slice(0, 4).map((tag) => (
 								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
 									#{tag.name}
@@ -103,7 +118,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				</Flex>
 			</Card.Body>
 
-			<Card.Footer p={0} justifyContent='flex-end' mt={3}>
+			<Card.Footer p={0} justifyContent='flex-end' mt={5}>
 				<Link
 					asChild
 					textStyle='small'
@@ -126,3 +141,4 @@ export function PoemCard({ poem }: PoemCardProps) {
 		</Card.Root>
 	);
 }
+

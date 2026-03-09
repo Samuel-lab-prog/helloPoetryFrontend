@@ -36,6 +36,10 @@ export type PoemPreviewType = {
 	slug: string;
 	id: number;
 	createdAt?: string | Date;
+	likesCount?: number;
+	stats?: {
+		likesCount?: number;
+	};
 	tags: {
 		id: number;
 		name: string;
