@@ -21,11 +21,12 @@ import {
 } from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
 import { AsyncState, Surface, formatDate } from '@features/base';
-import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
+import { useAuthClientStore } from '@features/auth';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 import { useFriendRequestActions } from '@features/interactions';
 import { useMyPoems, usePoemCollections, useSavedPoems } from '@features/poems';
+import { eventBus } from '@root/core/events/eventBus';
 
 function translateStatus(status: string) {
 	switch (status) {
@@ -150,7 +151,13 @@ export function MyProfilePage() {
 						size={{ base: 'sm', md: 'md' }}
 						variant='solidPink'
 						onClick={() => {
+							const authClient = useAuthClientStore.getState().authClient;
 							clearAuthClient();
+							void eventBus.publish('userLoggedOut', {
+								userId: authClient?.id ?? null,
+								reason: 'manual',
+								loggedOutAt: new Date().toISOString(),
+							});
 							navigate('/login');
 						}}
 					>
@@ -299,7 +306,7 @@ export function MyProfilePage() {
 									<Text textStyle='smaller' color='pink.200'>
 										Poemas
 									</Text>
-									<Text textStyle='h3'>{profile.stats?.poemsIds?.length ?? 0}</Text>
+									<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
 								</Box>
 								<Box
 									p={4}
@@ -323,7 +330,7 @@ export function MyProfilePage() {
 									<Text textStyle='smaller' color='pink.200'>
 										Amigos
 									</Text>
-									<Text textStyle='h3'>{profile.stats?.friendsIds?.length ?? 0}</Text>
+									<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
 								</Box>
 							</Grid>
 

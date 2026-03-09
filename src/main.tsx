@@ -6,8 +6,10 @@ import App from './App.tsx';
 import { system } from '@themes/main';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ColorModeProvider } from './components/ui/color-mode.tsx';
+import { registerEventListeners } from '@root/core/events/registerEventListeners';
 
 const queryClient = new QueryClient();
+registerEventListeners(queryClient);
 
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>

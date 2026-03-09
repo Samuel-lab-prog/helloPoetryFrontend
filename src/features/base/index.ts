@@ -3,6 +3,7 @@
  */
 
 export * from './components/AsyncState';
+export * from './components/Button';
 export * from './components/Footer';
 export * from './components/MarkdownRender';
 export * from './components/Navbar';

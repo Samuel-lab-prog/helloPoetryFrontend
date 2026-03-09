@@ -7,7 +7,11 @@ import { useMutation } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 import { useAuthClientStore, type AuthClient } from '../stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
+// eslint-disable-next-line no-restricted-imports
 import { getUnreadNotificationsCount } from '@features/users/utils/getUnreadNotificationsCount';
+import { eventBus } from '@root/core/events/eventBus';
+
+const FEED_ROUTE = '/';
 
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -38,7 +42,18 @@ export function useLoginForm() {
 				// If unread count fails, keep login successful and fallback to zero.
 			}
 
-			navigate('/');
+			void eventBus
+				.publish('userLoggedIn', {
+					userId: client.id,
+					role: client.role,
+					status: client.status,
+					loggedInAt: new Date().toISOString(),
+				})
+				.catch(() => {
+					// Do not block login redirect if listeners fail.
+				});
+
+			navigate(FEED_ROUTE, { replace: true });
 		},
 
 		onError: (err: unknown) => {

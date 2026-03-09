@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
+import { useAuthClientStore } from '@features/auth';
 
 type MyProfileType = {
 	id: number;
@@ -13,20 +13,14 @@ type MyProfileType = {
 	email: string;
 	emailVerifiedAt: string | null;
 	stats: {
-		poemsIds: number[];
-		commentsIds: number[];
-		friendsIds: number[];
+		poems: {
+			id: number;
+			title: string;
+		}[];
+		friends: {
+			id: number;
+		}[];
 	};
-	friendshipRequestsReceived: {
-		requesterId: number;
-		requesterNickname: string;
-		requesterAvatarUrl: string | null;
-	}[];
-	friendshipRequestsSent: {
-		addresseeId: number;
-		addresseeNickname: string;
-		addresseeAvatarUrl: string | null;
-	}[];
 	blockedUsersIds: number[];
 };
 
@@ -36,6 +30,7 @@ export function useMyProfile() {
 	const query = useQuery({
 		queryKey: ['my-profile', clientId],
 		enabled: !!clientId,
+		staleTime: Infinity,
 		queryFn: () =>
 			createHTTPRequest<MyProfileType>({
 				path: '/users',

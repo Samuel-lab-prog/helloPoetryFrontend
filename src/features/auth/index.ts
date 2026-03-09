@@ -12,3 +12,4 @@ export * from './pages/RegisterPage';
 export * from './schemas/loginSchema';
 export * from './schemas/registerSchema';
 export * from './stores/useAuthClientStore';
+export * from './stores/useUserBootstrapStore';

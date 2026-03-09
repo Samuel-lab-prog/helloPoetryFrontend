@@ -12,3 +12,4 @@ export * from './pages/AuthorPage';
 export * from './pages/MyProfilePage';
 export * from './pages/NotificationsPage';
 export * from './pages/PoetsPage';
+export * from './utils/getUnreadNotificationsCount';

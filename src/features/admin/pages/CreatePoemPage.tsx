@@ -10,9 +10,7 @@ export function CreatePoemPage() {
 						Criar Poema
 					</Heading>
 
-					<Text color='pink.100'>
-						Preencha os campos para publicar um novo poema.
-					</Text>
+					<Text color='pink.100'>Preencha os campos para publicar um novo poema.</Text>
 				</Flex>
 			</Flex>
 

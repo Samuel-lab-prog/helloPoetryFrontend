@@ -1,8 +1,9 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { Center, Spinner, Heading, Text } from '@chakra-ui/react';
 import { createHTTPRequest, type AppError } from '@features/base';
+import { eventBus } from '@root/core/events/eventBus';
 
 export function ProtectedRoutePage() {
 	const navigate = useNavigate();
@@ -18,6 +19,10 @@ export function ProtectedRoutePage() {
 	});
 
 	useEffect(() => {
+		const unsubscribe = eventBus.subscribe('userLoggedOut', () => {
+			navigate('/login');
+		});
+
 		async function authUser() {
 			try {
 				await authenticate();
@@ -31,6 +36,8 @@ export function ProtectedRoutePage() {
 		}
 
 		authUser();
+
+		return unsubscribe;
 	}, [authenticate, navigate]);
 
 	if (isAuthenticated === null)
@@ -48,7 +55,7 @@ export function ProtectedRoutePage() {
 			<Heading mb={4} size='lg'>
 				Boa tentativa!
 			</Heading>
-			<Text>Você não tem acesso a esta página.</Text>
+			<Text>Voc� n�o tem acesso a esta p�gina.</Text>
 		</Center>
 	);
 }

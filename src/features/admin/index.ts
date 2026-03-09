@@ -5,6 +5,7 @@
 export * from './components/CreatePoemForm';
 export * from './components/DeletePoemForm';
 export * from './components/UpdatePoemForm';
+export * from './components/UserDedicationCombobox';
 export * from './hooks/useCreatePoemForm';
 export * from './hooks/useDeletePoemForm';
 export * from './hooks/usePoemsMinimal';
