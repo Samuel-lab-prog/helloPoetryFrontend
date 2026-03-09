@@ -48,7 +48,7 @@ export type PoemPreviewType = {
 		id: number;
 		name: string;
 		nickname: string;
-		avatarUrl: string;
+		avatarUrl: string | null;
 	};
 };
 

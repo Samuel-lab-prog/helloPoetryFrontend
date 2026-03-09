@@ -1,10 +1,24 @@
-import { Avatar, Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/react';
-import { NavLink, useParams } from 'react-router-dom';
+import { Avatar, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
+import { PoemCard, PoemGrid } from '@features/poems';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
 import { useAuthorPoems } from '../../poems/hooks/useAuthorPoems';
+import type { FullPoemType, PoemPreviewType } from '../../poems/types';
+
+function toPreviewPoem(poem: FullPoemType): PoemPreviewType {
+	return {
+		id: poem.id,
+		title: poem.title,
+		slug: poem.slug,
+		createdAt: poem.createdAt,
+		likesCount: poem.stats?.likesCount,
+		tags: poem.tags,
+		author: poem.author,
+	};
+}
 
 export function AuthorPage() {
 	const { id } = useParams<{ id: string }>();
@@ -98,40 +112,58 @@ export function AuthorPage() {
 			</Box>
 
 			<Box w='full' maxW='4xl'>
-				<Heading as='h2' textStyle='h3' mb={4}>
-					Poemas do autor
-				</Heading>
+				<Flex align='center' justify='space-between' gap={3} mb={4} wrap='wrap'>
+					<Heading as='h2' textStyle='h3'>
+						Poemas do autor
+					</Heading>
+					<Text textStyle='small' color='pink.200'>
+						{poems.length} {poems.length === 1 ? 'poema' : 'poemas'}
+					</Text>
+				</Flex>
 
 				<AsyncState
 					isLoading={isPoemasLoading}
 					isError={isPoemasError}
 					isEmpty={poems.length === 0}
-					loadingElement={<Text textStyle='body'>Carregando poemas...</Text>}
-					errorElement={<Text textStyle='body'>Erro ao carregar poemas.</Text>}
-					emptyElement={<Text textStyle='body'>Sem poemas publicados.</Text>}
+					loadingElement={
+						<Flex
+							p={6}
+							border='1px solid'
+							borderColor='purple.700'
+							borderRadius='xl'
+							bg='rgba(255, 255, 255, 0.02)'
+						>
+							<Text textStyle='body'>Carregando poemas...</Text>
+						</Flex>
+					}
+					errorElement={
+						<Flex
+							p={6}
+							border='1px solid'
+							borderColor='purple.700'
+							borderRadius='xl'
+							bg='rgba(255, 255, 255, 0.02)'
+						>
+							<Text textStyle='body'>Erro ao carregar poemas.</Text>
+						</Flex>
+					}
+					emptyElement={
+						<Flex
+							p={6}
+							border='1px solid'
+							borderColor='purple.700'
+							borderRadius='xl'
+							bg='rgba(255, 255, 255, 0.02)'
+						>
+							<Text textStyle='body'>Sem poemas publicados.</Text>
+						</Flex>
+					}
 				>
-					<Flex direction='column' gap={3}>
+					<PoemGrid>
 						{poems.map((poem) => (
-							<Box
-								key={poem.id}
-								p={4}
-								border='1px solid'
-								borderColor='purple.700'
-								borderRadius='lg'
-								bg='rgba(255, 255, 255, 0.02)'
-							>
-								<Heading as='h3' textStyle='h4' mb={2}>
-									{poem.title}
-								</Heading>
-								<Text textStyle='small' mb={3}>
-									{poem.excerpt}
-								</Text>
-								<Link asChild textStyle='small' color='pink.100'>
-									<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Abrir poema</NavLink>
-								</Link>
-							</Box>
+							<PoemCard key={poem.id} poem={toPreviewPoem(poem)} hideAuthorMeta />
 						))}
-					</Flex>
+					</PoemGrid>
 				</AsyncState>
 			</Box>
 		</Flex>

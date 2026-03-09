@@ -4,6 +4,7 @@ import type { PoemPreviewType } from '../types';
 
 type PoemCardProps = {
 	poem: PoemPreviewType;
+	hideAuthorMeta?: boolean;
 };
 
 function formatRelativeTime(input?: string | Date) {
@@ -29,7 +30,7 @@ function formatRelativeTime(input?: string | Date) {
 	return `${Math.floor(diffMs / year)}a atrás`;
 }
 
-export function PoemCard({ poem }: PoemCardProps) {
+export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
 	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
 
@@ -68,7 +69,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header p={0} mb={4} gap={2}>
+			<Card.Header p={0} mb={5} gap={2}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poema
 				</Badge>
@@ -78,32 +79,35 @@ export function PoemCard({ poem }: PoemCardProps) {
 			</Card.Header>
 
 			<Card.Body p={0} flex='1'>
-				<Flex direction='column' gap={4}>
-					<Flex align='center' gap={3}>
-						<Avatar.Root size='xs'>
-							<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-							<Avatar.Fallback name={poem.author.nickname} />
-						</Avatar.Root>
-						<Flex direction='column' minW={0} gap={0.5}>
-							<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-								{poem.author.name}
-							</Text>
-							<Flex align='center' gap={2} wrap='wrap'>
-								<Link asChild textStyle='smaller' color='pink.200' opacity={0.8}>
+				<Flex direction='column' gap={3}>
+					{!hideAuthorMeta && (
+						<Flex align='center' gap={2}>
+							<Avatar.Root size='sm'>
+								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+								<Avatar.Fallback name={poem.author.nickname} />
+							</Avatar.Root>
+							<Flex direction='column' minW={0} gap={0}>
+								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+									{poem.author.name}
+								</Text>
+								<Link asChild textStyle='smaller' color='pink.200' opacity={0.9}>
 									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
 								</Link>
-								{typeof likesCount === 'number' && (
-									<Text textStyle='smaller' color='pink.300'>
-										• {likesCount} curtidas
-									</Text>
-								)}
-								{relativeCreatedAt && (
-									<Text textStyle='smaller' color='pink.300'>
-										• {relativeCreatedAt}
-									</Text>
-								)}
 							</Flex>
 						</Flex>
+					)}
+
+					<Flex align='center' gap={0} wrap='wrap'>
+						{typeof likesCount === 'number' && (
+							<Badge size='sm' colorPalette='pink' variant='outline'>
+								{likesCount} curtidas
+							</Badge>
+						)}
+						{relativeCreatedAt && (
+							<Text textStyle='smaller' color='pink.300'>
+								{relativeCreatedAt}
+							</Text>
+						)}
 					</Flex>
 
 					{poem.tags.length > 0 && (
@@ -118,7 +122,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				</Flex>
 			</Card.Body>
 
-			<Card.Footer p={0} justifyContent='flex-end' mt={5}>
+			<Card.Footer p={0} justifyContent='flex-end' mt={6}>
 				<Link
 					asChild
 					textStyle='small'
