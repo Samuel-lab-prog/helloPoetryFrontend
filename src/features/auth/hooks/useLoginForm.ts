@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { createHTTPRequest, type AppErrorType } from '@features/base';
-import { useAuthClientStore, type AuthClient } from '@root/core/stores/useAuthClientStore';
+import { type AuthClient } from '@root/core/stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
 import { eventBus } from '@root/core/events/eventBus';
 
@@ -29,21 +29,12 @@ export function useLoginForm() {
 			}),
 
 		onSuccess: async (client) => {
-			const authStore = useAuthClientStore.getState();
-			authStore.setAuthClient(client);
-			authStore.setUnreadNotificationsCount(0);
-
-			try {
-				await eventBus.publish('userLoggedIn', {
-					userId: client.id,
-					role: client.role,
-					status: client.status,
-					loggedInAt: new Date().toISOString(),
-				});
-			} catch {
-				// Do not block login if any listener fails.
-			}
-
+			await eventBus.publish('userLoggedIn', {
+				userId: client.id,
+				role: client.role,
+				status: client.status,
+				loggedInAt: new Date().toISOString(),
+			});
 			navigate(FEED_ROUTE, { replace: true });
 		},
 
