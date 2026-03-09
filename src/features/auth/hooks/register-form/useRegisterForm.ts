@@ -4,8 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { createHTTPRequest, type AppErrorType } from '@features/base';
-import { registerSchema, type RegisterDataType } from '../schemas/registerSchema';
+import { createHTTPRequest } from '@features/base';
+import { registerSchema, type RegisterDataType } from '../../schemas/registerSchema';
+import { handleRegisterError } from './handleRegisterError';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -32,29 +33,7 @@ export function useRegisterForm() {
 		},
 
 		onError: (err: unknown) => {
-			const error = err as AppErrorType;
-
-			if (error.statusCode === 409) {
-				const msg = error.message?.toLowerCase() ?? '';
-
-				if (msg.includes('nickname')) {
-					form.setError('nickname', {
-						type: 'manual',
-						message: 'Apelido já está em uso',
-					});
-				}
-
-				if (msg.includes('email')) {
-					form.setError('email', {
-						type: 'manual',
-						message: 'E-mail já está em uso',
-					});
-				}
-
-				return;
-			}
-
-			setGeneralError('Erro de rede. Tente novamente.');
+			handleRegisterError(err, form.setError, setGeneralError);
 		},
 	});
 

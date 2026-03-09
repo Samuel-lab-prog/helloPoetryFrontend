@@ -1,5 +1,10 @@
-﻿import { DynamicForm, type Field, createHTTPRequest } from '@features/base';
-import { useRegisterForm } from '../hooks/useRegisterForm';
+﻿import { DynamicForm, type Field } from '@features/base';
+import {
+	useRegisterForm,
+	checkEmailAvailability,
+	checkNicknameAvailability,
+} from '../hooks/register-form';
+
 import {
 	REGISTER_BIO_MAX_LENGTH,
 	REGISTER_BIO_MIN_LENGTH,
@@ -9,29 +14,8 @@ import {
 	REGISTER_NICKNAME_MIN_LENGTH,
 	REGISTER_PASSWORD_MAX_LENGTH,
 	REGISTER_PASSWORD_MIN_LENGTH,
-	type RegisterDataType,
-} from '../schemas/registerSchema';
-
-async function checkNicknameAvailability(nickname: string): Promise<string | null> {
-	if (!nickname || nickname.length < REGISTER_NICKNAME_MIN_LENGTH) return null;
-	const res = await createHTTPRequest<boolean>({
-		path: `/users/check-nickname`,
-		query: { nickname: String(nickname) },
-		method: 'GET',
-	});
-	return res ? 'Apelido já está em uso' : null;
-}
-
-async function checkEmailAvailability(email: string): Promise<string | null> {
-	if (!email || email.length < 5) return null;
-
-	const res = await createHTTPRequest<boolean>({
-		path: `/users/check-email`,
-		query: { email: String(email) },
-		method: 'GET',
-	});
-	return res ? 'E-mail já está em uso' : null;
-}
+} from '../schemas/constants';
+import type { RegisterDataType } from '../schemas/registerSchema';
 
 const registerFields: Field<RegisterDataType>[] = [
 	{

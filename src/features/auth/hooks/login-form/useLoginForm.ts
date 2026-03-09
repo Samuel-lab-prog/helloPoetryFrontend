@@ -1,13 +1,14 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { createHTTPRequest } from '@features/base';
 import { type AuthClient } from '@root/core/stores/useAuthClientStore';
-import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
+import { loginSchema, type LoginDataType } from '../../schemas/loginSchema';
 import { eventBus } from '@root/core/events/eventBus';
+import { handleLoginError } from './handleLoginError';
 
 const FEED_ROUTE = '/';
 
@@ -39,26 +40,7 @@ export function useLoginForm() {
 		},
 
 		onError: (err: unknown) => {
-			const error = err as AppErrorType;
-
-			if (error.statusCode === 401) {
-				form.setError('email', {
-					type: 'manual',
-					message: 'Credenciais incorretas',
-				});
-				form.setError('password', {
-					type: 'manual',
-					message: 'Credenciais incorretas',
-				});
-				return;
-			}
-
-			if (error.statusCode === 429) {
-				setGeneralError('Muitas tentativas. Por favor, tente novamente mais tarde.');
-				return;
-			}
-
-			setGeneralError('Erro de rede, por favor tente novamente.');
+			handleLoginError(err, form.setError, setGeneralError);
 		},
 	});
 

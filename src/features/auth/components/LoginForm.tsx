@@ -1,4 +1,4 @@
-﻿import { useLoginForm } from '../hooks/useLoginForm';
+﻿import { useLoginForm } from '../hooks/login-form';
 import type { LoginDataType } from '../schemas/loginSchema';
 import { DynamicForm, type Field } from '@features/base';
 
@@ -25,3 +25,4 @@ export function LoginForm() {
 		/>
 	);
 }
+

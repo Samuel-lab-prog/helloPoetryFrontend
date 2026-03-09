@@ -4,8 +4,8 @@
 
 export * from './components/LoginForm';
 export * from './components/RegisterForm';
-export * from './hooks/useLoginForm';
-export * from './hooks/useRegisterForm';
+export * from './hooks/login-form';
+export * from './hooks/register-form';
 export * from './pages/LoginPage';
 export * from './pages/RegisterPage';
 export * from './schemas/loginSchema';

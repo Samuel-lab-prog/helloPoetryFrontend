@@ -1,54 +1,15 @@
 ﻿import { z } from 'zod';
-import { FORBIDDEN_WORDS } from '@features/base';
-
-export const REGISTER_NICKNAME_MIN_LENGTH = 3;
-export const REGISTER_NICKNAME_MAX_LENGTH = 30;
-export const REGISTER_NAME_MIN_LENGTH = 3;
-export const REGISTER_NAME_MAX_LENGTH = 30;
-export const REGISTER_PASSWORD_MIN_LENGTH = 8;
-export const REGISTER_PASSWORD_MAX_LENGTH = 30;
-export const REGISTER_BIO_MIN_LENGTH = 0;
-export const REGISTER_BIO_MAX_LENGTH = 300;
-
-const LEET_CHAR_MAP: Record<string, string> = {
-	'0': 'o',
-	'1': 'i',
-	'3': 'e',
-	'4': 'a',
-	'5': 's',
-	'7': 't',
-	'8': 'b',
-	'9': 'g',
-	'@': 'a',
-	$: 's',
-	'!': 'i',
-	'+': 't',
-};
-
-function normalizeText(value: string) {
-	return value
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/[01345789@!$+]/g, (char) => LEET_CHAR_MAP[char] ?? char)
-		.replace(/[^a-z0-9\s]/g, ' ');
-}
-
-function simplifyRepeatedLetters(token: string) {
-	return token.replace(/(.)\1+/g, '$1');
-}
-
-function findForbiddenWords(value: string) {
-	const baseTokens = normalizeText(value).split(/\s+/).filter(Boolean);
-	const normalizedTokens = new Set<string>();
-
-	for (const token of baseTokens) {
-		normalizedTokens.add(token);
-		normalizedTokens.add(simplifyRepeatedLetters(token));
-	}
-
-	return FORBIDDEN_WORDS.filter((word) => normalizedTokens.has(word));
-}
+import { findForbiddenWords } from '@features/base';
+import {
+	REGISTER_BIO_MAX_LENGTH,
+	REGISTER_BIO_MIN_LENGTH,
+	REGISTER_NAME_MAX_LENGTH,
+	REGISTER_NAME_MIN_LENGTH,
+	REGISTER_NICKNAME_MAX_LENGTH,
+	REGISTER_NICKNAME_MIN_LENGTH,
+	REGISTER_PASSWORD_MAX_LENGTH,
+	REGISTER_PASSWORD_MIN_LENGTH,
+} from './constants';
 
 export const registerSchema = z
 	.object({
