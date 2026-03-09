@@ -117,7 +117,12 @@ export function MyProfilePage() {
 								animationDelay='60ms'
 							>
 								<FriendRequestsSection
-									friendRequests={friendRequests}
+									friendRequests={{
+										...friendRequests,
+										received: friendRequests.received.slice(0, 3),
+									}}
+									totalReceivedCount={friendRequests.received.length}
+									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}
 									isAccepting={isAccepting}
@@ -140,7 +145,9 @@ export function MyProfilePage() {
 								animationDelay='90ms'
 							>
 								<MyPoemsSection
-									myPoems={myPoems}
+									myPoems={myPoems.slice(0, 3)}
+									totalPoemsCount={myPoems.length}
+									viewAllHref='/my-profile/poems'
 									isLoadingMyPoems={isLoadingMyPoems}
 									isMyPoemsError={isMyPoemsError}
 									onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}

@@ -1,5 +1,6 @@
-import { Badge, Flex, Heading, HStack, IconButton, Menu, Portal, Text } from '@chakra-ui/react';
+import { Badge, Flex, Heading, HStack, IconButton, Link, Menu, Portal, Text } from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 import { Surface, formatDate } from '@features/base';
 import type { MyPoemsSectionProps } from './types';
 
@@ -31,6 +32,8 @@ function translateVisibility(visibility: string) {
 
 export function MyPoemsSection({
 	myPoems,
+	totalPoemsCount,
+	viewAllHref,
 	isLoadingMyPoems,
 	isMyPoemsError,
 	onOpenPoem,
@@ -39,9 +42,16 @@ export function MyPoemsSection({
 }: MyPoemsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Meus poemas
-			</Heading>
+			<Flex align='center' justify='space-between' gap={3} mb={4}>
+				<Heading as='h2' textStyle='h4' color='pink.300'>
+					Meus poemas
+				</Heading>
+				{viewAllHref && (totalPoemsCount ?? myPoems.length) > myPoems.length && (
+					<Link asChild textStyle='small' color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>
+						<NavLink to={viewAllHref}>Ver todos</NavLink>
+					</Link>
+				)}
+			</Flex>
 
 			<Flex direction='column' gap={3}>
 				{isLoadingMyPoems && <Text textStyle='small'>Carregando meus poemas...</Text>}

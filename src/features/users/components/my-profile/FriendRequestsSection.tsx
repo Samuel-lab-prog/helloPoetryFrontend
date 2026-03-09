@@ -6,6 +6,8 @@ import type { FriendRequestsSectionProps } from './types';
 
 export function FriendRequestsSection({
 	friendRequests,
+	totalReceivedCount,
+	viewAllHref,
 	isFriendRequestsLoading,
 	isFriendRequestsError,
 	isAccepting,
@@ -16,16 +18,23 @@ export function FriendRequestsSection({
 }: FriendRequestsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Solicitações de amizade recebidas
-			</Heading>
+			<Flex align='center' justify='space-between' gap={3} mb={4}>
+				<Heading as='h2' textStyle='h4' color='pink.300'>
+					Solicitacoes de amizade recebidas
+				</Heading>
+				{viewAllHref && (
+					<Link asChild textStyle='small' color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>
+						<NavLink to={viewAllHref}>Ver todas</NavLink>
+					</Link>
+				)}
+			</Flex>
 
 			<Flex direction='column' gap={3}>
-				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitações...</Text>}
+				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitacoes...</Text>}
 				{!isFriendRequestsLoading && !isFriendRequestsError && friendRequests.received.length === 0 && (
-					<Text textStyle='small'>Nenhuma solicitação pendente.</Text>
+					<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
 				)}
-				{isFriendRequestsError && <Text textStyle='small' color='red.400'>Erro ao carregar solicitações.</Text>}
+				{isFriendRequestsError && <Text textStyle='small' color='red.400'>Erro ao carregar solicitacoes.</Text>}
 
 				{friendRequests.received.map((request, index) => (
 					<Flex
@@ -74,7 +83,7 @@ export function FriendRequestsSection({
 						</HStack>
 						<Flex gap={2}>
 							<IconButton
-								aria-label='Aceitar solicitação'
+								aria-label='Aceitar solicitacao'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								onClick={() => onAcceptRequest(request.requesterId)}
@@ -83,7 +92,7 @@ export function FriendRequestsSection({
 								<Check />
 							</IconButton>
 							<IconButton
-								aria-label='Recusar solicitação'
+								aria-label='Recusar solicitacao'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								colorPalette='gray'

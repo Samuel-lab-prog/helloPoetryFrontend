@@ -17,6 +17,8 @@ export type MyProfileViewModel = {
 
 export type FriendRequestsSectionProps = {
 	friendRequests: MyFriendRequestsType;
+	totalReceivedCount?: number;
+	viewAllHref?: string;
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;
 	isAccepting: boolean;
@@ -28,6 +30,8 @@ export type FriendRequestsSectionProps = {
 
 export type MyPoemsSectionProps = {
 	myPoems: FullPoemType[];
+	totalPoemsCount?: number;
+	viewAllHref?: string;
 	isLoadingMyPoems: boolean;
 	isMyPoemsError: boolean;
 	onOpenPoem: (slug: string, id: number) => void;

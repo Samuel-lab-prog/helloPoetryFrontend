@@ -5,7 +5,14 @@ import { HomePage, PoemPage, PoemsPage } from '@features/poems';
 import { LoginPage, RegisterPage } from '@features/auth';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
-import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
+import {
+	AuthorPage,
+	MyProfileFriendRequestsPage,
+	MyProfilePage,
+	MyProfilePoemsPage,
+	NotificationsPage,
+	PoetsPage,
+} from '@features/users';
 
 import { AdminPage, CreatePoemPage } from '@features/admin';
 
@@ -46,6 +53,8 @@ export default function App() {
 				{ path: 'poems/new', element: <CreatePoemPage /> },
 				{ path: 'admin', element: <AdminPage /> },
 				{ path: 'my-profile', element: <MyProfilePage /> },
+				{ path: 'my-profile/friend-requests', element: <MyProfileFriendRequestsPage /> },
+				{ path: 'my-profile/poems', element: <MyProfilePoemsPage /> },
 				{ path: 'notifications', element: <NotificationsPage /> },
 			],
 		},

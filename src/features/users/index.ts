@@ -11,5 +11,7 @@ export * from './hooks/useNotificationsPanel';
 export * from './hooks/useUpdateMyProfile';
 export * from './pages/AuthorPage';
 export * from './pages/MyProfilePage';
+export * from './pages/MyProfileFriendRequestsPage';
+export * from './pages/MyProfilePoemsPage';
 export * from './pages/NotificationsPage';
 export * from './pages/PoetsPage';
