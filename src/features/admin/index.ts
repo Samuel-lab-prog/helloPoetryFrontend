@@ -15,3 +15,4 @@ export * from './pages/AdminPage';
 export * from './pages/CreatePoemPage';
 export * from './pages/ProtectedPage';
 export * from './schemas/schemas';
+export * from './constants/forbiddenWords';
