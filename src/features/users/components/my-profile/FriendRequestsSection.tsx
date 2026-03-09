@@ -17,17 +17,17 @@ export function FriendRequestsSection({
 	return (
 		<Surface p={5} variant='panel'>
 			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Solicitacoes de amizade recebidas
+				Solicitações de amizade recebidas
 			</Heading>
 
 			<Flex direction='column' gap={3}>
-				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitacoes...</Text>}
+				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitações...</Text>}
 				{!isFriendRequestsLoading && !isFriendRequestsError && friendRequests.received.length === 0 && (
-					<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+					<Text textStyle='small'>Nenhuma solicitação pendente.</Text>
 				)}
-				{isFriendRequestsError && <Text textStyle='small' color='red.400'>Erro ao carregar solicitacoes.</Text>}
+				{isFriendRequestsError && <Text textStyle='small' color='red.400'>Erro ao carregar solicitações.</Text>}
 
-				{friendRequests.received.map((request) => (
+				{friendRequests.received.map((request, index) => (
 					<Flex
 						key={request.requesterId}
 						align={{ base: 'start', md: 'center' }}
@@ -38,32 +38,43 @@ export function FriendRequestsSection({
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='md'
+						animationName='slide-from-bottom, fade-in'
+						animationDuration='320ms'
+						animationTimingFunction='ease-out'
+						animationFillMode='backwards'
+						animationDelay={`${30 + index * 30}ms`}
 					>
 						<HStack gap={3}>
 							<Avatar.Root size='sm'>
 								<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
 								<Avatar.Fallback name={request.requesterNickname} />
 							</Avatar.Root>
-							<Link
-								asChild
-								textStyle='small'
-								color='pink.200'
-								fontWeight='semibold'
-								textDecoration='underline'
-								textUnderlineOffset='3px'
-								_hover={{ color: 'pink.100' }}
-								_focusVisible={{
-									outline: '2px solid',
-									outlineColor: 'pink.300',
-									outlineOffset: '2px',
-								}}
-							>
-								<NavLink to={`/authors/${request.requesterId}`}>@{request.requesterNickname}</NavLink>
-							</Link>
+							<Flex direction='column' gap={0}>
+								<Text textStyle='small' color='pink.100' fontWeight='semibold'>
+									{request.requesterName}
+								</Text>
+								<Link
+									asChild
+									textStyle='smaller'
+									color='pink.200'
+									textDecoration='underline'
+									textUnderlineOffset='3px'
+									_hover={{ color: 'pink.100' }}
+									_focusVisible={{
+										outline: '2px solid',
+										outlineColor: 'pink.300',
+										outlineOffset: '2px',
+									}}
+								>
+									<NavLink to={`/authors/${request.requesterId}`}>
+										@{request.requesterNickname}
+									</NavLink>
+								</Link>
+							</Flex>
 						</HStack>
 						<Flex gap={2}>
 							<IconButton
-								aria-label='Aceitar solicitacao'
+								aria-label='Aceitar solicitação'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								onClick={() => onAcceptRequest(request.requesterId)}
@@ -72,7 +83,7 @@ export function FriendRequestsSection({
 								<Check />
 							</IconButton>
 							<IconButton
-								aria-label='Recusar solicitacao'
+								aria-label='Recusar solicitação'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								colorPalette='gray'

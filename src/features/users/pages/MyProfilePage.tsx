@@ -89,60 +89,100 @@ export function MyProfilePage() {
 					isEmpty={!profile}
 					loadingElement={<Text textStyle='body'>Carregando perfil...</Text>}
 					errorElement={<Text textStyle='body'>Erro ao carregar perfil.</Text>}
-					emptyElement={<Text textStyle='body'>Perfil nao encontrado.</Text>}
+					emptyElement={<Text textStyle='body'>Perfil não encontrado.</Text>}
 				>
 					{profile && (
 						<Flex direction='column' gap={6}>
-							<ProfileOverviewSection
-								profile={profile}
-								isUpdatingProfile={isUpdatingProfile}
-								updateProfileError={updateProfileError}
-								conflictField={conflictField}
-								onUpdateProfile={updateMyProfile}
-							/>
+							<Box
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='30ms'
+							>
+								<ProfileOverviewSection
+									profile={profile}
+									isUpdatingProfile={isUpdatingProfile}
+									updateProfileError={updateProfileError}
+									conflictField={conflictField}
+									onUpdateProfile={updateMyProfile}
+								/>
+							</Box>
 
-							<FriendRequestsSection
-								friendRequests={friendRequests}
-								isFriendRequestsLoading={isFriendRequestsLoading}
-								isFriendRequestsError={isFriendRequestsError}
-								isAccepting={isAccepting}
-								isRejecting={isRejecting}
-								errorMessage={errorMessage}
-								onAcceptRequest={(requesterId) => {
-									void acceptRequest(requesterId);
-								}}
-								onRejectRequest={(requesterId) => {
-									void rejectRequest(requesterId);
-								}}
-							/>
+							<Box
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='60ms'
+							>
+								<FriendRequestsSection
+									friendRequests={friendRequests}
+									isFriendRequestsLoading={isFriendRequestsLoading}
+									isFriendRequestsError={isFriendRequestsError}
+									isAccepting={isAccepting}
+									isRejecting={isRejecting}
+									errorMessage={errorMessage}
+									onAcceptRequest={(requesterId) => {
+										void acceptRequest(requesterId);
+									}}
+									onRejectRequest={(requesterId) => {
+										void rejectRequest(requesterId);
+									}}
+								/>
+							</Box>
 
-							<MyPoemsSection
-								myPoems={myPoems}
-								isLoadingMyPoems={isLoadingMyPoems}
-								isMyPoemsError={isMyPoemsError}
-								onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
-								onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}
-								onDeletePoem={(id) => navigate(`/admin?mode=delete&poemId=${id}`)}
-							/>
+							<Box
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='90ms'
+							>
+								<MyPoemsSection
+									myPoems={myPoems}
+									isLoadingMyPoems={isLoadingMyPoems}
+									isMyPoemsError={isMyPoemsError}
+									onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
+									onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}
+									onDeletePoem={(id) => navigate(`/admin?mode=delete&poemId=${id}`)}
+								/>
+							</Box>
 
-							<CollectionsSection
-								profile={profile}
-								collections={collections}
-								myPoems={myPoems}
-								savedPoems={savedPoems}
-								isLoadingCollections={isLoadingCollections}
-								isUpdatingCollections={isUpdatingCollections}
-								collectionsError={collectionsError}
-								onCreateCollection={createCollection}
-								onDeleteCollection={deleteCollection}
-								onAddPoemToCollection={addPoemToCollection}
-								onRemovePoemFromCollection={removePoemFromCollection}
-							/>
+							<Box
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='120ms'
+							>
+								<CollectionsSection
+									profile={profile}
+									collections={collections}
+									myPoems={myPoems}
+									savedPoems={savedPoems}
+									isLoadingCollections={isLoadingCollections}
+									isUpdatingCollections={isUpdatingCollections}
+									collectionsError={collectionsError}
+									onCreateCollection={createCollection}
+									onDeleteCollection={deleteCollection}
+									onAddPoemToCollection={addPoemToCollection}
+									onRemovePoemFromCollection={removePoemFromCollection}
+								/>
+							</Box>
 
-							<SavedPoemsSection
-								savedPoems={savedPoems}
-								isLoadingSavedPoems={isLoadingSavedPoems}
-							/>
+							<Box
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay='150ms'
+							>
+								<SavedPoemsSection
+									savedPoems={savedPoems}
+									isLoadingSavedPoems={isLoadingSavedPoems}
+								/>
+							</Box>
 						</Flex>
 					)}
 				</AsyncState>

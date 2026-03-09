@@ -85,8 +85,9 @@ export function usePoemCollections(enabled = true) {
 		if (error.statusCode === 401) return 'Faça login para gerenciar coleções.';
 		if (error.statusCode === 403) return 'Você não tem permissão para alterar esta coleção.';
 		if (error.statusCode === 404) return 'Coleção ou poema não encontrado.';
-		if (error.statusCode === 409)
+		if (error.statusCode === 409) {
 			return 'Já existe uma coleção com esse nome ou o poema já foi adicionado.';
+		}
 		return 'Erro ao gerenciar coleções.';
 	}
 

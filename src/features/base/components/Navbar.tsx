@@ -67,6 +67,7 @@ function Logo() {
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const location = useLocation();
+	const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -95,7 +96,14 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 					<VStack gap={2} align='stretch' w='full'>
 						{links.map((link) => (
 							<Link asChild variant='nav' size='sm' key={link.label}>
-								<NavLink to={link.to}>
+								<NavLink
+									to={link.to}
+									onClick={() => {
+										if (location.pathname === link.to) {
+											scrollToTop();
+										}
+									}}
+								>
 									<HStack gap={2} justify='space-between' w='full'>
 										<HStack gap={2}>
 											<Icon as={getLinkIcon(link.to)} boxSize={4} />
@@ -139,7 +147,15 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 				<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
 					{links.map((link) => (
 						<Link key={link.label} asChild variant='navIcon' size='sm'>
-							<NavLink to={link.to} style={{ display: 'block' }}>
+							<NavLink
+								to={link.to}
+								style={{ display: 'block' }}
+								onClick={() => {
+									if (location.pathname === link.to) {
+										scrollToTop();
+									}
+								}}
+							>
 								<Flex
 									direction='column'
 									align='center'

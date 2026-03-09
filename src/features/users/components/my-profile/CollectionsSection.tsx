@@ -24,20 +24,20 @@ export function CollectionsSection({
 	return (
 		<Surface p={5} variant='panel'>
 			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Colecoes de poemas
+				Coleções de poemas
 			</Heading>
 
 			<Flex direction='column' gap={3} mb={5}>
 				<Input
 					value={collectionNameDraft}
 					onChange={(event) => setCollectionNameDraft(event.target.value)}
-					placeholder='Nome da colecao'
+					placeholder='Nome da coleção'
 					bg='surface'
 				/>
 				<Textarea
 					value={collectionDescriptionDraft}
 					onChange={(event) => setCollectionDescriptionDraft(event.target.value)}
-					placeholder='Descricao da colecao'
+					placeholder='Descrição da coleção'
 					rows={3}
 					bg='surface'
 				/>
@@ -56,14 +56,14 @@ export function CollectionsSection({
 						setCollectionDescriptionDraft('');
 					}}
 				>
-					Criar colecao
+					Criar coleção
 				</Button>
 			</Flex>
 
 			<Flex direction='column' gap={4}>
-				{isLoadingCollections && <Text textStyle='small'>Carregando colecoes...</Text>}
+				{isLoadingCollections && <Text textStyle='small'>Carregando coleções...</Text>}
 				{!isLoadingCollections && collections.length === 0 && (
-					<Text textStyle='small'>Voce ainda nao criou colecoes.</Text>
+					<Text textStyle='small'>Você ainda não criou coleções.</Text>
 				)}
 
 				{collections.map((collection) => (
@@ -78,7 +78,7 @@ export function CollectionsSection({
 							<Flex direction='column' gap={1}>
 								<Text textStyle='small'>{collection.name}</Text>
 								<Text textStyle='smaller' color='pink.200'>
-									{collection.description || 'Sem descricao.'}
+									{collection.description || 'Sem descrição.'}
 								</Text>
 								<Text textStyle='smaller' color='pink.200'>
 									{collection.poemIds.length} poemas
@@ -100,7 +100,7 @@ export function CollectionsSection({
 						<Flex direction='column' gap={2} mb={3}>
 							{collection.poemIds.length === 0 && (
 								<Text textStyle='smaller' color='pink.200'>
-									Nenhum poema nesta colecao.
+									Nenhum poema nesta coleção.
 								</Text>
 							)}
 							{collection.poemIds.map((poemId) => {
@@ -134,7 +134,10 @@ export function CollectionsSection({
 												colorPalette='gray'
 												loading={isUpdatingCollections}
 												onClick={() => {
-													void onRemovePoemFromCollection({ collectionId: collection.id, poemId });
+													void onRemovePoemFromCollection({
+														collectionId: collection.id,
+														poemId,
+													});
 												}}
 											>
 												Remover
@@ -145,7 +148,11 @@ export function CollectionsSection({
 							})}
 						</Flex>
 
-						<Flex align={{ base: 'stretch', md: 'center' }} direction={{ base: 'column', md: 'row' }} gap={2}>
+						<Flex
+							align={{ base: 'stretch', md: 'center' }}
+							direction={{ base: 'column', md: 'row' }}
+							gap={2}
+						>
 							<Input
 								value={collectionPoemIdDrafts[collection.id] ?? ''}
 								onChange={(event) =>
@@ -167,7 +174,10 @@ export function CollectionsSection({
 									const poemId = Number(rawValue);
 									if (!Number.isFinite(poemId) || poemId <= 0) return;
 									await onAddPoemToCollection({ collectionId: collection.id, poemId });
-									setCollectionPoemIdDrafts((previous) => ({ ...previous, [collection.id]: '' }));
+									setCollectionPoemIdDrafts((previous) => ({
+										...previous,
+										[collection.id]: '',
+									}));
 								}}
 							>
 								Adicionar poema

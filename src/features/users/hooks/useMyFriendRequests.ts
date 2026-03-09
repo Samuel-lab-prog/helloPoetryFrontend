@@ -5,11 +5,13 @@ import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 export type MyFriendRequestsType = {
 	sent: {
 		addresseeId: number;
+		addresseeName: string;
 		addresseeNickname: string;
 		addresseeAvatarUrl: string | null;
 	}[];
 	received: {
 		requesterId: number;
+		requesterName: string;
 		requesterNickname: string;
 		requesterAvatarUrl: string | null;
 	}[];

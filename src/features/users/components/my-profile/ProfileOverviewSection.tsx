@@ -80,7 +80,7 @@ export function ProfileOverviewSection({
 								/>
 								{conflictField === 'nickname' && (
 									<Text textStyle='smaller' color='red.400'>
-										Este apelido ja esta em uso. Escolha outro.
+										Este apelido já está em uso. Escolha outro.
 									</Text>
 								)}
 								<Input
@@ -148,7 +148,7 @@ export function ProfileOverviewSection({
 					<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
 				</Box>
 				<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-					<Text textStyle='smaller' color='pink.200'>Comentarios</Text>
+					<Text textStyle='smaller' color='pink.200'>Comentários</Text>
 					<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
 				</Box>
 				<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>

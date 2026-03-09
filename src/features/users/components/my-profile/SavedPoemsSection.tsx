@@ -13,10 +13,10 @@ export function SavedPoemsSection({ savedPoems, isLoadingSavedPoems }: SavedPoem
 			<Flex direction='column' gap={3}>
 				{isLoadingSavedPoems && <Text textStyle='small'>Carregando poemas salvos...</Text>}
 				{!isLoadingSavedPoems && savedPoems.length === 0 && (
-					<Text textStyle='small'>Voce ainda nao salvou poemas.</Text>
+					<Text textStyle='small'>Você ainda não salvou poemas.</Text>
 				)}
 
-				{savedPoems.map((poem) => (
+				{savedPoems.map((poem, index) => (
 					<Flex
 						key={poem.id}
 						align={{ base: 'start', md: 'center' }}
@@ -27,6 +27,11 @@ export function SavedPoemsSection({ savedPoems, isLoadingSavedPoems }: SavedPoem
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='md'
+						animationName='slide-from-bottom, fade-in'
+						animationDuration='320ms'
+						animationTimingFunction='ease-out'
+						animationFillMode='backwards'
+						animationDelay={`${30 + index * 30}ms`}
 					>
 						<Flex direction='column' gap={1}>
 							<Text textStyle='small'>{poem.title}</Text>

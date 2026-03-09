@@ -17,13 +17,13 @@ function translateStatus(status: string) {
 function translateVisibility(visibility: string) {
 	switch (visibility) {
 		case 'public':
-			return 'Publico';
+			return 'Público';
 		case 'friends':
 			return 'Amigos';
 		case 'private':
 			return 'Privado';
 		case 'unlisted':
-			return 'Nao listado';
+			return 'Não listado';
 		default:
 			return visibility;
 	}
@@ -46,11 +46,11 @@ export function MyPoemsSection({
 			<Flex direction='column' gap={3}>
 				{isLoadingMyPoems && <Text textStyle='small'>Carregando meus poemas...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
-					<Text textStyle='small'>Voce ainda nao publicou poemas.</Text>
+					<Text textStyle='small'>Você ainda não publicou poemas.</Text>
 				)}
 				{isMyPoemsError && <Text textStyle='small' color='red.400'>Erro ao carregar seus poemas.</Text>}
 
-				{myPoems.map((poem) => (
+				{myPoems.map((poem, index) => (
 					<Flex
 						key={poem.id}
 						align='center'
@@ -60,15 +60,20 @@ export function MyPoemsSection({
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='md'
+						animationName='slide-from-bottom, fade-in'
+						animationDuration='320ms'
+						animationTimingFunction='ease-out'
+						animationFillMode='backwards'
+						animationDelay={`${30 + index * 30}ms`}
 					>
 						<Flex direction='column' gap={1} flex='1'>
 							<Text textStyle='small'>{poem.title}</Text>
 							<Text textStyle='smaller' color='pink.200'>
-								{formatDate(poem.createdAt)} � {translateStatus(poem.status)} � {translateVisibility(poem.visibility)}
+								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} | {translateVisibility(poem.visibility)}
 							</Text>
 							{poem.stats && (
 								<Text textStyle='smaller' color='pink.200'>
-									{poem.stats.likesCount} curtidas � {poem.stats.commentsCount} comentarios
+									{poem.stats.likesCount} curtidas | {poem.stats.commentsCount} comentários
 								</Text>
 							)}
 							{poem.tags?.length > 0 && (
@@ -84,7 +89,7 @@ export function MyPoemsSection({
 
 						<Menu.Root positioning={{ placement: 'bottom-end' }}>
 							<Menu.Trigger asChild>
-								<IconButton aria-label='Abrir menu de acoes' variant='solidPink' size={{ base: 'xs', md: 'sm' }}>
+								<IconButton aria-label='Abrir menu de a��es' variant='solidPink' size={{ base: 'xs', md: 'sm' }}>
 									<EllipsisVertical />
 								</IconButton>
 							</Menu.Trigger>

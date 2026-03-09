@@ -17,7 +17,7 @@ export function ProfileAccessGate() {
 				</Badge>
 				<Text textStyle='h2'>Entre para ver seu perfil</Text>
 				<Text textStyle='body' color='pink.100'>
-					Acompanhe poemas salvos, pedidos de amizade e suas estatisticas em um unico lugar.
+					Acompanhe poemas salvos, pedidos de amizade e suas estatísticas em um único lugar.
 				</Text>
 				<HStack gap={3} wrap='wrap'>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
