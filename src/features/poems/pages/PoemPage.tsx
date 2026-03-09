@@ -1,4 +1,4 @@
-/* eslint-disable max-nested-callbacks */
+﻿/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -8,6 +8,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
+import { findForbiddenWords } from '@features/admin';
 
 import { usePoem } from '../hooks/usePoem';
 import { useSavedPoems } from '../hooks/useSavedPoems';
@@ -30,6 +31,7 @@ export function PoemPage() {
 	const isPoemIdValid = poemId > 0;
 
 	const [commentInput, setCommentInput] = useState('');
+	const [commentInputError, setCommentInputError] = useState('');
 	const [repliesByCommentId, setRepliesByCommentId] = useState<Record<number, PoemCommentType[]>>(
 		{},
 	);
@@ -159,10 +161,16 @@ export function PoemPage() {
 	const handlePublishComment = useCallback(async () => {
 		const content = commentInput.trim();
 		if (!content) return;
+		const forbiddenWordsFound = findForbiddenWords(content);
+		if (forbiddenWordsFound.length > 0) {
+			setCommentInputError(`Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`);
+			return;
+		}
 
 		try {
 			await createComment({ content });
 			setCommentInput('');
+			setCommentInputError('');
 			toaster.create({
 				type: 'success',
 				title: 'Comentario publicado',
@@ -172,6 +180,14 @@ export function PoemPage() {
 			// Erro tratado por createCommentError + toast consolidado.
 		}
 	}, [commentInput, createComment]);
+
+	const handleCommentInputChange = useCallback(
+		(value: string) => {
+			setCommentInput(value);
+			if (commentInputError) setCommentInputError('');
+		},
+		[commentInputError],
+	);
 
 	const handleTogglePoemLike = useCallback(async () => {
 		if (isUpdatingLike) return;
@@ -312,6 +328,7 @@ export function PoemPage() {
 							<CommentsSection
 								poemIsCommentable={poem.isCommentable}
 								commentInput={commentInput}
+								commentError={commentInputError}
 								authClientId={authClientId}
 								comments={comments}
 								isLoadingComments={isLoadingComments}
@@ -321,7 +338,7 @@ export function PoemPage() {
 								isUpdatingCommentLike={isUpdatingCommentLike}
 								repliesByCommentId={repliesByCommentId}
 								setRepliesByCommentId={setRepliesByCommentId}
-								onCommentInputChange={setCommentInput}
+								onCommentInputChange={handleCommentInputChange}
 								onPublishComment={handlePublishComment}
 								createComment={createComment}
 								deleteComment={deleteComment}
@@ -363,3 +380,4 @@ export function PoemPage() {
 		</Flex>
 	);
 }
+

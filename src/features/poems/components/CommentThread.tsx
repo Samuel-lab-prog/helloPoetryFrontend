@@ -1,5 +1,5 @@
 ﻿/* eslint-disable max-lines-per-function */
-import { Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import {
 	ChevronDown,
@@ -10,7 +10,8 @@ import {
 	Trash2,
 } from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
-import { formatDate } from '@features/base';
+import { formatRelativeTime } from '@features/base';
+import { findForbiddenWords } from '@features/admin';
 
 interface CommentThreadProps {
 	comment: PoemCommentType;
@@ -74,9 +75,16 @@ export const CommentThread = memo(function CommentThread({
 
 	async function handleCreateReply() {
 		if (!replyInput.trim()) return;
+		const forbiddenWordsFound = findForbiddenWords(replyInput);
+		if (forbiddenWordsFound.length > 0) {
+			setReplyError(`Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`);
+			return;
+		}
+
 		try {
 			await createComment({ content: replyInput.trim(), parentId: comment.id });
 			setReplyInput('');
+			setReplyError('');
 			const fetched = await fetchReplies(comment.id);
 			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
 		} catch {
@@ -106,12 +114,20 @@ export const CommentThread = memo(function CommentThread({
 		>
 			<Flex justify='space-between' align='start' gap={3}>
 				<Box flex='1'>
-					<Text textStyle='smaller' color='pink.200' mb={1}>
-						@{comment.author.nickname}
-					</Text>
-					<Text textStyle='smaller' color='pink.200' mb={2}>
-						{formatDate(comment.createdAt)}
-					</Text>
+					<Flex align='center' gap={2} mb={2}>
+						<Avatar.Root size='xs'>
+							<Avatar.Image src={comment.author.avatarUrl ?? undefined} />
+							<Avatar.Fallback name={comment.author.nickname} />
+						</Avatar.Root>
+						<Box>
+							<Text textStyle='smaller' color='pink.200'>
+								@{comment.author.nickname}
+							</Text>
+							<Text textStyle='smaller' color='pink.200'>
+								{formatRelativeTime(comment.createdAt)}
+							</Text>
+						</Box>
+					</Flex>
 					<Text textStyle='small'>{comment.content}</Text>
 				</Box>
 				{comment.author.id === authClientId && (
@@ -239,3 +255,4 @@ export const CommentThread = memo(function CommentThread({
 		</Box>
 	);
 });
+

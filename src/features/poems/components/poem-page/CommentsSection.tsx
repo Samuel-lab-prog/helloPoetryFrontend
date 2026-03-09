@@ -7,6 +7,7 @@ import type { PoemCommentType } from '@features/interactions';
 type CommentsSectionProps = {
 	poemIsCommentable: boolean;
 	commentInput: string;
+	commentError: string;
 	authClientId: number;
 	comments: PoemCommentType[];
 	isLoadingComments: boolean;
@@ -28,6 +29,7 @@ type CommentsSectionProps = {
 export const CommentsSection = memo(function CommentsSection({
 	poemIsCommentable,
 	commentInput,
+	commentError,
 	authClientId,
 	comments,
 	isLoadingComments,
@@ -105,6 +107,8 @@ export const CommentsSection = memo(function CommentsSection({
 					placeholder='Escreva um comentario (1-300 caracteres)'
 					rows={4}
 					maxLength={300}
+					borderColor={commentError ? 'red.400' : undefined}
+					_focusVisible={commentError ? { borderColor: 'red.400' } : undefined}
 					disabled={!poemIsCommentable || isCreatingComment}
 				/>
 				<Flex
@@ -131,6 +135,11 @@ export const CommentsSection = memo(function CommentsSection({
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>
 						Comentarios desativados para este poema.
+					</Text>
+				)}
+				{commentError && (
+					<Text textStyle='small' color='red.400'>
+						{commentError}
 					</Text>
 				)}
 			</Flex>
