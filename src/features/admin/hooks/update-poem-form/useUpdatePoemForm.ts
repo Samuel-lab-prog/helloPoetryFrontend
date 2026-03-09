@@ -1,9 +1,10 @@
 ﻿import { useState } from 'react';
-import { useForm, type UseFormSetError } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type AppError, createHTTPRequest } from '@features/base';
-import { updatePoemSchema, type UpdatePoemType } from '../schemas/schemas';
+import { createHTTPRequest } from '@features/base';
+import { updatePoemSchema, type UpdatePoemType } from '../../schemas/schemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { handleUpdatePoemError } from './handleUpdatePoemError';
 
 export function useUpdatePoemForm() {
 	const queryClient = useQueryClient();
@@ -17,6 +18,8 @@ export function useUpdatePoemForm() {
 	const { mutateAsync, isPending } = useUpdatePoem();
 
 	async function onSubmit(data: UpdatePoemType) {
+		setGeneralError('');
+
 		try {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
@@ -37,36 +40,6 @@ export function useUpdatePoemForm() {
 		isPending,
 		generalError,
 	};
-}
-
-function handleUpdatePoemError(
-	err: unknown,
-	setError: UseFormSetError<UpdatePoemType>,
-	setGeneralError: (msg: string) => void,
-) {
-	const error = err as AppError;
-	const status = error?.statusCode;
-	const message = error?.errorMessages?.join(' ');
-
-	if (status === 401) {
-		setGeneralError('Você não tem permissao para atualizar poemas.');
-		return;
-	}
-
-	if (status === 409 && message?.includes('slug')) {
-		setError('title', {
-			type: 'manual',
-			message: 'Ja existe um poema com esse novo título.',
-		});
-		return;
-	}
-
-	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
-		return;
-	}
-
-	setGeneralError('Erro ao atualizar poema. Tente novamente mais tarde.');
 }
 
 function useUpdatePoem() {

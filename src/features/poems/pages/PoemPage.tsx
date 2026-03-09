@@ -3,7 +3,7 @@
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Box, Flex, Icon, Link } from '@chakra-ui/react';
+import { Box, Flex, Heading, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -304,7 +304,7 @@ export function PoemPage() {
 
 							<Box
 								as='article'
-								textAlign='justify'
+								display='flex'
 								mt={8}
 								p={[4, 6]}
 								border='1px solid'
@@ -322,7 +322,12 @@ export function PoemPage() {
 									},
 								}}
 							>
-								<MarkdownRenderer content={poem.content} />
+								<Box w='full' maxW='3xl' textAlign='left'>
+									<Heading as='h2' textStyle='h2' color='pink.300' mb={4}>
+										{poem.title}
+									</Heading>
+									<MarkdownRenderer content={poem.content} />
+								</Box>
 							</Box>
 
 							<CommentsSection

@@ -1,6 +1,6 @@
 ﻿import { Flex, Button, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useUpdatePoemForm } from '../hooks/useUpdatePoemForm';
+import { useUpdatePoemForm } from '../hooks/update-poem-form';
 import { usePoemsMinimal } from '../hooks/usePoemsMinimal';
 import { usePoem, PoemCombobox } from '@features/poems';
 import { FormField, SelectField, TagsField } from '@features/base';

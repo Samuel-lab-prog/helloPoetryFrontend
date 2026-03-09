@@ -1,7 +1,7 @@
 ﻿/* eslint-disable max-lines-per-function */
 import { Text, Heading, Box } from '@chakra-ui/react';
 
-import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
+import { useCreatePoemForm } from '../hooks/create-poem-form';
 import { useUsersPreview } from '../hooks/useUsersPreview';
 import {
 	FormField,
@@ -90,7 +90,6 @@ export function CreatePoemForm() {
 				<FieldContainer delay={120} hasError={!!errors.excerpt}>
 					<FormField
 						label='Resumo'
-						required
 						as='textarea'
 						rows={5}
 						control={control}

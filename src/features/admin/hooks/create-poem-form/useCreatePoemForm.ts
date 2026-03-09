@@ -1,9 +1,10 @@
 ﻿import { useState } from 'react';
-import { useForm, type UseFormSetError } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPoemSchema, type CreatePoemType } from '../schemas/schemas';
+import { createPoemSchema, type CreatePoemType } from '../../schemas/schemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppError } from '@features/base';
+import { createHTTPRequest } from '@features/base';
+import { handleCreatePoemError } from './handleCreatePoemError';
 
 export function useCreatePoemForm() {
 	const queryClient = useQueryClient();
@@ -13,6 +14,7 @@ export function useCreatePoemForm() {
 		resolver: zodResolver(createPoemSchema),
 		mode: 'onChange',
 		defaultValues: {
+			excerpt: '',
 			status: 'draft',
 			visibility: 'public',
 			isCommentable: true,
@@ -24,6 +26,8 @@ export function useCreatePoemForm() {
 	const { mutateAsync, isPending } = useCreatePoem();
 
 	async function onSubmit(data: CreatePoemType) {
+		setGeneralError('');
+
 		try {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
@@ -44,36 +48,6 @@ export function useCreatePoemForm() {
 		isPending,
 		generalError,
 	};
-}
-
-function handleCreatePoemError(
-	err: unknown,
-	setError: UseFormSetError<CreatePoemType>,
-	setGeneralError: (msg: string) => void,
-) {
-	const error = err as AppError;
-	const status = error?.statusCode;
-	const message = error?.message;
-
-	if (status === 401) {
-		setGeneralError('Você não tem permissao para criar poemas.');
-		return;
-	}
-
-	if (status === 409 && message?.includes('slug')) {
-		setError('title', {
-			type: 'manual',
-			message: 'Ja existe um poema com esse título.',
-		});
-		return;
-	}
-
-	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
-		return;
-	}
-
-	setGeneralError('Erro ao criar poema. Tente novamente mais tarde.');
 }
 
 function useCreatePoem() {
