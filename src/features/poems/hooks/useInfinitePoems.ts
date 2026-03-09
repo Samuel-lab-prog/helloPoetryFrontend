@@ -46,7 +46,10 @@ export function useInfinitePoems({
 				},
 			}),
 
-		getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+		getNextPageParam: (lastPage) => {
+			if (!lastPage.hasMore) return undefined;
+			return lastPage.nextCursor ?? lastPage.poems.at(-1)?.id ?? undefined;
+		},
 	});
 
 	return {

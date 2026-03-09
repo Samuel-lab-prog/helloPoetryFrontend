@@ -1,5 +1,6 @@
-﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 export type SavedPoemType = {
 	id: number;
@@ -10,10 +11,11 @@ export type SavedPoemType = {
 
 export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: ['saved-poems'],
-		enabled,
+		queryKey: ['saved-poems', clientId],
+		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () => createHTTPRequest<SavedPoemType[]>({ path: '/poems/saved' }),
 	});
@@ -42,7 +44,7 @@ export function useSavedPoems(enabled = true) {
 		const error = (saveMutation.error || unsaveMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faca login para salvar poemas.';
-		if (error.statusCode === 404) return 'Poema não encontrado.';
+		if (error.statusCode === 404) return 'Poema n�o encontrado.';
 		if (error.statusCode === 409) return 'Poema ja esta salvo.';
 		return 'Erro ao atualizar poema salvo.';
 	}
@@ -56,3 +58,4 @@ export function useSavedPoems(enabled = true) {
 		saveError: getErrorMessage(),
 	};
 }
+

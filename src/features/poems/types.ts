@@ -54,7 +54,7 @@ export type PoemMinimalDataType = {
 };
 
 export type PaginatedPoemsType = {
-	nextCursor?: number | undefined;
+	nextCursor?: number | null;
 	poems: PoemPreviewType[];
 	hasMore: boolean;
 };
@@ -94,7 +94,7 @@ export type AuthorProfileType = {
 };
 
 export type PaginatedMinimalPoemsType = {
-	nextCursor?: number | undefined;
+	nextCursor?: number | null;
 	hasMore: boolean;
 	poems: {
 		id: number;

@@ -43,6 +43,7 @@ export type NotificationsPageType = {
 
 export function useNotificationsPanel(onlyUnread: boolean) {
 	const queryClient = useQueryClient();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const setUnreadNotificationsCount = useAuthClientStore(
 		(state) => state.setUnreadNotificationsCount,
 	);
@@ -51,7 +52,8 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	);
 
 	const query = useQuery({
-		queryKey: ['notifications', { onlyUnread }],
+		queryKey: ['notifications', clientId, { onlyUnread }],
+		enabled: !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () =>
 			createHTTPRequest<NotificationsPageType>({
@@ -115,11 +117,12 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	});
 
 	useEffect(() => {
+		if (!clientId) return;
 		if (!query.data) return;
 		if (onlyUnread) return;
 		const unreadCount = query.data.notifications.filter((item) => !item.readAt).length;
 		setUnreadNotificationsCount(unreadCount);
-	}, [onlyUnread, query.data, setUnreadNotificationsCount]);
+	}, [clientId, onlyUnread, query.data, setUnreadNotificationsCount]);
 
 	return {
 		notifications: query.data?.notifications ?? [],

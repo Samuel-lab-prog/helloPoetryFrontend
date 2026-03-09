@@ -20,17 +20,38 @@ const INITIAL_FEED_LIMIT = 8;
 const POETS_SEARCH_LIMIT = 10;
 
 const QUERY_KEYS = {
-  myProfile: (userId: number) => ['my-profile', userId] as const,
-  myPoems: () => ['my-poems'] as const,
-  myFriendRequests: (userId: number) => ['my-friend-requests', userId] as const,
-  savedPoems: () => ['saved-poems'] as const,
-  poemCollections: () => ['poem-collections'] as const,
-  notifications: (onlyUnread: boolean) => ['notifications', { onlyUnread }] as const,
-  poetsSearch: (searchNickname: string, limit: number) =>
-    ['poets-search', searchNickname, limit] as const,
-  authenticatedHomeFeed: (limit: number) =>
-    ['home-feed', { isAuthenticated: true, limit }] as const,
+	myProfile: (userId: number) => ['my-profile', userId] as const,
+	myPoems: (userId: number) => ['my-poems', userId] as const,
+	myFriendRequests: (userId: number) => ['my-friend-requests', userId] as const,
+	savedPoems: (userId: number) => ['saved-poems', userId] as const,
+	poemCollections: (userId: number) => ['poem-collections', userId] as const,
+	notifications: (userId: number, onlyUnread: boolean) =>
+		['notifications', userId, { onlyUnread }] as const,
+	poetsSearch: (searchNickname: string, limit: number) =>
+		['poets-search', searchNickname, limit] as const,
+	authenticatedHomeFeed: (userId: number, limit: number) =>
+		['home-feed', { isAuthenticated: true, userId, limit }] as const,
 };
+
+async function clearSessionQueries(queryClient: QueryClient): Promise<void> {
+	await queryClient.cancelQueries({ queryKey: ['my-profile'] });
+	await queryClient.cancelQueries({ queryKey: ['my-poems'] });
+	await queryClient.cancelQueries({ queryKey: ['my-friend-requests'] });
+	await queryClient.cancelQueries({ queryKey: ['saved-poems'] });
+	await queryClient.cancelQueries({ queryKey: ['poem-collections'] });
+	await queryClient.cancelQueries({ queryKey: ['notifications'] });
+	await queryClient.cancelQueries({ queryKey: ['poets-search'] });
+	await queryClient.cancelQueries({ queryKey: ['home-feed'] });
+
+	queryClient.removeQueries({ queryKey: ['my-profile'] });
+	queryClient.removeQueries({ queryKey: ['my-poems'] });
+	queryClient.removeQueries({ queryKey: ['my-friend-requests'] });
+	queryClient.removeQueries({ queryKey: ['saved-poems'] });
+	queryClient.removeQueries({ queryKey: ['poem-collections'] });
+	queryClient.removeQueries({ queryKey: ['notifications'] });
+	queryClient.removeQueries({ queryKey: ['poets-search'] });
+	queryClient.removeQueries({ queryKey: ['home-feed'] });
+}
 
 function mapFeedPoem(item: FeedPoemType): PoemPreviewType {
   return {
@@ -89,6 +110,8 @@ export async function bootstrapUserDataOnLogin(
   queryClient: QueryClient,
   payload: AppEvents['userLoggedIn'],
 ): Promise<void> {
+  await clearSessionQueries(queryClient);
+
   const myProfile = await queryClient.fetchQuery({
     queryKey: QUERY_KEYS.myProfile(payload.userId),
     queryFn: () =>
@@ -108,11 +131,11 @@ export async function bootstrapUserDataOnLogin(
 
   await Promise.all([
     queryClient.fetchQuery({
-      queryKey: QUERY_KEYS.authenticatedHomeFeed(INITIAL_FEED_LIMIT),
+      queryKey: QUERY_KEYS.authenticatedHomeFeed(payload.userId, INITIAL_FEED_LIMIT),
       queryFn: () => fetchInitialFeed(INITIAL_FEED_LIMIT),
     }),
     queryClient.fetchQuery({
-      queryKey: QUERY_KEYS.myPoems(),
+      queryKey: QUERY_KEYS.myPoems(payload.userId),
       queryFn: () => createHTTPRequest<FullPoemType[]>({ path: '/poems/me' }),
     }),
     queryClient.fetchQuery({
@@ -123,15 +146,15 @@ export async function bootstrapUserDataOnLogin(
         }),
     }),
     queryClient.fetchQuery({
-      queryKey: QUERY_KEYS.savedPoems(),
+      queryKey: QUERY_KEYS.savedPoems(payload.userId),
       queryFn: () => createHTTPRequest<SavedPoemType[]>({ path: '/poems/saved' }),
     }),
     queryClient.fetchQuery({
-      queryKey: QUERY_KEYS.poemCollections(),
+      queryKey: QUERY_KEYS.poemCollections(payload.userId),
       queryFn: () => createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
     }),
     queryClient.fetchQuery({
-      queryKey: QUERY_KEYS.notifications(false),
+      queryKey: QUERY_KEYS.notifications(payload.userId, false),
       queryFn: () =>
         createHTTPRequest<NotificationsPageType>({
           path: '/notifications',
@@ -157,22 +180,5 @@ export async function bootstrapUserDataOnLogin(
 export async function clearUserDataFromCache(queryClient: QueryClient): Promise<void> {
   useUserBootstrapStore.getState().clearBootstrap();
   useAuthClientStore.getState().setUnreadNotificationsCount(0);
-
-  await queryClient.cancelQueries({ queryKey: ['my-profile'] });
-  await queryClient.cancelQueries({ queryKey: ['my-poems'] });
-  await queryClient.cancelQueries({ queryKey: ['my-friend-requests'] });
-  await queryClient.cancelQueries({ queryKey: ['saved-poems'] });
-  await queryClient.cancelQueries({ queryKey: ['poem-collections'] });
-  await queryClient.cancelQueries({ queryKey: ['notifications'] });
-  await queryClient.cancelQueries({ queryKey: ['poets-search'] });
-  await queryClient.cancelQueries({ queryKey: ['home-feed'] });
-
-  queryClient.removeQueries({ queryKey: ['my-profile'] });
-  queryClient.removeQueries({ queryKey: ['my-poems'] });
-  queryClient.removeQueries({ queryKey: ['my-friend-requests'] });
-  queryClient.removeQueries({ queryKey: ['saved-poems'] });
-  queryClient.removeQueries({ queryKey: ['poem-collections'] });
-  queryClient.removeQueries({ queryKey: ['notifications'] });
-  queryClient.removeQueries({ queryKey: ['poets-search'] });
-  queryClient.removeQueries({ queryKey: ['home-feed'] });
+  await clearSessionQueries(queryClient);
 }

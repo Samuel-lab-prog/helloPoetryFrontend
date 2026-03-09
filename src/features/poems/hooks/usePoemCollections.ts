@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 export type PoemCollectionType = {
 	id: number;
@@ -23,10 +24,11 @@ type UpdateCollectionItemInput = {
 
 export function usePoemCollections(enabled = true) {
 	const queryClient = useQueryClient();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: ['poem-collections'],
-		enabled,
+		queryKey: ['poem-collections', clientId],
+		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () => createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
 	});

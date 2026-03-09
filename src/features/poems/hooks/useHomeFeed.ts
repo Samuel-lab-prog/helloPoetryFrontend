@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '../types';
 
 type FeedSource = 'feed' | 'recent';
@@ -29,8 +30,10 @@ function toPoemPreviewType(item: FeedPoemType): PoemPreviewType {
 }
 
 export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) {
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+
 	const query = useQuery({
-		queryKey: ['home-feed', { isAuthenticated, limit }],
+		queryKey: ['home-feed', { isAuthenticated, userId: clientId, limit }],
 		retry: 2,
 		staleTime: 1000 * 60 * 5,
 		queryFn: async (): Promise<{
