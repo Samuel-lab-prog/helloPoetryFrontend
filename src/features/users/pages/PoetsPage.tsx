@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@features/base';
 import { usePoetsSearch } from '../../poems/hooks/usePoetsSearch';
@@ -32,7 +32,7 @@ export function PoetsPage() {
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column'>
-			<Flex as='section' mb={6} gap={6} direction='column' w='full'>
+			<Flex as='section'  gap={3} direction='column' w='full'>
 				<Heading as='h1' textStyle='h2'>
 					Buscar Poetas
 				</Heading>
@@ -56,8 +56,17 @@ export function PoetsPage() {
 				emptyElement={<Text textStyle='body'>Nenhum poeta encontrado.</Text>}
 			>
 				<Flex direction='column' gap={3}>
-					{poets.map((poet) => (
-						<PoetCard key={poet.id} poet={poet} />
+					{poets.map((poet, index) => (
+						<Box
+							key={poet.id}
+							animationName='slide-from-bottom, fade-in'
+							animationDuration='320ms'
+							animationTimingFunction='ease-out'
+							animationFillMode='backwards'
+							animationDelay={`${30 + index * 30}ms`}
+						>
+							<PoetCard poet={poet} />
+						</Box>
 					))}
 				</Flex>
 			</AsyncState>

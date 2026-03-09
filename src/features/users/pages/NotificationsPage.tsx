@@ -70,15 +70,23 @@ export function NotificationsPage() {
 					emptyElement={<Text textStyle='body'>Nenhuma notificação encontrada.</Text>}
 				>
 					<Flex direction='column' gap={3}>
-						{notifications.map((item) => (
-							<NotificationCard
+						{notifications.map((item, index) => (
+							<Box
 								key={item.id}
-								item={item}
-								onMarkAsRead={(id) => markAsRead(id).then(() => {})}
-								onDelete={(id) => deleteNotification(id).then(() => {})}
-								isMarkingAsRead={isMarkingAsRead}
-								isDeleting={isDeleting}
-							/>
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay={`${30 + index * 30}ms`}
+							>
+								<NotificationCard
+									item={item}
+									onMarkAsRead={(id) => markAsRead(id).then(() => {})}
+									onDelete={(id) => deleteNotification(id).then(() => {})}
+									isMarkingAsRead={isMarkingAsRead}
+									isDeleting={isDeleting}
+								/>
+							</Box>
 						))}
 					</Flex>
 				</AsyncState>

@@ -28,7 +28,7 @@ export function PoetCard({ poet }: PoetCardProps) {
 							</Text>
 						</Flex>
 					</Flex>
-					<Button asChild variant='ghostPink'>
+					<Button asChild size={{ base: 'xs', md: 'sm' }} variant='ghostPink'>
 						<NavLink to={`/authors/${poet.id}`}>Ver perfil</NavLink>
 					</Button>
 				</Flex>

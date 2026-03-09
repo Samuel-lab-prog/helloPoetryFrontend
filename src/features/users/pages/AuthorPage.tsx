@@ -1,9 +1,9 @@
-import { Avatar, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Grid, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
-import { PoemCard, PoemGrid } from '@features/poems';
+import { PoemCard } from '@features/poems';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
 import { useAuthorPoems } from '../../poems/hooks/useAuthorPoems';
 import type { FullPoemType, PoemPreviewType } from '../../poems/types';
@@ -159,14 +159,13 @@ export function AuthorPage() {
 						</Flex>
 					}
 				>
-					<PoemGrid>
+					<Grid templateColumns={['1fr', undefined, '1fr 1fr', '1fr 1fr 1fr']} gap={3}>
 						{poems.map((poem) => (
 							<PoemCard key={poem.id} poem={toPreviewPoem(poem)} hideAuthorMeta />
 						))}
-					</PoemGrid>
+					</Grid>
 				</AsyncState>
 			</Box>
 		</Flex>
 	);
 }
-

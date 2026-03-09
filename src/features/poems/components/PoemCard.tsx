@@ -97,9 +97,9 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 						</Flex>
 					)}
 
-					<Flex align='center' gap={0} wrap='wrap'>
+					<Flex align='center' gap={3} wrap='wrap'>
 						{typeof likesCount === 'number' && (
-							<Badge size='sm' colorPalette='pink' variant='outline'>
+							<Badge size='sm' px={2} colorPalette='pink' variant='outline'>
 								{likesCount} curtidas
 							</Badge>
 						)}
@@ -145,4 +145,3 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 		</Card.Root>
 	);
 }
-
