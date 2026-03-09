@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { Badge, Box, Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
 import { Bell, BookOpen, House, LogIn, PenSquare, User, UserPlus, Users } from 'lucide-react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 function getLinkIcon(to: string) {
@@ -65,6 +66,11 @@ function Logo() {
 
 export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
+	const location = useLocation();
+
+	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+	}, [location.pathname, location.search]);
 
 	return (
 		<Flex minH='100vh' w='full'>

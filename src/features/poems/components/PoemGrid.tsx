@@ -17,10 +17,10 @@ export function PoemGrid({ children }: PoemGridProps) {
 				<Box
 					key={`poem-grid-item-${index}`}
 					animationName='slide-from-bottom, fade-in'
-					animationDuration='420ms'
+					animationDuration='320ms'
 					animationTimingFunction='ease-out'
 					animationFillMode='backwards'
-					animationDelay={`${40 + index * 40}ms`}
+					animationDelay={`${30 + index * 30}ms`}
 				>
 					{child}
 				</Box>

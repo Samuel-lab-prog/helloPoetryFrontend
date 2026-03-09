@@ -55,7 +55,7 @@ export function PoemCard({ poem }: PoemCardProps) {
 				boxShadow: '0 10px 28px rgba(58, 33, 56, 0.35)',
 			}}
 			animationName='fade-in'
-			animationDuration='420ms'
+			animationDuration='320ms'
 			animationTimingFunction='ease-out'
 		>
 			<Box
