@@ -12,11 +12,13 @@ type MyProfileType = {
 	status: string;
 	email: string;
 	emailVerifiedAt: string | null;
+	unreadNotificationsCount: number;
 	stats: {
 		poems: {
 			id: number;
 			title: string;
 		}[];
+		commentsIds: number[];
 		friends: {
 			id: number;
 		}[];

@@ -5,6 +5,7 @@
 export * from './components/NotificationCard';
 export * from './components/PoetCard';
 export * from './hooks/useAuthorProfile';
+export * from './hooks/useMyFriendRequests';
 export * from './hooks/useMyProfile';
 export * from './hooks/useNotificationsPanel';
 export * from './hooks/useUpdateMyProfile';
@@ -12,4 +13,3 @@ export * from './pages/AuthorPage';
 export * from './pages/MyProfilePage';
 export * from './pages/NotificationsPage';
 export * from './pages/PoetsPage';
-export * from './utils/getUnreadNotificationsCount';

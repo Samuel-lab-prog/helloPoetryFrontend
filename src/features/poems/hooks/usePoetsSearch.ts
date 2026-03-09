@@ -1,20 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 
-type PoetPreview = {
+export type PoetPreview = {
 	id: number;
 	nickname: string;
 	avatarUrl: string | null;
 	role: string;
 };
 
-type UsersPage = {
+export type UsersPage = {
 	users: PoetPreview[];
 	nextCursor?: number;
 	hasMore: boolean;
 };
 
-export function usePoetsSearch(searchNickname: string, limit = 50) {
+export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();
 
 	const query = useQuery({

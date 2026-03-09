@@ -1,7 +1,7 @@
 ﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 
-type SavedPoemType = {
+export type SavedPoemType = {
 	id: number;
 	title: string;
 	slug: string;
@@ -14,6 +14,7 @@ export function useSavedPoems(enabled = true) {
 	const query = useQuery({
 		queryKey: ['saved-poems'],
 		enabled,
+		staleTime: 1000 * 60 * 5,
 		queryFn: () => createHTTPRequest<SavedPoemType[]>({ path: '/poems/saved' }),
 	});
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';

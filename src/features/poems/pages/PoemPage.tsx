@@ -1,4 +1,5 @@
-﻿/* eslint-disable max-nested-callbacks */
+﻿/* eslint-disable no-restricted-imports */
+/* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';

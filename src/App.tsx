@@ -7,6 +7,11 @@ import { LoginPage, RegisterPage, useAuthClientStore } from '@features/auth';
 import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
 
 import { AdminPage, CreatePoemPage } from '@features/admin';
+import { registerEventListeners } from './core/events/registerEventListeners';
+import { QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+registerEventListeners(queryClient);
 
 function generateNavLinks(isAuthenticated: boolean) {
 	const links = [

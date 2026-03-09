@@ -11,7 +11,10 @@ export function useFriendRequestActions() {
 				params: [requesterId],
 				method: 'PATCH',
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
+			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });
+		},
 	});
 
 	const rejectMutation = useMutation({
@@ -21,7 +24,10 @@ export function useFriendRequestActions() {
 				params: [requesterId],
 				method: 'PATCH',
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['my-profile'] }),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
+			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });
+		},
 	});
 
 	function getErrorMessage() {

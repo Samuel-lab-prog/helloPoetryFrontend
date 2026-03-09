@@ -35,7 +35,7 @@ export type NotificationItem = {
 	readAt: string | null;
 };
 
-type NotificationsPageType = {
+export type NotificationsPageType = {
 	notifications: NotificationItem[];
 	hasMore: boolean;
 	nextCursor?: number;
@@ -52,6 +52,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 
 	const query = useQuery({
 		queryKey: ['notifications', { onlyUnread }],
+		staleTime: 1000 * 60 * 5,
 		queryFn: () =>
 			createHTTPRequest<NotificationsPageType>({
 				path: '/notifications',

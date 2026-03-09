@@ -10,6 +10,7 @@ export type UserMyProfileSnapshot = {
 	status: string;
 	email: string;
 	emailVerifiedAt: string | null;
+	unreadNotificationsCount: number;
 	stats: {
 		poems: {
 			id: number;
@@ -40,6 +41,7 @@ export type UserLoginBootstrap = {
 		status: string;
 		email: string;
 		emailVerifiedAt: string | null;
+		unreadNotificationsCount: number;
 		blockedUsersIds: number[];
 	};
 };

@@ -12,6 +12,7 @@ import {
 	Heading,
 	HStack,
 	IconButton,
+	Link,
 	Menu,
 	Portal,
 	Text,
@@ -19,10 +20,11 @@ import {
 	Input,
 	VStack,
 } from '@chakra-ui/react';
-import { EllipsisVertical } from 'lucide-react';
+import { Check, EllipsisVertical, X } from 'lucide-react';
 import { AsyncState, Surface, formatDate } from '@features/base';
 import { useAuthClientStore } from '@features/auth';
 import { useMyProfile } from '../hooks/useMyProfile';
+import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 import { useFriendRequestActions } from '@features/interactions';
 import { useMyPoems, usePoemCollections, useSavedPoems } from '@features/poems';
@@ -60,6 +62,11 @@ export function MyProfilePage() {
 	const { profile, isLoading, isError, isMissingClient } = useMyProfile();
 	const { updateMyProfile, isUpdatingProfile, updateProfileError, conflictField } =
 		useUpdateMyProfile();
+	const {
+		requests: friendRequests,
+		isLoading: isFriendRequestsLoading,
+		isError: isFriendRequestsError,
+	} = useMyFriendRequests(!isMissingClient);
 	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
 		useFriendRequestActions();
 	const {
@@ -340,11 +347,21 @@ export function MyProfilePage() {
 								</Heading>
 
 								<Flex direction='column' gap={3}>
-									{(profile.friendshipRequestsReceived?.length ?? 0) === 0 && (
-										<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+									{isFriendRequestsLoading && (
+										<Text textStyle='small'>Carregando solicitacoes...</Text>
+									)}
+									{!isFriendRequestsLoading &&
+										!isFriendRequestsError &&
+										friendRequests.received.length === 0 && (
+											<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+										)}
+									{isFriendRequestsError && (
+										<Text textStyle='small' color='red.400'>
+											Erro ao carregar solicitacoes.
+										</Text>
 									)}
 
-									{(profile.friendshipRequestsReceived ?? []).map((request) => (
+									{friendRequests.received.map((request) => (
 										<Flex
 											key={request.requesterId}
 											align={{ base: 'start', md: 'center' }}
@@ -356,25 +373,50 @@ export function MyProfilePage() {
 											borderColor='purple.700'
 											borderRadius='md'
 										>
-											<Text textStyle='small'>@{request.requesterNickname}</Text>
+											<HStack gap={3}>
+												<Avatar.Root size='sm'>
+													<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
+													<Avatar.Fallback name={request.requesterNickname} />
+												</Avatar.Root>
+												<Link
+													asChild
+													textStyle='small'
+													color='pink.200'
+													fontWeight='semibold'
+													textDecoration='underline'
+													textUnderlineOffset='3px'
+													_hover={{ color: 'pink.100' }}
+													_focusVisible={{
+														outline: '2px solid',
+														outlineColor: 'pink.300',
+														outlineOffset: '2px',
+													}}
+												>
+													<NavLink to={`/authors/${request.requesterId}`}>
+														@{request.requesterNickname}
+													</NavLink>
+												</Link>
+											</HStack>
 											<Flex gap={2}>
-												<Button
+												<IconButton
+													aria-label='Aceitar solicitacao'
 													size={{ base: 'xs', md: 'sm' }}
 													variant='solidPink'
 													onClick={() => acceptRequest(request.requesterId)}
 													loading={isAccepting}
 												>
-													Aceitar
-												</Button>
-												<Button
+													<Check />
+												</IconButton>
+												<IconButton
+													aria-label='Recusar solicitacao'
 													size={{ base: 'xs', md: 'sm' }}
 													variant='solidPink'
 													colorPalette='gray'
 													onClick={() => rejectRequest(request.requesterId)}
 													loading={isRejecting}
 												>
-													Recusar
-												</Button>
+													<X />
+												</IconButton>
 											</Flex>
 										</Flex>
 									))}
