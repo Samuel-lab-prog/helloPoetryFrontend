@@ -1,18 +1,13 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { useMyPoems } from '@features/poems';
+import { useSavedPoems } from '@features/poems';
 import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
-import { MyPoemsSection } from '../components/my-profile/MyPoemsSection';
+import { SavedPoemsSection } from '../components/my-profile/SavedPoemsSection';
 
-export function MyProfilePoemsPage() {
-	const navigate = useNavigate();
+export function MyProfileSavedPoemsPage() {
 	const authClient = useAuthClientStore((state) => state.authClient);
-	const {
-		poems: myPoems,
-		isLoading: isLoadingMyPoems,
-		isError: isMyPoemsError,
-	} = useMyPoems(Boolean(authClient?.id));
+	const { savedPoems, isLoadingSavedPoems } = useSavedPoems(Boolean(authClient?.id));
 
 	if (!authClient?.id) {
 		return (
@@ -33,21 +28,14 @@ export function MyProfilePoemsPage() {
 					gap={3}
 				>
 					<Heading as='h1' textStyle='h2'>
-						Todos os meus poemas
+						Todos os poemas salvos
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
 						<NavLink to='/my-profile'>Voltar ao perfil</NavLink>
 					</Button>
 				</Flex>
 
-				<MyPoemsSection
-					myPoems={myPoems}
-					isLoadingMyPoems={isLoadingMyPoems}
-					isMyPoemsError={isMyPoemsError}
-					onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
-					onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}
-					onDeletePoem={(id) => navigate(`/admin?mode=delete&poemId=${id}`)}
-				/>
+				<SavedPoemsSection savedPoems={savedPoems} isLoadingSavedPoems={isLoadingSavedPoems} />
 			</Box>
 		</Flex>
 	);

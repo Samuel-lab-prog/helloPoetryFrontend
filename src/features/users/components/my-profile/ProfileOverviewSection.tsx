@@ -63,14 +63,23 @@ export function ProfileOverviewSection({
 			>
 				<Flex justify='space-between' align='start' gap={4}>
 					<VStack align='start' gap={2} flex='1'>
-						<Avatar.Root size='2xl' w={{ base: '6rem', md: '8rem' }} h={{ base: '6rem', md: '8rem' }}>
+						<Avatar.Root
+							size='2xl'
+							w={{ base: '6rem', md: '8rem' }}
+							h={{ base: '6rem', md: '8rem' }}
+						>
 							<Avatar.Image src={profile.avatarUrl ?? undefined} />
 							<Avatar.Fallback name={profile.name} />
 						</Avatar.Root>
 
 						{isEditingProfile ? (
 							<>
-								<Input value={nameDraft} onChange={(e) => setNameDraft(e.target.value)} placeholder='Nome' bg='surface' />
+								<Input
+									value={nameDraft}
+									onChange={(e) => setNameDraft(e.target.value)}
+									placeholder='Nome'
+									bg='surface'
+								/>
 								<Input
 									value={nicknameDraft}
 									onChange={(e) => setNicknameDraft(e.target.value)}
@@ -129,12 +138,21 @@ export function ProfileOverviewSection({
 								>
 									Salvar
 								</Button>
-								<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' colorPalette='gray' onClick={handleCancelEdit}>
+								<Button
+									size={{ base: 'xs', md: 'sm' }}
+									variant='solidPink'
+									colorPalette='gray'
+									onClick={handleCancelEdit}
+								>
 									Cancelar
 								</Button>
 							</>
 						) : (
-							<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' onClick={() => setIsEditingProfile(true)}>
+							<Button
+								size={{ base: 'xs', md: 'sm' }}
+								variant='solidPink'
+								onClick={() => setIsEditingProfile(true)}
+							>
 								Editar perfil
 							</Button>
 						)}
@@ -143,16 +161,40 @@ export function ProfileOverviewSection({
 			</Surface>
 
 			<Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
-				<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-					<Text textStyle='smaller' color='pink.200'>Poemas</Text>
+				<Box
+					p={4}
+					border='1px solid'
+					borderColor='purple.700'
+					borderRadius='xl'
+					bg='rgba(255, 255, 255, 0.02)'
+				>
+					<Text textStyle='smaller' color='pink.200'>
+						Poemas
+					</Text>
 					<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
 				</Box>
-				<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-					<Text textStyle='smaller' color='pink.200'>Comentários</Text>
+				<Box
+					p={4}
+					border='1px solid'
+					borderColor='purple.700'
+					borderRadius='xl'
+					bg='rgba(255, 255, 255, 0.02)'
+				>
+					<Text textStyle='smaller' color='pink.200'>
+						Comentários
+					</Text>
 					<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
 				</Box>
-				<Box p={4} border='1px solid' borderColor='purple.700' borderRadius='xl' bg='rgba(255, 255, 255, 0.02)'>
-					<Text textStyle='smaller' color='pink.200'>Amigos</Text>
+				<Box
+					p={4}
+					border='1px solid'
+					borderColor='purple.700'
+					borderRadius='xl'
+					bg='rgba(255, 255, 255, 0.02)'
+				>
+					<Text textStyle='smaller' color='pink.200'>
+						Amigos
+					</Text>
 					<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
 				</Box>
 			</Grid>

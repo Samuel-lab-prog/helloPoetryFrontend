@@ -42,6 +42,9 @@ export type MyPoemsSectionProps = {
 export type CollectionsSectionProps = {
 	profile: MyProfileViewModel;
 	collections: PoemCollectionType[];
+	totalCollectionsCount?: number;
+	viewAllHref?: string;
+	showManagementControls?: boolean;
 	myPoems: FullPoemType[];
 	savedPoems: SavedPoemType[];
 	isLoadingCollections: boolean;
@@ -53,17 +56,13 @@ export type CollectionsSectionProps = {
 		description: string;
 	}) => Promise<void>;
 	onDeleteCollection: (collectionId: number) => Promise<void>;
-	onAddPoemToCollection: (input: {
-		collectionId: number;
-		poemId: number;
-	}) => Promise<void>;
-	onRemovePoemFromCollection: (input: {
-		collectionId: number;
-		poemId: number;
-	}) => Promise<void>;
+	onAddPoemToCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
+	onRemovePoemFromCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
 };
 
 export type SavedPoemsSectionProps = {
 	savedPoems: SavedPoemType[];
+	totalSavedPoemsCount?: number;
+	viewAllHref?: string;
 	isLoadingSavedPoems: boolean;
 };

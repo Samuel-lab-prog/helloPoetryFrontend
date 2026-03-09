@@ -165,7 +165,10 @@ export function MyProfilePage() {
 							>
 								<CollectionsSection
 									profile={profile}
-									collections={collections}
+									collections={collections.slice(0, 3)}
+									totalCollectionsCount={collections.length}
+									viewAllHref='/my-profile/collections'
+									showManagementControls={false}
 									myPoems={myPoems}
 									savedPoems={savedPoems}
 									isLoadingCollections={isLoadingCollections}
@@ -186,7 +189,9 @@ export function MyProfilePage() {
 								animationDelay='150ms'
 							>
 								<SavedPoemsSection
-									savedPoems={savedPoems}
+									savedPoems={savedPoems.slice(0, 3)}
+									totalSavedPoemsCount={savedPoems.length}
+									viewAllHref='/my-profile/saved-poems'
 									isLoadingSavedPoems={isLoadingSavedPoems}
 								/>
 							</Box>

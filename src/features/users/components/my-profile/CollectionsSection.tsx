@@ -1,12 +1,78 @@
-import { useState } from 'react';
-import { Box, Button, Flex, Heading, Input, Text, Textarea } from '@chakra-ui/react';
+import { useMemo } from 'react';
+import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import { Surface } from '@features/base';
+import { ExternalLink, Plus, Trash2, X } from 'lucide-react';
+import { FormField, Surface } from '@features/base';
+import { PoemCombobox, type PoemMinimalDataType } from '@features/poems';
 import type { CollectionsSectionProps } from './types';
+
+type CreateCollectionFormValues = {
+	name: string;
+	description: string;
+};
+
+type AddPoemFormValues = {
+	poemId?: number;
+};
+
+type AddPoemToCollectionFormProps = {
+	collectionId: number;
+	poems: PoemMinimalDataType[];
+	isUpdatingCollections: boolean;
+	onAddPoemToCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
+};
+
+function AddPoemToCollectionForm({
+	collectionId,
+	poems,
+	isUpdatingCollections,
+	onAddPoemToCollection,
+}: AddPoemToCollectionFormProps) {
+	const form = useForm<AddPoemFormValues>({
+		defaultValues: { poemId: undefined },
+		mode: 'onChange',
+	});
+	const selectedPoemId = form.watch('poemId');
+
+	return (
+		<Flex
+			as='form'
+			align={{ base: 'stretch', md: 'end' }}
+			direction={{ base: 'column', md: 'row' }}
+			gap={2}
+			onSubmit={form.handleSubmit(async (values) => {
+				if (!values.poemId) return;
+				await onAddPoemToCollection({
+					collectionId,
+					poemId: values.poemId,
+				});
+				form.reset({ poemId: undefined });
+			})}
+		>
+			<Box flex='1'>
+				<PoemCombobox control={form.control} poems={poems} name='poemId' />
+			</Box>
+			<IconButton
+				type='submit'
+				aria-label='Adicionar poema a colecao'
+				size={{ base: 'xs', md: 'sm' }}
+				variant='solidPink'
+				loading={isUpdatingCollections}
+				disabled={!selectedPoemId || isUpdatingCollections}
+			>
+				<Plus />
+			</IconButton>
+		</Flex>
+	);
+}
 
 export function CollectionsSection({
 	profile,
 	collections,
+	totalCollectionsCount,
+	viewAllHref,
+	showManagementControls = true,
 	myPoems,
 	savedPoems,
 	isLoadingCollections,
@@ -17,57 +83,110 @@ export function CollectionsSection({
 	onAddPoemToCollection,
 	onRemovePoemFromCollection,
 }: CollectionsSectionProps) {
-	const [collectionNameDraft, setCollectionNameDraft] = useState('');
-	const [collectionDescriptionDraft, setCollectionDescriptionDraft] = useState('');
-	const [collectionPoemIdDrafts, setCollectionPoemIdDrafts] = useState<Record<number, string>>({});
+	const createCollectionForm = useForm<CreateCollectionFormValues>({
+		defaultValues: {
+			name: '',
+			description: '',
+		},
+		mode: 'onChange',
+	});
+	const collectionName = createCollectionForm.watch('name');
+
+	const availablePoems = useMemo<PoemMinimalDataType[]>(() => {
+		const items = [...myPoems, ...savedPoems];
+		const uniqueById = new Map<number, PoemMinimalDataType>();
+		items.forEach((poem) => {
+			if (!uniqueById.has(poem.id)) {
+				uniqueById.set(poem.id, {
+					id: poem.id,
+					title: poem.title,
+				});
+			}
+		});
+		return Array.from(uniqueById.values());
+	}, [myPoems, savedPoems]);
 
 	return (
 		<Surface p={5} variant='panel'>
-			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Coleções de poemas
-			</Heading>
-
-			<Flex direction='column' gap={3} mb={5}>
-				<Input
-					value={collectionNameDraft}
-					onChange={(event) => setCollectionNameDraft(event.target.value)}
-					placeholder='Nome da coleção'
-					bg='surface'
-				/>
-				<Textarea
-					value={collectionDescriptionDraft}
-					onChange={(event) => setCollectionDescriptionDraft(event.target.value)}
-					placeholder='Descrição da coleção'
-					rows={3}
-					bg='surface'
-				/>
-				<Button
-					size={{ base: 'xs', md: 'sm' }}
-					variant='solidPink'
-					loading={isUpdatingCollections}
-					onClick={async () => {
-						if (!collectionNameDraft.trim()) return;
-						await onCreateCollection({
-							userId: profile.id,
-							name: collectionNameDraft.trim(),
-							description: collectionDescriptionDraft.trim(),
-						});
-						setCollectionNameDraft('');
-						setCollectionDescriptionDraft('');
-					}}
-				>
-					Criar coleção
-				</Button>
+			<Flex align='center' justify='space-between' gap={3} mb={4}>
+				<Heading as='h2' textStyle='h4' color='pink.300'>
+					Colecoes de poemas
+				</Heading>
+				{viewAllHref && (
+					<Button asChild size={{ base: 'xs', md: 'sm' }} variant='ghost'>
+						<NavLink to={viewAllHref}>Ver todas</NavLink>
+					</Button>
+				)}
 			</Flex>
 
+			{showManagementControls && (
+				<Flex
+					as='form'
+					direction='column'
+					gap={3}
+					mb={5}
+					onSubmit={createCollectionForm.handleSubmit(async (values) => {
+						const name = values.name.trim();
+						if (!name) return;
+
+						await onCreateCollection({
+							userId: profile.id,
+							name,
+							description: values.description.trim(),
+						});
+
+						createCollectionForm.reset({
+							name: '',
+							description: '',
+						});
+					})}
+				>
+					<FormField
+						control={createCollectionForm.control}
+						name='name'
+						label='Nome da colecao'
+						required
+					/>
+					<FormField
+						control={createCollectionForm.control}
+						name='description'
+						label='Descricao da colecao'
+						as='textarea'
+						rows={3}
+					/>
+					<IconButton
+						type='submit'
+						aria-label='Criar colecao'
+						size={{ base: 'xs', md: 'sm' }}
+						variant='solidPink'
+						loading={isUpdatingCollections}
+						disabled={!collectionName?.trim() || isUpdatingCollections}
+						alignSelf='start'
+					>
+						<Plus />
+					</IconButton>
+				</Flex>
+			)}
+
 			<Flex direction='column' gap={4}>
-				{isLoadingCollections && <Text textStyle='small'>Carregando coleções...</Text>}
+				{isLoadingCollections && <Text textStyle='small'>Carregando colecoes...</Text>}
 				{!isLoadingCollections && collections.length === 0 && (
-					<Text textStyle='small'>Você ainda não criou coleções.</Text>
+					<Text textStyle='small'>Voce ainda nao criou colecoes.</Text>
+				)}
+				{!isLoadingCollections && Boolean(totalCollectionsCount) && (
+					<Text textStyle='smaller' color='pink.200'>
+						Mostrando {collections.length} de {totalCollectionsCount} colecoes.
+					</Text>
 				)}
 
 				{collections.map((collection) => (
-					<Box key={collection.id} p={4} border='1px solid' borderColor='purple.700' borderRadius='md'>
+					<Box
+						key={collection.id}
+						p={4}
+						border='1px solid'
+						borderColor='purple.700'
+						borderRadius='md'
+					>
 						<Flex
 							align={{ base: 'start', md: 'center' }}
 							justify='space-between'
@@ -78,29 +197,32 @@ export function CollectionsSection({
 							<Flex direction='column' gap={1}>
 								<Text textStyle='small'>{collection.name}</Text>
 								<Text textStyle='smaller' color='pink.200'>
-									{collection.description || 'Sem descrição.'}
+									{collection.description || 'Sem descricao.'}
 								</Text>
 								<Text textStyle='smaller' color='pink.200'>
 									{collection.poemIds.length} poemas
 								</Text>
 							</Flex>
-							<Button
-								size={{ base: 'xs', md: 'sm' }}
-								variant='solidPink'
-								colorPalette='gray'
-								loading={isUpdatingCollections}
-								onClick={() => {
-									void onDeleteCollection(collection.id);
-								}}
-							>
-								Excluir
-							</Button>
+							{showManagementControls && (
+								<IconButton
+									aria-label='Excluir colecao'
+									size={{ base: 'xs', md: 'sm' }}
+									variant='solidPink'
+									colorPalette='gray'
+									loading={isUpdatingCollections}
+									onClick={() => {
+										void onDeleteCollection(collection.id);
+									}}
+								>
+									<Trash2 />
+								</IconButton>
+							)}
 						</Flex>
 
 						<Flex direction='column' gap={2} mb={3}>
 							{collection.poemIds.length === 0 && (
 								<Text textStyle='smaller' color='pink.200'>
-									Nenhum poema nesta coleção.
+									Nenhum poema nesta colecao.
 								</Text>
 							)}
 							{collection.poemIds.map((poemId) => {
@@ -122,67 +244,50 @@ export function CollectionsSection({
 										<Text textStyle='smaller' color='pink.100'>
 											{poem ? poem.title : `Poema #${poemId}`}
 										</Text>
-										<Flex gap={2}>
-											{poem?.slug && (
-												<Button size={{ base: 'xs', md: 'sm' }} variant='solidPink' asChild>
-													<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Abrir</NavLink>
-												</Button>
-											)}
-											<Button
-												size={{ base: 'xs', md: 'sm' }}
-												variant='solidPink'
-												colorPalette='gray'
-												loading={isUpdatingCollections}
-												onClick={() => {
-													void onRemovePoemFromCollection({
-														collectionId: collection.id,
-														poemId,
-													});
-												}}
-											>
-												Remover
-											</Button>
-										</Flex>
+										{showManagementControls && (
+											<Flex gap={2}>
+												{poem?.slug && (
+													<IconButton
+														aria-label='Abrir poema'
+														size={{ base: 'xs', md: 'sm' }}
+														variant='solidPink'
+														asChild
+													>
+														<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+															<ExternalLink />
+														</NavLink>
+													</IconButton>
+												)}
+												<IconButton
+													aria-label='Remover poema da colecao'
+													size={{ base: 'xs', md: 'sm' }}
+													variant='solidPink'
+													colorPalette='gray'
+													loading={isUpdatingCollections}
+													onClick={() => {
+														void onRemovePoemFromCollection({
+															collectionId: collection.id,
+															poemId,
+														});
+													}}
+												>
+													<X />
+												</IconButton>
+											</Flex>
+										)}
 									</Flex>
 								);
 							})}
 						</Flex>
 
-						<Flex
-							align={{ base: 'stretch', md: 'center' }}
-							direction={{ base: 'column', md: 'row' }}
-							gap={2}
-						>
-							<Input
-								value={collectionPoemIdDrafts[collection.id] ?? ''}
-								onChange={(event) =>
-									setCollectionPoemIdDrafts((previous) => ({
-										...previous,
-										[collection.id]: event.target.value,
-									}))
-								}
-								placeholder='ID do poema'
-								inputMode='numeric'
-								bg='surface'
+						{showManagementControls && (
+							<AddPoemToCollectionForm
+								collectionId={collection.id}
+								poems={availablePoems}
+								isUpdatingCollections={isUpdatingCollections}
+								onAddPoemToCollection={onAddPoemToCollection}
 							/>
-							<Button
-								size={{ base: 'xs', md: 'sm' }}
-								variant='solidPink'
-								loading={isUpdatingCollections}
-								onClick={async () => {
-									const rawValue = collectionPoemIdDrafts[collection.id] ?? '';
-									const poemId = Number(rawValue);
-									if (!Number.isFinite(poemId) || poemId <= 0) return;
-									await onAddPoemToCollection({ collectionId: collection.id, poemId });
-									setCollectionPoemIdDrafts((previous) => ({
-										...previous,
-										[collection.id]: '',
-									}));
-								}}
-							>
-								Adicionar poema
-							</Button>
-						</Flex>
+						)}
 					</Box>
 				))}
 			</Flex>

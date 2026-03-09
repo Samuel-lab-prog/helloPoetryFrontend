@@ -38,4 +38,3 @@ export function useMyFriendRequests(enabled = true) {
 		refetch: query.refetch,
 	};
 }
-

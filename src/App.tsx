@@ -7,9 +7,11 @@ import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 import {
 	AuthorPage,
+	MyProfileCollectionsPage,
 	MyProfileFriendRequestsPage,
 	MyProfilePage,
 	MyProfilePoemsPage,
+	MyProfileSavedPoemsPage,
 	NotificationsPage,
 	PoetsPage,
 } from '@features/users';
@@ -53,8 +55,10 @@ export default function App() {
 				{ path: 'poems/new', element: <CreatePoemPage /> },
 				{ path: 'admin', element: <AdminPage /> },
 				{ path: 'my-profile', element: <MyProfilePage /> },
+				{ path: 'my-profile/collections', element: <MyProfileCollectionsPage /> },
 				{ path: 'my-profile/friend-requests', element: <MyProfileFriendRequestsPage /> },
 				{ path: 'my-profile/poems', element: <MyProfilePoemsPage /> },
+				{ path: 'my-profile/saved-poems', element: <MyProfileSavedPoemsPage /> },
 				{ path: 'notifications', element: <NotificationsPage /> },
 			],
 		},

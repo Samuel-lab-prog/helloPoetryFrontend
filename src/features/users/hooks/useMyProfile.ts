@@ -49,4 +49,3 @@ export function useMyProfile() {
 		refetch: query.refetch,
 	};
 }
-

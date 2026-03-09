@@ -11,9 +11,7 @@ export function RegisterPage() {
 						Criar conta
 					</Heading>
 
-					<Text variant='muted' >
-						Preencha seus dados para criar sua conta.
-					</Text>
+					<Text variant='muted'>Preencha seus dados para criar sua conta.</Text>
 				</Flex>
 
 				<RegisterForm />

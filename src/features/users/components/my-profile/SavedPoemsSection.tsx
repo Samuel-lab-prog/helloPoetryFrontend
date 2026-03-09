@@ -3,17 +3,34 @@ import { NavLink } from 'react-router-dom';
 import { Surface, formatDate } from '@features/base';
 import type { SavedPoemsSectionProps } from './types';
 
-export function SavedPoemsSection({ savedPoems, isLoadingSavedPoems }: SavedPoemsSectionProps) {
+export function SavedPoemsSection({
+	savedPoems,
+	totalSavedPoemsCount,
+	viewAllHref,
+	isLoadingSavedPoems,
+}: SavedPoemsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Heading as='h2' textStyle='h4' mb={4} color='pink.300'>
-				Poemas salvos
-			</Heading>
+			<Flex align='center' justify='space-between' gap={3} mb={4}>
+				<Heading as='h2' textStyle='h4' color='pink.300'>
+					Poemas salvos
+				</Heading>
+				{viewAllHref && (
+					<Button asChild size={{ base: 'xs', md: 'sm' }} variant='ghost'>
+						<NavLink to={viewAllHref}>Ver todos</NavLink>
+					</Button>
+				)}
+			</Flex>
 
 			<Flex direction='column' gap={3}>
 				{isLoadingSavedPoems && <Text textStyle='small'>Carregando poemas salvos...</Text>}
 				{!isLoadingSavedPoems && savedPoems.length === 0 && (
-					<Text textStyle='small'>Você ainda não salvou poemas.</Text>
+					<Text textStyle='small'>Voce ainda nao salvou poemas.</Text>
+				)}
+				{!isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (
+					<Text textStyle='smaller' color='pink.200'>
+						Mostrando {savedPoems.length} de {totalSavedPoemsCount} poemas salvos.
+					</Text>
 				)}
 
 				{savedPoems.map((poem, index) => (

@@ -44,7 +44,7 @@ export function useSavedPoems(enabled = true) {
 		const error = (saveMutation.error || unsaveMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Faca login para salvar poemas.';
-		if (error.statusCode === 404) return 'Poema não encontrado.';
+		if (error.statusCode === 404) return 'Poema nï¿½o encontrado.';
 		if (error.statusCode === 409) return 'Poema ja esta salvo.';
 		return 'Erro ao atualizar poema salvo.';
 	}
@@ -58,4 +58,3 @@ export function useSavedPoems(enabled = true) {
 		saveError: getErrorMessage(),
 	};
 }
-

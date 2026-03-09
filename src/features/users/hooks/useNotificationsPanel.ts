@@ -138,4 +138,3 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		isDeleting: deleteMutation.isPending,
 	};
 }
-

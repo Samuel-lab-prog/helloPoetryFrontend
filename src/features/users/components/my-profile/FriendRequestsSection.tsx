@@ -23,7 +23,13 @@ export function FriendRequestsSection({
 					Solicitacoes de amizade recebidas
 				</Heading>
 				{viewAllHref && (
-					<Link asChild textStyle='small' color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>
+					<Link
+						asChild
+						textStyle='small'
+						color='pink.200'
+						textDecoration='underline'
+						textUnderlineOffset='3px'
+					>
 						<NavLink to={viewAllHref}>Ver todas</NavLink>
 					</Link>
 				)}
@@ -31,10 +37,16 @@ export function FriendRequestsSection({
 
 			<Flex direction='column' gap={3}>
 				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitacoes...</Text>}
-				{!isFriendRequestsLoading && !isFriendRequestsError && friendRequests.received.length === 0 && (
-					<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+				{!isFriendRequestsLoading &&
+					!isFriendRequestsError &&
+					friendRequests.received.length === 0 && (
+						<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+					)}
+				{isFriendRequestsError && (
+					<Text textStyle='small' color='red.400'>
+						Erro ao carregar solicitacoes.
+					</Text>
 				)}
-				{isFriendRequestsError && <Text textStyle='small' color='red.400'>Erro ao carregar solicitacoes.</Text>}
 
 				{friendRequests.received.map((request, index) => (
 					<Flex

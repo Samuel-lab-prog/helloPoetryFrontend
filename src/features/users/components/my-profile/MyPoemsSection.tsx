@@ -1,4 +1,14 @@
-import { Badge, Flex, Heading, HStack, IconButton, Link, Menu, Portal, Text } from '@chakra-ui/react';
+import {
+	Badge,
+	Flex,
+	Heading,
+	HStack,
+	IconButton,
+	Link,
+	Menu,
+	Portal,
+	Text,
+} from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Surface, formatDate } from '@features/base';
@@ -47,7 +57,13 @@ export function MyPoemsSection({
 					Meus poemas
 				</Heading>
 				{viewAllHref && (totalPoemsCount ?? myPoems.length) > myPoems.length && (
-					<Link asChild textStyle='small' color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>
+					<Link
+						asChild
+						textStyle='small'
+						color='pink.200'
+						textDecoration='underline'
+						textUnderlineOffset='3px'
+					>
 						<NavLink to={viewAllHref}>Ver todos</NavLink>
 					</Link>
 				)}
@@ -58,7 +74,11 @@ export function MyPoemsSection({
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
 					<Text textStyle='small'>Você ainda não publicou poemas.</Text>
 				)}
-				{isMyPoemsError && <Text textStyle='small' color='red.400'>Erro ao carregar seus poemas.</Text>}
+				{isMyPoemsError && (
+					<Text textStyle='small' color='red.400'>
+						Erro ao carregar seus poemas.
+					</Text>
+				)}
 
 				{myPoems.map((poem, index) => (
 					<Flex
@@ -79,7 +99,8 @@ export function MyPoemsSection({
 						<Flex direction='column' gap={1} flex='1'>
 							<Text textStyle='small'>{poem.title}</Text>
 							<Text textStyle='smaller' color='pink.200'>
-								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} | {translateVisibility(poem.visibility)}
+								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
+								{translateVisibility(poem.visibility)}
 							</Text>
 							{poem.stats && (
 								<Text textStyle='smaller' color='pink.200'>
@@ -99,20 +120,43 @@ export function MyPoemsSection({
 
 						<Menu.Root positioning={{ placement: 'bottom-end' }}>
 							<Menu.Trigger asChild>
-								<IconButton aria-label='Abrir menu de a��es' variant='solidPink' size={{ base: 'xs', md: 'sm' }}>
+								<IconButton
+									aria-label='Abrir menu de a��es'
+									variant='solidPink'
+									size={{ base: 'xs', md: 'sm' }}
+								>
 									<EllipsisVertical />
 								</IconButton>
 							</Menu.Trigger>
 							<Portal>
 								<Menu.Positioner>
-									<Menu.Content bg='rgba(27, 0, 25, 0.98)' border='1px solid' borderColor='purple.700'>
-										<Menu.Item value={`open-${poem.id}`} color='pink.100' _hover={{ bg: 'rgba(255, 255, 255, 0.06)' }} onClick={() => onOpenPoem(poem.slug, poem.id)}>
+									<Menu.Content
+										bg='rgba(27, 0, 25, 0.98)'
+										border='1px solid'
+										borderColor='purple.700'
+									>
+										<Menu.Item
+											value={`open-${poem.id}`}
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											onClick={() => onOpenPoem(poem.slug, poem.id)}
+										>
 											Abrir
 										</Menu.Item>
-										<Menu.Item value={`update-${poem.id}`} color='pink.100' _hover={{ bg: 'rgba(255, 255, 255, 0.06)' }} onClick={() => onUpdatePoem(poem.id)}>
+										<Menu.Item
+											value={`update-${poem.id}`}
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											onClick={() => onUpdatePoem(poem.id)}
+										>
 											Atualizar
 										</Menu.Item>
-										<Menu.Item value={`delete-${poem.id}`} color='pink.100' _hover={{ bg: 'rgba(255, 255, 255, 0.06)' }} onClick={() => onDeletePoem(poem.id)}>
+										<Menu.Item
+											value={`delete-${poem.id}`}
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											onClick={() => onDeletePoem(poem.id)}
+										>
 											Deletar
 										</Menu.Item>
 									</Menu.Content>

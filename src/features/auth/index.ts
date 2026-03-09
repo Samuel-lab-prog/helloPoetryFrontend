@@ -11,4 +11,3 @@ export * from './pages/LoginPage';
 export * from './pages/RegisterPage';
 export * from './schemas/loginSchema';
 export * from './schemas/registerSchema';
-

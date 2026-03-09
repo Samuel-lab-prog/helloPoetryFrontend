@@ -47,9 +47,8 @@ function parsePersistedState(raw: string | null): PersistedAuthState {
 	try {
 		const parsed = JSON.parse(raw) as Partial<PersistedAuthState> | Partial<AuthClient> | null;
 
-		if (!parsed || typeof parsed !== 'object') 
+		if (!parsed || typeof parsed !== 'object')
 			return { authClient: null, unreadNotificationsCount: 0 };
-		
 
 		if ('authClient' in parsed) {
 			const authClient =
