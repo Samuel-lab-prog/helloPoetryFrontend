@@ -1,7 +1,7 @@
 import { Badge, Box, Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
 import { Bell, BookOpen, House, LogIn, PenSquare, User, UserPlus, Users } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 function getLinkIcon(to: string) {
 	switch (to) {
@@ -170,3 +170,4 @@ export function Navbar({ links }: { links: { label: string; to: string }[] }) {
 		</Flex>
 	);
 }
+

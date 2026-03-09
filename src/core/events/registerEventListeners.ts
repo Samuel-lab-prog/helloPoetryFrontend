@@ -1,7 +1,6 @@
-/* eslint-disable no-restricted-imports */
 import type { QueryClient } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import type {
 	FullPoemType,
 	SavedPoemType,
@@ -12,7 +11,7 @@ import type { MyFriendRequestsType, NotificationsPageType } from '@features/user
 import {
 	useUserBootstrapStore,
 	type UserMyProfileSnapshot,
-} from '@features/auth/stores/useUserBootstrapStore';
+} from '@root/core/stores/useUserBootstrapStore';
 import { eventBus } from './eventBus';
 
 export function registerEventListeners(queryClient: QueryClient): void {
@@ -90,3 +89,4 @@ export function registerEventListeners(queryClient: QueryClient): void {
 		queryClient.removeQueries({ queryKey: ['poets-search'] });
 	});
 }
+

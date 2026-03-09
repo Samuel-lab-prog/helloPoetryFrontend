@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Badge, Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import { AsyncState } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
 import { NotificationCard } from '../components/NotificationCard';
 
@@ -86,3 +86,4 @@ export function NotificationsPage() {
 		</Flex>
 	);
 }
+

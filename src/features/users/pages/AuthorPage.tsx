@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/react';
 import { NavLink, useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
 import { useAuthorPoems } from '../../poems/hooks/useAuthorPoems';
@@ -137,3 +137,4 @@ export function AuthorPage() {
 		</Flex>
 	);
 }
+

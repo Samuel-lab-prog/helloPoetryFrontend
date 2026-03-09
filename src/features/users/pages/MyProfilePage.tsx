@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react';
 import { Check, EllipsisVertical, X } from 'lucide-react';
 import { AsyncState, Surface, formatDate } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
@@ -86,6 +86,7 @@ export function MyProfilePage() {
 		collectionsError,
 	} = usePoemCollections(!isMissingClient);
 	const [isEditingProfile, setIsEditingProfile] = useState(false);
+	const [isLoggingOut, setIsLoggingOut] = useState(false);
 	const [nameDraft, setNameDraft] = useState('');
 	const [nicknameDraft, setNicknameDraft] = useState('');
 	const [bioDraft, setBioDraft] = useState('');
@@ -101,6 +102,14 @@ export function MyProfilePage() {
 		setBioDraft(profile.bio ?? '');
 		setAvatarUrlDraft(profile.avatarUrl ?? '');
 	}, [profile]);
+
+	if (isLoggingOut) {
+		return (
+			<Flex as='main' layerStyle='main' direction='column' align='center'>
+				<Text textStyle='body'>Saindo...</Text>
+			</Flex>
+		);
+	}
 
 	if (isMissingClient) {
 		return (
@@ -157,15 +166,18 @@ export function MyProfilePage() {
 					<Button
 						size={{ base: 'sm', md: 'md' }}
 						variant='solidPink'
+						loading={isLoggingOut}
 						onClick={() => {
+							if (isLoggingOut) return;
+							setIsLoggingOut(true);
 							const authClient = useAuthClientStore.getState().authClient;
+							navigate('/login', { replace: true });
 							clearAuthClient();
 							void eventBus.publish('userLoggedOut', {
 								userId: authClient?.id ?? null,
 								reason: 'manual',
 								loggedOutAt: new Date().toISOString(),
 							});
-							navigate('/login');
 						}}
 					>
 						Sair
@@ -757,3 +769,4 @@ export function MyProfilePage() {
 		</Flex>
 	);
 }
+

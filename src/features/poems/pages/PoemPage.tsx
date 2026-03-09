@@ -1,4 +1,4 @@
-Ôªø/* eslint-disable no-restricted-imports */
+/* eslint-disable no-restricted-imports */
 /* eslint-disable max-nested-callbacks */
 /* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
@@ -7,7 +7,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Avatar, Box, Button, Flex, Heading, Icon, Link, Text, Textarea } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, toaster } from '@features/base';
-import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
 import { usePoem } from '../hooks/usePoem';
@@ -66,7 +66,7 @@ const PoemAuthorCard = memo(function PoemAuthorCard({
 					@{author.nickname}
 				</Text>
 				<Text textStyle='smaller' color='pink.200'>
-					Curtidas: {stats.likesCount} | Coment√°rios: {stats.commentsCount}
+					Curtidas: {stats.likesCount} | Coment·rios: {stats.commentsCount}
 				</Text>
 			</Flex>
 
@@ -218,14 +218,14 @@ const CommentsSection = memo(function CommentsSection({
 			bg='rgba(255, 255, 255, 0.03)'
 		>
 			<Heading as='h2' textStyle='h3' mb={4}>
-				Coment√°rios
+				Coment·rios
 			</Heading>
 
 			<Flex direction='column' gap={3} mb={6}>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Escreva um coment√°rio (1-300 caracteres)'
+					placeholder='Escreva um coment·rio (1-300 caracteres)'
 					rows={4}
 					maxLength={300}
 					disabled={!poemIsCommentable || isCreatingComment}
@@ -242,12 +242,12 @@ const CommentsSection = memo(function CommentsSection({
 							void onPublishComment();
 						}}
 					>
-						Publicar coment√°rio
+						Publicar coment·rio
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>
-						Coment√°rios desativados para este poema.
+						Coment·rios desativados para este poema.
 					</Text>
 				)}
 			</Flex>
@@ -256,8 +256,8 @@ const CommentsSection = memo(function CommentsSection({
 				isLoading={isLoadingComments}
 				isError={isCommentsError}
 				isEmpty={comments.length === 0}
-				loadingElement={<Text textStyle='body'>Carregando coment√°rios...</Text>}
-				errorElement={<Text textStyle='body'>Erro ao carregar coment√°rios.</Text>}
+				loadingElement={<Text textStyle='body'>Carregando coment·rios...</Text>}
+				errorElement={<Text textStyle='body'>Erro ao carregar coment·rios.</Text>}
 				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
 			>
 				<Flex direction='column' gap={3}>
@@ -353,7 +353,7 @@ export function PoemPage() {
 					toaster.create({
 						type: 'error',
 						title: 'Erro ao carregar respostas',
-						description: 'N√£o foi possivel buscar algumas respostas.',
+						description: 'N„o foi possivel buscar algumas respostas.',
 						closable: true,
 					});
 				})
@@ -373,7 +373,7 @@ export function PoemPage() {
 		shownErrorsRef.current[key] = message;
 		toaster.create({
 			type: 'error',
-			title: 'Opera√ß√£o falhou',
+			title: 'OperaÁ„o falhou',
 			description: message,
 			closable: true,
 		});
@@ -408,7 +408,7 @@ export function PoemPage() {
 			setCommentInput('');
 			toaster.create({
 				type: 'success',
-				title: 'Coment√°rio publicado',
+				title: 'Coment·rio publicado',
 				closable: true,
 			});
 		} catch {
@@ -468,7 +468,7 @@ export function PoemPage() {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>ID de poema inv√°lido.</Box>
+					<Box textStyle='body'>ID de poema inv·lido.</Box>
 				</Box>
 			</Flex>
 		);
@@ -481,7 +481,7 @@ export function PoemPage() {
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
-					emptyElement={<Box textStyle='body'>Poema n√£o encontrado</Box>}
+					emptyElement={<Box textStyle='body'>Poema n„o encontrado</Box>}
 					errorElement={
 						<Box textStyle='body'>Erro ao carregar o poema. Tente novamente mais tarde</Box>
 					}
@@ -583,3 +583,4 @@ export function PoemPage() {
 		</Flex>
 	);
 }
+

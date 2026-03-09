@@ -14,6 +14,9 @@ export function useRegisterForm() {
 	const form = useForm<RegisterDataType>({
 		resolver: zodResolver(registerSchema),
 		mode: 'onChange',
+		defaultValues: {
+			bio: '',
+		},
 	});
 
 	const registerMutation = useMutation({

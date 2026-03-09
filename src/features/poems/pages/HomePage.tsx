@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { AsyncState, Footer, Surface } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
 import { useHomeFeed } from '../hooks/useHomeFeed';
@@ -78,3 +78,4 @@ export function HomePage() {
 		</Flex>
 	);
 }
+

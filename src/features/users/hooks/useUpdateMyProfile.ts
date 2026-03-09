@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-imports */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest, type AppErrorType } from '@features/base';
-import { useAuthClientStore } from '@features/auth/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 type UpdateMyProfileInput = {
 	name?: string;
@@ -42,7 +42,7 @@ export function useUpdateMyProfile() {
 	function getConflictField(): ConflictField {
 		const error = mutation.error as AppErrorType | null;
 		if (!error || error.statusCode !== 409) return null;
-		const message = error.errorMessages?.join(' ').toLowerCase() ?? '';
+		const message = error.message?.toLowerCase() ?? '';
 		if (message.includes('nickname') || message.includes('apelido')) {
 			return 'nickname';
 		}
@@ -57,3 +57,4 @@ export function useUpdateMyProfile() {
 		canEditProfile: !!clientId,
 	};
 }
+

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 export type MyFriendRequestsType = {
 	sent: {
@@ -36,3 +36,4 @@ export function useMyFriendRequests(enabled = true) {
 		refetch: query.refetch,
 	};
 }
+

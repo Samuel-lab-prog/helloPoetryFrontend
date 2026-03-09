@@ -10,23 +10,23 @@ export function LoginPage() {
 				direction='column'
 				align='center'
 				justify='center'
-				h={['70vh', undefined, '80vh']}
+				mt='120px'
 			>
 				<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
-					<Heading as='h1' textStyle='h2' color='accent'>
+					<Heading as='h1' textStyle='h1' color='accent'>
 						Entrar
 					</Heading>
 
-					<Text textStyle='small' color='pink.100'>
+					<Text variant='muted' >
 						Informe suas credenciais para entrar.
 					</Text>
 				</Flex>
 
 				<LoginForm />
 
-				<Text mt={4} textStyle='small' color='pink.100' textAlign='center'>
+				<Text mt={4} variant='muted' textAlign='center'>
 					Ainda não tem uma conta?{' '}
-					<Link asChild color='pink.200' textDecoration='underline'>
+					<Link asChild color='pink.300' textDecoration='underline'>
 						<NavLink to='/register'>Criar conta</NavLink>
 					</Link>
 				</Text>

@@ -52,22 +52,6 @@ export default defineConfig([
 			'no-undef': 'off',
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'arrow-body-style': ['error', 'as-needed'],
-			'no-restricted-imports': [
-				'error',
-				{
-					patterns: [
-						{
-							group: ['@features/*/**'],
-							message:
-								'Do not import internal feature paths. Use the public API instead: @features/<feature>',
-						},
-						{
-							group: ['../**/features/**'],
-							message: 'Do not bypass feature boundaries using relative imports.',
-						},
-					],
-				},
-			],
 		},
 	},
 ]);

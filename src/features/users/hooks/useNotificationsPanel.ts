@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
 import { useEffect } from 'react';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 type NotificationPayload = {
 	title?: string;
@@ -135,3 +135,4 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		isDeleting: deleteMutation.isPending,
 	};
 }
+

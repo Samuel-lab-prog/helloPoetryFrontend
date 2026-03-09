@@ -57,7 +57,7 @@ const registerFields: Field<RegisterDataType>[] = [
 	{
 		name: 'bio',
 		label: 'Bio',
-		required: true,
+		required: false,
 		type: 'textarea',
 	},
 

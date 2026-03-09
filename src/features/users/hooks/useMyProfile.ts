@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createHTTPRequest } from '@features/base';
-import { useAuthClientStore } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 type MyProfileType = {
 	id: number;
@@ -49,3 +49,4 @@ export function useMyProfile() {
 		refetch: query.refetch,
 	};
 }
+

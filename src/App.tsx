@@ -2,7 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Navbar, ErrorPage } from '@features/base';
 import { HomePage, PoemPage, PoemsPage } from '@features/poems';
-import { LoginPage, RegisterPage, useAuthClientStore } from '@features/auth';
+import { LoginPage, RegisterPage } from '@features/auth';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 import { AuthorPage, MyProfilePage, NotificationsPage, PoetsPage } from '@features/users';
 
