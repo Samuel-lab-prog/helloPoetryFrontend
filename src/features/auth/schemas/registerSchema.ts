@@ -66,7 +66,7 @@ export const registerSchema = z
 			if (forbiddenWordsFound.length === 0) continue;
 
 			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
+				code: 'custom',
 				path: [field.key],
 				message: `Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
 			});

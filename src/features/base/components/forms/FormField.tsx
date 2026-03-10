@@ -128,9 +128,8 @@ export function FormField<T extends FieldValues>({
 								if (!asyncValidator || !setError || !clearErrors) return;
 
 								const currentRun = ++validationRunRef.current;
-								if (debounceRef.current) 
-									window.clearTimeout(debounceRef.current);
-								
+								if (debounceRef.current) window.clearTimeout(debounceRef.current);
+
 								debounceRef.current = window.setTimeout(async () => {
 									let validationError: string | null = null;
 									try {

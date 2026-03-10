@@ -1,31 +1,92 @@
-﻿import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { lazy, Suspense, type ComponentType } from 'react';
+import { Flex, Spinner } from '@chakra-ui/react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Navbar, ErrorPage } from '@features/base';
-import { AdminPage, CreatePoemPage, HomePage, PoemPage, PoemsPage } from '@features/poems';
-import { LoginPage, RegisterPage } from '@features/auth';
+import { ErrorPage, Navbar } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
-import {
-	AuthorPage,
-	MyProfileCollectionsPage,
-	MyProfileFriendRequestsPage,
-	MyProfilePage,
-	MyProfilePoemsPage,
-	MyProfileSavedPoemsPage,
-	NotificationsPage,
-	PoetsPage,
-} from '@features/users';
+function lazyPage<TModule extends object>(
+	load: () => Promise<TModule>,
+	select: (module: TModule) => ComponentType,
+) {
+	return lazy(async () => ({ default: select(await load()) }));
+}
+
+function PageLoader() {
+	return (
+		<Flex as='main' layerStyle='main' minH='40vh' align='center' justify='center'>
+			<Spinner size='lg' color='pink.300' />
+		</Flex>
+	);
+}
+
+function renderLazyPage(Component: ComponentType) {
+	return (
+		<Suspense fallback={<PageLoader />}>
+			<Component />
+		</Suspense>
+	);
+}
+
+const HomePage = lazyPage(() => import('./features/poems/pages/HomePage'), (module) => module.HomePage);
+const PoemsPage = lazyPage(
+	() => import('./features/poems/pages/PoemsPage'),
+	(module) => module.PoemsPage,
+);
+const PoemPage = lazyPage(() => import('./features/poems/pages/PoemPage'), (module) => module.PoemPage);
+const CreatePoemPage = lazyPage(
+	() => import('./features/poems/pages/CreatePoemPage'),
+	(module) => module.CreatePoemPage,
+);
+const AdminPage = lazyPage(
+	() => import('./features/poems/pages/AdminPage'),
+	(module) => module.AdminPage,
+);
+const LoginPage = lazyPage(() => import('./features/auth/pages/LoginPage'), (module) => module.LoginPage);
+const RegisterPage = lazyPage(
+	() => import('./features/auth/pages/RegisterPage'),
+	(module) => module.RegisterPage,
+);
+const PoetsPage = lazyPage(() => import('./features/users/pages/PoetsPage'), (module) => module.PoetsPage);
+const AuthorPage = lazyPage(
+	() => import('./features/users/pages/AuthorPage'),
+	(module) => module.AuthorPage,
+);
+const MyProfilePage = lazyPage(
+	() => import('./features/users/pages/MyProfilePage'),
+	(module) => module.MyProfilePage,
+);
+const MyProfileCollectionsPage = lazyPage(
+	() => import('./features/users/pages/MyProfileCollectionsPage'),
+	(module) => module.MyProfileCollectionsPage,
+);
+const MyProfileFriendRequestsPage = lazyPage(
+	() => import('./features/users/pages/MyProfileFriendRequestsPage'),
+	(module) => module.MyProfileFriendRequestsPage,
+);
+const MyProfilePoemsPage = lazyPage(
+	() => import('./features/users/pages/MyProfilePoemsPage'),
+	(module) => module.MyProfilePoemsPage,
+);
+const MyProfileSavedPoemsPage = lazyPage(
+	() => import('./features/users/pages/MyProfileSavedPoemsPage'),
+	(module) => module.MyProfileSavedPoemsPage,
+);
+const NotificationsPage = lazyPage(
+	() => import('./features/users/pages/NotificationsPage'),
+	(module) => module.NotificationsPage,
+);
 
 function generateNavLinks(isAuthenticated: boolean) {
 	const links = [
-		{ to: '/', label: 'InÃ­cio' },
+		{ to: '/', label: 'Inicio' },
 		{ to: '/poems', label: 'Poemas' },
 		{ to: '/poets', label: 'Poetas' },
 	];
 	if (isAuthenticated) {
 		links.push({ to: '/poems/new', label: 'Criar' });
 		links.push({ to: '/my-profile', label: 'Meu Perfil' });
-		links.push({ to: '/notifications', label: 'NotificaÃ§Ãµes' });
+		links.push({ to: '/notifications', label: 'Notificacoes' });
 	} else {
 		links.push({ to: '/register', label: 'Cadastrar' });
 		links.push({ to: '/login', label: 'Entrar' });
@@ -43,22 +104,22 @@ export default function App() {
 			element: <Navbar links={navLinks} />,
 			errorElement: <ErrorPage />,
 			children: [
-				{ index: true, element: <HomePage /> },
-				{ path: 'poems', element: <PoemsPage /> },
-				{ path: 'poets', element: <PoetsPage /> },
-				{ path: 'poems/:id', element: <PoemPage /> },
-				{ path: 'poems/:slug/:id', element: <PoemPage /> },
-				{ path: 'authors/:id', element: <AuthorPage /> },
-				{ path: '/login', element: <LoginPage /> },
-				{ path: '/register', element: <RegisterPage /> },
-				{ path: 'poems/new', element: <CreatePoemPage /> },
-				{ path: 'admin', element: <AdminPage /> },
-				{ path: 'my-profile', element: <MyProfilePage /> },
-				{ path: 'my-profile/collections', element: <MyProfileCollectionsPage /> },
-				{ path: 'my-profile/friend-requests', element: <MyProfileFriendRequestsPage /> },
-				{ path: 'my-profile/poems', element: <MyProfilePoemsPage /> },
-				{ path: 'my-profile/saved-poems', element: <MyProfileSavedPoemsPage /> },
-				{ path: 'notifications', element: <NotificationsPage /> },
+				{ index: true, element: renderLazyPage(HomePage) },
+				{ path: 'poems', element: renderLazyPage(PoemsPage) },
+				{ path: 'poets', element: renderLazyPage(PoetsPage) },
+				{ path: 'poems/:id', element: renderLazyPage(PoemPage) },
+				{ path: 'poems/:slug/:id', element: renderLazyPage(PoemPage) },
+				{ path: 'authors/:id', element: renderLazyPage(AuthorPage) },
+				{ path: '/login', element: renderLazyPage(LoginPage) },
+				{ path: '/register', element: renderLazyPage(RegisterPage) },
+				{ path: 'poems/new', element: renderLazyPage(CreatePoemPage) },
+				{ path: 'admin', element: renderLazyPage(AdminPage) },
+				{ path: 'my-profile', element: renderLazyPage(MyProfilePage) },
+				{ path: 'my-profile/collections', element: renderLazyPage(MyProfileCollectionsPage) },
+				{ path: 'my-profile/friend-requests', element: renderLazyPage(MyProfileFriendRequestsPage) },
+				{ path: 'my-profile/poems', element: renderLazyPage(MyProfilePoemsPage) },
+				{ path: 'my-profile/saved-poems', element: renderLazyPage(MyProfileSavedPoemsPage) },
+				{ path: 'notifications', element: renderLazyPage(NotificationsPage) },
 			],
 		},
 	]);

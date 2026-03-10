@@ -66,19 +66,19 @@ export const createPoemSchema = createOrUpdatePoemSchemaBase.superRefine((data, 
 		if (forbiddenWordsFound.length === 0) continue;
 
 		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
+			code: 'custom',
 			path: [field.key],
 			message: `Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
 		});
 	}
 
-	for (const [index, tag] of (data.tags ?? []).entries()) {
+	for (const tag of data.tags ?? []) {
 		const forbiddenWordsFound = findForbiddenWords(tag);
 		if (forbiddenWordsFound.length === 0) continue;
 
 		ctx.addIssue({
-			code: z.ZodIssueCode.custom,
-			path: ['tags', index],
+			code: 'custom',
+			path: ['tags'],
 			message: `Tag contém palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
 		});
 	}

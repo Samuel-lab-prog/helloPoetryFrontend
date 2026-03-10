@@ -1,19 +1,13 @@
 ﻿import { Box, Field, TagsInput } from '@chakra-ui/react';
 import { useState } from 'react';
-import {
-	Controller,
-	type Control,
-	type FieldErrors,
-	type FieldValues,
-	type Path,
-} from 'react-hook-form';
+import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 
 interface TagsFieldProps<T extends FieldValues> {
 	control: Control<T>;
 	name: Path<T>;
 	label: string;
 	placeholder?: string;
-	error?: FieldErrors<T>;
+	error?: unknown;
 	required?: boolean;
 	disabled?: boolean;
 	maxTags?: number;
@@ -34,7 +28,7 @@ export function TagsField<T extends FieldValues>({
 	placeholder,
 }: TagsFieldProps<T>) {
 	const [isFocused, setIsFocused] = useState(false);
-	const errorMessage = error?.message?.toString();
+	const errorMessage = resolveErrorMessage(error);
 	const hasError = Boolean(errorMessage);
 
 	function sanitizeTags(rawTags: string[]) {
@@ -217,4 +211,32 @@ export function TagsField<T extends FieldValues>({
 			</Box>
 		</Field.Root>
 	);
+}
+
+function resolveErrorMessage(error: unknown): string | undefined {
+	if (!error) return undefined;
+
+	if (typeof error === 'string') return error;
+
+	if (typeof error === 'object') {
+		const candidate = (error as { message?: unknown }).message;
+		if (typeof candidate === 'string') return candidate;
+	}
+
+	if (Array.isArray(error)) {
+		for (const item of error) {
+			const nested = resolveErrorMessage(item);
+			if (nested) return nested;
+		}
+		return undefined;
+	}
+
+	if (typeof error === 'object') {
+		for (const value of Object.values(error as Record<string, unknown>)) {
+			const nested = resolveErrorMessage(value);
+			if (nested) return nested;
+		}
+	}
+
+	return undefined;
 }
