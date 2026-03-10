@@ -4,9 +4,10 @@
 
 export * from './components/LoginForm';
 export * from './components/RegisterForm';
-export * from './hooks/login-form';
-export * from './hooks/register-form';
+export * from './hooks/login-form/index';
+export * from './hooks/register-form/index';
 export * from './pages/LoginPage';
 export * from './pages/RegisterPage';
+export * from './schemas/constants';
 export * from './schemas/loginSchema';
 export * from './schemas/registerSchema';
