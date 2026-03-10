@@ -28,12 +28,18 @@ function renderLazyPage(Component: ComponentType) {
 	);
 }
 
-const HomePage = lazyPage(() => import('./features/poems/pages/HomePage'), (module) => module.HomePage);
+const HomePage = lazyPage(
+	() => import('./features/poems/pages/HomePage'),
+	(module) => module.HomePage,
+);
 const PoemsPage = lazyPage(
 	() => import('./features/poems/pages/PoemsPage'),
 	(module) => module.PoemsPage,
 );
-const PoemPage = lazyPage(() => import('./features/poems/pages/PoemPage'), (module) => module.PoemPage);
+const PoemPage = lazyPage(
+	() => import('./features/poems/pages/PoemPage'),
+	(module) => module.PoemPage,
+);
 const CreatePoemPage = lazyPage(
 	() => import('./features/poems/pages/CreatePoemPage'),
 	(module) => module.CreatePoemPage,
@@ -42,12 +48,18 @@ const AdminPage = lazyPage(
 	() => import('./features/poems/pages/AdminPage'),
 	(module) => module.AdminPage,
 );
-const LoginPage = lazyPage(() => import('./features/auth/pages/LoginPage'), (module) => module.LoginPage);
+const LoginPage = lazyPage(
+	() => import('./features/auth/pages/LoginPage'),
+	(module) => module.LoginPage,
+);
 const RegisterPage = lazyPage(
 	() => import('./features/auth/pages/RegisterPage'),
 	(module) => module.RegisterPage,
 );
-const PoetsPage = lazyPage(() => import('./features/users/pages/PoetsPage'), (module) => module.PoetsPage);
+const PoetsPage = lazyPage(
+	() => import('./features/users/pages/PoetsPage'),
+	(module) => module.PoetsPage,
+);
 const AuthorPage = lazyPage(
 	() => import('./features/users/pages/AuthorPage'),
 	(module) => module.AuthorPage,
@@ -116,7 +128,10 @@ export default function App() {
 				{ path: 'admin', element: renderLazyPage(AdminPage) },
 				{ path: 'my-profile', element: renderLazyPage(MyProfilePage) },
 				{ path: 'my-profile/collections', element: renderLazyPage(MyProfileCollectionsPage) },
-				{ path: 'my-profile/friend-requests', element: renderLazyPage(MyProfileFriendRequestsPage) },
+				{
+					path: 'my-profile/friend-requests',
+					element: renderLazyPage(MyProfileFriendRequestsPage),
+				},
 				{ path: 'my-profile/poems', element: renderLazyPage(MyProfilePoemsPage) },
 				{ path: 'my-profile/saved-poems', element: renderLazyPage(MyProfileSavedPoemsPage) },
 				{ path: 'notifications', element: renderLazyPage(NotificationsPage) },
