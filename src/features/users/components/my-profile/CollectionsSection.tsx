@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import { ExternalLink, Plus, Trash2, X } from 'lucide-react';

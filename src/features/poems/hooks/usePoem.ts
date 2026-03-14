@@ -1,14 +1,14 @@
 ﻿import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
-import type { FullPoemType } from '../types';
+import { api } from '@root/core/api';
 
 export function usePoem(id: number) {
+	const stringId = String(id);
 	const query = useQuery({
-		queryKey: ['poem', id],
+		queryKey: api.poems.getPoem.query(stringId).queryKey,
 		retry: 3,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,
-		queryFn: () => createHTTPRequest<FullPoemType>({ path: '/poems', params: [id] }),
+		queryFn: () => api.poems.getPoem.query(stringId).queryFn(),
 	});
 	return {
 		poem: query.data,

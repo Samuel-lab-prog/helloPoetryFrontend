@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import { useEffect } from 'react';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api } from '@root/core/api';
 
 type NotificationPayload = {
 	title?: string;
@@ -57,19 +57,14 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		enabled: !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () =>
-			createHTTPRequest<NotificationsPageType>({
-				path: '/notifications',
-				query: { onlyUnread, limit: 50 },
-			}),
+			api.notifications.getNotifications
+				.query({ onlyUnread, limit: 50 })
+				.queryFn() as Promise<NotificationsPageType>,
 	});
 
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
-			createHTTPRequest<NotificationItem>({
-				path: '/notifications',
-				params: [id, 'read'],
-				method: 'PATCH',
-			}),
+			api.notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (_, notificationId) => {
 			const cachedNotifications = queryClient.getQueriesData<NotificationsPageType>({
 				queryKey: ['notifications'],
@@ -89,11 +84,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	});
 
 	const markAllReadMutation = useMutation({
-		mutationFn: () =>
-			createHTTPRequest<void>({
-				path: '/notifications/mark-all-read',
-				method: 'PATCH',
-			}),
+		mutationFn: () => api.notifications.markAllAsRead.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
 			queryClient.invalidateQueries({
@@ -104,11 +95,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 
 	const deleteMutation = useMutation({
 		mutationFn: (id: number) =>
-			createHTTPRequest<NotificationItem>({
-				path: '/notifications',
-				params: [id],
-				method: 'DELETE',
-			}),
+			api.notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (notification) => {
 			if (!notification.readAt) decrementUnreadNotificationsCount(1);
 			queryClient.invalidateQueries({

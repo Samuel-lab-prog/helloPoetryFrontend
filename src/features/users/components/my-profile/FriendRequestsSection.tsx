@@ -6,7 +6,6 @@ import type { FriendRequestsSectionProps } from './types';
 
 export function FriendRequestsSection({
 	friendRequests,
-	totalReceivedCount,
 	viewAllHref,
 	isFriendRequestsLoading,
 	isFriendRequestsError,

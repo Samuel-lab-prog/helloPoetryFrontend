@@ -17,7 +17,6 @@ export type MyProfileViewModel = {
 
 export type FriendRequestsSectionProps = {
 	friendRequests: MyFriendRequestsType;
-	totalReceivedCount?: number;
 	viewAllHref?: string;
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;

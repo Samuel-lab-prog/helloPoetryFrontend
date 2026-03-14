@@ -1,6 +1,6 @@
 ﻿import { useInfiniteQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import type { PaginatedPoemsType } from '../types';
+import { api } from '@root/core/api';
 
 type OrderOption = 'newest' | 'oldest';
 type UseInfinitePoemsOption = {
@@ -34,17 +34,16 @@ export function useInfinitePoems({
 		initialPageParam: undefined as number | undefined,
 
 		queryFn: ({ pageParam }) =>
-			createHTTPRequest<PaginatedPoemsType>({
-				path: '/poems',
-				query: {
+			api.poems.getPoems
+				.query({
 					limit,
 					cursor: pageParam,
 					orderBy: 'createdAt',
 					orderDirection: order === 'newest' ? 'desc' : 'asc',
 					tags: normalizedTags.length > 0 ? normalizedTags : undefined,
 					searchTitle: normalizedSearchTitle || undefined,
-				},
-			}),
+				})
+				.queryFn() as Promise<PaginatedPoemsType>,
 
 		getNextPageParam: (lastPage) => {
 			if (!lastPage.hasMore) return undefined;

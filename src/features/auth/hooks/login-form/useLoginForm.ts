@@ -4,11 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { createHTTPRequest } from '@features/base';
 import { type AuthClient } from '@root/core/stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../../schemas/loginSchema';
 import { eventBus } from '@root/core/events/eventBus';
 import { handleLoginError } from './handleLoginError';
+import { api } from '@root/core/api';
 
 const FEED_ROUTE = '/';
 
@@ -22,12 +22,7 @@ export function useLoginForm() {
 	});
 
 	const loginMutation = useMutation({
-		mutationFn: (data: LoginDataType) =>
-			createHTTPRequest<AuthClient, LoginDataType>({
-				path: '/auth/login',
-				method: 'POST',
-				body: data,
-			}),
+		mutationFn: (data: LoginDataType) => api.auth.login.mutate(data) as Promise<AuthClient>,
 
 		onSuccess: async (client) => {
 			await eventBus.publish('userLoggedIn', {

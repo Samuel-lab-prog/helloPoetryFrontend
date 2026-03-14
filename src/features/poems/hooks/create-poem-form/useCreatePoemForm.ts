@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPoemSchema, type CreatePoemType } from '../../schemas/managePoemSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import { handleCreatePoemError } from './handleCreatePoemError';
+import { api } from '@root/core/api';
 
 export function useCreatePoemForm() {
 	const queryClient = useQueryClient();
@@ -52,11 +52,6 @@ export function useCreatePoemForm() {
 
 function useCreatePoem() {
 	return useMutation({
-		mutationFn: (newPoem: CreatePoemType) =>
-			createHTTPRequest<{ id: number }, CreatePoemType>({
-				path: '/poems',
-				method: 'POST',
-				body: newPoem,
-			}),
+		mutationFn: (newPoem: CreatePoemType) => api.poems.createPoem.mutate(newPoem),
 	});
 }

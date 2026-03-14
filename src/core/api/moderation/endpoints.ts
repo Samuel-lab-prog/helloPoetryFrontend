@@ -1,31 +1,35 @@
-import { createHTTPRequest } from "@root/features/base";
-import { createMutationEndpoint } from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint } from '../utils';
+import type {
+	BanUserBody,
+	BannedUserResponse,
+	SuspendUserBody,
+	SuspendedUserResponse,
+} from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-const banUser = createMutationEndpoint({
-  fn: (data: { userId: string; reason: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/moderation/ban/${data.userId}`,
-      body: {
-        reason: data.reason,
-      },
-    }),
+const banUser = createMutationEndpoint<BanUserBody, BannedUserResponse>({
+	fn: (data) =>
+		createHTTPRequest<BannedUserResponse, { reason: string }>({
+			method: 'POST',
+			path: `/moderation/ban/${data.userId}`,
+			body: {
+				reason: data.reason,
+			},
+		}),
 });
 
-const suspendUser = createMutationEndpoint({
-  fn: (data: { userId: string; reason: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/moderation/suspend/${data.userId}`,
-      body: {
-        reason: data.reason,
-      },
-    }),
+const suspendUser = createMutationEndpoint<SuspendUserBody, SuspendedUserResponse>({
+	fn: (data) =>
+		createHTTPRequest<SuspendedUserResponse, { reason: string }>({
+			method: 'POST',
+			path: `/moderation/suspend/${data.userId}`,
+			body: {
+				reason: data.reason,
+			},
+		}),
 });
 
 export const moderation = {
-  banUser,
-  suspendUser,
+	banUser,
+	suspendUser,
 };

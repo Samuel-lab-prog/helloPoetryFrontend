@@ -1,20 +1,19 @@
-import { createHTTPRequest } from "@root/features/base";
-import { createQueryEndpoint } from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createQueryEndpoint } from '../utils';
 
-import { feedKeys } from "./keys";
+import { feedKeys } from './keys';
+import type { FeedPoem } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const getFeed = createQueryEndpoint<[], FeedPoem[]>({
+	key: feedKeys.all,
 
-const getFeed = createQueryEndpoint({
-  key: feedKeys.all,
-
-  fn: () =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/feed`,
-    }),
+	fn: () =>
+		createHTTPRequest<FeedPoem[]>({
+			method: 'GET',
+			path: `/feed`,
+		}),
 });
 
 export const feed = {
-  getFeed,
+	getFeed,
 };

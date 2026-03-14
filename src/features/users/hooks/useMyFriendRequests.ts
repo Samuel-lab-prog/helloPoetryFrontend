@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api } from '@root/core/api';
 
 export type MyFriendRequestsType = {
 	sent: {
@@ -24,10 +24,7 @@ export function useMyFriendRequests(enabled = true) {
 		queryKey: ['my-friend-requests', clientId],
 		enabled: enabled && !!clientId,
 		staleTime: Infinity,
-		queryFn: () =>
-			createHTTPRequest<MyFriendRequestsType>({
-				path: '/friends/requests',
-			}),
+		queryFn: () => api.friends.getMyFriendRequests.query().queryFn(),
 	});
 
 	return {

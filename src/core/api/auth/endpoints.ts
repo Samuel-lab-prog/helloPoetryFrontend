@@ -1,17 +1,16 @@
-import { createHTTPRequest } from "@root/features/base";
-import { createMutationEndpoint } from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint } from '../utils';
+import type { AuthClient, LoginBody } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-const login = createMutationEndpoint({
-  fn: (data: { email: string; password: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/auth/login`,
-      body: data,
-    }),
+const login = createMutationEndpoint<LoginBody, AuthClient>({
+	fn: (data) =>
+		createHTTPRequest<AuthClient, LoginBody>({
+			method: 'POST',
+			path: `/auth/login`,
+			body: data,
+		}),
 });
 
 export const auth = {
-  login,
+	login,
 };

@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '../types';
+import { api } from '@root/core/api';
 
 type FeedSource = 'feed' | 'recent';
 
@@ -42,14 +43,7 @@ export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) 
 		}> => {
 			if (isAuthenticated) {
 				try {
-					const payload = await createHTTPRequest<FeedPoemType[]>({
-						path: '/feed/',
-						query: {
-							limit,
-							orderBy: 'createdAt',
-							orderDirection: 'desc',
-						},
-					});
+					const payload = (await api.feed.getFeed.query().queryFn()) as FeedPoemType[];
 					return { source: 'feed', poems: payload.map(toPoemPreviewType) };
 				} catch (error) {
 					const appError = error as AppErrorType;
@@ -63,10 +57,13 @@ export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) 
 				}
 			}
 
-			const payload = await createHTTPRequest<PaginatedPoemsType>({
-				path: '/poems',
-				query: { limit, orderBy: 'createdAt', orderDirection: 'desc' },
-			});
+			const payload = (await api.poems.getPoems
+				.query({
+					limit,
+					orderBy: 'createdAt',
+					orderDirection: 'desc',
+				})
+				.queryFn()) as PaginatedPoemsType;
 			return { source: 'recent', poems: payload.poems ?? [] };
 		},
 	});

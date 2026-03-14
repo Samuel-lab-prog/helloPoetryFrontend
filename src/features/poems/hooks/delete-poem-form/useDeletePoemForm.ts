@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePoemSchema, type DeletePoemType } from '../../schemas/managePoemSchemas';
-import { createHTTPRequest } from '@features/base';
 import { handleDeletePoemError } from './handleDeletePoemError';
+import { api } from '@root/core/api';
 
 export function useDeletePoemForm() {
 	const queryClient = useQueryClient();
@@ -44,11 +44,6 @@ export function useDeletePoemForm() {
 
 function useDeletePoem() {
 	return useMutation({
-		mutationFn: (poemId: number) =>
-			createHTTPRequest<void>({
-				path: '/poems',
-				params: [poemId],
-				method: 'DELETE',
-			}),
+		mutationFn: (poemId: number) => api.poems.deletePoem.mutate(String(poemId)),
 	});
 }

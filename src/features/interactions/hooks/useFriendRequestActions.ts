@@ -1,16 +1,13 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
+import { api } from '@root/core/api';
 
 export function useFriendRequestActions() {
 	const queryClient = useQueryClient();
 
 	const acceptMutation = useMutation({
 		mutationFn: (requesterId: number) =>
-			createHTTPRequest<unknown>({
-				path: '/friends/accept',
-				params: [requesterId],
-				method: 'PATCH',
-			}),
+			api.friends.acceptFriendRequest.mutate(String(requesterId)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
 			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });
@@ -19,11 +16,7 @@ export function useFriendRequestActions() {
 
 	const rejectMutation = useMutation({
 		mutationFn: (requesterId: number) =>
-			createHTTPRequest<unknown>({
-				path: '/friends/reject',
-				params: [requesterId],
-				method: 'PATCH',
-			}),
+			api.friends.rejectFriendRequest.mutate(String(requesterId)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
 			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });

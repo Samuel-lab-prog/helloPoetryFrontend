@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api } from '@root/core/api';
 
 export type SavedPoemType = {
 	id: number;
@@ -17,26 +18,16 @@ export function useSavedPoems(enabled = true) {
 		queryKey: ['saved-poems', clientId],
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () => createHTTPRequest<SavedPoemType[]>({ path: '/poems/saved' }),
+		queryFn: () => api.poems.getSavedPoems.query().queryFn(),
 	});
 
 	const saveMutation = useMutation({
-		mutationFn: (poemId: number) =>
-			createHTTPRequest<void>({
-				path: '/poems',
-				params: [poemId, 'save'],
-				method: 'POST',
-			}),
+		mutationFn: (poemId: number) => api.poems.savePoem.mutate(String(poemId)),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
 	});
 
 	const unsaveMutation = useMutation({
-		mutationFn: (poemId: number) =>
-			createHTTPRequest<void>({
-				path: '/poems',
-				params: [poemId, 'save'],
-				method: 'DELETE',
-			}),
+		mutationFn: (poemId: number) => api.poems.removeSavedPoem.mutate(String(poemId)),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
 	});
 

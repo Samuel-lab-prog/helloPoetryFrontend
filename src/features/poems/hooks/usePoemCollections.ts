@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api } from '@root/core/api';
 
 export type PoemCollectionType = {
 	id: number;
@@ -30,47 +31,38 @@ export function usePoemCollections(enabled = true) {
 		queryKey: ['poem-collections', clientId],
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () => createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
+		queryFn: () => api.poems.getCollections.query().queryFn(),
 	});
 
 	const createCollectionMutation = useMutation({
 		mutationFn: (data: CreateCollectionInput) =>
-			createHTTPRequest<void, CreateCollectionInput>({
-				path: '/poems/collections',
-				method: 'POST',
-				body: data,
+			api.poems.createCollection.mutate({
+				userId: String(data.userId),
+				name: data.name,
+				description: data.description,
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const deleteCollectionMutation = useMutation({
-		mutationFn: (collectionId: number) =>
-			createHTTPRequest<void>({
-				path: '/poems/collections',
-				method: 'DELETE',
-				params: [collectionId],
-			}),
+		mutationFn: (collectionId: number) => api.poems.deleteCollection.mutate(String(collectionId)),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const addCollectionItemMutation = useMutation({
 		mutationFn: (data: UpdateCollectionItemInput) =>
-			createHTTPRequest<void, { poemId: number }>({
-				path: '/poems/collections',
-				params: [data.collectionId, 'items'],
-				method: 'POST',
-				body: { poemId: data.poemId },
+			api.poems.addItemToCollection.mutate({
+				collectionId: String(data.collectionId),
+				poemId: String(data.poemId),
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});
 
 	const removeCollectionItemMutation = useMutation({
 		mutationFn: (data: UpdateCollectionItemInput) =>
-			createHTTPRequest<void, { poemId: number }>({
-				path: '/poems/collections',
-				params: [data.collectionId, 'items'],
-				method: 'DELETE',
-				body: { poemId: data.poemId },
+			api.poems.removeItemFromCollection.mutate({
+				collectionId: String(data.collectionId),
+				poemId: String(data.poemId),
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
 	});

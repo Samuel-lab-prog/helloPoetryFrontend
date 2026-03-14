@@ -1,10 +1,11 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import {
 	useUserBootstrapStore,
 	type UserMyProfileSnapshot,
 } from '@root/core/stores/useUserBootstrapStore';
+import { api } from '@root/core/api';
 import type {
 	FeedPoemType,
 	FullPoemType,
@@ -77,14 +78,7 @@ async function fetchInitialFeed(limit: number): Promise<{
 	poems: PoemPreviewType[];
 }> {
 	try {
-		const payload = await createHTTPRequest<FeedPoemType[]>({
-			path: '/feed/',
-			query: {
-				limit,
-				orderBy: 'createdAt',
-				orderDirection: 'desc',
-			},
-		});
+		const payload = (await api.feed.getFeed.query().queryFn()) as FeedPoemType[];
 
 		return { source: 'feed', poems: payload.map(mapFeedPoem) };
 	} catch (error) {
@@ -94,14 +88,13 @@ async function fetchInitialFeed(limit: number): Promise<{
 		}
 	}
 
-	const payload = await createHTTPRequest<{ poems: PoemPreviewType[] }>({
-		path: '/poems',
-		query: {
+	const payload = (await api.poems.getPoems
+		.query({
 			limit,
 			orderBy: 'createdAt',
 			orderDirection: 'desc',
-		},
-	});
+		})
+		.queryFn()) as { poems: PoemPreviewType[] };
 
 	return { source: 'recent', poems: payload.poems ?? [] };
 }
@@ -115,10 +108,9 @@ export async function bootstrapUserDataOnLogin(
 	const myProfile = await queryClient.fetchQuery({
 		queryKey: QUERY_KEYS.myProfile(payload.userId),
 		queryFn: () =>
-			createHTTPRequest<UserMyProfileSnapshot>({
-				path: '/users',
-				params: [payload.userId, 'profile'],
-			}),
+			api.users.getProfile
+				.query(String(payload.userId))
+				.queryFn() as Promise<UserMyProfileSnapshot>,
 	});
 
 	useAuthClientStore.setState({
@@ -135,42 +127,38 @@ export async function bootstrapUserDataOnLogin(
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.myPoems(payload.userId),
-			queryFn: () => createHTTPRequest<FullPoemType[]>({ path: '/poems/me' }),
+			queryFn: () => api.poems.getMyPoems.query().queryFn() as Promise<FullPoemType[]>,
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.myFriendRequests(payload.userId),
 			queryFn: () =>
-				createHTTPRequest<MyFriendRequestsType>({
-					path: '/friends/requests',
-				}),
+				api.friends.getMyFriendRequests.query().queryFn() as Promise<MyFriendRequestsType>,
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.savedPoems(payload.userId),
-			queryFn: () => createHTTPRequest<SavedPoemType[]>({ path: '/poems/saved' }),
+			queryFn: () => api.poems.getSavedPoems.query().queryFn() as Promise<SavedPoemType[]>,
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.poemCollections(payload.userId),
-			queryFn: () => createHTTPRequest<PoemCollectionType[]>({ path: '/poems/collections' }),
+			queryFn: () => api.poems.getCollections.query().queryFn() as Promise<PoemCollectionType[]>,
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.notifications(payload.userId, false),
 			queryFn: () =>
-				createHTTPRequest<NotificationsPageType>({
-					path: '/notifications',
-					query: { onlyUnread: false, limit: 50 },
-				}),
+				api.notifications.getNotifications
+					.query({ onlyUnread: false, limit: 50 })
+					.queryFn() as Promise<NotificationsPageType>,
 		}),
 		queryClient.fetchQuery({
 			queryKey: QUERY_KEYS.poetsSearch('', POETS_SEARCH_LIMIT),
 			queryFn: () =>
-				createHTTPRequest<PoetsSearchPageType>({
-					path: '/users',
-					query: {
+				api.users.getUsers
+					.query({
 						limit: POETS_SEARCH_LIMIT,
 						orderBy: 'nickname',
 						orderDirection: 'asc',
-					},
-				}),
+					})
+					.queryFn() as Promise<PoetsSearchPageType>,
 		}),
 	]);
 }

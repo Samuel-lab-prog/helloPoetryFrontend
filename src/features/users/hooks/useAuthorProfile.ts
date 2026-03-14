@@ -1,6 +1,6 @@
 ﻿import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import type { AuthorProfileType } from '../../poems/types';
+import { api } from '@root/core/api';
 
 export function useAuthorProfile(authorId: number) {
 	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;
@@ -11,10 +11,7 @@ export function useAuthorProfile(authorId: number) {
 		retry: 2,
 		staleTime: 1000 * 60 * 10,
 		queryFn: () =>
-			createHTTPRequest<AuthorProfileType>({
-				path: '/users',
-				params: [authorId, 'profile'],
-			}),
+			api.users.getProfile.query(String(authorId)).queryFn() as Promise<AuthorProfileType>,
 	});
 
 	return {

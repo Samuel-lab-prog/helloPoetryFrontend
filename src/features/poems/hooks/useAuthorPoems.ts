@@ -1,6 +1,5 @@
 ﻿import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
-import type { FullPoemType } from '../types';
+import { api } from '@root/core/api';
 
 export function useAuthorPoems(authorId: number) {
 	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;
@@ -10,11 +9,7 @@ export function useAuthorPoems(authorId: number) {
 		enabled: isValidAuthorId,
 		retry: 2,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () =>
-			createHTTPRequest<FullPoemType[]>({
-				path: '/poems/authors',
-				params: [authorId],
-			}),
+		queryFn: () => api.poems.getAuthorPoems.query(String(authorId)).queryFn(),
 	});
 
 	return {

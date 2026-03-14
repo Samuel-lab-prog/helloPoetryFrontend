@@ -1,5 +1,5 @@
 ﻿import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
+import { api } from '@root/core/api';
 
 type UserPreview = {
 	id: number;
@@ -18,14 +18,13 @@ export function useUsersPreview() {
 	const query = useQuery({
 		queryKey: ['users-preview'],
 		queryFn: () =>
-			createHTTPRequest<UsersPage>({
-				path: '/users',
-				query: {
+			api.users.getUsers
+				.query({
 					limit: 50,
 					orderBy: 'nickname',
 					orderDirection: 'asc',
-				},
-			}),
+				})
+				.queryFn() as Promise<UsersPage>,
 	});
 
 	return {

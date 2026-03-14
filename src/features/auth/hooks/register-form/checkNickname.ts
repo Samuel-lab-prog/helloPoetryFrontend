@@ -1,14 +1,9 @@
-﻿import { createHTTPRequest } from '@features/base';
-import { REGISTER_NICKNAME_MIN_LENGTH } from '../../schemas/constants';
+import { api } from '@root/core/api';
 
 export async function checkNicknameAvailability(nickname: string): Promise<string | null> {
-	if (!nickname || nickname.length < REGISTER_NICKNAME_MIN_LENGTH) return null;
+	if (!nickname || nickname.length < 3) return null;
 
-	const inUse = await createHTTPRequest<boolean>({
-		path: '/users/check-nickname',
-		query: { nickname: String(nickname) },
-		method: 'GET',
-	});
+	const inUse = await api.users.checkNickname.fetch(String(nickname));
 
-	return inUse ? 'Apelido já está em uso' : null;
+	return inUse ? 'Apelido j� est� em uso' : null;
 }

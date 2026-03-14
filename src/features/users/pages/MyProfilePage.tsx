@@ -122,7 +122,6 @@ export function MyProfilePage() {
 										...friendRequests,
 										received: friendRequests.received.slice(0, 3),
 									}}
-									totalReceivedCount={friendRequests.received.length}
 									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}

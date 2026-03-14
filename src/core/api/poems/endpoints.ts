@@ -1,220 +1,205 @@
-import { createHTTPRequest } from "@root/features/base";
-import {
-  createMutationEndpoint,
-  createQueryEndpoint
-} from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
-import { poemKeys } from "./keys";
+import { poemKeys } from './keys';
+import type {
+	CollectionItemBody,
+	CreateCollectionBody,
+	CreatePoemBody,
+	CreatePoemResult,
+	FullPoem,
+	PaginatedPoems,
+	PoemCollection,
+	SavedPoem,
+	SearchPoemsParams,
+	UpdatePoemBody,
+	UpdatePoemResult,
+} from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const createPoem = createMutationEndpoint<CreatePoemBody, CreatePoemResult>({
+	fn: (data) =>
+		createHTTPRequest<CreatePoemResult, CreatePoemBody>({
+			method: 'POST',
+			path: `/poems`,
+			body: data,
+		}),
 
-const createPoem = createMutationEndpoint({
-  fn: (data: { title: string; content: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/poems`,
-      body: data,
-    }),
-
-  invalidate: [
-    poemKeys.all,
-    poemKeys.mine
-  ],
+	invalidate: [poemKeys.all, poemKeys.mine],
 });
 
-const getPoem = createQueryEndpoint({
-  key: poemKeys.byId,
+const getPoem = createQueryEndpoint<[string], FullPoem>({
+	key: poemKeys.byId,
 
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems/${id}`,
-    }),
+	fn: (id) =>
+		createHTTPRequest<FullPoem>({
+			method: 'GET',
+			path: `/poems/${id}`,
+		}),
 });
 
-const getMyPoems = createQueryEndpoint({
-  key: poemKeys.mine,
+const getMyPoems = createQueryEndpoint<[], FullPoem[]>({
+	key: poemKeys.mine,
 
-  fn: () =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems/me`,
-    }),
+	fn: () =>
+		createHTTPRequest<FullPoem[]>({
+			method: 'GET',
+			path: `/poems/me`,
+		}),
 });
 
-const getAuthorPoems = createQueryEndpoint({
-  key: poemKeys.byAuthor,
+const getAuthorPoems = createQueryEndpoint<[string], FullPoem[]>({
+	key: poemKeys.byAuthor,
 
-  fn: (authorId: string) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems/authors/${authorId}`,
-    }),
+	fn: (authorId) =>
+		createHTTPRequest<FullPoem[]>({
+			method: 'GET',
+			path: `/poems/authors/${authorId}`,
+		}),
 });
 
-const getPoems = createQueryEndpoint({
-  key: poemKeys.search,
+const getPoems = createQueryEndpoint<[SearchPoemsParams?], PaginatedPoems>({
+	key: poemKeys.search,
 
-  fn: (params: {
-    limit?: number;
-    cursor?: number;
-    searchTitle?: string;
-    tags?: string[];
-    orderBy?: "createdAt" | "title";
-    orderDirection?: "asc" | "desc";
-  } = {}) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems`,
-      query: params,
-    }),
+	fn: (params = {}) =>
+		createHTTPRequest<PaginatedPoems>({
+			method: 'GET',
+			path: `/poems`,
+			query: params,
+		}),
 });
 
-const getSavedPoems = createQueryEndpoint({
-  key: poemKeys.saved,
+const getSavedPoems = createQueryEndpoint<[], SavedPoem[]>({
+	key: poemKeys.saved,
 
-  fn: () =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems/saved`,
-    }),
+	fn: () =>
+		createHTTPRequest<SavedPoem[]>({
+			method: 'GET',
+			path: `/poems/saved`,
+		}),
 });
 
-const getCollections = createQueryEndpoint({
-  key: poemKeys.collections,
+const getCollections = createQueryEndpoint<[], PoemCollection[]>({
+	key: poemKeys.collections,
 
-  fn: () =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/poems/collections`,
-    }),
+	fn: () =>
+		createHTTPRequest<PoemCollection[]>({
+			method: 'GET',
+			path: `/poems/collections`,
+		}),
 });
 
-const updatePoem = createMutationEndpoint({
-  fn: (data: { id: string; title?: string; content?: string }) =>
-    createHTTPRequest({
-      method: "PUT",
-      path: `${API_URL}/poems/${data.id}`,
-      body: {
-        title: data.title,
-        content: data.content,
-      },
-    }),
+const updatePoem = createMutationEndpoint<UpdatePoemBody, UpdatePoemResult>({
+	fn: (data) =>
+		createHTTPRequest<UpdatePoemResult, Omit<UpdatePoemBody, 'id'>>({
+			method: 'PUT',
+			path: `/poems/${data.id}`,
+			body: {
+				title: data.title,
+				excerpt: data.excerpt,
+				content: data.content,
+				tags: data.tags,
+				visibility: data.visibility,
+				status: data.status,
+				isCommentable: data.isCommentable,
+				toUserIds: data.toUserIds,
+				mentionedUserIds: data.mentionedUserIds,
+			},
+		}),
 
-  invalidate: [
-    poemKeys.all,
-    poemKeys.mine
-  ],
+	invalidate: [poemKeys.all, poemKeys.mine],
 });
 
-const deletePoem = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/poems/${id}`,
-    }),
+const deletePoem = createMutationEndpoint<string, void>({
+	fn: (id) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/poems/${id}`,
+		}),
 
-  invalidate: [
-    poemKeys.all,
-    poemKeys.mine
-  ],
+	invalidate: [poemKeys.all, poemKeys.mine],
 });
 
-const savePoem = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/poems/${id}/save`,
-    }),
+const savePoem = createMutationEndpoint<string, void>({
+	fn: (id) =>
+		createHTTPRequest<void>({
+			method: 'POST',
+			path: `/poems/${id}/save`,
+		}),
 
-  invalidate: [
-    poemKeys.saved
-  ],
+	invalidate: [poemKeys.saved],
 });
 
-const removeSavedPoem = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/poems/${id}/save`,
-    }),
+const removeSavedPoem = createMutationEndpoint<string, void>({
+	fn: (id) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/poems/${id}/save`,
+		}),
 
-  invalidate: [
-    poemKeys.saved
-  ],
+	invalidate: [poemKeys.saved],
 });
 
-const createCollection = createMutationEndpoint({
-  fn: (data: { userId: string; name: string; description: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/poems/collections`,
-      body: data,
-    }),
+const createCollection = createMutationEndpoint<CreateCollectionBody, void>({
+	fn: (data) =>
+		createHTTPRequest<void, CreateCollectionBody>({
+			method: 'POST',
+			path: `/poems/collections`,
+			body: data,
+		}),
 
-  invalidate: [
-    poemKeys.collections
-  ],
+	invalidate: [poemKeys.collections],
 });
 
-const addItemToCollection = createMutationEndpoint({
-  fn: (data: { collectionId: string; poemId: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/poems/collections/${data.collectionId}/items`,
-      body: {
-        poemId: data.poemId,
-      },
-    }),
+const addItemToCollection = createMutationEndpoint<CollectionItemBody, void>({
+	fn: (data) =>
+		createHTTPRequest<void, { poemId: string }>({
+			method: 'POST',
+			path: `/poems/collections/${data.collectionId}/items`,
+			body: {
+				poemId: data.poemId,
+			},
+		}),
 
-  invalidate: [
-    poemKeys.collections
-  ],
+	invalidate: [poemKeys.collections],
 });
 
-const removeItemFromCollection = createMutationEndpoint({
-  fn: (data: { collectionId: string; poemId: string }) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/poems/collections/${data.collectionId}/items`,
-      body: {
-        poemId: data.poemId,
-      },
-    }),
+const removeItemFromCollection = createMutationEndpoint<CollectionItemBody, void>({
+	fn: (data) =>
+		createHTTPRequest<void, { poemId: string }>({
+			method: 'DELETE',
+			path: `/poems/collections/${data.collectionId}/items`,
+			body: {
+				poemId: data.poemId,
+			},
+		}),
 
-  invalidate: [
-    poemKeys.collections
-  ],
+	invalidate: [poemKeys.collections],
 });
 
-const deleteCollection = createMutationEndpoint({
-  fn: (collectionId: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/poems/collections/${collectionId}`,
-    }),
+const deleteCollection = createMutationEndpoint<string, void>({
+	fn: (collectionId) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/poems/collections/${collectionId}`,
+		}),
 
-  invalidate: [
-    poemKeys.collections
-  ],
+	invalidate: [poemKeys.collections],
 });
 
 export const poems = {
-  createPoem,
-  getPoem,
-  getPoems,
-  getMyPoems,
-  getAuthorPoems,
-  getSavedPoems,
-  getCollections,
-  updatePoem,
-  deletePoem,
-  savePoem,
-  removeSavedPoem,
-  createCollection,
-  addItemToCollection,
-  removeItemFromCollection,
-  deleteCollection,
+	createPoem,
+	getPoem,
+	getPoems,
+	getMyPoems,
+	getAuthorPoems,
+	getSavedPoems,
+	getCollections,
+	updatePoem,
+	deletePoem,
+	savePoem,
+	removeSavedPoem,
+	createCollection,
+	addItemToCollection,
+	removeItemFromCollection,
+	deleteCollection,
 };
-
-await poems.getPoem.fetch("123");

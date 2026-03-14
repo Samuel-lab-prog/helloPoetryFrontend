@@ -1,94 +1,90 @@
-import { createHTTPRequest } from "@root/features/base";
-import {
-  createMutationEndpoint,
-  createQueryEndpoint
-} from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
-import { interactionsKeys } from "./keys";
+import { interactionsKeys } from './keys';
+import type { CommentPoemBody, PoemComment, UpdateCommentBody } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const getPoemComments = createQueryEndpoint<[string, string?], PoemComment[]>({
+	key: interactionsKeys.commentsByPoem,
 
-const getPoemComments = createQueryEndpoint({
-  key: interactionsKeys.commentsByPoem,
-
-  fn: (poemId: string, parentId?: string) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/interactions/poems/${poemId}/comments`,
-      query: { parentId },
-    }),
+	fn: (poemId, parentId) =>
+		createHTTPRequest<PoemComment[]>({
+			method: 'GET',
+			path: `/interactions/poems/${poemId}/comments`,
+			query: { parentId },
+		}),
 });
 
-const likePoem = createMutationEndpoint({
-  fn: (poemId: string) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/interactions/poems/${poemId}/like`,
-    }),
+const likePoem = createMutationEndpoint<string, void>({
+	fn: (poemId) =>
+		createHTTPRequest<void>({
+			method: 'POST',
+			path: `/interactions/poems/${poemId}/like`,
+		}),
 });
 
-const unlikePoem = createMutationEndpoint({
-  fn: (poemId: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/interactions/poems/${poemId}/like`,
-    }),
+const unlikePoem = createMutationEndpoint<string, void>({
+	fn: (poemId) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/interactions/poems/${poemId}/like`,
+		}),
 });
 
-const commentPoem = createMutationEndpoint({
-  fn: (data: { poemId: string; content: string; parentId?: string }) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/interactions/poems/${data.poemId}/comments`,
-      body: {
-        content: data.content,
-        parentId: data.parentId,
-      },
-    }),
+const commentPoem = createMutationEndpoint<CommentPoemBody, void>({
+	fn: (data) =>
+		createHTTPRequest<void, Omit<CommentPoemBody, 'poemId'>>({
+			method: 'POST',
+			path: `/interactions/poems/${data.poemId}/comments`,
+			body: {
+				content: data.content,
+				parentId: data.parentId,
+			},
+		}),
 });
 
-const deleteComment = createMutationEndpoint({
-  fn: (commentId: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/interactions/comments/${commentId}`,
-    }),
+const deleteComment = createMutationEndpoint<string, void>({
+	fn: (commentId) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/interactions/comments/${commentId}`,
+		}),
 });
 
-const likeComment = createMutationEndpoint({
-  fn: (commentId: string) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/interactions/comments/${commentId}/like`,
-    }),
+const likeComment = createMutationEndpoint<string, void>({
+	fn: (commentId) =>
+		createHTTPRequest<void>({
+			method: 'POST',
+			path: `/interactions/comments/${commentId}/like`,
+		}),
 });
 
-const unlikeComment = createMutationEndpoint({
-  fn: (commentId: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/interactions/comments/${commentId}/like`,
-    }),
+const unlikeComment = createMutationEndpoint<string, void>({
+	fn: (commentId) =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/interactions/comments/${commentId}/like`,
+		}),
 });
 
-const updateComment = createMutationEndpoint({
-  fn: (data: { commentId: string; content: string }) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/interactions/comments/${data.commentId}`,
-      body: {
-        content: data.content,
-      },
-    }),
+const updateComment = createMutationEndpoint<UpdateCommentBody, void>({
+	fn: (data) =>
+		createHTTPRequest<void, Omit<UpdateCommentBody, 'commentId'>>({
+			method: 'PATCH',
+			path: `/interactions/comments/${data.commentId}`,
+			body: {
+				content: data.content,
+			},
+		}),
 });
 
 export const interactions = {
-  getPoemComments,
-  likePoem,
-  unlikePoem,
-  commentPoem,
-  deleteComment,
-  likeComment,
-  unlikeComment,
-  updateComment,
+	getPoemComments,
+	likePoem,
+	unlikePoem,
+	commentPoem,
+	deleteComment,
+	likeComment,
+	unlikeComment,
+	updateComment,
 };

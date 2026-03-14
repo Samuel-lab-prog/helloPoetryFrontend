@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-imports */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api } from '@root/core/api';
 
 type UpdateMyProfileInput = {
 	name?: string;
@@ -18,11 +19,12 @@ export function useUpdateMyProfile() {
 
 	const mutation = useMutation({
 		mutationFn: (data: UpdateMyProfileInput) =>
-			createHTTPRequest<void, UpdateMyProfileInput>({
-				path: '/users',
-				params: [clientId!],
-				method: 'PATCH',
-				body: data,
+			api.users.updateUser.mutate({
+				id: String(clientId),
+				name: data.name,
+				nickname: data.nickname,
+				bio: data.bio,
+				avatarUrl: data.avatarUrl,
 			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['my-profile'] });

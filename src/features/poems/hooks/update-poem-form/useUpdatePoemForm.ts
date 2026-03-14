@@ -1,10 +1,10 @@
 ﻿import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createHTTPRequest } from '@features/base';
 import { updatePoemSchema, type UpdatePoemType } from '../../schemas/managePoemSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { handleUpdatePoemError } from './handleUpdatePoemError';
+import { api } from '@root/core/api';
 
 export function useUpdatePoemForm() {
 	const queryClient = useQueryClient();
@@ -45,19 +45,15 @@ export function useUpdatePoemForm() {
 function useUpdatePoem() {
 	return useMutation({
 		mutationFn: (updatedPoem: UpdatePoemType) =>
-			createHTTPRequest<{ id: number }, Omit<UpdatePoemType, 'id'>>({
-				path: '/poems',
-				params: [Number(updatedPoem.id)],
-				method: 'PUT',
-				body: {
-					title: updatedPoem.title,
-					excerpt: updatedPoem.excerpt,
-					content: updatedPoem.content,
-					tags: updatedPoem.tags,
-					status: updatedPoem.status,
-					visibility: updatedPoem.visibility,
-					isCommentable: updatedPoem.isCommentable,
-				},
+			api.poems.updatePoem.mutate({
+				id: String(updatedPoem.id),
+				title: updatedPoem.title,
+				excerpt: updatedPoem.excerpt,
+				content: updatedPoem.content,
+				tags: updatedPoem.tags,
+				status: updatedPoem.status,
+				visibility: updatedPoem.visibility,
+				isCommentable: updatedPoem.isCommentable,
 			}),
 	});
 }

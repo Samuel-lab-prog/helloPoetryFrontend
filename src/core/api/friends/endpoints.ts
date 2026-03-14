@@ -1,114 +1,105 @@
-import { createHTTPRequest } from "@root/features/base";
-import {
-  createMutationEndpoint,
-  createQueryEndpoint
-} from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
-import { friendsKeys } from "./keys";
+import { friendsKeys } from './keys';
+import type {
+	BlockedUser,
+	CancelFriendRequest,
+	FriendRecord,
+	FriendRequest,
+	FriendRequestRejection,
+	MyFriendRequests,
+	RemovedFriend,
+	UnblockUser,
+} from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const getMyFriendRequests = createQueryEndpoint<[], MyFriendRequests>({
+	key: friendsKeys.requests,
 
-const getMyFriendRequests = createQueryEndpoint({
-  key: friendsKeys.requests,
-
-  fn: () =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/friends/requests`,
-    }),
+	fn: () =>
+		createHTTPRequest<MyFriendRequests>({
+			method: 'GET',
+			path: `/friends/requests`,
+		}),
 });
 
-const sendFriendRequest = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "POST",
-      path: `${API_URL}/friends/${id}`,
-    }),
+const sendFriendRequest = createMutationEndpoint<string, FriendRequest>({
+	fn: (id) =>
+		createHTTPRequest<FriendRequest>({
+			method: 'POST',
+			path: `/friends/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const acceptFriendRequest = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/friends/accept/${id}`,
-    }),
+const acceptFriendRequest = createMutationEndpoint<string, FriendRecord | FriendRequest>({
+	fn: (id) =>
+		createHTTPRequest<FriendRecord | FriendRequest>({
+			method: 'PATCH',
+			path: `/friends/accept/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const rejectFriendRequest = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/friends/reject/${id}`,
-    }),
+const rejectFriendRequest = createMutationEndpoint<string, FriendRequestRejection>({
+	fn: (id) =>
+		createHTTPRequest<FriendRequestRejection>({
+			method: 'PATCH',
+			path: `/friends/reject/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const blockUser = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/friends/block/${id}`,
-    }),
+const blockUser = createMutationEndpoint<string, BlockedUser>({
+	fn: (id) =>
+		createHTTPRequest<BlockedUser>({
+			method: 'PATCH',
+			path: `/friends/block/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const deleteFriend = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/friends/delete/${id}`,
-    }),
+const deleteFriend = createMutationEndpoint<string, RemovedFriend>({
+	fn: (id) =>
+		createHTTPRequest<RemovedFriend>({
+			method: 'DELETE',
+			path: `/friends/delete/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const cancelFriendRequest = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/friends/cancel/${id}`,
-    }),
+const cancelFriendRequest = createMutationEndpoint<string, CancelFriendRequest>({
+	fn: (id) =>
+		createHTTPRequest<CancelFriendRequest>({
+			method: 'DELETE',
+			path: `/friends/cancel/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
-const unblockUser = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/friends/unblock/${id}`,
-    }),
+const unblockUser = createMutationEndpoint<string, UnblockUser>({
+	fn: (id) =>
+		createHTTPRequest<UnblockUser>({
+			method: 'PATCH',
+			path: `/friends/unblock/${id}`,
+		}),
 
-  invalidate: [
-    friendsKeys.requests
-  ],
+	invalidate: [friendsKeys.requests],
 });
 
 export const friends = {
-  getMyFriendRequests,
-  sendFriendRequest,
-  acceptFriendRequest,
-  rejectFriendRequest,
-  blockUser,
-  deleteFriend,
-  cancelFriendRequest,
-  unblockUser,
+	getMyFriendRequests,
+	sendFriendRequest,
+	acceptFriendRequest,
+	rejectFriendRequest,
+	blockUser,
+	deleteFriend,
+	cancelFriendRequest,
+	unblockUser,
 };

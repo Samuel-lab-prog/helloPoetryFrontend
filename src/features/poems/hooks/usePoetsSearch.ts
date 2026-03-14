@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
+import { api } from '@root/core/api';
 
 export type PoetPreview = {
 	id: number;
@@ -20,15 +20,14 @@ export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const query = useQuery({
 		queryKey: ['poets-search', normalizedSearch, limit],
 		queryFn: () =>
-			createHTTPRequest<UsersPage>({
-				path: '/users',
-				query: {
+			api.users.getUsers
+				.query({
 					limit,
 					orderBy: 'nickname',
 					orderDirection: 'asc',
 					searchNickname: normalizedSearch || undefined,
-				},
-			}),
+				})
+				.queryFn() as Promise<UsersPage>,
 	});
 
 	return {

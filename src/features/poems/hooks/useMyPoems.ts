@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { createHTTPRequest } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import type { FullPoemType } from '../types';
+import { api } from '@root/core/api';
 
 export function useMyPoems(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
@@ -10,7 +9,7 @@ export function useMyPoems(enabled = true) {
 		queryKey: ['my-poems', clientId],
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () => createHTTPRequest<FullPoemType[]>({ path: '/poems/me' }),
+		queryFn: () => api.poems.getMyPoems.query().queryFn(),
 	});
 
 	return {

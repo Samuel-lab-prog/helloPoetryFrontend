@@ -1,78 +1,64 @@
-import { createHTTPRequest } from "@root/features/base";
-import {
-  createMutationEndpoint,
-  createQueryEndpoint
-} from "../utils";
+import { createHTTPRequest } from '@root/features/base';
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
-import { notificationsKeys } from "./keys";
+import { notificationsKeys } from './keys';
+import type { GetNotificationsParams, NotificationItem, NotificationsPage } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const getNotifications = createQueryEndpoint<[GetNotificationsParams?], NotificationsPage>({
+	key: notificationsKeys.page,
 
-const getNotifications = createQueryEndpoint({
-  key: notificationsKeys.page,
-
-  fn: (params: {
-    onlyUnread?: boolean;
-    limit?: number;
-    nextCursor?: string;
-  } = {}) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/notifications`,
-      query: params,
-    }),
+	fn: (params = {}) =>
+		createHTTPRequest<NotificationsPage>({
+			method: 'GET',
+			path: `/notifications`,
+			query: params,
+		}),
 });
 
-const getNotificationById = createQueryEndpoint({
-  key: notificationsKeys.byId,
+const getNotificationById = createQueryEndpoint<[string], NotificationItem>({
+	key: notificationsKeys.byId,
 
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "GET",
-      path: `${API_URL}/notifications/${id}`,
-    }),
+	fn: (id) =>
+		createHTTPRequest<NotificationItem>({
+			method: 'GET',
+			path: `/notifications/${id}`,
+		}),
 });
 
-const markNotificationAsRead = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/notifications/${id}/read`,
-    }),
+const markNotificationAsRead = createMutationEndpoint<string, NotificationItem>({
+	fn: (id) =>
+		createHTTPRequest<NotificationItem>({
+			method: 'PATCH',
+			path: `/notifications/${id}/read`,
+		}),
 
-  invalidate: [
-    notificationsKeys.all
-  ],
+	invalidate: [notificationsKeys.all],
 });
 
-const deleteNotification = createMutationEndpoint({
-  fn: (id: string) =>
-    createHTTPRequest({
-      method: "DELETE",
-      path: `${API_URL}/notifications/${id}`,
-    }),
+const deleteNotification = createMutationEndpoint<string, NotificationItem>({
+	fn: (id) =>
+		createHTTPRequest<NotificationItem>({
+			method: 'DELETE',
+			path: `/notifications/${id}`,
+		}),
 
-  invalidate: [
-    notificationsKeys.all
-  ],
+	invalidate: [notificationsKeys.all],
 });
 
-const markAllAsRead = createMutationEndpoint({
-  fn: () =>
-    createHTTPRequest({
-      method: "PATCH",
-      path: `${API_URL}/notifications/mark-all-read`,
-    }),
+const markAllAsRead = createMutationEndpoint<void, void>({
+	fn: () =>
+		createHTTPRequest<void>({
+			method: 'PATCH',
+			path: `/notifications/mark-all-read`,
+		}),
 
-  invalidate: [
-    notificationsKeys.all
-  ],
+	invalidate: [notificationsKeys.all],
 });
 
 export const notifications = {
-  getNotifications,
-  getNotificationById,
-  markNotificationAsRead,
-  deleteNotification,
-  markAllAsRead,
+	getNotifications,
+	getNotificationById,
+	markNotificationAsRead,
+	deleteNotification,
+	markAllAsRead,
 };

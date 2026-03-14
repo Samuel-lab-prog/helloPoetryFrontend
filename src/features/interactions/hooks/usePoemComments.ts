@@ -1,5 +1,6 @@
 ﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createHTTPRequest, type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@features/base';
+import { api } from '@root/core/api';
 
 export type PoemCommentType = {
 	id: number;
@@ -24,20 +25,15 @@ export function usePoemComments(poemId: number) {
 	const query = useQuery({
 		queryKey: ['poem-comments', poemId],
 		enabled: !!poemId,
-		queryFn: () =>
-			createHTTPRequest<PoemCommentType[]>({
-				path: '/interactions/poems',
-				params: [poemId, 'comments'],
-			}),
+		queryFn: () => api.interactions.getPoemComments.query(String(poemId)).queryFn(),
 	});
 
 	const mutation = useMutation({
 		mutationFn: (params: { content: string; parentId?: number }) =>
-			createHTTPRequest<void, { content: string; parentId?: number }>({
-				path: '/interactions/poems',
-				params: [poemId, 'comments'],
-				method: 'POST',
-				body: params,
+			api.interactions.commentPoem.mutate({
+				poemId: String(poemId),
+				content: params.content,
+				parentId: params.parentId ? String(params.parentId) : undefined,
 			}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
@@ -49,12 +45,7 @@ export function usePoemComments(poemId: number) {
 	});
 
 	const deleteMutation = useMutation({
-		mutationFn: (commentId: number) =>
-			createHTTPRequest<void>({
-				path: '/interactions/comments',
-				params: [commentId],
-				method: 'DELETE',
-			}),
+		mutationFn: (commentId: number) => api.interactions.deleteComment.mutate(String(commentId)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
@@ -65,12 +56,7 @@ export function usePoemComments(poemId: number) {
 	});
 
 	const likeCommentMutation = useMutation({
-		mutationFn: (commentId: number) =>
-			createHTTPRequest<void>({
-				path: '/interactions/comments',
-				params: [commentId, 'like'],
-				method: 'POST',
-			}),
+		mutationFn: (commentId: number) => api.interactions.likeComment.mutate(String(commentId)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
@@ -80,12 +66,7 @@ export function usePoemComments(poemId: number) {
 	});
 
 	const unlikeCommentMutation = useMutation({
-		mutationFn: (commentId: number) =>
-			createHTTPRequest<void>({
-				path: '/interactions/comments',
-				params: [commentId, 'like'],
-				method: 'DELETE',
-			}),
+		mutationFn: (commentId: number) => api.interactions.unlikeComment.mutate(String(commentId)),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
@@ -98,11 +79,7 @@ export function usePoemComments(poemId: number) {
 		return queryClient.fetchQuery({
 			queryKey: ['poem-comments-replies', poemId, parentId],
 			queryFn: () =>
-				createHTTPRequest<PoemCommentType[]>({
-					path: '/interactions/poems',
-					params: [poemId, 'comments'],
-					query: { parentId },
-				}),
+				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
 			staleTime: 1000 * 30,
 		});
 	}

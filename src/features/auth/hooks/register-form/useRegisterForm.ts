@@ -4,9 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { createHTTPRequest } from '@features/base';
 import { registerSchema, type RegisterDataType } from '../../schemas/registerSchema';
 import { handleRegisterError } from './handleRegisterError';
+import { api } from '@root/core/api';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -21,12 +21,7 @@ export function useRegisterForm() {
 	});
 
 	const registerMutation = useMutation({
-		mutationFn: (data: RegisterDataType) =>
-			createHTTPRequest<void, RegisterDataType>({
-				path: '/users',
-				method: 'POST',
-				body: data,
-			}),
+		mutationFn: (data: RegisterDataType) => api.users.createUser.mutate(data),
 
 		onSuccess: () => {
 			navigate('/login');
