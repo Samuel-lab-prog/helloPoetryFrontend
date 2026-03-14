@@ -26,6 +26,7 @@ export function PoemPage() {
 	const { id } = useParams<{ id: string }>();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
 	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
+	const isAuthenticated = authClientId > 0;
 	const isPoemIdValid = poemId > 0;
 
 	const [commentInput, setCommentInput] = useState('');
@@ -52,7 +53,7 @@ export function PoemPage() {
 		isUpdatingCommentLike,
 		likeCommentError,
 		fetchReplies,
-	} = usePoemComments(poemId);
+	} = usePoemComments(poemId, { enabled: isAuthenticated });
 	const { likePoem, unlikePoem, isUpdatingLike, likeError } = usePoemLike(poemId);
 	const { savedPoems, savePoem, unsavePoem, isSavingPoem, saveError } = useSavedPoems(
 		authClientId > 0,
@@ -329,6 +330,7 @@ export function PoemPage() {
 
 							<CommentsSection
 								poemIsCommentable={poem.isCommentable}
+								isAuthenticated={isAuthenticated}
 								commentInput={commentInput}
 								commentError={commentInputError}
 								authClientId={authClientId}

@@ -16,6 +16,7 @@ interface CommentThreadProps {
 	comment: PoemCommentType;
 	authClientId: number;
 	poemIsCommentable: boolean;
+	isAuthenticated: boolean;
 	isCreatingComment: boolean;
 	isDeletingComment: boolean;
 	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
@@ -32,6 +33,7 @@ export const CommentThread = memo(function CommentThread({
 	comment,
 	authClientId,
 	poemIsCommentable,
+	isAuthenticated,
 	isCreatingComment,
 	isDeletingComment,
 	createComment,
@@ -52,6 +54,10 @@ export const CommentThread = memo(function CommentThread({
 	const hasLoadedReplies = replies.length > 0;
 
 	async function handleToggleReplies() {
+		if (!isAuthenticated) {
+			setReplyError('Faca login para responder.');
+			return;
+		}
 		if (activeReplyFor === comment.id) {
 			setActiveReplyFor(null);
 			setReplyInput('');
@@ -74,6 +80,10 @@ export const CommentThread = memo(function CommentThread({
 
 	async function handleCreateReply() {
 		if (!replyInput.trim()) return;
+		if (!isAuthenticated) {
+			setReplyError('Faca login para responder.');
+			return;
+		}
 		const forbiddenWordsFound = findForbiddenWords(replyInput);
 		if (forbiddenWordsFound.length > 0) {
 			setReplyError(`Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`);
@@ -152,6 +162,7 @@ export const CommentThread = memo(function CommentThread({
 						colorPalette='gray'
 						aria-label={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
 						title={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
+						disabled={!isAuthenticated}
 						onClick={handleToggleReplies}
 					>
 						<MessageCircleReply />
@@ -162,6 +173,7 @@ export const CommentThread = memo(function CommentThread({
 						colorPalette='gray'
 						aria-label={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
 						title={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
+						disabled={!isAuthenticated}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
 							comment.likedByCurrentUser ? unlikeComment(comment.id) : likeComment(comment.id)
@@ -203,6 +215,7 @@ export const CommentThread = memo(function CommentThread({
 								comment={reply}
 								authClientId={authClientId}
 								poemIsCommentable={poemIsCommentable}
+								isAuthenticated={isAuthenticated}
 								isCreatingComment={isCreatingComment}
 								isDeletingComment={isDeletingComment}
 								createComment={createComment}
@@ -228,15 +241,20 @@ export const CommentThread = memo(function CommentThread({
 							placeholder='Responder comentário'
 							rows={3}
 							maxLength={300}
-							disabled={!poemIsCommentable || isCreatingComment}
-						/>
+					disabled={!poemIsCommentable || isCreatingComment}
+				/>
 						<Flex justify='flex-end'>
 							<IconButton
 								size='sm'
 								variant='solidPink'
 								aria-label='Enviar resposta'
 								title='Enviar resposta'
-								disabled={!replyInput.trim() || !poemIsCommentable || isCreatingComment}
+								disabled={
+									!isAuthenticated ||
+									!replyInput.trim() ||
+									!poemIsCommentable ||
+									isCreatingComment
+								}
 								loading={isCreatingComment}
 								onClick={handleCreateReply}
 							>

@@ -20,12 +20,17 @@ export type PoemCommentType = {
 	};
 };
 
-export function usePoemComments(poemId: number) {
+type UsePoemCommentsOptions = {
+	enabled?: boolean;
+};
+
+export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {
 	const queryClient = useQueryClient();
+	const isEnabled = options.enabled ?? true;
 
 	const query = useQuery({
 		queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-		enabled: !!poemId,
+		enabled: isEnabled && !!poemId,
 		queryFn: () => api.interactions.getPoemComments.query(String(poemId)).queryFn(),
 	});
 

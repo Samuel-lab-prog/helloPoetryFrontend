@@ -6,6 +6,7 @@ import type { PoemCommentType } from '@features/interactions';
 
 type CommentsSectionProps = {
 	poemIsCommentable: boolean;
+	isAuthenticated: boolean;
 	commentInput: string;
 	commentError: string;
 	authClientId: number;
@@ -28,6 +29,7 @@ type CommentsSectionProps = {
 
 export const CommentsSection = memo(function CommentsSection({
 	poemIsCommentable,
+	isAuthenticated,
 	commentInput,
 	commentError,
 	authClientId,
@@ -48,7 +50,7 @@ export const CommentsSection = memo(function CommentsSection({
 	fetchReplies,
 }: CommentsSectionProps) {
 	const canPublishComment =
-		poemIsCommentable && commentInput.trim().length > 0 && !isCreatingComment;
+		isAuthenticated && poemIsCommentable && commentInput.trim().length > 0 && !isCreatingComment;
 
 	const renderedThreads = useMemo(
 		() =>
@@ -58,6 +60,7 @@ export const CommentsSection = memo(function CommentsSection({
 					comment={comment}
 					authClientId={authClientId}
 					poemIsCommentable={poemIsCommentable}
+					isAuthenticated={isAuthenticated}
 					isCreatingComment={isCreatingComment}
 					isDeletingComment={isDeletingComment}
 					createComment={createComment}
@@ -76,6 +79,7 @@ export const CommentsSection = memo(function CommentsSection({
 			createComment,
 			deleteComment,
 			fetchReplies,
+			isAuthenticated,
 			isCreatingComment,
 			isDeletingComment,
 			isUpdatingCommentLike,
@@ -109,7 +113,7 @@ export const CommentsSection = memo(function CommentsSection({
 					maxLength={300}
 					borderColor={commentError ? 'red.400' : undefined}
 					_focusVisible={commentError ? { borderColor: 'red.400' } : undefined}
-					disabled={!poemIsCommentable || isCreatingComment}
+					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
 				/>
 				<Flex
 					align={{ base: 'stretch', md: 'center' }}
@@ -137,6 +141,11 @@ export const CommentsSection = memo(function CommentsSection({
 						Comentarios desativados para este poema.
 					</Text>
 				)}
+				{!isAuthenticated && (
+					<Text textStyle='small' color='pink.200'>
+						Faca login para comentar.
+					</Text>
+				)}
 				{commentError && (
 					<Text textStyle='small' color='red.400'>
 						{commentError}
@@ -150,7 +159,13 @@ export const CommentsSection = memo(function CommentsSection({
 				isEmpty={comments.length === 0}
 				loadingElement={<Text textStyle='body'>Carregando comentarios...</Text>}
 				errorElement={<Text textStyle='body'>Erro ao carregar comentarios.</Text>}
-				emptyElement={<Text textStyle='body'>Seja o primeiro a comentar.</Text>}
+				emptyElement={
+					!isAuthenticated ? (
+						<Text textStyle='body'>Faca login para ver os comentarios.</Text>
+					) : (
+						<Text textStyle='body'>Seja o primeiro a comentar.</Text>
+					)
+				}
 			>
 				<Flex direction='column' gap={3}>
 					{renderedThreads}
