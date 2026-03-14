@@ -1,4 +1,4 @@
-import type { QueryClient } from '@tanstack/react-query';
+﻿import type { QueryClient } from '@tanstack/react-query';
 import { apiKeys } from '@root/core/api';
 import type { AppEvents } from '../eventBus';
 
@@ -20,6 +20,6 @@ export async function onCommentCreated(
 	].filter(Boolean) as ReadonlyArray<readonly unknown[]>;
 
 	await Promise.all(
-		keysToInvalidate.map((queryKey) => queryClient.invalidateQueries({ queryKey })),
+		keysToInvalidate.map((queryKey) => queryClient.refetchQueries({ queryKey })),
 	);
 }

@@ -1,4 +1,7 @@
-import { Avatar, Box, Button, Flex, Grid, Heading, Text } from '@chakra-ui/react';
+/* eslint-disable max-lines-per-function */
+import { Avatar, Box, Button, Flex, Grid, Heading, Icon, Text } from '@chakra-ui/react';
+import { Clock3, LogIn, UserCheck, UserPlus, UserX } from 'lucide-react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AsyncState } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -28,15 +31,44 @@ export function AuthorPage() {
 
 	const { author, isLoading: isAuthorLoading, isError: isAuthorError } = useAuthorProfile(authorId);
 	const { poems, isLoading: isPoemasLoading, isError: isPoemasError } = useAuthorPoems(authorId);
-	const { sendFriendRequest, isSending, isSuccess, errorMessage } = useSendFriendRequest();
+	const { sendFriendRequest, isSending, isSuccess, errorMessage, reset } = useSendFriendRequest();
+
+	useEffect(() => {
+		reset();
+	}, [authorId, reset]);
+
+	const isAuthenticated = authClientId > 0;
+	const isSelf = !!author && author.id === authClientId;
+	const hasOutgoingRequest = !!author && (author.isFriendRequester || isSuccess);
+	const hasIncomingRequest = !!author && author.hasIncomingFriendRequest;
 
 	const canSendFriendRequest =
 		!!author &&
-		authClientId > 0 &&
-		author.id !== authClientId &&
+		isAuthenticated &&
+		!isSelf &&
 		!author.isFriend &&
 		!author.hasBlockedRequester &&
-		!author.isBlockedByRequester;
+		!author.isBlockedByRequester &&
+		!hasOutgoingRequest &&
+		!hasIncomingRequest;
+
+	const relationStatus = (() => {
+		if (!author) return null;
+		if (!isAuthenticated)
+			return { icon: LogIn, color: 'pink.200', text: 'Faça login para enviar pedido.' };
+		if (isSelf) return null;
+		if (author.hasBlockedRequester)
+			return { icon: UserX, color: 'red.300', text: 'Você foi bloqueado por este usuário.' };
+		if (author.isBlockedByRequester)
+			return { icon: UserX, color: 'red.300', text: 'Você bloqueou este usuário.' };
+		if (author.isFriend)
+			return { icon: UserCheck, color: 'green.300', text: 'Vocês são amigos.' };
+		if (hasOutgoingRequest)
+			return { icon: Clock3, color: 'yellow.300', text: 'Pedido enviado.' };
+		if (hasIncomingRequest)
+			return { icon: UserPlus, color: 'yellow.300', text: 'Pedido recebido.' };
+		return null;
+	})();
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center' gap={8}>
@@ -91,24 +123,33 @@ export function AuthorPage() {
 										Amigos: {author.stats.friendsCount}
 									</Text>
 
-									{canSendFriendRequest && (
-										<Flex mt={2} direction='column' gap={2} align='start'>
+									<Flex mt={2} direction='column' gap={2} align='start'>
+										{relationStatus && (
+											<Flex align='center' gap={2}>
+												<Icon as={relationStatus.icon} boxSize={4.5} color={relationStatus.color} />
+												<Text textStyle='smaller' color={relationStatus.color}>
+													{relationStatus.text}
+												</Text>
+											</Flex>
+										)}
+
+										{canSendFriendRequest && (
 											<Button
 												size='sm'
 												variant='solidPink'
 												onClick={() => sendFriendRequest(author.id)}
 												loading={isSending}
-												disabled={isSuccess}
 											>
-												{isSuccess ? 'Pedido enviado' : 'Enviar pedido de amizade'}
+												Enviar pedido de amizade
 											</Button>
-											{errorMessage && (
-												<Text textStyle='smaller' color='red.400'>
-													{errorMessage}
-												</Text>
-											)}
-										</Flex>
-									)}
+										)}
+
+										{errorMessage && (
+											<Text textStyle='smaller' color='red.400'>
+												{errorMessage}
+											</Text>
+										)}
+									</Flex>
 								</Flex>
 							</Flex>
 						)}

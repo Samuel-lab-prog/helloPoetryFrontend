@@ -1,4 +1,5 @@
-﻿import { DynamicForm, type Field } from '@features/base';
+﻿import { Avatar, Button, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
+import { DynamicForm, type Field } from '@features/base';
 import {
 	useRegisterForm,
 	checkEmailAvailability,
@@ -66,12 +67,6 @@ const registerFields: Field<RegisterDataType>[] = [
 		maxLength: REGISTER_BIO_MAX_LENGTH,
 		showCharacterCount: true,
 	},
-
-	{
-		name: 'avatarUrl',
-		label: 'URL do avatar',
-		required: false,
-	},
 ];
 
 export function RegisterForm() {
@@ -84,6 +79,11 @@ export function RegisterForm() {
 		handleSubmit,
 		setError,
 		clearErrors,
+		avatarFile,
+		avatarPreviewUrl,
+		onPickAvatar,
+		avatarError,
+		maxAvatarSizeMb,
 	} = useRegisterForm();
 
 	return (
@@ -100,6 +100,46 @@ export function RegisterForm() {
 			clearErrors={clearErrors}
 			buttonLabel='Criar conta'
 			buttonVariant='surface'
+			extraContent={
+				<Flex direction='column' gap={3} mt={2}>
+					<Text textStyle='small' color='pink.200'>
+						Avatar (opcional)
+					</Text>
+
+					<Flex align='center' gap={3} wrap='wrap'>
+						<Avatar.Root size='md'>
+							<Avatar.Image src={avatarPreviewUrl ?? undefined} />
+							<Avatar.Fallback name='Avatar' />
+						</Avatar.Root>
+						<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
+							Escolher arquivo
+							<VisuallyHidden>
+								<Input
+									type='file'
+									accept='image/*'
+									onChange={(event) => {
+										onPickAvatar(event.target.files?.[0] ?? null);
+									}}
+								/>
+							</VisuallyHidden>
+						</Button>
+						<Text textStyle='smaller' color='pink.200'>
+							{avatarFile ? avatarFile.name : 'Nenhum arquivo selecionado'}
+						</Text>
+					</Flex>
+
+					<Text textStyle='smaller' color='pink.200'>
+						Tamanho máximo: {maxAvatarSizeMb}MB
+					</Text>
+
+
+					{avatarError && (
+						<Text textStyle='smaller' color='red.400'>
+							{avatarError}
+						</Text>
+					)}
+				</Flex>
+			}
 		/>
 	);
 }

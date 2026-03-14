@@ -38,9 +38,9 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	const mutation = useMutation({
 		mutationFn: (params: { content: string; parentId?: number }) =>
 			api.interactions.commentPoem.mutate({
-				poemId: String(poemId),
+				poemId,
 				content: params.content,
-				parentId: params.parentId ? String(params.parentId) : undefined,
+				parentId: params.parentId,
 			}),
 		onSuccess: (_, variables) =>
 			eventBus.publish('commentCreated', {

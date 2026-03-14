@@ -41,6 +41,7 @@ export type UserPublicProfile = {
 	hasBlockedRequester: boolean;
 	isBlockedByRequester: boolean;
 	isFriendRequester: boolean;
+	hasIncomingFriendRequest: boolean;
 };
 
 export type UserPrivateProfile = {
@@ -79,4 +80,13 @@ export type UpdateUserBody = {
 	nickname?: string;
 	bio?: string;
 	avatarUrl?: string;
+};
+
+export type AvatarUploadUrlRequest = {
+	contentType: string;
+};
+
+export type AvatarUploadUrlResponse = {
+	uploadUrl: string;
+	fileUrl: string;
 };

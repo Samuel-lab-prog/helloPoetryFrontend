@@ -95,6 +95,7 @@ export type AuthorProfileType = {
 	hasBlockedRequester: boolean;
 	isBlockedByRequester: boolean;
 	isFriendRequester: boolean;
+	hasIncomingFriendRequest: boolean;
 };
 
 export type PaginatedMinimalPoemsType = {

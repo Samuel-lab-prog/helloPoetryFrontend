@@ -1,4 +1,4 @@
-import { memo, useMemo, type Dispatch, type SetStateAction } from 'react';
+﻿import { memo, useMemo, type Dispatch, type SetStateAction } from 'react';
 import { Box, Button, Flex, Heading, Text, Textarea } from '@chakra-ui/react';
 import { AsyncState } from '@features/base';
 import { CommentThread } from '../CommentThread';
@@ -24,7 +24,7 @@ type CommentsSectionProps = {
 	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
+	fetchReplies: (parentId: number, options?: { force?: boolean }) => Promise<PoemCommentType[]>;
 };
 
 export const CommentsSection = memo(function CommentsSection({

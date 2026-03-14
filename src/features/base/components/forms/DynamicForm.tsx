@@ -1,5 +1,6 @@
 ﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Text, type ButtonProps } from '@chakra-ui/react';
+import type { ReactNode } from 'react';
 import { FieldContainer } from './FieldContainer';
 import { FormCard } from './FormCard';
 import { FormField } from './FormField';
@@ -43,6 +44,7 @@ interface DynamicFormProps<T extends FieldValues> {
 	setError?: UseFormSetError<T>;
 	clearErrors?: UseFormClearErrors<T>;
 	handleSubmitFn: (fn: SubmitHandler<T>) => (e?: React.BaseSyntheticEvent) => Promise<void>;
+	extraContent?: ReactNode;
 }
 
 export function DynamicForm<T extends FieldValues>({
@@ -58,6 +60,7 @@ export function DynamicForm<T extends FieldValues>({
 	setError,
 	clearErrors,
 	handleSubmitFn,
+	extraContent,
 }: DynamicFormProps<T>) {
 	return (
 		<FormCard as='form' onSubmit={handleSubmitFn(onSubmit)}>
@@ -91,6 +94,8 @@ export function DynamicForm<T extends FieldValues>({
 					/>
 				</FieldContainer>
 			))}
+
+			{extraContent}
 
 			<FormButton isValid={isValid} loading={loading} variant={buttonVariant}>
 				{buttonLabel}

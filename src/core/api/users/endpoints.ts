@@ -9,6 +9,8 @@ import type {
 	UsersSearchParams,
 	PublicUsersSearchParams,
 	UserProfile,
+	AvatarUploadUrlRequest,
+	AvatarUploadUrlResponse,
 } from './types';
 
 const checkNickname = createQueryEndpoint<[string], boolean>({
@@ -92,6 +94,18 @@ const updateUser = createMutationEndpoint<UpdateUserBody, void>({
 	invalidate: [userKeys.all],
 });
 
+const requestAvatarUploadUrl = createMutationEndpoint<
+	AvatarUploadUrlRequest,
+	AvatarUploadUrlResponse
+>({
+	fn: (data) =>
+		createHTTPRequest<AvatarUploadUrlResponse, AvatarUploadUrlRequest>({
+			method: 'POST',
+			path: `/users/avatar/upload-url`,
+			body: data,
+		}),
+});
+
 export const users = {
 	checkNickname,
 	checkEmail,
@@ -100,4 +114,5 @@ export const users = {
 	getProfile,
 	createUser,
 	updateUser,
+	requestAvatarUploadUrl,
 };

@@ -24,7 +24,7 @@ interface CommentThreadProps {
 	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	isUpdatingCommentLike: boolean;
-	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
+	fetchReplies: (parentId: number, options?: { force?: boolean }) => Promise<PoemCommentType[]>;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
 	setRepliesByCommentId: React.Dispatch<React.SetStateAction<Record<number, PoemCommentType[]>>>;
 }
@@ -94,7 +94,7 @@ export const CommentThread = memo(function CommentThread({
 			await createComment({ content: replyInput.trim(), parentId: comment.id });
 			setReplyInput('');
 			setReplyError('');
-			const fetched = await fetchReplies(comment.id);
+			const fetched = await fetchReplies(comment.id, { force: true });
 			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
 		} catch {
 			setReplyError('Erro ao enviar resposta.');
@@ -104,7 +104,7 @@ export const CommentThread = memo(function CommentThread({
 	async function handleDelete() {
 		await deleteComment({ id: comment.id, parentId: comment.parentId ?? undefined });
 		if (comment.parentId) {
-			const parentReplies = await fetchReplies(comment.parentId);
+			const parentReplies = await fetchReplies(comment.parentId, { force: true });
 			setRepliesByCommentId((prev) => ({
 				...prev,
 				[comment.parentId!]: parentReplies,

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Avatar, Box, Button, Flex, Grid, Input, Text, Textarea, VStack } from '@chakra-ui/react';
+﻿import { useEffect, useState } from 'react';
+import { Avatar, Box, Button, Flex, Grid, Input, Text, Textarea, VStack, VisuallyHidden } from '@chakra-ui/react';
 import { Surface } from '@features/base';
 import type { MyProfileViewModel } from './types';
+import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '../../utils/avatarUpload';
 
 type ProfileOverviewSectionProps = {
 	profile: MyProfileViewModel;
@@ -12,7 +13,7 @@ type ProfileOverviewSectionProps = {
 		name?: string;
 		nickname?: string;
 		bio?: string;
-		avatarUrl?: string;
+		avatarFile?: File | null;
 	}) => Promise<void>;
 };
 
@@ -47,32 +48,66 @@ export function ProfileOverviewSection({
 	const [nameDraft, setNameDraft] = useState('');
 	const [nicknameDraft, setNicknameDraft] = useState('');
 	const [bioDraft, setBioDraft] = useState('');
-	const [avatarUrlDraft, setAvatarUrlDraft] = useState('');
+	const [avatarFile, setAvatarFile] = useState<File | null>(null);
+	const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
+	const [avatarFileError, setAvatarFileError] = useState('');
 
 	useEffect(() => {
 		setNameDraft(profile.name ?? '');
 		setNicknameDraft(profile.nickname ?? '');
 		setBioDraft(profile.bio ?? '');
-		setAvatarUrlDraft(profile.avatarUrl ?? '');
+		setAvatarFile(null);
+		setAvatarPreviewUrl(null);
+		setAvatarFileError('');
 	}, [profile]);
+
+	useEffect(() => {
+		return () => {
+			if (avatarPreviewUrl) URL.revokeObjectURL(avatarPreviewUrl);
+		};
+	}, [avatarPreviewUrl]);
 
 	function handleCancelEdit() {
 		setIsEditingProfile(false);
 		setNameDraft(profile.name ?? '');
 		setNicknameDraft(profile.nickname ?? '');
 		setBioDraft(profile.bio ?? '');
-		setAvatarUrlDraft(profile.avatarUrl ?? '');
+		setAvatarFile(null);
+		setAvatarPreviewUrl(null);
+		setAvatarFileError('');
+	}
+
+	function handlePickAvatar(file: File | null) {
+		setAvatarFile(file);
+		setAvatarPreviewUrl((current) => {
+			if (current) URL.revokeObjectURL(current);
+			return file ? URL.createObjectURL(file) : null;
+		});
+
+		if (!file) {
+			setAvatarFileError('');
+			return;
+		}
+
+		const error = getAvatarFileError(file);
+		setAvatarFileError(error ?? '');
 	}
 
 	async function handleSaveProfile() {
+		if (avatarFileError) return;
+
 		await onUpdateProfile({
 			name: nameDraft.trim(),
 			nickname: nicknameDraft.trim(),
 			bio: bioDraft.trim(),
-			avatarUrl: avatarUrlDraft.trim() || undefined,
+			avatarFile,
 		});
 		setIsEditingProfile(false);
 	}
+
+	const displayAvatarUrl = isEditingProfile
+		? avatarPreviewUrl ?? profile.avatarUrl ?? undefined
+		: profile.avatarUrl ?? undefined;
 
 	return (
 		<>
@@ -93,7 +128,7 @@ export function ProfileOverviewSection({
 							w={{ base: '6rem', md: '8rem' }}
 							h={{ base: '6rem', md: '8rem' }}
 						>
-							<Avatar.Image src={profile.avatarUrl ?? undefined} />
+							<Avatar.Image src={displayAvatarUrl} />
 							<Avatar.Fallback name={profile.name} />
 						</Avatar.Root>
 
@@ -117,7 +152,7 @@ export function ProfileOverviewSection({
 													borderColor: 'error',
 													boxShadow: '0 0 0 3px rgba(239, 68, 68, 1)',
 													bg: 'rgba(255, 255, 255, 0.06)',
-												}
+											  }
 											: profileInputStyles._focusVisible
 									}
 									_focus={
@@ -131,12 +166,39 @@ export function ProfileOverviewSection({
 										Este apelido já está em uso. Escolha outro.
 									</Text>
 								)}
-								<Input
-									value={avatarUrlDraft}
-									onChange={(e) => setAvatarUrlDraft(e.target.value)}
-									placeholder='URL do avatar'
-									{...profileInputStyles}
-								/>
+
+								<Flex direction='column' gap={2} w='full'>
+									<Text textStyle='smaller' color='pink.200'>
+										Avatar (arquivo)
+									</Text>
+									<Flex align='center' gap={3} wrap='wrap'>
+									<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
+										Escolher arquivo
+										<VisuallyHidden>
+											<Input
+												type='file'
+												accept='image/*'
+												onChange={(event) => {
+													handlePickAvatar(event.target.files?.[0] ?? null);
+												}}
+											/>
+										</VisuallyHidden>
+									</Button>
+									<Text textStyle='smaller' color='pink.200'>
+										{avatarFile ? avatarFile.name : 'Nenhum arquivo selecionado'}
+									</Text>
+								</Flex>
+									<Text textStyle='smaller' color='pink.200'>
+										Tamanho máximo: {MAX_AVATAR_SIZE_MB}MB
+									</Text>
+
+									{avatarFileError && (
+										<Text textStyle='smaller' color='red.400'>
+											{avatarFileError}
+										</Text>
+									)}
+								</Flex>
+
 								<Textarea
 									value={bioDraft}
 									onChange={(e) => setBioDraft(e.target.value)}
@@ -175,6 +237,7 @@ export function ProfileOverviewSection({
 									onClick={() => {
 										void handleSaveProfile();
 									}}
+									disabled={!!avatarFileError}
 								>
 									Salvar
 								</Button>

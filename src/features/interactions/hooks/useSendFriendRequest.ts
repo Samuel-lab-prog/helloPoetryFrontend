@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 type FriendRequestResult = {
 	id: number;
@@ -16,7 +16,7 @@ export function useSendFriendRequest() {
 		mutationFn: (authorId: number) =>
 			api.friends.sendFriendRequest.mutate(String(authorId)) as Promise<FriendRequestResult>,
 		onSuccess: (_, authorId) => {
-			queryClient.invalidateQueries({ queryKey: ['author-profile', authorId] });
+			queryClient.invalidateQueries({ queryKey: apiKeys.users.profile(String(authorId)) });
 		},
 	});
 
