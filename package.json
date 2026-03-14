@@ -15,7 +15,8 @@
 		"generate": "cd ./src/themes/ && npx @chakra-ui/cli typegen ./main.ts",
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",
-		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run barrels && bun run check-deps"
+		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run barrels && bun run check-deps",
+    "generate:api": "orval"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^3.30.0",
@@ -52,6 +53,7 @@
 		"eslint-plugin-react-refresh": "^0.4.20",
 		"globals": "^16.3.0",
 		"jiti": "^2.6.1",
+		"orval": "^8.5.3",
 		"typescript": "~5.8.3",
 		"typescript-eslint": "^8.39.1",
 		"vite": "^7.1.2",
