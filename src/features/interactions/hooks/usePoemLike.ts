@@ -1,21 +1,22 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 export function usePoemLike(poemId: number) {
 	const queryClient = useQueryClient();
+	const poemKey = apiKeys.poems.byId(String(poemId));
 
 	const likeMutation = useMutation({
 		mutationFn: () => api.interactions.likePoem.mutate(String(poemId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
+			queryClient.invalidateQueries({ queryKey: poemKey });
 		},
 	});
 
 	const unlikeMutation = useMutation({
 		mutationFn: () => api.interactions.unlikePoem.mutate(String(poemId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
+			queryClient.invalidateQueries({ queryKey: poemKey });
 		},
 	});
 

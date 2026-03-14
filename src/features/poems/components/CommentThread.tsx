@@ -20,9 +20,9 @@ interface CommentThreadProps {
 	isCreatingComment: boolean;
 	isDeletingComment: boolean;
 	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
-	deleteComment: (id: number) => Promise<void>;
-	likeComment: (id: number) => Promise<void>;
-	unlikeComment: (id: number) => Promise<void>;
+	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	isUpdatingCommentLike: boolean;
 	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
@@ -102,7 +102,7 @@ export const CommentThread = memo(function CommentThread({
 	}
 
 	async function handleDelete() {
-		await deleteComment(comment.id);
+		await deleteComment({ id: comment.id, parentId: comment.parentId ?? undefined });
 		if (comment.parentId) {
 			const parentReplies = await fetchReplies(comment.parentId);
 			setRepliesByCommentId((prev) => ({
@@ -176,7 +176,9 @@ export const CommentThread = memo(function CommentThread({
 						disabled={!isAuthenticated}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
-							comment.likedByCurrentUser ? unlikeComment(comment.id) : likeComment(comment.id)
+							comment.likedByCurrentUser
+								? unlikeComment({ id: comment.id, parentId: comment.parentId ?? undefined })
+								: likeComment({ id: comment.id, parentId: comment.parentId ?? undefined })
 						}
 					>
 						<Heart />
@@ -241,8 +243,8 @@ export const CommentThread = memo(function CommentThread({
 							placeholder='Responder comentário'
 							rows={3}
 							maxLength={300}
-					disabled={!poemIsCommentable || isCreatingComment}
-				/>
+							disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
+						/>
 						<Flex justify='flex-end'>
 							<IconButton
 								size='sm'

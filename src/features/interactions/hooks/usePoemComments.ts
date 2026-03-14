@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
-import { api, interactionsKeys } from '@root/core/api';
+import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
 
 export type PoemCommentType = {
@@ -27,6 +27,7 @@ type UsePoemCommentsOptions = {
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {
 	const queryClient = useQueryClient();
 	const isEnabled = options.enabled ?? true;
+	const poemKey = apiKeys.poems.byId(String(poemId));
 
 	const query = useQuery({
 		queryKey: interactionsKeys.commentsByPoem(String(poemId)),
@@ -50,39 +51,165 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	});
 
 	const deleteMutation = useMutation({
-		mutationFn: (commentId: number) => api.interactions.deleteComment.mutate(String(commentId)),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
+		mutationFn: (params: { id: number; parentId?: number }) =>
+			api.interactions.deleteComment.mutate(String(params.id)),
+		onMutate: async (params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+
+			await queryClient.cancelQueries({ queryKey: baseKey });
+			if (repliesKey) await queryClient.cancelQueries({ queryKey: repliesKey });
+
+			const previousBase = queryClient.getQueryData<PoemCommentType[]>(baseKey);
+			const previousReplies = repliesKey
+				? queryClient.getQueryData<PoemCommentType[]>(repliesKey)
+				: undefined;
+
+			if (previousBase) {
+				queryClient.setQueryData<PoemCommentType[]>(
+					baseKey,
+					previousBase
+						.filter((comment) => comment.id !== params.id)
+						.map((comment) =>
+							params.parentId && comment.id === params.parentId
+								? {
+										...comment,
+										aggregateChildrenCount: Math.max(0, comment.aggregateChildrenCount - 1),
+									}
+								: comment,
+						),
+				);
+			}
+
+			if (repliesKey && previousReplies) {
+				queryClient.setQueryData<PoemCommentType[]>(
+					repliesKey,
+					previousReplies.filter((comment) => comment.id !== params.id),
+				);
+			}
+
+			return { previousBase, previousReplies, baseKey, repliesKey };
+		},
+		onError: (_, __, context) => {
+			if (!context) return;
+			queryClient.setQueryData(context.baseKey, context.previousBase);
+			if (context.repliesKey) {
+				queryClient.setQueryData(context.repliesKey, context.previousReplies);
+			}
+		},
+		onSuccess: (_, params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+
+			queryClient.invalidateQueries({ queryKey: baseKey });
+			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
+			queryClient.invalidateQueries({ queryKey: poemKey });
 		},
 	});
 
 	const likeCommentMutation = useMutation({
-		mutationFn: (commentId: number) => api.interactions.likeComment.mutate(String(commentId)),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
+		mutationFn: (params: { id: number; parentId?: number }) =>
+			api.interactions.likeComment.mutate(String(params.id)),
+		onMutate: async (params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+
+			await queryClient.cancelQueries({ queryKey: baseKey });
+			if (repliesKey) await queryClient.cancelQueries({ queryKey: repliesKey });
+
+			const previousBase = queryClient.getQueryData<PoemCommentType[]>(baseKey);
+			const previousReplies = repliesKey
+				? queryClient.getQueryData<PoemCommentType[]>(repliesKey)
+				: undefined;
+
+			const applyLike = (list?: PoemCommentType[]) =>
+				list?.map((comment) =>
+					comment.id === params.id
+						? {
+								...comment,
+								likesCount: comment.likesCount + 1,
+								likedByCurrentUser: true,
+							}
+						: comment,
+				);
+
+			if (previousBase) queryClient.setQueryData(baseKey, applyLike(previousBase));
+			if (repliesKey && previousReplies)
+				queryClient.setQueryData(repliesKey, applyLike(previousReplies));
+
+			return { previousBase, previousReplies, baseKey, repliesKey };
+		},
+		onError: (_, __, context) => {
+			if (!context) return;
+			queryClient.setQueryData(context.baseKey, context.previousBase);
+			if (context.repliesKey) {
+				queryClient.setQueryData(context.repliesKey, context.previousReplies);
+			}
+		},
+		onSuccess: (_, params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+			queryClient.invalidateQueries({ queryKey: baseKey });
+			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
 		},
 	});
 
 	const unlikeCommentMutation = useMutation({
-		mutationFn: (commentId: number) => api.interactions.unlikeComment.mutate(String(commentId)),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
+		mutationFn: (params: { id: number; parentId?: number }) =>
+			api.interactions.unlikeComment.mutate(String(params.id)),
+		onMutate: async (params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+
+			await queryClient.cancelQueries({ queryKey: baseKey });
+			if (repliesKey) await queryClient.cancelQueries({ queryKey: repliesKey });
+
+			const previousBase = queryClient.getQueryData<PoemCommentType[]>(baseKey);
+			const previousReplies = repliesKey
+				? queryClient.getQueryData<PoemCommentType[]>(repliesKey)
+				: undefined;
+
+			const applyUnlike = (list?: PoemCommentType[]) =>
+				list?.map((comment) =>
+					comment.id === params.id
+						? {
+								...comment,
+								likesCount: Math.max(0, comment.likesCount - 1),
+								likedByCurrentUser: false,
+							}
+						: comment,
+				);
+
+			if (previousBase) queryClient.setQueryData(baseKey, applyUnlike(previousBase));
+			if (repliesKey && previousReplies)
+				queryClient.setQueryData(repliesKey, applyUnlike(previousReplies));
+
+			return { previousBase, previousReplies, baseKey, repliesKey };
+		},
+		onError: (_, __, context) => {
+			if (!context) return;
+			queryClient.setQueryData(context.baseKey, context.previousBase);
+			if (context.repliesKey) {
+				queryClient.setQueryData(context.repliesKey, context.previousReplies);
+			}
+		},
+		onSuccess: (_, params) => {
+			const baseKey = interactionsKeys.commentsByPoem(String(poemId));
+			const repliesKey = params.parentId
+				? interactionsKeys.commentsByPoem(String(poemId), String(params.parentId))
+				: null;
+			queryClient.invalidateQueries({ queryKey: baseKey });
+			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
 		},
 	});
 
@@ -127,11 +254,12 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		createComment: mutation.mutateAsync,
 		isCreatingComment: mutation.isPending,
 		createCommentError: getErrorMessage(),
-		deleteComment: deleteMutation.mutateAsync,
+		deleteComment: (args: { id: number; parentId?: number }) => deleteMutation.mutateAsync(args),
 		isDeletingComment: deleteMutation.isPending,
 		deleteCommentError: getDeleteErrorMessage(),
-		likeComment: likeCommentMutation.mutateAsync,
-		unlikeComment: unlikeCommentMutation.mutateAsync,
+		likeComment: (args: { id: number; parentId?: number }) => likeCommentMutation.mutateAsync(args),
+		unlikeComment: (args: { id: number; parentId?: number }) =>
+			unlikeCommentMutation.mutateAsync(args),
 		isUpdatingCommentLike: likeCommentMutation.isPending || unlikeCommentMutation.isPending,
 		likeCommentError: getLikeCommentErrorMessage(),
 		fetchReplies,

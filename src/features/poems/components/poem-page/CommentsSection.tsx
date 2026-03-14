@@ -21,9 +21,9 @@ type CommentsSectionProps = {
 	onCommentInputChange: (value: string) => void;
 	onPublishComment: () => Promise<void>;
 	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
-	deleteComment: (id: number) => Promise<void>;
-	likeComment: (id: number) => Promise<void>;
-	unlikeComment: (id: number) => Promise<void>;
+	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	fetchReplies: (parentId: number) => Promise<PoemCommentType[]>;
 };
 
