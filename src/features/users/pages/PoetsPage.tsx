@@ -54,7 +54,6 @@ export function PoetsPage() {
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' w='4xl' mx='auto'>
-			
 			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
 				<Heading as='h1' textStyle='h2'>
 					Buscar Poetas

@@ -24,7 +24,7 @@ export function useLoginForm() {
 	const loginMutation = useMutation({
 		mutationFn: (data: LoginDataType) => api.auth.login.mutate(data) as Promise<AuthClient>,
 
-		onSuccess: async (client) => {
+		onSuccess: (client) => {
 			useAuthClientStore.getState().setAuthClient({
 				id: client.id,
 				role: client.role,

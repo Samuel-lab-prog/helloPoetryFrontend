@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-imports */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -25,8 +24,9 @@ export function useUpdateMyProfile() {
 
 	const mutation = useMutation({
 		mutationFn: async (data: UpdateMyProfileInput) => {
-			const nextAvatarUrl =
-				data.avatarFile ? await uploadAvatarFile(data.avatarFile) : data.avatarUrl;
+			const nextAvatarUrl = data.avatarFile
+				? await uploadAvatarFile(data.avatarFile)
+				: data.avatarUrl;
 
 			await api.users.updateUser.mutate({
 				id: String(clientId),

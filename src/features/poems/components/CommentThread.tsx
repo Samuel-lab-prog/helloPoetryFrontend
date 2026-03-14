@@ -252,10 +252,7 @@ export const CommentThread = memo(function CommentThread({
 								aria-label='Enviar resposta'
 								title='Enviar resposta'
 								disabled={
-									!isAuthenticated ||
-									!replyInput.trim() ||
-									!poemIsCommentable ||
-									isCreatingComment
+									!isAuthenticated || !replyInput.trim() || !poemIsCommentable || isCreatingComment
 								}
 								loading={isCreatingComment}
 								onClick={handleCreateReply}

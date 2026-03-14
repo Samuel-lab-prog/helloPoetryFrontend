@@ -132,7 +132,6 @@ export function RegisterForm() {
 						Tamanho máximo: {maxAvatarSizeMb}MB
 					</Text>
 
-
 					{avatarError && (
 						<Text textStyle='smaller' color='red.400'>
 							{avatarError}

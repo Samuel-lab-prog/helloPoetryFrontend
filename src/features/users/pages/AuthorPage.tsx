@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { Avatar, Box, Button, Flex, Grid, Heading, Icon, Text } from '@chakra-ui/react';
 import { Clock3, LogIn, UserCheck, UserPlus, UserX } from 'lucide-react';
 import { useEffect } from 'react';
@@ -61,10 +60,8 @@ export function AuthorPage() {
 			return { icon: UserX, color: 'red.300', text: 'Você foi bloqueado por este usuário.' };
 		if (author.isBlockedByRequester)
 			return { icon: UserX, color: 'red.300', text: 'Você bloqueou este usuário.' };
-		if (author.isFriend)
-			return { icon: UserCheck, color: 'green.300', text: 'Vocês são amigos.' };
-		if (hasOutgoingRequest)
-			return { icon: Clock3, color: 'yellow.300', text: 'Pedido enviado.' };
+		if (author.isFriend) return { icon: UserCheck, color: 'green.300', text: 'Vocês são amigos.' };
+		if (hasOutgoingRequest) return { icon: Clock3, color: 'yellow.300', text: 'Pedido enviado.' };
 		if (hasIncomingRequest)
 			return { icon: UserPlus, color: 'yellow.300', text: 'Pedido recebido.' };
 		return null;

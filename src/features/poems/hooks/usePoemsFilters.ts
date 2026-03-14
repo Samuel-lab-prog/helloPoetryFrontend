@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import { useSearchParams } from 'react-router-dom';
 import { useForm, type Control } from 'react-hook-form';
 import { useEffect } from 'react';

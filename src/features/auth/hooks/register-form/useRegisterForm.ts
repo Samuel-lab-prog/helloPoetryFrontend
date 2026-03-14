@@ -7,7 +7,11 @@ import { useMutation } from '@tanstack/react-query';
 import { registerSchema, type RegisterDataType } from '../../schemas/registerSchema';
 import { handleRegisterError } from './handleRegisterError';
 import { api } from '@root/core/api';
-import { getAvatarFileError, uploadAvatarFile, MAX_AVATAR_SIZE_MB } from '@features/users/utils/avatarUpload';
+import {
+	getAvatarFileError,
+	uploadAvatarFile,
+	MAX_AVATAR_SIZE_MB,
+} from '@features/users/utils/avatarUpload';
 import type { CreateUserBody } from '@root/core/api/users/types';
 
 export function useRegisterForm() {
@@ -18,11 +22,12 @@ export function useRegisterForm() {
 	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		return () => {
+	useEffect(
+		() => () => {
 			if (avatarPreviewUrl) URL.revokeObjectURL(avatarPreviewUrl);
-		};
-	}, [avatarPreviewUrl]);
+		},
+		[avatarPreviewUrl],
+	);
 
 	const form = useForm<RegisterDataType>({
 		resolver: zodResolver(registerSchema),
@@ -75,8 +80,7 @@ export function useRegisterForm() {
 							'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
 						);
 					} else {
-						const message =
-							error instanceof Error ? error.message : 'Erro ao enviar avatar.';
+						const message = error instanceof Error ? error.message : 'Erro ao enviar avatar.';
 						setAvatarError(message);
 						setIsUploadingAvatar(false);
 						return;

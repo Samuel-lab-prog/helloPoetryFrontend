@@ -1,8 +1,11 @@
-﻿import { useEffect, useState } from 'react';
-import { Avatar, Box, Button, Flex, Grid, Input, Text, Textarea, VStack, VisuallyHidden } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Avatar, Button, Flex, VStack } from '@chakra-ui/react';
 import { Surface } from '@features/base';
 import type { MyProfileViewModel } from './types';
-import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '../../utils/avatarUpload';
+import { getAvatarFileError } from '../../utils/avatarUpload';
+import { ProfileEditFields } from './ProfileEditFields';
+import { ProfileReadOnly } from './ProfileReadOnly';
+import { ProfileStatsGrid } from './ProfileStatsGrid';
 
 type ProfileOverviewSectionProps = {
 	profile: MyProfileViewModel;
@@ -61,11 +64,12 @@ export function ProfileOverviewSection({
 		setAvatarFileError('');
 	}, [profile]);
 
-	useEffect(() => {
-		return () => {
+	useEffect(
+		() => () => {
 			if (avatarPreviewUrl) URL.revokeObjectURL(avatarPreviewUrl);
-		};
-	}, [avatarPreviewUrl]);
+		},
+		[avatarPreviewUrl],
+	);
 
 	function handleCancelEdit() {
 		setIsEditingProfile(false);
@@ -106,8 +110,8 @@ export function ProfileOverviewSection({
 	}
 
 	const displayAvatarUrl = isEditingProfile
-		? avatarPreviewUrl ?? profile.avatarUrl ?? undefined
-		: profile.avatarUrl ?? undefined;
+		? (avatarPreviewUrl ?? profile.avatarUrl ?? undefined)
+		: (profile.avatarUrl ?? undefined);
 
 	return (
 		<>
@@ -133,96 +137,22 @@ export function ProfileOverviewSection({
 						</Avatar.Root>
 
 						{isEditingProfile ? (
-							<>
-								<Input
-									value={nameDraft}
-									onChange={(e) => setNameDraft(e.target.value)}
-									placeholder='Nome'
-									{...profileInputStyles}
-								/>
-								<Input
-									value={nicknameDraft}
-									onChange={(e) => setNicknameDraft(e.target.value)}
-									placeholder='Apelido'
-									{...profileInputStyles}
-									borderColor={conflictField === 'nickname' ? 'red.400' : undefined}
-									_focusVisible={
-										conflictField === 'nickname'
-											? {
-													borderColor: 'error',
-													boxShadow: '0 0 0 3px rgba(239, 68, 68, 1)',
-													bg: 'rgba(255, 255, 255, 0.06)',
-											  }
-											: profileInputStyles._focusVisible
-									}
-									_focus={
-										conflictField === 'nickname'
-											? { borderColor: 'error', bg: 'rgba(255, 255, 255, 0.06)' }
-											: profileInputStyles._focus
-									}
-								/>
-								{conflictField === 'nickname' && (
-									<Text textStyle='smaller' color='red.400'>
-										Este apelido já está em uso. Escolha outro.
-									</Text>
-								)}
-
-								<Flex direction='column' gap={2} w='full'>
-									<Text textStyle='smaller' color='pink.200'>
-										Avatar (arquivo)
-									</Text>
-									<Flex align='center' gap={3} wrap='wrap'>
-									<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
-										Escolher arquivo
-										<VisuallyHidden>
-											<Input
-												type='file'
-												accept='image/*'
-												onChange={(event) => {
-													handlePickAvatar(event.target.files?.[0] ?? null);
-												}}
-											/>
-										</VisuallyHidden>
-									</Button>
-									<Text textStyle='smaller' color='pink.200'>
-										{avatarFile ? avatarFile.name : 'Nenhum arquivo selecionado'}
-									</Text>
-								</Flex>
-									<Text textStyle='smaller' color='pink.200'>
-										Tamanho máximo: {MAX_AVATAR_SIZE_MB}MB
-									</Text>
-
-									{avatarFileError && (
-										<Text textStyle='smaller' color='red.400'>
-											{avatarFileError}
-										</Text>
-									)}
-								</Flex>
-
-								<Textarea
-									value={bioDraft}
-									onChange={(e) => setBioDraft(e.target.value)}
-									placeholder='Bio'
-									rows={4}
-									{...profileInputStyles}
-								/>
-								{updateProfileError && (
-									<Text textStyle='small' color='red.400'>
-										{updateProfileError}
-									</Text>
-								)}
-							</>
+							<ProfileEditFields
+								profileInputStyles={profileInputStyles}
+								nameDraft={nameDraft}
+								nicknameDraft={nicknameDraft}
+								bioDraft={bioDraft}
+								avatarFile={avatarFile}
+								avatarFileError={avatarFileError}
+								conflictField={conflictField}
+								updateProfileError={updateProfileError}
+								onChangeName={setNameDraft}
+								onChangeNickname={setNicknameDraft}
+								onChangeBio={setBioDraft}
+								onPickAvatar={handlePickAvatar}
+							/>
 						) : (
-							<>
-								<Text textStyle='h3'>{profile.name}</Text>
-								<Text textStyle='small' color='pink.200'>
-									@{profile.nickname}
-								</Text>
-								<Text textStyle='small' color='pink.100'>
-									{profile.email}
-								</Text>
-								<Text textStyle='body'>{profile.bio || 'Sem bio.'}</Text>
-							</>
+							<ProfileReadOnly profile={profile} />
 						)}
 					</VStack>
 
@@ -265,44 +195,7 @@ export function ProfileOverviewSection({
 				</Flex>
 			</Surface>
 
-			<Grid mt={5} templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
-				<Box
-					p={4}
-					border='1px solid'
-					borderColor='purple.700'
-					borderRadius='xl'
-					bg='rgba(255, 255, 255, 0.02)'
-				>
-					<Text textStyle='smaller' color='pink.200'>
-						Poemas
-					</Text>
-					<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
-				</Box>
-				<Box
-					p={4}
-					border='1px solid'
-					borderColor='purple.700'
-					borderRadius='xl'
-					bg='rgba(255, 255, 255, 0.02)'
-				>
-					<Text textStyle='smaller' color='pink.200'>
-						Comentários
-					</Text>
-					<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
-				</Box>
-				<Box
-					p={4}
-					border='1px solid'
-					borderColor='purple.700'
-					borderRadius='xl'
-					bg='rgba(255, 255, 255, 0.02)'
-				>
-					<Text textStyle='smaller' color='pink.200'>
-						Amigos
-					</Text>
-					<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
-				</Box>
-			</Grid>
+			<ProfileStatsGrid profile={profile} />
 		</>
 	);
 }
