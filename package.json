@@ -16,7 +16,7 @@
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",
 		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run barrels && bun run check-deps",
-    "generate:api": "orval"
+		"generate:api": "orval"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^3.30.0",
