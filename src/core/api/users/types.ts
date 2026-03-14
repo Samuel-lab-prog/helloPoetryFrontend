@@ -6,6 +6,11 @@ export type UsersSearchParams = {
 	searchNickname?: string;
 };
 
+export type PublicUsersSearchParams = {
+	limit?: number;
+	searchNickname?: string;
+};
+
 export type UserPreview = {
 	id: number;
 	nickname: string;

@@ -9,6 +9,8 @@ export const userKeys = createQueryKeys({
 		orderDirection?: 'asc' | 'desc';
 		searchNickname?: string;
 	}) => ['users', 'search', params] as const,
+	publicSearch: (params: { limit?: number; searchNickname?: string }) =>
+		['users', 'public', params] as const,
 	profile: (id: string) => ['users', 'profile', id] as const,
 	checkNickname: (nickname: string) => ['users', 'check-nickname', nickname] as const,
 	checkEmail: (email: string) => ['users', 'check-email', email] as const,

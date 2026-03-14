@@ -7,6 +7,7 @@ import type {
 	UpdateUserBody,
 	UsersPage,
 	UsersSearchParams,
+	PublicUsersSearchParams,
 	UserProfile,
 } from './types';
 
@@ -39,6 +40,17 @@ const getUsers = createQueryEndpoint<[UsersSearchParams], UsersPage>({
 		createHTTPRequest<UsersPage>({
 			method: 'GET',
 			path: `/users`,
+			query: params,
+		}),
+});
+
+const getPublicUsers = createQueryEndpoint<[PublicUsersSearchParams], UsersPage>({
+	key: userKeys.publicSearch,
+
+	fn: (params) =>
+		createHTTPRequest<UsersPage>({
+			method: 'GET',
+			path: `/users/public`,
 			query: params,
 		}),
 });
@@ -84,6 +96,7 @@ export const users = {
 	checkNickname,
 	checkEmail,
 	getUsers,
+	getPublicUsers,
 	getProfile,
 	createUser,
 	updateUser,

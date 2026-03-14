@@ -18,18 +18,14 @@ export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();
 
 	const query = useQuery<UsersPage>({
-		queryKey: apiKeys.users.search({
+		queryKey: apiKeys.users.publicSearch({
 			limit,
-			orderBy: 'nickname',
-			orderDirection: 'asc',
 			searchNickname: normalizedSearch || undefined,
 		}),
 		queryFn: () =>
-			api.users.getUsers
+			api.users.getPublicUsers
 				.query({
 					limit,
-					orderBy: 'nickname',
-					orderDirection: 'asc',
 					searchNickname: normalizedSearch || undefined,
 				})
 				.queryFn() as Promise<UsersPage>,
