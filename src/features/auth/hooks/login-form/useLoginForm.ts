@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { type AuthClient } from '@root/core/stores/useAuthClientStore';
+import { type AuthClient, useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { loginSchema, type LoginDataType } from '../../schemas/loginSchema';
 import { eventBus } from '@root/core/events/eventBus';
 import { handleLoginError } from './handleLoginError';
@@ -25,7 +25,13 @@ export function useLoginForm() {
 		mutationFn: (data: LoginDataType) => api.auth.login.mutate(data) as Promise<AuthClient>,
 
 		onSuccess: async (client) => {
-			await eventBus.publish('userLoggedIn', {
+			useAuthClientStore.getState().setAuthClient({
+				id: client.id,
+				role: client.role,
+				status: client.status,
+			});
+
+			void eventBus.publish('userLoggedIn', {
 				userId: client.id,
 				role: client.role,
 				status: client.status,
@@ -41,6 +47,7 @@ export function useLoginForm() {
 
 	function onSubmit(data: LoginDataType) {
 		setGeneralError('');
+		if (loginMutation.isPending) return;
 		loginMutation.mutate(data);
 	}
 

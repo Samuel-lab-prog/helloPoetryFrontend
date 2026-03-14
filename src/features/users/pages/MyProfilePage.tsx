@@ -81,7 +81,7 @@ export function MyProfilePage() {
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
-			<Box as='section' w='full' maxW='5xl'>
+			<Box as='section' w='full' maxW='4xl'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
 
 				<AsyncState
@@ -106,7 +106,9 @@ export function MyProfilePage() {
 									isUpdatingProfile={isUpdatingProfile}
 									updateProfileError={updateProfileError}
 									conflictField={conflictField}
-									onUpdateProfile={updateMyProfile}
+									onUpdateProfile={async (input) => {
+										await updateMyProfile(input);
+									}}
 								/>
 							</Box>
 

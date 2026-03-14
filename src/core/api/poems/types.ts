@@ -41,8 +41,10 @@ export type PoemPreview = {
 	id: number;
 	createdAt?: string | Date;
 	likesCount?: number;
+	commentsCount?: number;
 	stats?: {
 		likesCount?: number;
+		commentsCount?: number;
 	};
 	tags: PoemTag[];
 	author: PoemAuthor;

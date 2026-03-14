@@ -53,12 +53,13 @@ export function PoetsPage() {
 	);
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column'>
-			<Flex as='section' gap={3} direction='column' w='full'>
+		<Flex as='main' layerStyle='main' direction='column' w='4xl' mx='auto'>
+			
+			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
 				<Heading as='h1' textStyle='h2'>
 					Buscar Poetas
 				</Heading>
-				<Text textStyle='small' color='pink.200'>
+				<Text textStyle='small' color='pink.200' mt={-1}>
 					Encontre outros poetas por nickname.
 				</Text>
 				<FormField

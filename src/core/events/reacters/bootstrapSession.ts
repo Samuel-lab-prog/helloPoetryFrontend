@@ -61,20 +61,23 @@ export async function bootstrapUserDataOnLogin(
 	queryClient: QueryClient,
 	payload: AppEvents['userLoggedIn'],
 ): Promise<void> {
+	const authStore = useAuthClientStore.getState();
+	authStore.setAuthClient({ id: payload.userId, role: payload.role, status: payload.status });
+
 	await clearSessionQueries(queryClient);
 
 	const profileKey = apiKeys.users.profile(String(payload.userId));
-	const myProfile = (await api.users.getProfile.fetch(
-		String(payload.userId),
-	)) as UserPrivateProfile;
+	try {
+		const myProfile = (await api.users.getProfile.fetch(
+			String(payload.userId),
+		)) as UserPrivateProfile;
+		authStore.setUnreadNotificationsCount(myProfile.unreadNotificationsCount);
+		queryClient.setQueryData(profileKey, myProfile);
+	} catch {
+		authStore.setUnreadNotificationsCount(0);
+	}
 
-	const authStore = useAuthClientStore.getState();
-	authStore.setAuthClient({ id: payload.userId, role: payload.role, status: payload.status });
-	authStore.setUnreadNotificationsCount(myProfile.unreadNotificationsCount);
-
-	queryClient.setQueryData(profileKey, myProfile);
-
-	await Promise.all([
+	await Promise.allSettled([
 		queryClient.fetchQuery({
 			queryKey: homeFeedKey(payload.userId, INITIAL_FEED_LIMIT),
 			queryFn: () => fetchInitialFeed(INITIAL_FEED_LIMIT),

@@ -1,5 +1,6 @@
-﻿import { Card, Text, Badge, Flex, Link, Box, Avatar } from '@chakra-ui/react';
+﻿import { Card, Text, Badge, Flex, Link, Box, Avatar, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
+import { Heart, MessageCircle } from 'lucide-react';
 import { formatRelativeTime } from '@features/base';
 import type { PoemPreviewType } from '../types';
 
@@ -11,6 +12,7 @@ type PoemCardProps = {
 export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
 	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
+	const commentsCount = poem.stats?.commentsCount ?? poem.commentsCount;
 
 	return (
 		<Card.Root
@@ -75,18 +77,25 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 						</Flex>
 					)}
 
-					<Flex align='center' gap={3} wrap='wrap'>
-						{typeof likesCount === 'number' && (
-							<Badge size='sm' px={2} colorPalette='pink' variant='outline'>
-								{likesCount} curtidas
-							</Badge>
-						)}
-						{relativeCreatedAt && (
-							<Text textStyle='smaller' color='pink.300'>
-								{relativeCreatedAt}
-							</Text>
-						)}
-					</Flex>
+						<Flex align='center' gap={4} wrap='wrap'>
+							{typeof likesCount === 'number' && (
+								<Flex align='center' gap={2} color='pink.200'>
+									<Icon as={Heart} boxSize={4} />
+									<Text textStyle='smaller'>{likesCount}</Text>
+								</Flex>
+							)}
+							{typeof commentsCount === 'number' && (
+								<Flex align='center' gap={2} color='pink.200'>
+									<Icon as={MessageCircle} boxSize={4} />
+									<Text textStyle='smaller'>{commentsCount}</Text>
+								</Flex>
+							)}
+							{relativeCreatedAt && (
+								<Text textStyle='smaller' color='pink.300'>
+									{relativeCreatedAt}
+								</Text>
+							)}
+						</Flex>
 
 					{poem.tags.length > 0 && (
 						<Flex gap={2} wrap='wrap'>

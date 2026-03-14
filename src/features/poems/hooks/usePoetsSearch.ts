@@ -3,6 +3,7 @@ import { api, apiKeys } from '@root/core/api';
 
 export type PoetPreview = {
 	id: number;
+	name: string;
 	nickname: string;
 	avatarUrl: string | null;
 	role: string;

@@ -17,6 +17,8 @@ function toPoemPreviewType(item: FeedPoemType): PoemPreviewType {
 		title: item.title,
 		slug: item.slug,
 		createdAt: item.createdAt,
+		likesCount: item.likesCount,
+		commentsCount: item.commentsCount,
 		tags: item.tags.map((name, index) => ({
 			id: index + 1,
 			name,

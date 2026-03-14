@@ -5,6 +5,8 @@ export type FeedPoem = {
 	slug: string;
 	tags: string[];
 	createdAt: string | Date;
+	likesCount: number;
+	commentsCount: number;
 	author: {
 		id: number;
 		name: string;

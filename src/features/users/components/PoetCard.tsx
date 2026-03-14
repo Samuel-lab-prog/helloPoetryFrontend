@@ -1,8 +1,9 @@
-import { Avatar, Button, Card, Flex, Text } from '@chakra-ui/react';
+﻿import { Avatar, Button, Card, Flex, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export type PoetCardData = {
 	id: number;
+	name: string;
 	nickname: string;
 	avatarUrl: string | null;
 };
@@ -22,9 +23,9 @@ export function PoetCard({ poet }: PoetCardProps) {
 							<Avatar.Fallback name={poet.nickname} />
 						</Avatar.Root>
 						<Flex direction='column'>
-							<Text textStyle='small'>@{poet.nickname}</Text>
-							<Text textStyle='smaller' color='pink.200'>
-								Perfil público
+							<Text textStyle='small'>{poet.name}</Text>
+							<Text textStyle='small' color='pink.200'>
+								@{poet.nickname}
 							</Text>
 						</Flex>
 					</Flex>

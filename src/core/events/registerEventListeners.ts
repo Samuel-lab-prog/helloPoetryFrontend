@@ -2,8 +2,27 @@ import type { QueryClient } from '@tanstack/react-query';
 import { eventBus } from './eventBus';
 import { bootstrapUserDataOnLogin, clearUserDataFromCache, onCommentCreated } from './reacters';
 
+const GLOBAL_KEY = '__olapoesia_event_listeners__';
+
 export function registerEventListeners(queryClient: QueryClient): void {
-	eventBus.subscribe('userLoggedIn', bootstrapUserDataOnLogin.bind(null, queryClient));
-	eventBus.subscribe('userLoggedOut', clearUserDataFromCache.bind(null, queryClient));
-	eventBus.subscribe('commentCreated', onCommentCreated.bind(null, queryClient));
+	if ((globalThis as Record<string, unknown>)[GLOBAL_KEY]) return;
+
+	const unsubscribeLogin = eventBus.subscribe(
+		'userLoggedIn',
+		bootstrapUserDataOnLogin.bind(null, queryClient),
+	);
+	const unsubscribeLogout = eventBus.subscribe(
+		'userLoggedOut',
+		clearUserDataFromCache.bind(null, queryClient),
+	);
+	const unsubscribeComment = eventBus.subscribe(
+		'commentCreated',
+		onCommentCreated.bind(null, queryClient),
+	);
+
+	(globalThis as Record<string, unknown>)[GLOBAL_KEY] = () => {
+		unsubscribeLogin();
+		unsubscribeLogout();
+		unsubscribeComment();
+	};
 }

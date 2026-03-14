@@ -37,8 +37,10 @@ export type PoemPreviewType = {
 	id: number;
 	createdAt?: string | Date;
 	likesCount?: number;
+	commentsCount?: number;
 	stats?: {
 		likesCount?: number;
+		commentsCount?: number;
 	};
 	tags: {
 		id: number;
@@ -70,6 +72,8 @@ export type FeedPoemType = {
 	slug: string;
 	tags: string[];
 	createdAt: string | Date;
+	likesCount: number;
+	commentsCount: number;
 	author: {
 		id: number;
 		name: string;
