@@ -17,7 +17,7 @@ export type UsersPage = {
 export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();
 
-	const query = useQuery({
+	const query = useQuery<UsersPage>({
 		queryKey: apiKeys.users.search({
 			limit,
 			orderBy: 'nickname',
@@ -38,6 +38,7 @@ export function usePoetsSearch(searchNickname: string, limit = 10) {
 	return {
 		poets: query.data?.users ?? [],
 		isLoading: query.isLoading,
+		isFetching: query.isFetching,
 		isError: query.isError,
 		error: query.error,
 	};

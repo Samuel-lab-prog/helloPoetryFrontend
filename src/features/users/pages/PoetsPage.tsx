@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Card, Flex, Heading, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@features/base';
 import { usePoetsSearch } from '../../poems/hooks/usePoetsSearch';
@@ -28,7 +28,29 @@ export function PoetsPage() {
 		return () => window.clearTimeout(timeoutId);
 	}, [searchNickname]);
 
-	const { poets, isLoading, isError } = usePoetsSearch(debouncedSearch);
+	const { poets, isLoading, isFetching, isError } = usePoetsSearch(debouncedSearch);
+	const showSkeletons = isLoading && poets.length === 0;
+
+	const loadingSkeletons = (
+		<Flex direction='column' gap={3}>
+			{Array.from({ length: 6 }).map((_, index) => (
+				<Card.Root key={`poet-skeleton-${index}`} variant='interactive'>
+					<Card.Body>
+						<Flex align='center' justify='space-between' gap={2}>
+							<Flex align='center' gap={3}>
+								<Skeleton boxSize='12' borderRadius='full' />
+								<Flex direction='column' gap={2}>
+									<Skeleton height='12px' width='140px' />
+									<Skeleton height='10px' width='90px' />
+								</Flex>
+							</Flex>
+							<Skeleton height='28px' width='96px' borderRadius='md' />
+						</Flex>
+					</Card.Body>
+				</Card.Root>
+			))}
+		</Flex>
+	);
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column'>
@@ -45,13 +67,18 @@ export function PoetsPage() {
 					control={form.control}
 					type='text'
 				/>
+				{isFetching && (
+					<Text textStyle='smaller' color='pink.200'>
+						Buscando poetas...
+					</Text>
+				)}
 			</Flex>
 
 			<AsyncState
-				isLoading={isLoading}
+				isLoading={showSkeletons}
 				isError={isError}
 				isEmpty={poets.length === 0}
-				loadingElement={<Text textStyle='body'>Buscando poetas...</Text>}
+				loadingElement={loadingSkeletons}
 				errorElement={<Text textStyle='body'>Erro ao buscar poetas.</Text>}
 				emptyElement={<Text textStyle='body'>Nenhum poeta encontrado.</Text>}
 			>
