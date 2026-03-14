@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 type NotificationPayload = {
 	title?: string;
@@ -53,7 +53,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	);
 
 	const query = useQuery({
-		queryKey: ['notifications', clientId, { onlyUnread }],
+		queryKey: apiKeys.notifications.page({ onlyUnread, limit: 50 }),
 		enabled: !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () =>
@@ -67,7 +67,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			api.notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (_, notificationId) => {
 			const cachedNotifications = queryClient.getQueriesData<NotificationsPageType>({
-				queryKey: ['notifications'],
+				queryKey: apiKeys.notifications.all(),
 			});
 			const wasUnread = cachedNotifications.some(([, cachedPage]) =>
 				cachedPage?.notifications.some(
@@ -78,7 +78,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			if (wasUnread) decrementUnreadNotificationsCount(1);
 
 			queryClient.invalidateQueries({
-				queryKey: ['notifications'],
+				queryKey: apiKeys.notifications.all(),
 			});
 		},
 	});
@@ -88,7 +88,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
 			queryClient.invalidateQueries({
-				queryKey: ['notifications'],
+				queryKey: apiKeys.notifications.all(),
 			});
 		},
 	});
@@ -99,7 +99,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onSuccess: (notification) => {
 			if (!notification.readAt) decrementUnreadNotificationsCount(1);
 			queryClient.invalidateQueries({
-				queryKey: ['notifications'],
+				queryKey: apiKeys.notifications.all(),
 			});
 		},
 	});

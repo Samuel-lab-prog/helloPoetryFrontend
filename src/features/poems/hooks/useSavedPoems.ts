@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 export type SavedPoemType = {
 	id: number;
@@ -15,7 +15,7 @@ export function useSavedPoems(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: ['saved-poems', clientId],
+		queryKey: apiKeys.poems.saved(),
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () => api.poems.getSavedPoems.query().queryFn(),
@@ -23,12 +23,12 @@ export function useSavedPoems(enabled = true) {
 
 	const saveMutation = useMutation({
 		mutationFn: (poemId: number) => api.poems.savePoem.mutate(String(poemId)),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.saved() }),
 	});
 
 	const unsaveMutation = useMutation({
 		mutationFn: (poemId: number) => api.poems.removeSavedPoem.mutate(String(poemId)),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['saved-poems'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.saved() }),
 	});
 
 	function getErrorMessage() {

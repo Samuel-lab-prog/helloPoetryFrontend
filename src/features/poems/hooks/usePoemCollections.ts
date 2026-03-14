@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 export type PoemCollectionType = {
 	id: number;
@@ -28,7 +28,7 @@ export function usePoemCollections(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: ['poem-collections', clientId],
+		queryKey: apiKeys.poems.collections(),
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () => api.poems.getCollections.query().queryFn(),
@@ -41,12 +41,12 @@ export function usePoemCollections(enabled = true) {
 				name: data.name,
 				description: data.description,
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
 
 	const deleteCollectionMutation = useMutation({
 		mutationFn: (collectionId: number) => api.poems.deleteCollection.mutate(String(collectionId)),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
 
 	const addCollectionItemMutation = useMutation({
@@ -55,7 +55,7 @@ export function usePoemCollections(enabled = true) {
 				collectionId: String(data.collectionId),
 				poemId: String(data.poemId),
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
 
 	const removeCollectionItemMutation = useMutation({
@@ -64,7 +64,7 @@ export function usePoemCollections(enabled = true) {
 				collectionId: String(data.collectionId),
 				poemId: String(data.poemId),
 			}),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['poem-collections'] }),
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
 
 	function getErrorMessage() {

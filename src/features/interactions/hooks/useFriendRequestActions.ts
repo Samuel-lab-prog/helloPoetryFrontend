@@ -1,16 +1,21 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
-import { api } from '@root/core/api';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { api, apiKeys } from '@root/core/api';
 
 export function useFriendRequestActions() {
 	const queryClient = useQueryClient();
+	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const profileKey = clientId
+		? apiKeys.users.profile(String(clientId))
+		: (['users', 'profile'] as const);
 
 	const acceptMutation = useMutation({
 		mutationFn: (requesterId: number) =>
 			api.friends.acceptFriendRequest.mutate(String(requesterId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
-			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });
+			queryClient.invalidateQueries({ queryKey: profileKey });
+			queryClient.invalidateQueries({ queryKey: apiKeys.friends.requests() });
 		},
 	});
 
@@ -18,8 +23,8 @@ export function useFriendRequestActions() {
 		mutationFn: (requesterId: number) =>
 			api.friends.rejectFriendRequest.mutate(String(requesterId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
-			queryClient.invalidateQueries({ queryKey: ['my-friend-requests'] });
+			queryClient.invalidateQueries({ queryKey: profileKey });
+			queryClient.invalidateQueries({ queryKey: apiKeys.friends.requests() });
 		},
 	});
 

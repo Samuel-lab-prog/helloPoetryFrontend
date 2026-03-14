@@ -71,6 +71,8 @@ export function createQueryEndpoint<TArgs extends unknown[], TResult>(
 
 			queryClient.setQueryData<TResult>(key, updater);
 		},
+
+		getKey: () => config.key(...([] as unknown as TArgs)),
 	};
 }
 

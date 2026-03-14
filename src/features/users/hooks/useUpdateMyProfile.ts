@@ -2,7 +2,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 type UpdateMyProfileInput = {
 	name?: string;
@@ -16,6 +16,9 @@ type ConflictField = 'nickname' | null;
 export function useUpdateMyProfile() {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const profileKey = clientId
+		? apiKeys.users.profile(String(clientId))
+		: (['users', 'profile'] as const);
 
 	const mutation = useMutation({
 		mutationFn: (data: UpdateMyProfileInput) =>
@@ -27,7 +30,7 @@ export function useUpdateMyProfile() {
 				avatarUrl: data.avatarUrl,
 			}),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['my-profile'] });
+			queryClient.invalidateQueries({ queryKey: profileKey });
 		},
 	});
 

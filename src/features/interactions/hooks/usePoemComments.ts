@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
-import { api } from '@root/core/api';
+import { api, interactionsKeys } from '@root/core/api';
 
 export type PoemCommentType = {
 	id: number;
@@ -23,7 +23,7 @@ export function usePoemComments(poemId: number) {
 	const queryClient = useQueryClient();
 
 	const query = useQuery({
-		queryKey: ['poem-comments', poemId],
+		queryKey: interactionsKeys.commentsByPoem(String(poemId)),
 		enabled: !!poemId,
 		queryFn: () => api.interactions.getPoemComments.query(String(poemId)).queryFn(),
 	});
@@ -36,9 +36,11 @@ export function usePoemComments(poemId: number) {
 				parentId: params.parentId ? String(params.parentId) : undefined,
 			}),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
-				queryKey: ['poem-comments-replies', poemId],
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
+			});
+			queryClient.invalidateQueries({
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
 			});
 			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
 		},
@@ -47,9 +49,11 @@ export function usePoemComments(poemId: number) {
 	const deleteMutation = useMutation({
 		mutationFn: (commentId: number) => api.interactions.deleteComment.mutate(String(commentId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
-				queryKey: ['poem-comments-replies', poemId],
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
+			});
+			queryClient.invalidateQueries({
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
 			});
 			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
 		},
@@ -58,9 +62,11 @@ export function usePoemComments(poemId: number) {
 	const likeCommentMutation = useMutation({
 		mutationFn: (commentId: number) => api.interactions.likeComment.mutate(String(commentId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
-				queryKey: ['poem-comments-replies', poemId],
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
+			});
+			queryClient.invalidateQueries({
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
 			});
 		},
 	});
@@ -68,16 +74,18 @@ export function usePoemComments(poemId: number) {
 	const unlikeCommentMutation = useMutation({
 		mutationFn: (commentId: number) => api.interactions.unlikeComment.mutate(String(commentId)),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['poem-comments', poemId] });
 			queryClient.invalidateQueries({
-				queryKey: ['poem-comments-replies', poemId],
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
+			});
+			queryClient.invalidateQueries({
+				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
 			});
 		},
 	});
 
 	function fetchReplies(parentId: number) {
 		return queryClient.fetchQuery({
-			queryKey: ['poem-comments-replies', poemId, parentId],
+			queryKey: interactionsKeys.commentsByPoem(String(poemId), String(parentId)),
 			queryFn: () =>
 				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
 			staleTime: 1000 * 30,
