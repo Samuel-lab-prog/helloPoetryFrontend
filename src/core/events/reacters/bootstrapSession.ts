@@ -68,10 +68,9 @@ export async function bootstrapUserDataOnLogin(
 		String(payload.userId),
 	)) as UserPrivateProfile;
 
-	useAuthClientStore.setState({
-		authClient: { id: payload.userId, role: payload.role, status: payload.status },
-		unreadNotificationsCount: myProfile.unreadNotificationsCount,
-	});
+	const authStore = useAuthClientStore.getState();
+	authStore.setAuthClient({ id: payload.userId, role: payload.role, status: payload.status });
+	authStore.setUnreadNotificationsCount(myProfile.unreadNotificationsCount);
 
 	queryClient.setQueryData(profileKey, myProfile);
 

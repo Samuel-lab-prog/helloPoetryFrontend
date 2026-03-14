@@ -10,6 +10,11 @@ export interface AppEvents {
 		reason: 'manual' | 'sessionExpired' | 'unauthorized';
 		loggedOutAt: string;
 	};
+	commentCreated: {
+		poemId: number;
+		parentId?: number;
+		createdAt: string;
+	};
 }
 
 type EventMap = object;

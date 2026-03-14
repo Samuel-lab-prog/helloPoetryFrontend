@@ -1,6 +1,7 @@
 ﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@features/base';
 import { api, interactionsKeys } from '@root/core/api';
+import { eventBus } from '@root/core/events/eventBus';
 
 export type PoemCommentType = {
 	id: number;
@@ -35,15 +36,12 @@ export function usePoemComments(poemId: number) {
 				content: params.content,
 				parentId: params.parentId ? String(params.parentId) : undefined,
 			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({
-				queryKey: interactionsKeys.commentsByPoem(String(poemId)),
-			});
-			queryClient.invalidateQueries({ queryKey: ['poem', poemId] });
-		},
+		onSuccess: (_, variables) =>
+			eventBus.publish('commentCreated', {
+				poemId,
+				parentId: variables.parentId,
+				createdAt: new Date().toISOString(),
+			}),
 	});
 
 	const deleteMutation = useMutation({

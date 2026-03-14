@@ -42,7 +42,7 @@ export default defineConfig([
 			'max-depth': ['error', 4],
 			'max-lines': ['warn', 300],
 			'max-lines-per-function': ['error', { max: 200, skipComments: true }],
-			'max-nested-callbacks': ['error', 2],
+			'max-nested-callbacks': ['error', 3],
 			'max-params': ['error', 4],
 
 			'require-await': 'warn',

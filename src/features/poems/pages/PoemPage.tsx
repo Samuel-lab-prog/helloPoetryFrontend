@@ -1,5 +1,4 @@
-﻿/* eslint-disable max-nested-callbacks */
-/* eslint-disable max-lines */
+﻿/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
@@ -77,7 +76,6 @@ export function PoemPage() {
 		[poem],
 	);
 
-	const loadedReplyParentsRef = useRef<Set<number>>(new Set());
 	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
 	const shownErrorsRef = useRef<Record<string, string>>({});
 
@@ -93,7 +91,8 @@ export function PoemPage() {
 
 		for (const parent of comments) {
 			if (parent.aggregateChildrenCount <= 0) continue;
-			if (loadedReplyParentsRef.current.has(parent.id)) continue;
+			const existingRepliesCount = repliesByCommentId[parent.id]?.length ?? 0;
+			if (existingRepliesCount >= parent.aggregateChildrenCount) continue;
 			if (loadingReplyParentsRef.current.has(parent.id)) continue;
 
 			loadingReplyParentsRef.current.add(parent.id);
@@ -104,7 +103,6 @@ export function PoemPage() {
 						if (prev[parent.id]) return prev;
 						return { ...prev, [parent.id]: replies };
 					});
-					loadedReplyParentsRef.current.add(parent.id);
 				})
 				.catch(() => {
 					if (!isMounted) return;
@@ -123,7 +121,7 @@ export function PoemPage() {
 		return () => {
 			isMounted = false;
 		};
-	}, [comments, fetchReplies]);
+	}, [comments, fetchReplies, repliesByCommentId]);
 
 	const showErrorToast = useCallback((key: string, message: string) => {
 		if (!message) return;
