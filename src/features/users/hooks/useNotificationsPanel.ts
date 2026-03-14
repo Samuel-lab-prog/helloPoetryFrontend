@@ -93,6 +93,28 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 	});
 
+	const deleteAllMutation = useMutation({
+		mutationFn: () => api.notifications.deleteAllNotifications.mutate(),
+		onSuccess: () => {
+			setUnreadNotificationsCount(0);
+			queryClient.setQueriesData<NotificationsPageType>(
+				{ queryKey: apiKeys.notifications.all() },
+				(old) =>
+					old
+						? {
+								...old,
+								notifications: [],
+								hasMore: false,
+								nextCursor: undefined,
+							}
+						: old,
+			);
+			queryClient.invalidateQueries({
+				queryKey: apiKeys.notifications.all(),
+			});
+		},
+	});
+
 	const deleteMutation = useMutation({
 		mutationFn: (id: number) =>
 			api.notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
@@ -120,9 +142,11 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		refetch: query.refetch,
 		markAsRead: markAsReadMutation.mutateAsync,
 		markAllAsRead: markAllReadMutation.mutateAsync,
+		deleteAllNotifications: deleteAllMutation.mutateAsync,
 		deleteNotification: deleteMutation.mutateAsync,
 		isMarkingAsRead: markAsReadMutation.isPending,
 		isMarkingAllAsRead: markAllReadMutation.isPending,
+		isDeletingAll: deleteAllMutation.isPending,
 		isDeleting: deleteMutation.isPending,
 	};
 }

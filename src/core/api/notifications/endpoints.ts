@@ -45,6 +45,16 @@ const deleteNotification = createMutationEndpoint<string, NotificationItem>({
 	invalidate: [notificationsKeys.all],
 });
 
+const deleteAllNotifications = createMutationEndpoint<void, void>({
+	fn: () =>
+		createHTTPRequest<void>({
+			method: 'DELETE',
+			path: `/notifications/all`,
+		}),
+
+	invalidate: [notificationsKeys.all],
+});
+
 const markAllAsRead = createMutationEndpoint<void, void>({
 	fn: () =>
 		createHTTPRequest<void>({
@@ -60,5 +70,6 @@ export const notifications = {
 	getNotificationById,
 	markNotificationAsRead,
 	deleteNotification,
+	deleteAllNotifications,
 	markAllAsRead,
 };

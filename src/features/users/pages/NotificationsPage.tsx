@@ -13,9 +13,11 @@ export function NotificationsPage() {
 		isError,
 		markAsRead,
 		markAllAsRead,
+		deleteAllNotifications,
 		deleteNotification,
 		isMarkingAsRead,
 		isMarkingAllAsRead,
+		isDeletingAll,
 		isDeleting,
 	} = useNotificationsPanel(onlyUnread);
 
@@ -42,6 +44,7 @@ export function NotificationsPage() {
 				<HStack mb={6} gap={2} wrap='wrap'>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
+						w={{ base: 'full', md: 'auto' }}
 						variant='solidPink'
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
@@ -50,6 +53,7 @@ export function NotificationsPage() {
 					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
+						w={{ base: 'full', md: 'auto' }}
 						variant='solidPink'
 						onClick={() => {
 							void markAllAsRead();
@@ -58,6 +62,19 @@ export function NotificationsPage() {
 						loading={isMarkingAllAsRead}
 					>
 						Marcar todas como lidas
+					</Button>
+					<Button
+						size={{ base: 'xs', md: 'sm' }}
+						w={{ base: 'full', md: 'auto' }}
+						variant='solidPink'
+						colorPalette='gray'
+						onClick={() => {
+							void deleteAllNotifications();
+						}}
+						disabled={notifications.length === 0}
+						loading={isDeletingAll}
+					>
+						Excluir todas
 					</Button>
 				</HStack>
 
@@ -94,3 +111,4 @@ export function NotificationsPage() {
 		</Flex>
 	);
 }
+
