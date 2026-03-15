@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 
 type MarkdownRendererProps = {
 	content: string;
+	componentsOverride?: Components;
 };
 
 const components: Components = {
@@ -47,7 +48,7 @@ const components: Components = {
 	),
 
 	strong: ({ children }) => (
-		<Text as='strong' fontWeight='700' display='inline'>
+		<Text as='strong' fontWeight='700' display='inline' color='pink.400'>
 			{children}
 		</Text>
 	),
@@ -142,11 +143,14 @@ const components: Components = {
 	hr: () => <Box as='hr' my={6} borderColor='purple.700' />,
 };
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, componentsOverride }: MarkdownRendererProps) {
 	if (!content) return null;
 
 	return (
-		<ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+		<ReactMarkdown
+			remarkPlugins={[remarkGfm]}
+			components={componentsOverride ? { ...components, ...componentsOverride } : components}
+		>
 			{content}
 		</ReactMarkdown>
 	);

@@ -2,7 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Box, Flex, Heading, Icon, Link } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@features/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -76,6 +76,10 @@ export function PoemPage() {
 				: null,
 		[poem],
 	);
+	const immersiveUrl = useMemo(() => {
+		if (!poem) return '';
+		return poem.slug ? `/poems/${poem.slug}/${poem.id}/immersive` : `/poems/${poem.id}/immersive`;
+	}, [poem]);
 
 	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
 	const shownErrorsRef = useRef<Record<string, string>>({});
@@ -279,6 +283,13 @@ export function PoemPage() {
 								mb={6}
 							>
 								<PoemHeader poem={poemHeaderPoem} />
+								{immersiveUrl && (
+									<Flex justify='flex-end' mb={4}>
+										<Button asChild size='sm' variant='outlinePurple'>
+											<NavLink to={immersiveUrl}>Modo imersivo</NavLink>
+										</Button>
+									</Flex>
+								)}
 
 								<PoemAuthorCard
 									embedded

@@ -13,6 +13,14 @@ export type PoemAuthor = {
 	avatarUrl: string | null;
 };
 
+export type PoemDedicationUser = {
+	id: number;
+	name: string;
+	nickname: string;
+	avatarUrl: string | null;
+	friendIds?: number[];
+};
+
 export type PoemStats = {
 	likesCount: number;
 	commentsCount: number;
@@ -31,6 +39,7 @@ export type FullPoem = {
 	visibility: PoemVisibility;
 	isCommentable: boolean;
 	author: PoemAuthor;
+	toUsers?: PoemDedicationUser[];
 	stats: PoemStats;
 	updatedAt: Date;
 };

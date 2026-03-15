@@ -40,6 +40,10 @@ const PoemPage = lazyPage(
 	() => import('./features/poems/pages/PoemPage'),
 	(module) => module.PoemPage,
 );
+const PoemImmersivePage = lazyPage(
+	() => import('./features/poems/pages/PoemImmersivePage'),
+	(module) => module.PoemImmersivePage,
+);
 const CreatePoemPage = lazyPage(
 	() => import('./features/poems/pages/CreatePoemPage'),
 	(module) => module.CreatePoemPage,
@@ -121,6 +125,8 @@ export default function App() {
 				{ path: 'poets', element: renderLazyPage(PoetsPage) },
 				{ path: 'poems/:id', element: renderLazyPage(PoemPage) },
 				{ path: 'poems/:slug/:id', element: renderLazyPage(PoemPage) },
+				{ path: 'poems/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
+				{ path: 'poems/:slug/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
 				{ path: 'authors/:id', element: renderLazyPage(AuthorPage) },
 				{ path: '/login', element: renderLazyPage(LoginPage) },
 				{ path: '/register', element: renderLazyPage(RegisterPage) },
