@@ -1,5 +1,6 @@
-﻿/* eslint-disable max-lines-per-function */
-import { Text, Heading, Box } from '@chakra-ui/react';
+﻿/* eslint-disable max-lines */
+/* eslint-disable max-lines-per-function */
+import { Text, Heading, Box, Flex, Button } from '@chakra-ui/react';
 
 import { useCreatePoemForm } from '../../hooks/create-poem-form';
 import { useUsersPreview, UserDedicationCombobox } from '@features/users';
@@ -11,8 +12,12 @@ import {
 	FieldContainer,
 	FormButton,
 	FormCard,
+	toaster,
 } from '@features/base';
 import { PoemHeader } from '@features/poems';
+import { uploadPoemAudioFile } from '../../utils/poemAudioUpload';
+import { api } from '@root/core/api';
+import { useCallback, useRef, useState, type ChangeEvent } from 'react';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,
@@ -25,6 +30,138 @@ import {
 } from '../../constants/poemConstants';
 
 export function CreatePoemForm() {
+	const [isRecording, setIsRecording] = useState(false);
+	const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+	const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
+	const [audioError, setAudioError] = useState('');
+	const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null);
+	const [selectedAudioUrl, setSelectedAudioUrl] = useState<string | null>(null);
+	const [isUploadingAudio, setIsUploadingAudio] = useState(false);
+
+	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+	const mediaStreamRef = useRef<MediaStream | null>(null);
+	const audioChunksRef = useRef<Blob[]>([]);
+	const audioFileInputRef = useRef<HTMLInputElement | null>(null);
+
+	const stopMediaStream = useCallback(() => {
+		mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+		mediaStreamRef.current = null;
+	}, []);
+
+	const pickAudioMimeType = useCallback(() => {
+		if (typeof MediaRecorder === 'undefined') return '';
+		const candidates = [
+			'audio/webm;codecs=opus',
+			'audio/webm',
+			'audio/ogg;codecs=opus',
+			'audio/ogg',
+			'audio/mpeg',
+		];
+		return candidates.find((type) => MediaRecorder.isTypeSupported(type)) ?? '';
+	}, []);
+
+	const handleStartRecording = useCallback(async () => {
+		setAudioError('');
+
+		if (isRecording) return;
+		setRecordedBlob(null);
+		setRecordedUrl((prev) => {
+			if (prev) URL.revokeObjectURL(prev);
+			return null;
+		});
+		if (!navigator.mediaDevices?.getUserMedia) {
+			setAudioError('Gravacao de audio nao suportada neste navegador.');
+			return;
+		}
+
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+			mediaStreamRef.current = stream;
+
+			const mimeType = pickAudioMimeType();
+			const recorder = mimeType
+				? new MediaRecorder(stream, { mimeType })
+				: new MediaRecorder(stream);
+
+			audioChunksRef.current = [];
+			recorder.ondataavailable = (event) => {
+				if (event.data.size > 0) audioChunksRef.current.push(event.data);
+			};
+			recorder.onstop = () => {
+				const blob = new Blob(audioChunksRef.current, {
+					type: recorder.mimeType || mimeType || 'audio/webm',
+				});
+				setRecordedBlob(blob);
+				setRecordedUrl((prev) => {
+					if (prev) URL.revokeObjectURL(prev);
+					return URL.createObjectURL(blob);
+				});
+				stopMediaStream();
+			};
+
+			recorder.start();
+			mediaRecorderRef.current = recorder;
+			setIsRecording(true);
+		} catch {
+			stopMediaStream();
+			setAudioError('Nao foi possivel acessar o microfone.');
+		}
+	}, [isRecording, pickAudioMimeType, stopMediaStream]);
+
+	const handleStopRecording = useCallback(() => {
+		if (!isRecording) return;
+		mediaRecorderRef.current?.stop();
+		setIsRecording(false);
+	}, [isRecording]);
+
+	const handleDiscardRecording = useCallback(() => {
+		if (isRecording) {
+			mediaRecorderRef.current?.stop();
+			setIsRecording(false);
+		}
+
+		setRecordedBlob(null);
+		setRecordedUrl((prev) => {
+			if (prev) URL.revokeObjectURL(prev);
+			return null;
+		});
+	}, [isRecording]);
+
+	const handleSelectAudioFile = useCallback((file: File | null) => {
+		setSelectedAudioFile(file);
+		if (file) {
+			setRecordedBlob(null);
+			setRecordedUrl((prev) => {
+				if (prev) URL.revokeObjectURL(prev);
+				return null;
+			});
+			setSelectedAudioUrl((prev) => {
+				if (prev) URL.revokeObjectURL(prev);
+				return URL.createObjectURL(file);
+			});
+		} else {
+			setSelectedAudioUrl((prev) => {
+				if (prev) URL.revokeObjectURL(prev);
+				return null;
+			});
+		}
+	}, []);
+
+	const handleAudioFileChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0] ?? null;
+			handleSelectAudioFile(file);
+		},
+		[handleSelectAudioFile],
+	);
+
+	const handleClearSelectedFile = useCallback(() => {
+		if (audioFileInputRef.current) {
+			audioFileInputRef.current.value = '';
+		}
+		handleSelectAudioFile(null);
+	}, [handleSelectAudioFile]);
+
 	const {
 		handleSubmit,
 		formState: { errors, isValid },
@@ -33,7 +170,45 @@ export function CreatePoemForm() {
 		generalError,
 		control,
 		watch,
-	} = useCreatePoemForm();
+	} = useCreatePoemForm({
+		onCreated: async (createdPoem) => {
+			const fileToUpload =
+				selectedAudioFile ??
+				(recordedBlob
+					? new File(
+							[recordedBlob],
+							`poem-${createdPoem.id}-audio.${(recordedBlob.type || 'audio/webm').split('/')[1] || 'webm'}`,
+							{ type: recordedBlob.type || 'audio/webm' },
+						)
+					: null);
+
+			if (!fileToUpload) return;
+			setIsUploadingAudio(true);
+			setAudioError('');
+
+			try {
+				const audioUrl = await uploadPoemAudioFile(createdPoem.id, fileToUpload);
+				await api.poems.updatePoemAudio.mutate({
+					poemId: String(createdPoem.id),
+					audioUrl,
+				});
+
+				handleDiscardRecording();
+				handleClearSelectedFile();
+
+				toaster.create({
+					type: 'success',
+					title: 'Audio salvo',
+					closable: true,
+				});
+			} catch (error) {
+				const message = error instanceof Error ? error.message : 'Erro ao enviar audio.';
+				setAudioError(message);
+			} finally {
+				setIsUploadingAudio(false);
+			}
+		},
+	});
 	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
 	const preview = watch();
 	const titleLength = preview?.title?.length ?? 0;
@@ -197,6 +372,93 @@ export function CreatePoemForm() {
 						Erro ao carregar usuários para dedicação.
 					</Text>
 				)}
+
+				<FieldContainer delay={680} hasError={!!audioError}>
+					<Box>
+						<Text textStyle='small' color='pink.200' mb={2}>
+							Audio do poema (opcional)
+						</Text>
+
+						{recordedUrl && (
+							<Box mb={3}>
+								<Text textStyle='smaller' color='pink.200' mb={2}>
+									Preview da gravacao
+								</Text>
+								<audio controls preload='metadata' src={recordedUrl} />
+							</Box>
+						)}
+						{selectedAudioUrl && (
+							<Box mb={3}>
+								<Text textStyle='smaller' color='pink.200' mb={2}>
+									Preview do arquivo
+								</Text>
+								<audio controls preload='metadata' src={selectedAudioUrl} />
+							</Box>
+						)}
+
+						<Flex gap={2} wrap='wrap'>
+							<Button
+								size='sm'
+								variant='solidPink'
+								onClick={handleStartRecording}
+								disabled={isRecording || isUploadingAudio || isPending}
+							>
+								Gravar
+							</Button>
+							<Button
+								size='sm'
+								variant='outlinePurple'
+								onClick={handleStopRecording}
+								disabled={!isRecording || isUploadingAudio || isPending}
+							>
+								Parar
+							</Button>
+							<Button
+								size='sm'
+								variant='ghost'
+								onClick={handleDiscardRecording}
+								disabled={!recordedBlob || isUploadingAudio || isPending}
+							>
+								Descartar
+							</Button>
+							<Button
+								size='sm'
+								variant='surface'
+								onClick={() => audioFileInputRef.current?.click()}
+								disabled={isUploadingAudio || isPending}
+							>
+								Enviar arquivo
+							</Button>
+							<Button
+								size='sm'
+								variant='ghost'
+								onClick={handleClearSelectedFile}
+								disabled={!selectedAudioFile || isUploadingAudio || isPending}
+							>
+								Limpar arquivo
+							</Button>
+						</Flex>
+						<input
+							ref={audioFileInputRef}
+							type='file'
+							accept='audio/*'
+							hidden
+							onChange={handleAudioFileChange}
+						/>
+
+						{selectedAudioFile && (
+							<Text textStyle='smaller' color='pink.200' mt={2}>
+								Arquivo selecionado: {selectedAudioFile.name}
+							</Text>
+						)}
+
+						{audioError && (
+							<Text textStyle='small' color='red.400' mt={2}>
+								{audioError}
+							</Text>
+						)}
+					</Box>
+				</FieldContainer>
 
 				<FormButton isValid={isValid} loading={isPending} variant='surface'>
 					Criar Poema

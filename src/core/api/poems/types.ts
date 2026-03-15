@@ -35,6 +35,7 @@ export type FullPoem = {
 	id: number;
 	createdAt: Date;
 	content: string;
+	audioUrl: string | null;
 	status: PoemStatus;
 	visibility: PoemVisibility;
 	isCommentable: boolean;
@@ -139,6 +140,7 @@ export type CreatePoemResult = {
 	createdAt: Date;
 	updatedAt: Date;
 	isCommentable: boolean;
+	audioUrl: string | null;
 	toUserIds: number[];
 	mentionedUserIds: number[];
 };
@@ -157,4 +159,24 @@ export type UpdatePoemResult = {
 	updatedAt: Date;
 	toUserIds: number[];
 	mentionedUserIds: number[];
+	audioUrl: string | null;
+};
+
+export type PoemAudioUploadUrlRequest = {
+	poemId: string;
+	contentType: string;
+};
+
+export type PoemAudioUploadUrlResponse = {
+	uploadUrl: string;
+	fileUrl: string;
+};
+
+export type UpdatePoemAudioBody = {
+	poemId: string;
+	audioUrl: string | null;
+};
+
+export type UpdatePoemAudioResponse = {
+	audioUrl: string | null;
 };

@@ -1,5 +1,4 @@
-﻿/* eslint-disable max-lines-per-function */
-import { Avatar, Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
+﻿import { Avatar, Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import {
 	ChevronDown,

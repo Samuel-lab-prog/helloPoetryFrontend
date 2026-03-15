@@ -5,8 +5,13 @@ import { createPoemSchema, type CreatePoemType } from '../../schemas/managePoemS
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { handleCreatePoemError } from './handleCreatePoemError';
 import { api } from '@root/core/api';
+import type { CreatePoemResult } from '@root/core/api/poems/types';
 
-export function useCreatePoemForm() {
+type UseCreatePoemFormOptions = {
+	onCreated?: (poem: CreatePoemResult) => Promise<void> | void;
+};
+
+export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 	const queryClient = useQueryClient();
 	const [generalError, setGeneralError] = useState('');
 
@@ -29,7 +34,10 @@ export function useCreatePoemForm() {
 		setGeneralError('');
 
 		try {
-			await mutateAsync(data);
+			const createdPoem = await mutateAsync(data);
+			if (options.onCreated) {
+				await options.onCreated(createdPoem);
+			}
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			queryClient.invalidateQueries({ queryKey: ['poems'] });
 			alert('Poema criado com sucesso!');

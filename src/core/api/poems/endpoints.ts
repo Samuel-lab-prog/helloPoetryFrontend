@@ -10,10 +10,14 @@ import type {
 	FullPoem,
 	PaginatedPoems,
 	PoemCollection,
+	PoemAudioUploadUrlRequest,
+	PoemAudioUploadUrlResponse,
 	SavedPoem,
 	SearchPoemsParams,
 	UpdatePoemBody,
 	UpdatePoemResult,
+	UpdatePoemAudioBody,
+	UpdatePoemAudioResponse,
 } from './types';
 
 const createPoem = createMutationEndpoint<CreatePoemBody, CreatePoemResult>({
@@ -119,6 +123,32 @@ const deletePoem = createMutationEndpoint<string, void>({
 	invalidate: [poemKeys.all, poemKeys.mine],
 });
 
+const requestPoemAudioUploadUrl = createMutationEndpoint<
+	PoemAudioUploadUrlRequest,
+	PoemAudioUploadUrlResponse
+>({
+	fn: (data) =>
+		createHTTPRequest<PoemAudioUploadUrlResponse, { contentType: string }>({
+			method: 'POST',
+			path: `/poems/${data.poemId}/audio/upload-url`,
+			body: {
+				contentType: data.contentType,
+			},
+		}),
+});
+
+const updatePoemAudio = createMutationEndpoint<UpdatePoemAudioBody, UpdatePoemAudioResponse>({
+	fn: (data) =>
+		createHTTPRequest<UpdatePoemAudioResponse, { audioUrl: string | null }>({
+			method: 'PATCH',
+			path: `/poems/${data.poemId}/audio`,
+			body: {
+				audioUrl: data.audioUrl,
+			},
+		}),
+	invalidate: [poemKeys.all, poemKeys.mine],
+});
+
 const savePoem = createMutationEndpoint<string, void>({
 	fn: (id) =>
 		createHTTPRequest<void>({
@@ -196,6 +226,8 @@ export const poems = {
 	getCollections,
 	updatePoem,
 	deletePoem,
+	requestPoemAudioUploadUrl,
+	updatePoemAudio,
 	savePoem,
 	removeSavedPoem,
 	createCollection,

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable max-lines */
 import React, { isValidElement, useMemo } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
@@ -118,14 +116,13 @@ function useTextAnimator({
 	}, [initialDelay, prefersReducedMotion, wordFadeIn]);
 }
 
-function useDedicationUsers(
-	poem?: { toUsers?: { id?: number; nickname?: string; name?: string }[] },
-) {
+function useDedicationUsers(poem?: {
+	toUsers?: { id?: number; nickname?: string; name?: string }[];
+}) {
 	return useMemo(() => {
 		if (!poem?.toUsers?.length) return [];
-		return poem.toUsers.filter(
-			(user): user is { id: number; nickname?: string; name?: string } =>
-				Number.isInteger(user.id)
+		return poem.toUsers.filter((user): user is { id: number; nickname?: string; name?: string } =>
+			Number.isInteger(user.id),
 		);
 	}, [poem?.toUsers]);
 }

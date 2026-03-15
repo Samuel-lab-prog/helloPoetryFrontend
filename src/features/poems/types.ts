@@ -9,6 +9,7 @@ export type FullPoemType = {
 	id: number;
 	createdAt: Date;
 	content: string;
+	audioUrl: string | null;
 	status: 'draft' | 'published';
 	visibility: 'public' | 'friends' | 'private' | 'unlisted';
 	isCommentable: boolean;

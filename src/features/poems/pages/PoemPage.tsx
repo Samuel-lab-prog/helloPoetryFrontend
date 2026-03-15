@@ -14,6 +14,7 @@ import { PoemHeader } from '../components/PoemHeader';
 import { PoemAuthorCard } from '../components/poem-page/PoemAuthorCard';
 import { PoemActions } from '../components/poem-page/PoemActions';
 import { CommentsSection } from '../components/poem-page/CommentsSection';
+import { PoemAudioPlayer } from '../components/poem-page/PoemAudioPlayer';
 
 function parsePoemId(rawId: string | undefined) {
 	if (!rawId) return -1;
@@ -332,6 +333,11 @@ export function PoemPage() {
 								}}
 							>
 								<Box w='full' maxW='3xl' textAlign='left'>
+									{poem.audioUrl && (
+										<Box mb={6}>
+											<PoemAudioPlayer src={poem.audioUrl} />
+										</Box>
+									)}
 									<Heading as='h2' textStyle='h2' color='pink.300' mb={4}>
 										{poem.title}
 									</Heading>
