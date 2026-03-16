@@ -52,6 +52,10 @@ const AdminPage = lazyPage(
 	() => import('./features/poems/pages/AdminPage'),
 	(module) => module.AdminPage,
 );
+const PoemModerationPage = lazyPage(
+	() => import('./features/poems/pages/PoemModeration.tsx/Page'),
+	(module) => module.PoemModerationPage,
+);
 const LoginPage = lazyPage(
 	() => import('./features/auth/pages/LoginPage'),
 	(module) => module.LoginPage,
@@ -93,7 +97,7 @@ const NotificationsPage = lazyPage(
 	(module) => module.NotificationsPage,
 );
 
-function generateNavLinks(isAuthenticated: boolean) {
+function generateNavLinks(isAuthenticated: boolean, role?: string) {
 	const links = [
 		{ to: '/', label: 'Inicio' },
 		{ to: '/poems', label: 'Poemas' },
@@ -103,6 +107,9 @@ function generateNavLinks(isAuthenticated: boolean) {
 		links.push({ to: '/poems/new', label: 'Criar' });
 		links.push({ to: '/my-profile', label: 'Meu Perfil' });
 		links.push({ to: '/notifications', label: 'Notificacoes' });
+		if (role === 'moderator' || role === 'admin') {
+			links.push({ to: '/admin/moderation', label: 'Moderacao' });
+		}
 	} else {
 		links.push({ to: '/register', label: 'Cadastrar' });
 		links.push({ to: '/login', label: 'Entrar' });
@@ -111,8 +118,9 @@ function generateNavLinks(isAuthenticated: boolean) {
 }
 
 export default function App() {
-	const isAuthenticated = useAuthClientStore((state) => Boolean(state.authClient));
-	const navLinks = generateNavLinks(isAuthenticated);
+	const authClient = useAuthClientStore((state) => state.authClient);
+	const isAuthenticated = Boolean(authClient);
+	const navLinks = generateNavLinks(isAuthenticated, authClient?.role);
 
 	const router = createBrowserRouter([
 		{
@@ -132,6 +140,7 @@ export default function App() {
 				{ path: '/register', element: renderLazyPage(RegisterPage) },
 				{ path: 'poems/new', element: renderLazyPage(CreatePoemPage) },
 				{ path: 'admin', element: renderLazyPage(AdminPage) },
+				{ path: 'admin/moderation', element: renderLazyPage(PoemModerationPage) },
 				{ path: 'my-profile', element: renderLazyPage(MyProfilePage) },
 				{ path: 'my-profile/collections', element: renderLazyPage(MyProfileCollectionsPage) },
 				{

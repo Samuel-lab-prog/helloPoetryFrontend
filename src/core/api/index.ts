@@ -13,6 +13,7 @@ import { interactions } from './interactions/endpoints';
 import { interactionsKeys } from './interactions/keys';
 
 import { moderation } from './moderation/endpoints';
+import { moderationKeys } from './moderation/keys';
 
 import { feed } from './feed/endpoints';
 import { feedKeys } from './feed/keys';
@@ -38,6 +39,15 @@ export const apiKeys = {
 	interactions: interactionsKeys,
 	feed: feedKeys,
 	notifications: notificationsKeys,
+	moderation: moderationKeys,
 };
 
-export { userKeys, poemKeys, friendsKeys, interactionsKeys, feedKeys, notificationsKeys };
+export {
+	userKeys,
+	poemKeys,
+	friendsKeys,
+	interactionsKeys,
+	feedKeys,
+	notificationsKeys,
+	moderationKeys,
+};

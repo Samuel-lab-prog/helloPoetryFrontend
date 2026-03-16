@@ -1,11 +1,15 @@
 import { createHTTPRequest } from '@root/features/base';
-import { createMutationEndpoint } from '../utils';
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 import type {
 	BanUserBody,
 	BannedUserResponse,
 	SuspendUserBody,
 	SuspendedUserResponse,
+	ModerationPoem,
+	ModeratePoemBody,
+	ModeratePoemResult,
 } from './types';
+import { moderationKeys } from './keys';
 
 const banUser = createMutationEndpoint<BanUserBody, BannedUserResponse>({
 	fn: (data) =>
@@ -29,7 +33,30 @@ const suspendUser = createMutationEndpoint<SuspendUserBody, SuspendedUserRespons
 		}),
 });
 
+const getPendingPoems = createQueryEndpoint<[], ModerationPoem[]>({
+	key: moderationKeys.pendingPoems,
+	fn: () =>
+		createHTTPRequest<ModerationPoem[]>({
+			method: 'GET',
+			path: `/poems/moderation/pending`,
+		}),
+});
+
+const moderatePoem = createMutationEndpoint<ModeratePoemBody, ModeratePoemResult>({
+	fn: (data) =>
+		createHTTPRequest<ModeratePoemResult, { moderationStatus: ModeratePoemBody['moderationStatus'] }>({
+			method: 'PATCH',
+			path: `/poems/${data.poemId}/moderation`,
+			body: {
+				moderationStatus: data.moderationStatus,
+			},
+		}),
+	invalidate: [moderationKeys.pendingPoems],
+});
+
 export const moderation = {
 	banUser,
 	suspendUser,
+	getPendingPoems,
+	moderatePoem,
 };

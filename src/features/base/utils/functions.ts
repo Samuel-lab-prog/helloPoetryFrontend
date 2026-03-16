@@ -1,4 +1,5 @@
-﻿import type { AppErrorType } from './appError';
+﻿import type { ModerationPoem } from '@root/core/api/moderation/types';
+import type { AppErrorType } from './appError';
 
 export function formatDate(
 	date: Date | string,
@@ -7,10 +8,9 @@ export function formatDate(
 ): string {
 	const parsedDate = typeof date === 'string' ? new Date(date) : date;
 
-	if (Number.isNaN(parsedDate.getTime())) {
+	if (Number.isNaN(parsedDate.getTime())) 
 		return 'Data inválida';
-	}
-
+	
 	return parsedDate.toLocaleString(locale, {
 		dateStyle: 'medium',
 		timeStyle: 'short',
@@ -51,6 +51,34 @@ export type Options<TBody> = {
 	signal?: AbortSignal;
 	headers?: HeadersInit;
 };
+
+export function translateVisibility(visibility: ModerationPoem['visibility']) {
+	switch (visibility) {
+		case 'public':
+			return 'Publico';
+		case 'private':
+			return 'Privado';
+		case 'unlisted':
+			return 'Nao listado';
+		default:
+			return visibility;
+	}
+}
+
+export function translateModerationStatus(status: ModerationPoem['moderationStatus']) {
+	switch (status) {
+		case 'approved':
+			return 'Aprovado';
+		case 'rejected':
+			return 'Rejeitado';
+		case 'pending':
+			return 'Pendente';
+		case 'removed':
+			return 'Removido';
+		default:
+			return status;
+	}
+}
 
 /**
  * Sends an HTTP request to the given API endpoint and returns the parsed JSON response.

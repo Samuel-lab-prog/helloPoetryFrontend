@@ -35,6 +35,7 @@ export * from './pages/AdminPage';
 export * from './pages/CreatePoemPage';
 export * from './pages/HomePage';
 export * from './pages/PoemImmersivePage';
+export * from './pages/PoemModeration.tsx/Page';
 export * from './pages/PoemPage';
 export * from './pages/PoemsPage';
 export * from './schemas/managePoemSchemas';
