@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Flex, Heading, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
 import { CreatePoemForm } from '../components/manage/CreatePoemForm';

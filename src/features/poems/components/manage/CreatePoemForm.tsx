@@ -1,4 +1,4 @@
-Ôªø/* eslint-disable max-lines */
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { Text, Heading, Box, Flex, Button } from '@chakra-ui/react';
 
@@ -13,7 +13,7 @@ import {
 	FormButton,
 	FormCard,
 	toaster,
-} from '@features/base';
+} from '@root/core/base';
 import { PoemHeader } from '@features/poems';
 import { uploadPoemAudioFile } from '../../utils/poemAudioUpload';
 import { api } from '@root/core/api';
@@ -220,7 +220,7 @@ export function CreatePoemForm() {
 	const isContentBelowMinLength = contentLength < POEM_CONTENT_MIN_LENGTH;
 
 	const previewPoem = {
-		title: preview?.title || 'T√≠¬≠tulo do poema',
+		title: preview?.title || 'TÌ≠tulo do poema',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -244,7 +244,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={40} hasError={!!errors.title}>
 					<FormField
-						label='T√≠¬≠tulo'
+						label='TÌ≠tulo'
 						required
 						error={errors.title}
 						control={control}
@@ -283,7 +283,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={200} hasError={!!errors.content}>
 					<FormField
-						label='Conte√∫do (Markdown)'
+						label='Conte˙do (Markdown)'
 						required
 						as='textarea'
 						rows={20}
@@ -334,10 +334,10 @@ export function CreatePoemForm() {
 						name='visibility'
 						control={control}
 						options={[
-							{ value: 'public', label: 'P√∫blico' },
+							{ value: 'public', label: 'P˙blico' },
 							{ value: 'friends', label: 'Amigos' },
 							{ value: 'private', label: 'Privado' },
-							{ value: 'unlisted', label: 'N√£o listado' },
+							{ value: 'unlisted', label: 'N„o listado' },
 						]}
 						error={errors.visibility}
 					/>
@@ -345,7 +345,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={520} hasError={!!errors.isCommentable}>
 					<SelectField
-						label='Coment√°rios'
+						label='Coment·rios'
 						name='isCommentable'
 						control={control}
 						options={[
@@ -369,7 +369,7 @@ export function CreatePoemForm() {
 				</FieldContainer>
 				{isUsersError && (
 					<Text textStyle='small' color='red.400'>
-						Erro ao carregar usu√°rios para dedica√ß√£o.
+						Erro ao carregar usu·rios para dedicaÁ„o.
 					</Text>
 				)}
 
@@ -472,7 +472,7 @@ export function CreatePoemForm() {
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formul√°rio para ver o preview do poema
+						Preencha o formul·rio para ver o preview do poema
 					</Box>
 				) : (
 					<>

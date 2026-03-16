@@ -1,4 +1,4 @@
-﻿import { Box, Field, TagsInput } from '@chakra-ui/react';
+import { Box, Field, TagsInput } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 

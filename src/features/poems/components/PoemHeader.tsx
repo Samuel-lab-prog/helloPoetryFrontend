@@ -1,4 +1,4 @@
-ï»¿import { formatDate } from '@features/base';
+import { formatDate } from '@root/core/base';
 import { Tag } from './PoemTag';
 import { Heading, Text, Flex, VStack } from '@chakra-ui/react';
 
@@ -40,7 +40,7 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 
 				{updatedAt !== createdAt && (
 					<Text fontSize={['xs', 'sm']} fontStyle='italic'>
-						Ãšltima atualizaÃ§Ã£o em {formatDate(updatedAt)}
+						Última atualização em {formatDate(updatedAt)}
 					</Text>
 				)}
 			</VStack>

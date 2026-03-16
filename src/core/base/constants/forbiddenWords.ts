@@ -1,4 +1,4 @@
-﻿export const FORBIDDEN_WORDS = [
+export const FORBIDDEN_WORDS = [
 	'caralho',
 	'carai',
 	'porra',

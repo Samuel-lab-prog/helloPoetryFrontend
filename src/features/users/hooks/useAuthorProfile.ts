@@ -1,4 +1,4 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { AuthorProfileType } from '../../poems/types';
 import { api, apiKeys } from '@root/core/api';
 

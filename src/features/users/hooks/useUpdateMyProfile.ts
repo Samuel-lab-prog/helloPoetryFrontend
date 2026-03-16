@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@features/base';
+import { type AppErrorType } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 import { uploadAvatarFile } from '../utils/avatarUpload';

@@ -1,4 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Text, type ButtonProps } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
 import { FieldContainer } from './FieldContainer';

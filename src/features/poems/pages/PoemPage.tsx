@@ -1,10 +1,10 @@
-﻿/* eslint-disable max-lines */
+/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
-import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@features/base';
+import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 

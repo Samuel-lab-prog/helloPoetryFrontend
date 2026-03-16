@@ -1,5 +1,5 @@
-﻿import type { UseFormSetError } from 'react-hook-form';
-import type { AppErrorType } from '@features/base';
+import type { UseFormSetError } from 'react-hook-form';
+import type { AppErrorType } from '@root/core/base';
 import type { UpdatePoemType } from '../../schemas/managePoemSchemas';
 
 export function handleUpdatePoemError(
@@ -12,20 +12,20 @@ export function handleUpdatePoemError(
 	const message = normalizeErrorMessage(error?.message);
 
 	if (status === 401) {
-		setGeneralError('VocÃª nÃ£o tem permissao para atualizar poemas.');
+		setGeneralError('Você não tem permissao para atualizar poemas.');
 		return;
 	}
 
 	if (status === 409 && (message.includes('slug') || message.includes('title'))) {
 		setError('title', {
 			type: 'manual',
-			message: 'Ja existe um poema com esse novo tÃ­tulo.',
+			message: 'Ja existe um poema com esse novo título.',
 		});
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados invÃ¡lidos. Verifique os campos e tente novamente.');
+		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
 		return;
 	}
 

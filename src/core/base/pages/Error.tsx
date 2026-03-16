@@ -1,4 +1,4 @@
-Ôªøimport { Flex, Heading, Text, Box, Button } from '@chakra-ui/react';
+import { Flex, Heading, Text, Box, Button } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export function ErrorPage() {
@@ -10,16 +10,16 @@ export function ErrorPage() {
 				</Heading>
 
 				<Heading as='h2' textStyle='h5' mt={3}>
-					Algo deu errado ou esta p√°gina n√£o existe.
+					Algo deu errado ou esta p·gina n„o existe.
 				</Heading>
 
 				<Text textStyle='small' mt={1}>
-					Tente voltar para a p√°gina inicial ou conferir a URL.
+					Tente voltar para a p·gina inicial ou conferir a URL.
 				</Text>
 
 				<Box mt={6}>
 					<Button asChild variant='solidPink'>
-						<NavLink to='/'>Voltar para o in√≠cio</NavLink>
+						<NavLink to='/'>Voltar para o inÌcio</NavLink>
 					</Button>
 				</Box>
 			</Box>

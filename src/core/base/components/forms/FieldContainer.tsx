@@ -1,4 +1,4 @@
-﻿import { Box, type BoxProps } from '@chakra-ui/react';
+import { Box, type BoxProps } from '@chakra-ui/react';
 
 interface FieldContainerProps extends BoxProps {
 	delay?: number;

@@ -1,9 +1,9 @@
-ï»¿import { Flex, Button, Text } from '@chakra-ui/react';
+import { Flex, Button, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useUpdatePoemForm } from '../../hooks/update-poem-form';
 import { usePoemsMinimal } from '../../hooks/usePoemsMinimal';
 import { usePoem, PoemCombobox } from '@features/poems';
-import { FormField, SelectField, TagsField } from '@features/base';
+import { FormField, SelectField, TagsField } from '@root/core/base';
 import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../constants/poemConstants';
 
 export function UpdatePoemForm() {
@@ -44,7 +44,7 @@ export function UpdatePoemForm() {
 			<PoemCombobox name='id' control={control} poems={poems} />
 
 			<FormField
-				label='TÃ­tulo'
+				label='Título'
 				control={control}
 				name='title'
 				error={errors.title}
@@ -70,10 +70,10 @@ export function UpdatePoemForm() {
 				name='visibility'
 				control={control}
 				options={[
-					{ value: 'public', label: 'PÃºblico' },
+					{ value: 'public', label: 'Público' },
 					{ value: 'friends', label: 'Amigos' },
 					{ value: 'private', label: 'Privado' },
-					{ value: 'unlisted', label: 'NÃ£o listado' },
+					{ value: 'unlisted', label: 'Não listado' },
 				]}
 				error={errors.visibility}
 				required
@@ -81,7 +81,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<SelectField
-				label='ComentÃ¡rios'
+				label='Comentários'
 				name='isCommentable'
 				control={control}
 				options={[
@@ -106,7 +106,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<FormField
-				label='ConteÃºdo (Markdown)'
+				label='Conteúdo (Markdown)'
 				as='textarea'
 				rows={20}
 				control={control}

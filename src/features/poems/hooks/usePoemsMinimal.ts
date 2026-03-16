@@ -1,4 +1,4 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { FullPoemType } from '@features/poems';
 import { api } from '@root/core/api';
 

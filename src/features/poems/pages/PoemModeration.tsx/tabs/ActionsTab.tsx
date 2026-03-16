@@ -7,7 +7,7 @@ import {
   Wrap,
   WrapItem,
 } from '@chakra-ui/react';
-import { Surface } from '@features/base';
+import { Surface } from '@root/core/base';
 
 export function ActionsTab() {
 	return (

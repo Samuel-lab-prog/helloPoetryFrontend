@@ -1,5 +1,5 @@
-Ôªøimport { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@features/base';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
 
@@ -111,24 +111,24 @@ function updateLikeState(
 
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Poema n√£o encontrado.';
-	if (error.statusCode === 403) return 'Voc√™ n√£o pode comentar neste poema.';
-	if (error.statusCode === 422) return 'Coment√°rio inv√°lido (1-300 chars).';
-	return 'Erro ao enviar coment√°rio.';
+	if (error.statusCode === 404) return 'Poema n„o encontrado.';
+	if (error.statusCode === 403) return 'VocÍ n„o pode comentar neste poema.';
+	if (error.statusCode === 422) return 'Coment·rio inv·lido (1-300 chars).';
+	return 'Erro ao enviar coment·rio.';
 }
 
 function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 403) return 'Voc√™ n√£o pode deletar este coment√°rio.';
-	if (error.statusCode === 404) return 'Coment√°rio n√£o encontrado.';
-	return 'Erro ao deletar coment√°rio.';
+	if (error.statusCode === 403) return 'VocÍ n„o pode deletar este coment·rio.';
+	if (error.statusCode === 404) return 'Coment·rio n„o encontrado.';
+	return 'Erro ao deletar coment·rio.';
 }
 
 function getToggleLikeErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Coment√°rio n√£o encontrado.';
-	if (error.statusCode === 409) return 'Estado de curtida inv√°lido.';
-	return 'Erro ao atualizar curtida do coment√°rio.';
+	if (error.statusCode === 404) return 'Coment·rio n„o encontrado.';
+	if (error.statusCode === 409) return 'Estado de curtida inv·lido.';
+	return 'Erro ao atualizar curtida do coment·rio.';
 }
 
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {

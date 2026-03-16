@@ -1,2 +1,2 @@
-﻿export * from './useLoginForm';
+export * from './useLoginForm';
 export * from './handleLoginError';

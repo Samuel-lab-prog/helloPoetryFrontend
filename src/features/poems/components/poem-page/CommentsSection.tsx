@@ -1,6 +1,6 @@
-﻿import { memo, useMemo, type Dispatch, type SetStateAction } from 'react';
+import { memo, useMemo, type Dispatch, type SetStateAction } from 'react';
 import { Box, Button, Flex, Heading, Text, Textarea } from '@chakra-ui/react';
-import { AsyncState } from '@features/base';
+import { AsyncState } from '@root/core/base';
 import { CommentThread } from '../CommentThread';
 import type { PoemCommentType } from '@features/interactions';
 

@@ -1,5 +1,5 @@
-ï»¿import { z } from 'zod';
-import { findForbiddenWords } from '@features/base';
+import { z } from 'zod';
+import { findForbiddenWords } from '@root/core/base';
 import {
 	REGISTER_BIO_MAX_LENGTH,
 	REGISTER_BIO_MIN_LENGTH,
@@ -22,9 +22,9 @@ export const registerSchema = z
 			)
 			.max(
 				REGISTER_NICKNAME_MAX_LENGTH,
-				`Apelido deve ter no mÃ¡ximo ${REGISTER_NICKNAME_MAX_LENGTH} caracteres`,
+				`Apelido deve ter no máximo ${REGISTER_NICKNAME_MAX_LENGTH} caracteres`,
 			)
-			.regex(/^[a-zA-Z0-9_]+$/, 'Apelido pode conter apenas letras, nÃºmeros e underscores'),
+			.regex(/^[a-zA-Z0-9_]+$/, 'Apelido pode conter apenas letras, números e underscores'),
 		name: z
 			.string()
 			.trim()
@@ -34,9 +34,9 @@ export const registerSchema = z
 			)
 			.max(
 				REGISTER_NAME_MAX_LENGTH,
-				`Nome deve ter no mÃ¡ximo ${REGISTER_NAME_MAX_LENGTH} caracteres`,
+				`Nome deve ter no máximo ${REGISTER_NAME_MAX_LENGTH} caracteres`,
 			),
-		email: z.email('E-mail invÃ¡lido').trim(),
+		email: z.email('E-mail inválido').trim(),
 		password: z
 			.string()
 			.min(
@@ -45,13 +45,13 @@ export const registerSchema = z
 			)
 			.max(
 				REGISTER_PASSWORD_MAX_LENGTH,
-				`A senha deve ter no mÃ¡ximo ${REGISTER_PASSWORD_MAX_LENGTH} caracteres`,
+				`A senha deve ter no máximo ${REGISTER_PASSWORD_MAX_LENGTH} caracteres`,
 			),
 		bio: z
 			.string()
 			.trim()
 			.min(REGISTER_BIO_MIN_LENGTH, `Bio deve ter pelo menos ${REGISTER_BIO_MIN_LENGTH} caracteres`)
-			.max(REGISTER_BIO_MAX_LENGTH, `Bio deve ter no mÃ¡ximo ${REGISTER_BIO_MAX_LENGTH} caracteres`),
+			.max(REGISTER_BIO_MAX_LENGTH, `Bio deve ter no máximo ${REGISTER_BIO_MAX_LENGTH} caracteres`),
 	})
 	.superRefine((data, ctx) => {
 		const fields: Array<{ key: 'nickname' | 'name' | 'bio'; value: string }> = [

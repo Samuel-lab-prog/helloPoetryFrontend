@@ -1,4 +1,4 @@
-﻿import { defineLayerStyles } from '@chakra-ui/react';
+import { defineLayerStyles } from '@chakra-ui/react';
 
 export const layerStyles = defineLayerStyles({
 	main: {

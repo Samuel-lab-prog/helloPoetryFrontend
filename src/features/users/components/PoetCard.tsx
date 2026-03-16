@@ -1,4 +1,4 @@
-﻿import { Avatar, Button, Card, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Button, Card, Flex, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export type PoetCardData = {

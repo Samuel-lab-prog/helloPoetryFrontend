@@ -1,4 +1,4 @@
-ï»¿import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import {
 	Badge,
 	Box,
@@ -66,7 +66,7 @@ function FooterNav({ links }: { links: FooterLink[] }) {
 	return (
 		<VStack align='start' gap={2}>
 			<Text textStyle='small' color='pink.200'>
-				NavegaÃ§Ã£o
+				Navegação
 			</Text>
 			{links.map((link) => (
 				<Link
@@ -194,7 +194,7 @@ export function Footer({ links }: FooterProps) {
 					gap={2}
 				>
 					<Text textStyle='smaller' color='pink.200'>
-						Â© {new Date().getFullYear()} Olapoesia. Todos os direitos reservados.
+						© {new Date().getFullYear()} Olapoesia. Todos os direitos reservados.
 					</Text>
 					<Text textStyle='smaller' color='pink.200'>
 						Feito para leitores e autores.

@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/features/base';
+import { createHTTPRequest } from '@root/core/base';
 import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
 import { friendsKeys } from './keys';

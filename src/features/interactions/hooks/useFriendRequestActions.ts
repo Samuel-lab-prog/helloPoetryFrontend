@@ -1,5 +1,5 @@
-ï»¿import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@features/base';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type AppErrorType } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 
@@ -31,9 +31,9 @@ export function useFriendRequestActions() {
 	function getErrorMessage() {
 		const err = (acceptMutation.error || rejectMutation.error) as AppErrorType | undefined;
 		if (!err) return '';
-		if (err.statusCode === 404) return 'SolicitaÃ§Ã£o nÃ£o encontrada.';
-		if (err.statusCode === 403) return 'VocÃª nÃ£o pode executar esta aÃ§Ã£o.';
-		return 'Erro ao processar solicitaÃ§Ã£o.';
+		if (err.statusCode === 404) return 'Solicitação não encontrada.';
+		if (err.statusCode === 403) return 'Você não pode executar esta ação.';
+		return 'Erro ao processar solicitação.';
 	}
 
 	return {

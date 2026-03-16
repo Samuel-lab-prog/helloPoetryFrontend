@@ -1,7 +1,7 @@
 import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { Check, X } from 'lucide-react';
-import { Surface } from '@features/base';
+import { Surface } from '@root/core/base';
 import type { FriendRequestsSectionProps } from './types';
 
 export function FriendRequestsSection({

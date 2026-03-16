@@ -1,5 +1,5 @@
-﻿import { Avatar, Button, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
-import { DynamicForm, type Field } from '@features/base';
+import { Avatar, Button, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
+import { DynamicForm, type Field } from '@root/core/base';
 import {
 	useRegisterForm,
 	checkEmailAvailability,
@@ -129,7 +129,7 @@ export function RegisterForm() {
 					</Flex>
 
 					<Text textStyle='smaller' color='pink.200'>
-						Tamanho máximo: {maxAvatarSizeMb}MB
+						Tamanho m�ximo: {maxAvatarSizeMb}MB
 					</Text>
 
 					{avatarError && (

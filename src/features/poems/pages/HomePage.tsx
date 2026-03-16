@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
-import { AsyncState, Footer, Surface } from '@features/base';
+import { AsyncState, Footer, Surface } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';

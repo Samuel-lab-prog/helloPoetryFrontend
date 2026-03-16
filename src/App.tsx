@@ -2,7 +2,7 @@ import { lazy, Suspense, type ComponentType } from 'react';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { ErrorPage, Navbar } from '@features/base';
+import { ErrorPage, Navbar } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 function lazyPage<TModule extends object>(

@@ -1,5 +1,5 @@
 import { Flex, Heading, Button } from '@chakra-ui/react';
-import { AsyncState, FormField, SelectField, TagsField } from '@features/base';
+import { AsyncState, FormField, SelectField, TagsField } from '@root/core/base';
 import { PoemCard } from '../components/PoemCard';
 import { PoemGrid } from '../components/PoemGrid';
 import { useInfinitePoems } from '../hooks/useInfinitePoems';

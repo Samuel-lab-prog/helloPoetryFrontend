@@ -1,4 +1,4 @@
-﻿import type { ModerationPoem } from '@root/core/api/moderation/types';
+import type { ModerationPoem } from '@root/core/api/moderation/types';
 import type { AppErrorType } from './appError';
 
 export function formatDate(
@@ -9,7 +9,7 @@ export function formatDate(
 	const parsedDate = typeof date === 'string' ? new Date(date) : date;
 
 	if (Number.isNaN(parsedDate.getTime())) 
-		return 'Data inválida';
+		return 'Data inv�lida';
 	
 	return parsedDate.toLocaleString(locale, {
 		dateStyle: 'medium',
@@ -34,11 +34,11 @@ export function formatRelativeTime(input?: string | Date) {
 	const year = 365 * day;
 
 	if (diffMs < minute) return 'agora';
-	if (diffMs < hour) return `${Math.floor(diffMs / minute)}m atrás`;
-	if (diffMs < day) return `${Math.floor(diffMs / hour)}h atrás`;
-	if (diffMs < month) return `${Math.floor(diffMs / day)}d atrás`;
-	if (diffMs < year) return `${Math.floor(diffMs / month)}mo atrás`;
-	return `${Math.floor(diffMs / year)}a atrás`;
+	if (diffMs < hour) return `${Math.floor(diffMs / minute)}m atr�s`;
+	if (diffMs < day) return `${Math.floor(diffMs / hour)}h atr�s`;
+	if (diffMs < month) return `${Math.floor(diffMs / day)}d atr�s`;
+	if (diffMs < year) return `${Math.floor(diffMs / month)}mo atr�s`;
+	return `${Math.floor(diffMs / year)}a atr�s`;
 }
 
 export type Options<TBody> = {

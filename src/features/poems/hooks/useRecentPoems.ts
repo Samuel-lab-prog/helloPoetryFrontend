@@ -1,4 +1,4 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { PaginatedPoemsType } from '../types';
 import { api } from '@root/core/api';
 

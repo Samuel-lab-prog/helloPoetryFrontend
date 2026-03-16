@@ -1,7 +1,7 @@
 import { Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { ExternalLink, X } from 'lucide-react';
-import { Surface, formatDate } from '@features/base';
+import { Surface, formatDate } from '@root/core/base';
 import type { SavedPoemsSectionProps } from './types';
 
 export function SavedPoemsSection({

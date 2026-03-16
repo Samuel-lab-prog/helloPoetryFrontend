@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { EllipsisVertical } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Surface, formatDate } from '@features/base';
+import { Surface, formatDate } from '@root/core/base';
 import type { MyPoemsSectionProps } from './types';
 
 function translateStatus(status: string) {

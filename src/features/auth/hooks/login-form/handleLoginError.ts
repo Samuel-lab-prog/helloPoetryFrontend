@@ -1,4 +1,4 @@
-import type { AppErrorType } from '@features/base';
+import type { AppErrorType } from '@root/core/base';
 import type { UseFormSetError } from 'react-hook-form';
 import type { LoginDataType } from '../../schemas/loginSchema';
 

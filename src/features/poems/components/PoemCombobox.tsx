@@ -1,4 +1,4 @@
-﻿import { Field, Combobox, Portal, useListCollection, useFilter } from '@chakra-ui/react';
+import { Field, Combobox, Portal, useListCollection, useFilter } from '@chakra-ui/react';
 import {
 	Controller,
 	type Control,

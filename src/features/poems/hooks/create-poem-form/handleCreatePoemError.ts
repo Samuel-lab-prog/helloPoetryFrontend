@@ -1,5 +1,5 @@
-﻿import type { UseFormSetError } from 'react-hook-form';
-import type { AppErrorType } from '@features/base';
+import type { UseFormSetError } from 'react-hook-form';
+import type { AppErrorType } from '@root/core/base';
 import type { CreatePoemType } from '../../schemas/managePoemSchemas';
 
 export function handleCreatePoemError(
@@ -13,7 +13,7 @@ export function handleCreatePoemError(
 	const lowerMessage = message.toLowerCase();
 
 	if (status === 401) {
-		setGeneralError('VocÃª nÃ£o tem permissÃ£o para criar poemas.');
+		setGeneralError('Você não tem permissão para criar poemas.');
 		return;
 	}
 
@@ -21,17 +21,17 @@ export function handleCreatePoemError(
 		if (lowerMessage.includes('assign or mention themselves')) {
 			setError('toUserIds', {
 				type: 'manual',
-				message: 'VocÃª nÃ£o pode dedicar o poema para si mesmo.',
+				message: 'Você não pode dedicar o poema para si mesmo.',
 			});
 			return;
 		}
 
 		if (lowerMessage.includes('author is not active')) {
-			setGeneralError('Seu usuÃ¡rio precisa estar ativo para criar poemas.');
+			setGeneralError('Seu usuário precisa estar ativo para criar poemas.');
 			return;
 		}
 
-		setGeneralError('VocÃª nÃ£o tem permissÃ£o para criar este poema.');
+		setGeneralError('Você não tem permissão para criar este poema.');
 		return;
 	}
 
@@ -43,7 +43,7 @@ export function handleCreatePoemError(
 		) {
 			setError('title', {
 				type: 'manual',
-				message: 'VocÃª jÃ¡ tem um poema com este tÃ­tulo.',
+				message: 'Você já tem um poema com este título.',
 			});
 			return;
 		}
@@ -54,7 +54,7 @@ export function handleCreatePoemError(
 
 	if (status === 422) {
 		if (mapCreatePoemValidationError(lowerMessage, setError)) return;
-		setGeneralError('Dados invÃ¡lidos. Verifique os campos e tente novamente.');
+		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
 		return;
 	}
 
@@ -68,39 +68,39 @@ function mapCreatePoemValidationError(
 	if (!lowerMessage) return false;
 
 	if (lowerMessage.includes('title')) {
-		setError('title', { type: 'manual', message: 'TÃ­tulo invÃ¡lido.' });
+		setError('title', { type: 'manual', message: 'Título inválido.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('excerpt') || lowerMessage.includes('summary')) {
-		setError('excerpt', { type: 'manual', message: 'Resumo invÃ¡lido.' });
+		setError('excerpt', { type: 'manual', message: 'Resumo inválido.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('content')) {
-		setError('content', { type: 'manual', message: 'ConteÃºdo invÃ¡lido.' });
+		setError('content', { type: 'manual', message: 'Conteúdo inválido.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('tag')) {
-		setError('tags', { type: 'manual', message: 'Tags invÃ¡lidas.' });
+		setError('tags', { type: 'manual', message: 'Tags inválidas.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('status')) {
-		setError('status', { type: 'manual', message: 'Status invÃ¡lido.' });
+		setError('status', { type: 'manual', message: 'Status inválido.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('visibility')) {
-		setError('visibility', { type: 'manual', message: 'Visibilidade invÃ¡lida.' });
+		setError('visibility', { type: 'manual', message: 'Visibilidade inválida.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('commentable') || lowerMessage.includes('comments')) {
 		setError('isCommentable', {
 			type: 'manual',
-			message: 'ConfiguraÃ§Ã£o de comentÃ¡rios invÃ¡lida.',
+			message: 'Configuração de comentários inválida.',
 		});
 		return true;
 	}
@@ -113,7 +113,7 @@ function mapCreatePoemValidationError(
 	) {
 		setError('toUserIds', {
 			type: 'manual',
-			message: 'Selecione apenas usuÃ¡rios ativos e vÃ¡lidos para dedicaÃ§Ã£o.',
+			message: 'Selecione apenas usuários ativos e válidos para dedicação.',
 		});
 		return true;
 	}

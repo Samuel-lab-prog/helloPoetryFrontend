@@ -1,4 +1,4 @@
-﻿import type { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { apiKeys } from '@root/core/api';
 import type { AppEvents } from '../eventBus';
 

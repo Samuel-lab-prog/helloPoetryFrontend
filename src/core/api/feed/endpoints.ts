@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/features/base';
+import { createHTTPRequest } from '@root/core/base';
 import { createQueryEndpoint } from '../utils';
 
 import { feedKeys } from './keys';

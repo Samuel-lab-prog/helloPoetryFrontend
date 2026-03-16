@@ -5,7 +5,7 @@ import {
 	Text,
 	VStack,
 } from '@chakra-ui/react';
-import { AsyncState, type AppErrorType } from '@features/base';
+import { AsyncState } from '@root/core/base';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
 import { ModerationPoemCard } from '../PoemModerationCard';
 

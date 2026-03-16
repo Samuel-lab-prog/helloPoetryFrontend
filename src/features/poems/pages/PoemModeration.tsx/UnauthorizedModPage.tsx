@@ -6,7 +6,7 @@ import {
 	Text,
 	VStack,
 } from '@chakra-ui/react';
-import { Surface } from '@features/base';
+import { Surface } from '@root/core/base';
 
 export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
   return (

@@ -1,6 +1,6 @@
 import { Badge, Button, HStack, Text, VStack } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { Surface } from '@features/base';
+import { Surface } from '@root/core/base';
 
 export function ProfileAccessGate() {
 	return (

@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
@@ -77,7 +77,7 @@ export function useRegisterForm() {
 
 					if (statusCode === 401 || statusCode === 403) {
 						setAvatarError(
-							'FaÃ§a login para enviar avatar. VocÃª pode concluir o cadastro e adicionar depois.',
+							'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
 						);
 					} else {
 						const message = error instanceof Error ? error.message : 'Erro ao enviar avatar.';

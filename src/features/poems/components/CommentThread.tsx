@@ -1,4 +1,4 @@
-﻿import { Avatar, Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Flex, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { memo, useState } from 'react';
 import {
 	ChevronDown,
@@ -9,7 +9,7 @@ import {
 	Trash2,
 } from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
-import { findForbiddenWords, formatRelativeTime } from '@features/base';
+import { findForbiddenWords, formatRelativeTime } from '@root/core/base';
 
 interface CommentThreadProps {
 	comment: PoemCommentType;
@@ -143,8 +143,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label='Excluir comentário'
-						title='Excluir comentário'
+						aria-label='Excluir coment�rio'
+						title='Excluir coment�rio'
 						loading={isDeletingComment}
 						onClick={handleDelete}
 					>
@@ -159,8 +159,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
-						title={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
+						aria-label={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder coment�rio'}
+						title={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder coment�rio'}
 						disabled={!isAuthenticated}
 						onClick={handleToggleReplies}
 					>
@@ -170,8 +170,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
-						title={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
+						aria-label={comment.likedByCurrentUser ? 'Descurtir coment�rio' : 'Curtir coment�rio'}
+						title={comment.likedByCurrentUser ? 'Descurtir coment�rio' : 'Curtir coment�rio'}
 						disabled={!isAuthenticated}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
@@ -239,7 +239,7 @@ export const CommentThread = memo(function CommentThread({
 						<Textarea
 							value={replyInput}
 							onChange={(e) => setReplyInput(e.target.value)}
-							placeholder='Responder comentário'
+							placeholder='Responder coment�rio'
 							rows={3}
 							maxLength={300}
 							disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}

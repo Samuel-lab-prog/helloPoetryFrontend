@@ -1,4 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable react-refresh/only-export-components */
 'use client';
 

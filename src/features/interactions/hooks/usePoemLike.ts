@@ -1,5 +1,5 @@
-﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@features/base';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys } from '@root/core/api';
 
 export function usePoemLike(poemId: number) {
@@ -23,7 +23,7 @@ export function usePoemLike(poemId: number) {
 	function getErrorMessage() {
 		const error = (likeMutation.error || unlikeMutation.error) as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 404) return 'Poema não encontrado.';
+		if (error.statusCode === 404) return 'Poema n�o encontrado.';
 		if (error.statusCode === 409) return 'Poema ja curtido.';
 		return 'Erro ao atualizar curtida.';
 	}

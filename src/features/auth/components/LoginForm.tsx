@@ -1,6 +1,6 @@
-﻿import { useLoginForm } from '../hooks/login-form';
+import { useLoginForm } from '../hooks/login-form';
 import type { LoginDataType } from '../schemas/loginSchema';
-import { DynamicForm, type Field } from '@features/base';
+import { DynamicForm, type Field } from '@root/core/base';
 
 const loginFields: Field<LoginDataType>[] = [
 	{ name: 'email', label: 'E-mail', required: true, autoFocus: true },

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { Eye, Check, Trash2 } from 'lucide-react';
 import { Badge, Card, Flex, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
-import { formatDate } from '@features/base';
+import { formatDate } from '@root/core/base';
 import type { NotificationItem } from '../hooks/useNotificationsPanel';
 
 function getFallbackTitle(type: string) {

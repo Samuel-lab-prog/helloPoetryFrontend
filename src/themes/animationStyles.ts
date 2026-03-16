@@ -1,4 +1,4 @@
-﻿import { defineAnimationStyles } from '@chakra-ui/react';
+import { defineAnimationStyles } from '@chakra-ui/react';
 
 export const animationStyles = defineAnimationStyles({
 	bounceFadeIn: {
