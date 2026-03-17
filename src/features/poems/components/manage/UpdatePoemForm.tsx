@@ -4,7 +4,7 @@ import { useUpdatePoemForm } from '../../hooks/update-poem-form';
 import { usePoemsMinimal } from '../../hooks/usePoemsMinimal';
 import { usePoem, PoemCombobox } from '@features/poems';
 import { FormField, SelectField, TagsField } from '@root/core/base';
-import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../constants/poemConstants';
+import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../use-cases/create-poem/components/constants';
 
 export function UpdatePoemForm() {
 	const { poems } = usePoemsMinimal();
@@ -44,7 +44,7 @@ export function UpdatePoemForm() {
 			<PoemCombobox name='id' control={control} poems={poems} />
 
 			<FormField
-				label='Título'
+				label='Tï¿½tulo'
 				control={control}
 				name='title'
 				error={errors.title}
@@ -70,10 +70,10 @@ export function UpdatePoemForm() {
 				name='visibility'
 				control={control}
 				options={[
-					{ value: 'public', label: 'Público' },
+					{ value: 'public', label: 'Pï¿½blico' },
 					{ value: 'friends', label: 'Amigos' },
 					{ value: 'private', label: 'Privado' },
-					{ value: 'unlisted', label: 'Não listado' },
+					{ value: 'unlisted', label: 'Nï¿½o listado' },
 				]}
 				error={errors.visibility}
 				required
@@ -81,7 +81,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<SelectField
-				label='Comentários'
+				label='Comentï¿½rios'
 				name='isCommentable'
 				control={control}
 				options={[
@@ -106,7 +106,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<FormField
-				label='Conteúdo (Markdown)'
+				label='Conteï¿½do (Markdown)'
 				as='textarea'
 				rows={20}
 				control={control}

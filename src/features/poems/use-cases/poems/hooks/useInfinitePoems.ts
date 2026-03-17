@@ -1,8 +1,8 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import type { PaginatedPoemsType } from '../types';
+﻿import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '@root/core/api';
+import type { PaginatedPoemsType } from '../../../types';
+import type { OrderOption } from './usePoemsFilters';
 
-type OrderOption = 'newest' | 'oldest';
 type UseInfinitePoemsOption = {
 	order: OrderOption;
 	tags?: string[];

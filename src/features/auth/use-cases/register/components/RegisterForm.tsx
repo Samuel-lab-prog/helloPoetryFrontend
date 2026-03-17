@@ -15,7 +15,7 @@ import {
 	REGISTER_NICKNAME_MIN_LENGTH,
 	REGISTER_PASSWORD_MAX_LENGTH,
 	REGISTER_PASSWORD_MIN_LENGTH,
-} from '../../../constants';
+} from '../constants';
 import type { RegisterDataType } from './registerSchema';
 
 const registerFields: Field<RegisterDataType>[] = [

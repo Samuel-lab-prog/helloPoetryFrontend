@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ComponentType } from 'react';
+﻿import { lazy, Suspense, type ComponentType } from 'react';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -29,11 +29,11 @@ function renderLazyPage(Component: ComponentType) {
 }
 
 const HomePage = lazyPage(
-	() => import('./features/poems/pages/HomePage'),
+	() => import('./features/poems/use-cases/home/Page'),
 	(module) => module.HomePage,
 );
 const PoemsPage = lazyPage(
-	() => import('./features/poems/pages/PoemsPage'),
+	() => import('./features/poems/use-cases/poems/Page'),
 	(module) => module.PoemsPage,
 );
 const PoemPage = lazyPage(
@@ -45,7 +45,7 @@ const PoemImmersivePage = lazyPage(
 	(module) => module.PoemImmersivePage,
 );
 const CreatePoemPage = lazyPage(
-	() => import('./features/poems/pages/CreatePoemPage'),
+	() => import('./features/poems/use-cases/create-poem/Page'),
 	(module) => module.CreatePoemPage,
 );
 const AdminPage = lazyPage(

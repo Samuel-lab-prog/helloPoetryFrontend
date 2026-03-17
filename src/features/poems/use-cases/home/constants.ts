@@ -1,0 +1,2 @@
+﻿export const POEMS_FEED_LIMIT = 8;
+export const POEMS_FEED_LIMIT_UNAUTHENTICATED = 4;

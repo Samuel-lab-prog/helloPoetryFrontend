@@ -2,7 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import { Text, Heading, Box, Flex, Button } from '@chakra-ui/react';
 
-import { useCreatePoemForm } from '../../hooks/create-poem-form';
+import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview, UserDedicationCombobox } from '@features/users';
 import {
 	FormField,
@@ -15,7 +15,7 @@ import {
 	toaster,
 } from '@root/core/base';
 import { PoemHeader } from '@features/poems';
-import { uploadPoemAudioFile } from '../../utils/poemAudioUpload';
+import { uploadPoemAudioFile } from '../../../utils/poemAudioUpload';
 import { api } from '@root/core/api';
 import { useCallback, useRef, useState, type ChangeEvent } from 'react';
 import {
@@ -27,7 +27,7 @@ import {
 	POEM_TAGS_MAX_AMOUNT,
 	POEM_TITLE_MIN_LENGTH,
 	POEM_TITLE_MAX_LENGTH,
-} from '../../constants/poemConstants';
+} from './constants';
 
 export function CreatePoemForm() {
 	const [isRecording, setIsRecording] = useState(false);
@@ -220,7 +220,7 @@ export function CreatePoemForm() {
 	const isContentBelowMinLength = contentLength < POEM_CONTENT_MIN_LENGTH;
 
 	const previewPoem = {
-		title: preview?.title || 'Tí­tulo do poema',
+		title: preview?.title || 'Tï¿½ï¿½tulo do poema',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -244,7 +244,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={40} hasError={!!errors.title}>
 					<FormField
-						label='Tí­tulo'
+						label='Tï¿½ï¿½tulo'
 						required
 						error={errors.title}
 						control={control}
@@ -283,7 +283,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={200} hasError={!!errors.content}>
 					<FormField
-						label='Conteúdo (Markdown)'
+						label='Conteï¿½do (Markdown)'
 						required
 						as='textarea'
 						rows={20}
@@ -334,10 +334,10 @@ export function CreatePoemForm() {
 						name='visibility'
 						control={control}
 						options={[
-							{ value: 'public', label: 'Público' },
+							{ value: 'public', label: 'Pï¿½blico' },
 							{ value: 'friends', label: 'Amigos' },
 							{ value: 'private', label: 'Privado' },
-							{ value: 'unlisted', label: 'Não listado' },
+							{ value: 'unlisted', label: 'Nï¿½o listado' },
 						]}
 						error={errors.visibility}
 					/>
@@ -345,7 +345,7 @@ export function CreatePoemForm() {
 
 				<FieldContainer delay={520} hasError={!!errors.isCommentable}>
 					<SelectField
-						label='Comentários'
+						label='Comentï¿½rios'
 						name='isCommentable'
 						control={control}
 						options={[
@@ -369,7 +369,7 @@ export function CreatePoemForm() {
 				</FieldContainer>
 				{isUsersError && (
 					<Text textStyle='small' color='red.400'>
-						Erro ao carregar usuários para dedicação.
+						Erro ao carregar usuï¿½rios para dedicaï¿½ï¿½o.
 					</Text>
 				)}
 
@@ -472,7 +472,7 @@ export function CreatePoemForm() {
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formulário para ver o preview do poema
+						Preencha o formulï¿½rio para ver o preview do poema
 					</Box>
 				) : (
 					<>

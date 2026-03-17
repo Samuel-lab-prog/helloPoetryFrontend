@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+﻿import { useSearchParams } from 'react-router-dom';
 import { useForm, type Control } from 'react-hook-form';
 import { useEffect } from 'react';
 
@@ -10,7 +10,7 @@ type PoemsFiltersForm = {
 	searchTitle: string;
 };
 
-type UsePoemFiltersReturn = {
+export type UsePoemFiltersReturn = {
 	control: Control<PoemsFiltersForm>;
 	order: OrderOption;
 	tags: string[];

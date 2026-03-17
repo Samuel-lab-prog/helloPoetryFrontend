@@ -1,6 +1,68 @@
-import type { UseFormSetError } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm, type UseFormSetError} from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createPoemSchema, type CreatePoemType } from '../../../schemas/managePoemSchemas';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { api } from '@root/core/api';
+import type { CreatePoemResult } from '@root/core/api/poems/types';
 import type { AppErrorType } from '@root/core/base';
-import type { CreatePoemType } from '../../schemas/managePoemSchemas';
+
+type UseCreatePoemFormOptions = {
+	onCreated?: (poem: CreatePoemResult) => Promise<void> | void;
+};
+
+export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
+	const queryClient = useQueryClient();
+	const [generalError, setGeneralError] = useState('');
+
+	const form = useForm<CreatePoemType>({
+		resolver: zodResolver(createPoemSchema),
+		mode: 'onChange',
+		defaultValues: {
+			excerpt: '',
+			status: 'draft',
+			visibility: 'public',
+			isCommentable: true,
+			tags: [],
+			toUserIds: [],
+		},
+	});
+
+	const { mutateAsync, isPending } = useCreatePoem();
+
+	async function onSubmit(data: CreatePoemType) {
+		setGeneralError('');
+
+		try {
+			const createdPoem = await mutateAsync(data);
+			if (options.onCreated) {
+				await options.onCreated(createdPoem);
+			}
+			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
+			queryClient.invalidateQueries({ queryKey: ['poems'] });
+			alert('Poema criado com sucesso!');
+		} catch (err) {
+			handleCreatePoemError(err, form.setError, setGeneralError);
+		}
+	}
+
+	return {
+		handleSubmit: form.handleSubmit,
+		reset: form.reset,
+		formState: form.formState,
+		control: form.control,
+		watch: form.watch,
+		onSubmit,
+		isPending,
+		generalError,
+	};
+}
+
+function useCreatePoem() {
+	return useMutation({
+		mutationFn: (newPoem: CreatePoemType) => api.poems.createPoem.mutate(newPoem),
+	});
+}
 
 export function handleCreatePoemError(
 	err: unknown,
@@ -9,8 +71,7 @@ export function handleCreatePoemError(
 ) {
 	const error = err as AppErrorType;
 	const status = error?.statusCode;
-	const message = normalizeErrorMessage(error?.message);
-	const lowerMessage = message.toLowerCase();
+	const lowerMessage = error?.message?.toLowerCase();
 
 	if (status === 401) {
 		setGeneralError('Você não tem permissão para criar poemas.');
@@ -119,12 +180,4 @@ function mapCreatePoemValidationError(
 	}
 
 	return false;
-}
-
-function normalizeErrorMessage(message: unknown) {
-	if (typeof message === 'string') return message;
-	if (Array.isArray(message)) {
-		return message.filter((part): part is string => typeof part === 'string').join(' ');
-	}
-	return '';
 }

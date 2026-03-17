@@ -9,13 +9,13 @@ import {
 	POEM_TAGS_MAX_AMOUNT,
 	POEM_TITLE_MAX_LENGTH,
 	POEM_TITLE_MIN_LENGTH,
-} from '../constants/poemConstants';
+} from '../use-cases/create-poem/components/constants';
 
 const createOrUpdatePoemSchemaBase = z.object({
 	title: z
 		.string()
-		.min(POEM_TITLE_MIN_LENGTH, `O título deve ter pelo menos ${POEM_TITLE_MIN_LENGTH} caracteres`)
-		.max(POEM_TITLE_MAX_LENGTH, `O título deve ter no máximo ${POEM_TITLE_MAX_LENGTH} caracteres`),
+		.min(POEM_TITLE_MIN_LENGTH, `O tï¿½tulo deve ter pelo menos ${POEM_TITLE_MIN_LENGTH} caracteres`)
+		.max(POEM_TITLE_MAX_LENGTH, `O tï¿½tulo deve ter no mï¿½ximo ${POEM_TITLE_MAX_LENGTH} caracteres`),
 	excerpt: z
 		.string()
 		.min(
@@ -24,33 +24,33 @@ const createOrUpdatePoemSchemaBase = z.object({
 		)
 		.max(
 			POEM_EXCERPT_MAX_LENGTH,
-			`O resumo deve ter no máximo ${POEM_EXCERPT_MAX_LENGTH} caracteres`,
+			`O resumo deve ter no mï¿½ximo ${POEM_EXCERPT_MAX_LENGTH} caracteres`,
 		),
 	content: z
 		.string()
 		.min(
 			POEM_CONTENT_MIN_LENGTH,
-			`O conteúdo deve ter pelo menos ${POEM_CONTENT_MIN_LENGTH} caracteres`,
+			`O conteï¿½do deve ter pelo menos ${POEM_CONTENT_MIN_LENGTH} caracteres`,
 		)
 		.max(
 			POEM_CONTENT_MAX_LENGTH,
-			`O conteúdo deve ter no máximo ${POEM_CONTENT_MAX_LENGTH} caracteres`,
+			`O conteï¿½do deve ter no mï¿½ximo ${POEM_CONTENT_MAX_LENGTH} caracteres`,
 		),
 	tags: z
 		.array(
 			z
 				.string()
-				.min(1, 'Tag inválida')
-				.max(POEM_TAG_MAX_LENGTH, `Tag deve ter no máximo ${POEM_TAG_MAX_LENGTH} caracteres`),
+				.min(1, 'Tag invï¿½lida')
+				.max(POEM_TAG_MAX_LENGTH, `Tag deve ter no mï¿½ximo ${POEM_TAG_MAX_LENGTH} caracteres`),
 		)
-		.max(POEM_TAGS_MAX_AMOUNT, `Você pode adicionar no máximo ${POEM_TAGS_MAX_AMOUNT} tags`)
+		.max(POEM_TAGS_MAX_AMOUNT, `Vocï¿½ pode adicionar no mï¿½ximo ${POEM_TAGS_MAX_AMOUNT} tags`)
 		.optional(),
 	status: z.enum(['draft', 'published']),
 	visibility: z.enum(['public', 'friends', 'private', 'unlisted']),
 	isCommentable: z.boolean(),
 	toUserIds: z
-		.array(z.number().int().positive('ID de usuário inválido'))
-		.max(POEM_TAGS_MAX_AMOUNT, `Você pode dedicar para no máximo ${POEM_TAGS_MAX_AMOUNT} usuários`)
+		.array(z.number().int().positive('ID de usuï¿½rio invï¿½lido'))
+		.max(POEM_TAGS_MAX_AMOUNT, `Vocï¿½ pode dedicar para no mï¿½ximo ${POEM_TAGS_MAX_AMOUNT} usuï¿½rios`)
 		.optional(),
 });
 
@@ -79,17 +79,17 @@ export const createPoemSchema = createOrUpdatePoemSchemaBase.superRefine((data, 
 		ctx.addIssue({
 			code: 'custom',
 			path: ['tags'],
-			message: `Tag contém palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
+			message: `Tag contï¿½m palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
 		});
 	}
 });
 
 export const deletePoemSchema = z.object({
-	id: z.number('ID inválido').min(1, 'ID deve ser um número positivo'),
+	id: z.number('ID invï¿½lido').min(1, 'ID deve ser um nï¿½mero positivo'),
 });
 
 export const updatePoemSchema = createOrUpdatePoemSchemaBase.extend({
-	id: z.number('ID inválido').min(1, 'ID deve ser um número positivo'),
+	id: z.number('ID invï¿½lido').min(1, 'ID deve ser um nï¿½mero positivo'),
 });
 
 export type CreatePoemType = z.infer<typeof createPoemSchema>;
