@@ -1,6 +1,5 @@
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-
-type UserRole = 'admin' | 'moderator' | 'user';
+import type { UserRole } from '@root/core/api/users/types';
 
 export function useEnsureRole(allowedRoles: UserRole[]): boolean {
 	const authClient = useAuthClientStore((state) => state.authClient);

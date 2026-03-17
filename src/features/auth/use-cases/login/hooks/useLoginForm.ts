@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { type AuthClient, useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { loginSchema, type LoginDataType } from '../../schemas/loginSchema';
+import { loginSchema, type LoginDataType } from '../components/loginSchema';
 import { eventBus } from '@root/core/events/eventBus';
-import { handleLoginError } from './handleLoginError';
 import { api } from '@root/core/api';
+
+import type { AppErrorType } from '@root/core/base';
+
 
 const FEED_ROUTE = '/';
 const MODERATION_ROUTE = '/admin/moderation';
@@ -67,3 +69,50 @@ export function useLoginForm() {
 		isPending: loginMutation.isPending,
 	};
 }
+//------------------------------
+// HELPERS
+//------------------------------
+export function handleLoginError(
+	err: unknown,
+	setError: UseFormSetError<LoginDataType>,
+	setGeneralError: (msg: string) => void,
+) {
+	const error = err as AppErrorType;
+	const status = error?.statusCode;
+	const message = error?.message.toLocaleLowerCase();
+
+	if (status === 401) {
+		setError('email', {
+			type: 'manual',
+			message: 'Credenciais incorretas',
+		});
+		setError('password', {
+			type: 'manual',
+			message: 'Credenciais incorretas',
+		});
+		return;
+	}
+
+	if (status === 403) {
+		if (message.includes('not active') || message.includes('inactive')) {
+			setGeneralError('Sua conta não está ativa.');
+			return;
+		}
+
+		setGeneralError('Você não tem permissão para acessar.');
+		return;
+	}
+
+	if (status === 422) {
+		setGeneralError('Dados de login inválidos. Revise os campos.');
+		return;
+	}
+
+	if (status === 429) {
+		setGeneralError('Muitas tentativas. Por favor, tente novamente mais tarde.');
+		return;
+	}
+
+	setGeneralError('Erro de rede, por favor tente novamente.');
+}
+

@@ -1,5 +1,5 @@
-import { useLoginForm } from '../hooks/login-form';
-import type { LoginDataType } from '../schemas/loginSchema';
+import { useLoginForm } from '../hooks/useLoginForm';
+import type { LoginDataType } from './loginSchema';
 import { DynamicForm, type Field } from '@root/core/base';
 
 const loginFields: Field<LoginDataType>[] = [

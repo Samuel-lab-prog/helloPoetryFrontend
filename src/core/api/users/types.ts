@@ -91,3 +91,5 @@ export type AvatarUploadUrlResponse = {
 	fileUrl: string;
 };
 
+export type UserRole = 'user' | 'admin' | 'moderator';
+export type UserStatus = 'active' | 'banned' | 'suspended';

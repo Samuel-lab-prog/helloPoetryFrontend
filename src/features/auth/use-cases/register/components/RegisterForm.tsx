@@ -2,9 +2,9 @@ import { Avatar, Button, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/re
 import { DynamicForm, type Field } from '@root/core/base';
 import {
 	useRegisterForm,
-	checkEmailAvailability,
-	checkNicknameAvailability,
-} from '../hooks/register-form';
+} from '../hooks/useRegisterForm';
+import { checkEmailAvailability } from '../hooks/checkEmail';
+import { checkNicknameAvailability } from '../hooks/checkNickname';
 
 import {
 	REGISTER_BIO_MAX_LENGTH,
@@ -15,8 +15,8 @@ import {
 	REGISTER_NICKNAME_MIN_LENGTH,
 	REGISTER_PASSWORD_MAX_LENGTH,
 	REGISTER_PASSWORD_MIN_LENGTH,
-} from '../schemas/constants';
-import type { RegisterDataType } from '../schemas/registerSchema';
+} from '../../../constants';
+import type { RegisterDataType } from './registerSchema';
 
 const registerFields: Field<RegisterDataType>[] = [
 	{
@@ -129,7 +129,7 @@ export function RegisterForm() {
 					</Flex>
 
 					<Text textStyle='smaller' color='pink.200'>
-						Tamanho máximo: {maxAvatarSizeMb}MB
+						Tamanho mï¿½ximo: {maxAvatarSizeMb}MB
 					</Text>
 
 					{avatarError && (

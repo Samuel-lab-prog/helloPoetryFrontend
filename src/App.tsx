@@ -57,11 +57,11 @@ const PoemModerationPage = lazyPage(
 	(module) => module.PoemModerationPage,
 );
 const LoginPage = lazyPage(
-	() => import('./features/auth/pages/LoginPage'),
+	() => import('./features/auth/use-cases/login/Page'),
 	(module) => module.LoginPage,
 );
 const RegisterPage = lazyPage(
-	() => import('./features/auth/pages/RegisterPage'),
+	() => import('./features/auth/use-cases/register/Page'),
 	(module) => module.RegisterPage,
 );
 const PoetsPage = lazyPage(
