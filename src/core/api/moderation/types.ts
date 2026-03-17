@@ -1,4 +1,4 @@
-import type {
+﻿import type {
 	PoemAuthor,
 	PoemDedicationUser,
 	PoemStatus,
@@ -64,3 +64,4 @@ export type ModeratePoemResult = {
 	id: number;
 	moderationStatus: 'rejected' | 'removed' | 'approved' | 'pending';
 };
+

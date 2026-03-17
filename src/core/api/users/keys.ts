@@ -1,4 +1,4 @@
-import { createQueryKeys } from '../utils';
+﻿import { createQueryKeys } from '../utils';
 
 export const userKeys = createQueryKeys({
 	all: () => ['users'] as const,
@@ -17,3 +17,4 @@ export const userKeys = createQueryKeys({
 	anyProfile: () => ['users', 'profile'] as const,
 	anySearch: () => ['users', 'search'] as const,
 });
+

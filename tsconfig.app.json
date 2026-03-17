@@ -1,4 +1,4 @@
-{
+﻿{
 	"compilerOptions": {
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 		"target": "ES2022",
@@ -11,7 +11,8 @@
 			"@root/*": ["./*"],
 			"@features/*": ["features/*"],
 			"@assets/*": ["assets/*"],
-			"@themes/*": ["themes/*"]
+			"@themes/*": ["themes/*"],
+			"@http-request": ["core/base/utils/createHttpRequest"]
 		},
 
 		/* Bundler mode */

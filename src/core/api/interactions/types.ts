@@ -1,4 +1,4 @@
-export type PoemComment = {
+﻿export type PoemComment = {
 	id: number;
 	poemId: number;
 	content: string;
@@ -25,3 +25,4 @@ export type UpdateCommentBody = {
 	commentId: string;
 	content: string;
 };
+

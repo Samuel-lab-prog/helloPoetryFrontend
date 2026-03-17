@@ -1,9 +1,25 @@
-export const FORBIDDEN_WORDS = [
-	'caralho',
+const PROFANITY = [
 	'carai',
-	'porra',
 	'merda',
 	'bosta',
+	'porra',
+	'caralho',
+	'pqp',
+];
+
+const INSULTS = [
+	'otario',
+	'otaria',
+	'idiota',
+	'babaca',
+	'fdp',
+	'arrombado',
+	'arrombada',
+];
+
+const SEXUAL = [
+	'vsf',
+	'vtnc',
 	'buceta',
 	'xota',
 	'puta',
@@ -12,16 +28,9 @@ export const FORBIDDEN_WORDS = [
 	'foder',
 	'foda',
 	'fudido',
-	'arrombado',
-	'arrombada',
-	'otario',
-	'otaria',
-	'idiota',
-	'babaca',
-	'fdp',
-	'vsf',
-	'vtnc',
-	'pqp',
+];
+
+const DICTATOR_NAMES = [
 	'hitler',
 	'adolf',
 	'stalin',
@@ -43,9 +52,16 @@ export const FORBIDDEN_WORDS = [
 	'gadafi',
 	'qaddafi',
 	'milosevic',
+];
+
+export const FORBIDDEN_WORDS = [
+	...DICTATOR_NAMES,
+	...PROFANITY,
+	...INSULTS,
+	...SEXUAL,
 ] as const;
 
-const LEET_CHAR_MAP: Record<string, string> = {
+const LEET_MAP: Record<string, string> = {
 	'0': 'o',
 	'1': 'i',
 	'3': 'e',
@@ -65,7 +81,7 @@ function normalizeText(value: string) {
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/[\u0300-\u036f]/g, '')
-		.replace(/[01345789@!$+]/g, (char) => LEET_CHAR_MAP[char] ?? char)
+		.replace(/[01345789@!$+]/g, (char) => LEET_MAP[char] ?? char)
 		.replace(/[^a-z0-9\s]/g, ' ');
 }
 

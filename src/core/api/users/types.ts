@@ -1,4 +1,4 @@
-export type UsersSearchParams = {
+﻿export type UsersSearchParams = {
 	limit?: number;
 	cursor?: string;
 	orderBy: 'nickname' | 'createdAt' | 'id';
@@ -90,3 +90,4 @@ export type AvatarUploadUrlResponse = {
 	uploadUrl: string;
 	fileUrl: string;
 };
+

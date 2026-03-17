@@ -1,4 +1,4 @@
-export type FriendRequest = {
+﻿export type FriendRequest = {
 	id: number;
 	requesterId: number;
 	addresseeId: number;
@@ -53,3 +53,4 @@ export type MyFriendRequests = {
 		requesterAvatarUrl: string | null;
 	}[];
 };
+

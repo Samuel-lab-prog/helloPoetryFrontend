@@ -53,7 +53,7 @@ const AdminPage = lazyPage(
 	(module) => module.AdminPage,
 );
 const PoemModerationPage = lazyPage(
-	() => import('./features/poems/pages/PoemModeration.tsx/Page'),
+	() => import('./features/moderation/Pages/PoemModeration/Page'),
 	(module) => module.PoemModerationPage,
 );
 const LoginPage = lazyPage(

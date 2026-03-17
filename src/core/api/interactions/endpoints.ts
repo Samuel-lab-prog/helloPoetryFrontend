@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/core/base';
+﻿import { createHTTPRequest } from '@http-request';
 import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
 import { interactionsKeys } from './keys';
@@ -88,3 +88,4 @@ export const interactions = {
 	unlikeComment,
 	updateComment,
 };
+

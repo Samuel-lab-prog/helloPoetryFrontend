@@ -11,10 +11,9 @@ import {
 	WrapItem,
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { MarkdownRenderer, Surface, translateModerationStatus, translateVisibility } from '@root/core/base';
-import { Tag } from '../../components/PoemTag';
+import { formatDate, MarkdownRenderer, Surface, translateModerationStatus, translateVisibility } from '@root/core/base';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
-import { formatDate } from '@root/core/base';
+import { Tag } from '@root/features/poems/components/PoemTag';
 
 export function ModerationPoemCard({
 	poem,

@@ -1,4 +1,4 @@
-export type NotificationPayload = {
+﻿export type NotificationPayload = {
 	title?: string;
 	body?: string;
 	poemId?: number;
@@ -42,3 +42,4 @@ export type GetNotificationsParams = {
 	limit?: number;
 	nextCursor?: string;
 };
+

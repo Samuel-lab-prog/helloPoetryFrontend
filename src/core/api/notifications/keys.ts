@@ -1,4 +1,4 @@
-import { createQueryKeys } from '../utils';
+﻿import { createQueryKeys } from '../utils';
 
 export const notificationsKeys = createQueryKeys({
 	all: () => ['notifications'] as const,
@@ -6,3 +6,4 @@ export const notificationsKeys = createQueryKeys({
 	page: (params?: { onlyUnread?: boolean; limit?: number; nextCursor?: string }) =>
 		['notifications', 'page', params ?? {}] as const,
 });
+

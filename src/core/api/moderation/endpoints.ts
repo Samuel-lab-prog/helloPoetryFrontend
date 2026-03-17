@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/core/base';
+﻿import { createHTTPRequest } from '@http-request';
 import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 import type {
 	BanUserBody,
@@ -60,3 +60,4 @@ export const moderation = {
 	getPendingPoems,
 	moderatePoem,
 };
+

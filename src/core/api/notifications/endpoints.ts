@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/core/base';
+﻿import { createHTTPRequest } from '@http-request';
 import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
 import { notificationsKeys } from './keys';
@@ -73,3 +73,4 @@ export const notifications = {
 	deleteAllNotifications,
 	markAllAsRead,
 };
+

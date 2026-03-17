@@ -1,43 +1,20 @@
-import { forwardRef } from 'react';
 import { Button as ChakraButton, type ButtonProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-export interface BaseButtonProps extends ButtonProps {
-	isLoading?: boolean;
-	isDisabled?: boolean;
+export type BaseButtonProps = ButtonProps & {
+	loading?: boolean;
 	fullWidth?: boolean;
-	disableWhenLoading?: boolean;
-}
+};
 
-export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(function BaseButton(
-	{
-		children,
-		variant = 'surface',
-		size = 'md',
-		loading,
-		isLoading,
-		disabled,
-		isDisabled,
-		fullWidth,
-		disableWhenLoading = true,
-		w,
-		...props
-	},
-	ref,
-) {
-	const resolvedLoading = loading ?? isLoading ?? false;
-	const resolvedDisabled = disabled ?? isDisabled ?? (disableWhenLoading ? resolvedLoading : false);
-
-	return (
+export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
+	({ loading, fullWidth, w, ...props }, ref) => (
 		<ChakraButton
 			ref={ref}
-			variant={variant}
-			size={size}
-			loading={resolvedLoading}
-			disabled={resolvedDisabled}
+			loading={loading}
 			w={fullWidth ? 'full' : w}
 			{...props}
-		>
-			{children}
-		</ChakraButton>
-	);
-});
+		/>
+	),
+);
+
+BaseButton.displayName = 'BaseButton';

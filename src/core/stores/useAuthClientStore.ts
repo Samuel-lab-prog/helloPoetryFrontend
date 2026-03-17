@@ -2,10 +2,13 @@ import { create } from 'zustand';
 
 const AUTH_STORAGE_KEY = 'auth-client';
 
+type UserRole = 'user' | 'admin' | 'moderator';
+type UserStatus = 'active' | 'banned' | 'suspended';
+
 export type AuthClient = {
 	id: number;
-	role: string;
-	status: string;
+	role: UserRole;
+	status: UserStatus;
 };
 
 type PersistedAuthState = {

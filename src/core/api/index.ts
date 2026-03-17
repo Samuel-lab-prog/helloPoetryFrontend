@@ -1,4 +1,4 @@
-import { auth } from './auth/endpoints';
+﻿import { auth } from './auth/endpoints';
 
 import { users } from './users/endpoints';
 import { userKeys } from './users/keys';
@@ -51,3 +51,4 @@ export {
 	notificationsKeys,
 	moderationKeys,
 };
+

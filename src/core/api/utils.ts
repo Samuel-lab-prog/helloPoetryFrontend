@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FetchQueryOptions } from '@tanstack/react-query';
 import { queryClient } from '../queryClient';
 
@@ -106,3 +106,4 @@ export function createMutationEndpoint<TInput, TResult>(
 export async function invalidateMany(...keys: Array<readonly unknown[]>) {
 	await Promise.all(keys.map((key) => queryClient.invalidateQueries({ queryKey: key })));
 }
+

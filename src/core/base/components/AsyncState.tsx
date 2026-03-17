@@ -35,9 +35,9 @@ export function AsyncState({
 	emptyElement,
 	children,
 }: AsyncStateProps) {
-	if (isError) return errorElement || <Text textStyle='body'>Error occurred.</Text>;
-	if (isLoading) return loadingElement || <Text textStyle='body'>Loading...</Text>;
-	if (isEmpty) return emptyElement || <Text textStyle='body'>No data available.</Text>;
+	if (isError) return errorElement || <Text textStyle='body'>Erro</Text>;
+	if (isLoading) return loadingElement || <Text textStyle='body'>Carregando...</Text>;
+	if (isEmpty) return emptyElement || <Text textStyle='body'>Nenhum dado encontrado.</Text>;
 
 	return children;
 }

@@ -6,6 +6,7 @@ import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '@feature
 import type { AppEvents } from '../eventBus';
 import type { UserPrivateProfile } from '../../api/users/types';
 import { clearSessionQueries } from './clearSession';
+import type { AuthClient } from '../../stores/useAuthClientStore';
 
 const INITIAL_FEED_LIMIT = 8;
 const POETS_SEARCH_LIMIT = 10;
@@ -13,6 +14,19 @@ const NOTIFICATIONS_FETCH_LIMIT = 50;
 
 const homeFeedKey = (userId: number, limit: number) =>
 	['home-feed', { isAuthenticated: true, userId, limit }] as const;
+
+const AUTH_ROLES: AuthClient['role'][] = ['user', 'admin', 'moderator'];
+const AUTH_STATUS: AuthClient['status'][] = ['active', 'banned', 'suspended'];
+
+function resolveAuthRole(role: string): AuthClient['role'] {
+	return AUTH_ROLES.includes(role as AuthClient['role']) ? (role as AuthClient['role']) : 'user';
+}
+
+function resolveAuthStatus(status: string): AuthClient['status'] {
+	return AUTH_STATUS.includes(status as AuthClient['status'])
+		? (status as AuthClient['status'])
+		: 'active';
+}
 
 function mapFeedPoem(item: FeedPoemType): PoemPreviewType {
 	return {
@@ -62,7 +76,11 @@ export async function bootstrapUserDataOnLogin(
 	payload: AppEvents['userLoggedIn'],
 ): Promise<void> {
 	const authStore = useAuthClientStore.getState();
-	authStore.setAuthClient({ id: payload.userId, role: payload.role, status: payload.status });
+	authStore.setAuthClient({
+		id: payload.userId,
+		role: resolveAuthRole(payload.role),
+		status: resolveAuthStatus(payload.status),
+	});
 
 	await clearSessionQueries(queryClient);
 

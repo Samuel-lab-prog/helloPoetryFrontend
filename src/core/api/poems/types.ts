@@ -1,4 +1,4 @@
-export type PoemVisibility = 'public' | 'friends' | 'private' | 'unlisted';
+﻿export type PoemVisibility = 'public' | 'friends' | 'private' | 'unlisted';
 export type PoemStatus = 'draft' | 'published';
 
 export type PoemTag = {
@@ -180,3 +180,4 @@ export type UpdatePoemAudioBody = {
 export type UpdatePoemAudioResponse = {
 	audioUrl: string | null;
 };
+

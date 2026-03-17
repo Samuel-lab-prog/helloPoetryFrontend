@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/core/base';
+﻿import { createHTTPRequest } from '@http-request';
 import { createMutationEndpoint } from '../utils';
 import type { AuthClient, LoginBody } from './types';
 
@@ -14,3 +14,5 @@ const login = createMutationEndpoint<LoginBody, AuthClient>({
 export const auth = {
 	login,
 };
+
+

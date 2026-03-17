@@ -1,4 +1,4 @@
-import { createHTTPRequest } from '@root/core/base';
+﻿import { createHTTPRequest } from '@http-request';
 import { createQueryEndpoint } from '../utils';
 
 import { feedKeys } from './keys';
@@ -17,3 +17,5 @@ const getFeed = createQueryEndpoint<[], FeedPoem[]>({
 export const feed = {
 	getFeed,
 };
+
+
