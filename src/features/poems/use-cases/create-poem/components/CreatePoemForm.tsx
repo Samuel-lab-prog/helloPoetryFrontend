@@ -5,19 +5,19 @@ import { Text, Heading, Box, Flex, Button } from '@chakra-ui/react';
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview, UserDedicationCombobox } from '@features/users';
 import {
+	DynamicForm,
 	FormField,
 	SelectField,
 	TagsField,
 	MarkdownRenderer,
-	FieldContainer,
-	FormButton,
-	FormCard,
 	toaster,
+	type Field,
 } from '@root/core/base';
 import { PoemHeader } from '@features/poems';
 import { uploadPoemAudioFile } from '../../../utils/poemAudioUpload';
 import { api } from '@root/core/api';
 import { useCallback, useRef, useState, type ChangeEvent } from 'react';
+import type { CreatePoemType } from '../../../schemas/managePoemSchemas';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,
@@ -230,19 +230,13 @@ export function CreatePoemForm() {
 
 	const isEmptyPreview = !preview?.title && !preview?.excerpt && !preview?.content;
 
-	return (
-		<>
-			<FormCard
-				as='form'
-				w='full'
-				maxW='4xl'
-				direction='column'
-				gap={3}
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				{generalError && <Text color='red.500'>{generalError}</Text>}
-
-				<FieldContainer delay={40} hasError={!!errors.title}>
+	const fields: Field<CreatePoemType>[] = [
+		{
+			kind: 'custom',
+			id: 'title',
+			hasError: Boolean(errors.title),
+			render: ({ control }) => (
+				<>
 					<FormField
 						label='T��tulo'
 						required
@@ -259,9 +253,15 @@ export function CreatePoemForm() {
 					>
 						{titleLength}/{POEM_TITLE_MAX_LENGTH} caracteres
 					</Text>
-				</FieldContainer>
-
-				<FieldContainer delay={120} hasError={!!errors.excerpt}>
+				</>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'excerpt',
+			hasError: Boolean(errors.excerpt),
+			render: ({ control }) => (
+				<>
 					<FormField
 						label='Resumo'
 						as='textarea'
@@ -279,9 +279,15 @@ export function CreatePoemForm() {
 					>
 						{excerptLength}/{POEM_EXCERPT_MAX_LENGTH} caracteres
 					</Text>
-				</FieldContainer>
-
-				<FieldContainer delay={200} hasError={!!errors.content}>
+				</>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'content',
+			hasError: Boolean(errors.content),
+			render: ({ control }) => (
+				<>
 					<FormField
 						label='Conte�do (Markdown)'
 						required
@@ -300,64 +306,86 @@ export function CreatePoemForm() {
 					>
 						{contentLength}/{POEM_CONTENT_MAX_LENGTH} caracteres
 					</Text>
-				</FieldContainer>
-
-				<FieldContainer delay={280} hasError={!!errors.tags}>
-					<TagsField
-						label='Tags'
-						control={control}
-						name='tags'
-						error={errors.tags}
-						disabled={isPending}
-						maxTags={POEM_TAGS_MAX_AMOUNT}
-						maxTagLength={POEM_TAG_MAX_LENGTH}
-						placeholder='Adicione suas tags'
-					/>
-				</FieldContainer>
-
-				<FieldContainer delay={360} hasError={!!errors.status}>
-					<SelectField
-						label='Status'
-						name='status'
-						control={control}
-						options={[
-							{ value: 'draft', label: 'Rascunho' },
-							{ value: 'published', label: 'Publicado' },
-						]}
-						error={errors.status}
-					/>
-				</FieldContainer>
-
-				<FieldContainer delay={440} hasError={!!errors.visibility}>
-					<SelectField
-						label='Visibilidade'
-						name='visibility'
-						control={control}
-						options={[
-							{ value: 'public', label: 'P�blico' },
-							{ value: 'friends', label: 'Amigos' },
-							{ value: 'private', label: 'Privado' },
-							{ value: 'unlisted', label: 'N�o listado' },
-						]}
-						error={errors.visibility}
-					/>
-				</FieldContainer>
-
-				<FieldContainer delay={520} hasError={!!errors.isCommentable}>
-					<SelectField
-						label='Coment�rios'
-						name='isCommentable'
-						control={control}
-						options={[
-							{ value: 'true', label: 'Permitidos' },
-							{ value: 'false', label: 'Desativados' },
-						]}
-						transformValue={(value) => value === 'true'}
-						error={errors.isCommentable}
-					/>
-				</FieldContainer>
-
-				<FieldContainer delay={600} hasError={!!errors.toUserIds}>
+				</>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'tags',
+			hasError: Boolean(errors.tags),
+			render: ({ control }) => (
+				<TagsField
+					label='Tags'
+					control={control}
+					name='tags'
+					error={errors.tags}
+					disabled={isPending}
+					maxTags={POEM_TAGS_MAX_AMOUNT}
+					maxTagLength={POEM_TAG_MAX_LENGTH}
+					placeholder='Adicione suas tags'
+				/>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'status',
+			hasError: Boolean(errors.status),
+			render: ({ control }) => (
+				<SelectField
+					label='Status'
+					name='status'
+					control={control}
+					options={[
+						{ value: 'draft', label: 'Rascunho' },
+						{ value: 'published', label: 'Publicado' },
+					]}
+					error={errors.status}
+				/>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'visibility',
+			hasError: Boolean(errors.visibility),
+			render: ({ control }) => (
+				<SelectField
+					label='Visibilidade'
+					name='visibility'
+					control={control}
+					options={[
+						{ value: 'public', label: 'P�blico' },
+						{ value: 'friends', label: 'Amigos' },
+						{ value: 'private', label: 'Privado' },
+						{ value: 'unlisted', label: 'N�o listado' },
+					]}
+					error={errors.visibility}
+				/>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'comments',
+			hasError: Boolean(errors.isCommentable),
+			render: ({ control }) => (
+				<SelectField
+					label='Coment�rios'
+					name='isCommentable'
+					control={control}
+					options={[
+						{ value: 'true', label: 'Permitidos' },
+						{ value: 'false', label: 'Desativados' },
+					]}
+					transformValue={(value) => value === 'true'}
+					error={errors.isCommentable}
+				/>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'dedication',
+			hasError: Boolean(errors.toUserIds),
+			render: ({ control }) => (
+				<>
 					<UserDedicationCombobox
 						name='toUserIds'
 						control={control}
@@ -366,104 +394,122 @@ export function CreatePoemForm() {
 						disabled={isPending || isLoadingUsers}
 						isLoading={isLoadingUsers}
 					/>
-				</FieldContainer>
-				{isUsersError && (
-					<Text textStyle='small' color='red.400'>
-						Erro ao carregar usu�rios para dedica��o.
-					</Text>
-				)}
-
-				<FieldContainer delay={680} hasError={!!audioError}>
-					<Box>
-						<Text textStyle='small' color='pink.200' mb={2}>
-							Audio do poema (opcional)
+					{isUsersError && (
+						<Text textStyle='small' color='red.400'>
+							Erro ao carregar usu�rios para dedica��o.
 						</Text>
+					)}
+				</>
+			),
+		},
+		{
+			kind: 'custom',
+			id: 'audio',
+			hasError: Boolean(audioError),
+			render: () => (
+				<Box>
+					<Text textStyle='small' color='pink.200' mb={2}>
+						Audio do poema (opcional)
+					</Text>
 
-						{recordedUrl && (
-							<Box mb={3}>
-								<Text textStyle='smaller' color='pink.200' mb={2}>
-									Preview da gravacao
-								</Text>
-								<audio controls preload='metadata' src={recordedUrl} />
-							</Box>
-						)}
-						{selectedAudioUrl && (
-							<Box mb={3}>
-								<Text textStyle='smaller' color='pink.200' mb={2}>
-									Preview do arquivo
-								</Text>
-								<audio controls preload='metadata' src={selectedAudioUrl} />
-							</Box>
-						)}
-
-						<Flex gap={2} wrap='wrap'>
-							<Button
-								size='sm'
-								variant='solidPink'
-								onClick={handleStartRecording}
-								disabled={isRecording || isUploadingAudio || isPending}
-							>
-								Gravar
-							</Button>
-							<Button
-								size='sm'
-								variant='outlinePurple'
-								onClick={handleStopRecording}
-								disabled={!isRecording || isUploadingAudio || isPending}
-							>
-								Parar
-							</Button>
-							<Button
-								size='sm'
-								variant='ghost'
-								onClick={handleDiscardRecording}
-								disabled={!recordedBlob || isUploadingAudio || isPending}
-							>
-								Descartar
-							</Button>
-							<Button
-								size='sm'
-								variant='surface'
-								onClick={() => audioFileInputRef.current?.click()}
-								disabled={isUploadingAudio || isPending}
-							>
-								Enviar arquivo
-							</Button>
-							<Button
-								size='sm'
-								variant='ghost'
-								onClick={handleClearSelectedFile}
-								disabled={!selectedAudioFile || isUploadingAudio || isPending}
-							>
-								Limpar arquivo
-							</Button>
-						</Flex>
-						<input
-							ref={audioFileInputRef}
-							type='file'
-							accept='audio/*'
-							hidden
-							onChange={handleAudioFileChange}
-						/>
-
-						{selectedAudioFile && (
-							<Text textStyle='smaller' color='pink.200' mt={2}>
-								Arquivo selecionado: {selectedAudioFile.name}
+					{recordedUrl && (
+						<Box mb={3}>
+							<Text textStyle='smaller' color='pink.200' mb={2}>
+								Preview da gravacao
 							</Text>
-						)}
-
-						{audioError && (
-							<Text textStyle='small' color='red.400' mt={2}>
-								{audioError}
+							<audio controls preload='metadata' src={recordedUrl} />
+						</Box>
+					)}
+					{selectedAudioUrl && (
+						<Box mb={3}>
+							<Text textStyle='smaller' color='pink.200' mb={2}>
+								Preview do arquivo
 							</Text>
-						)}
-					</Box>
-				</FieldContainer>
+							<audio controls preload='metadata' src={selectedAudioUrl} />
+						</Box>
+					)}
 
-				<FormButton isValid={isValid} loading={isPending} variant='surface'>
-					Criar Poema
-				</FormButton>
-			</FormCard>
+					<Flex gap={2} wrap='wrap'>
+						<Button
+							size='sm'
+							variant='solidPink'
+							onClick={handleStartRecording}
+							disabled={isRecording || isUploadingAudio || isPending}
+						>
+							Gravar
+						</Button>
+						<Button
+							size='sm'
+							variant='outlinePurple'
+							onClick={handleStopRecording}
+							disabled={!isRecording || isUploadingAudio || isPending}
+						>
+							Parar
+						</Button>
+						<Button
+							size='sm'
+							variant='ghost'
+							onClick={handleDiscardRecording}
+							disabled={!recordedBlob || isUploadingAudio || isPending}
+						>
+							Descartar
+						</Button>
+						<Button
+							size='sm'
+							variant='surface'
+							onClick={() => audioFileInputRef.current?.click()}
+							disabled={isUploadingAudio || isPending}
+						>
+							Enviar arquivo
+						</Button>
+						<Button
+							size='sm'
+							variant='ghost'
+							onClick={handleClearSelectedFile}
+							disabled={!selectedAudioFile || isUploadingAudio || isPending}
+						>
+							Limpar arquivo
+						</Button>
+					</Flex>
+					<input
+						ref={audioFileInputRef}
+						type='file'
+						accept='audio/*'
+						hidden
+						onChange={handleAudioFileChange}
+					/>
+
+					{selectedAudioFile && (
+						<Text textStyle='smaller' color='pink.200' mt={2}>
+							Arquivo selecionado: {selectedAudioFile.name}
+						</Text>
+					)}
+
+					{audioError && (
+						<Text textStyle='small' color='red.400' mt={2}>
+							{audioError}
+						</Text>
+					)}
+				</Box>
+			),
+		},
+	];
+
+	return (
+		<>
+			<DynamicForm<CreatePoemType>
+				fields={fields}
+				control={control}
+				errors={errors}
+				isValid={isValid}
+				loading={isPending}
+				generalError={generalError}
+				onSubmit={onSubmit}
+				handleSubmitFn={handleSubmit}
+				buttonLabel='Criar Poema'
+				buttonVariant='surface'
+				cardProps={{ w: 'full', maxW: '4xl', gap: 3 }}
+			/>
 
 			<Heading as='h2' textStyle='h2' mt={12}>
 				Preview

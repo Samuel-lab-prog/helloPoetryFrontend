@@ -1,10 +1,8 @@
-import { Avatar, Button, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
 import { DynamicForm, type Field } from '@root/core/base';
-import {
-	useRegisterForm,
-} from '../hooks/useRegisterForm';
+import { useRegisterForm } from '../hooks/useRegisterForm';
 import { checkEmailAvailability } from '../hooks/checkEmail';
 import { checkNicknameAvailability } from '../hooks/checkNickname';
+import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '@features/users/utils/avatarUpload';
 
 import {
 	REGISTER_BIO_MAX_LENGTH,
@@ -18,7 +16,7 @@ import {
 } from '../constants';
 import type { RegisterDataType } from './registerSchema';
 
-const registerFields: Field<RegisterDataType>[] = [
+const baseRegisterFields: Field<RegisterDataType>[] = [
 	{
 		name: 'nickname',
 		label: 'Apelido',
@@ -79,12 +77,21 @@ export function RegisterForm() {
 		handleSubmit,
 		setError,
 		clearErrors,
-		avatarFile,
-		avatarPreviewUrl,
-		onPickAvatar,
-		avatarError,
-		maxAvatarSizeMb,
 	} = useRegisterForm();
+
+	const registerFields: Field<RegisterDataType>[] = [
+		...baseRegisterFields,
+		{
+			kind: 'file',
+			name: 'avatar',
+			label: 'Avatar (opcional)',
+			accept: 'image/*',
+			buttonLabel: 'Escolher arquivo',
+			helpText: `Tamanho máximo: ${MAX_AVATAR_SIZE_MB}MB`,
+			preview: 'image',
+			validateFile: (file) => (file ? getAvatarFileError(file) : null),
+		},
+	];
 
 	return (
 		<DynamicForm<RegisterDataType>
@@ -100,45 +107,6 @@ export function RegisterForm() {
 			clearErrors={clearErrors}
 			buttonLabel='Criar conta'
 			buttonVariant='surface'
-			extraContent={
-				<Flex direction='column' gap={3} mt={2}>
-					<Text textStyle='small' color='pink.200'>
-						Avatar (opcional)
-					</Text>
-
-					<Flex align='center' gap={3} wrap='wrap'>
-						<Avatar.Root size='md'>
-							<Avatar.Image src={avatarPreviewUrl ?? undefined} />
-							<Avatar.Fallback name='Avatar' />
-						</Avatar.Root>
-						<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
-							Escolher arquivo
-							<VisuallyHidden>
-								<Input
-									type='file'
-									accept='image/*'
-									onChange={(event) => {
-										onPickAvatar(event.target.files?.[0] ?? null);
-									}}
-								/>
-							</VisuallyHidden>
-						</Button>
-						<Text textStyle='smaller' color='pink.200'>
-							{avatarFile ? avatarFile.name : 'Nenhum arquivo selecionado'}
-						</Text>
-					</Flex>
-
-					<Text textStyle='smaller' color='pink.200'>
-						Tamanho máximo: {maxAvatarSizeMb}MB
-					</Text>
-
-					{avatarError && (
-						<Text textStyle='smaller' color='red.400'>
-							{avatarError}
-						</Text>
-					)}
-				</Flex>
-			}
 		/>
 	);
 }

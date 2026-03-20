@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
@@ -6,34 +6,21 @@ import { useMutation } from '@tanstack/react-query';
 
 import { registerSchema, type RegisterDataType } from '../components/registerSchema';
 import { api } from '@root/core/api';
-import {
-	getAvatarFileError,
-	uploadAvatarFile,
-	MAX_AVATAR_SIZE_MB,
-} from '@features/users/utils/avatarUpload';
+import { getAvatarFileError, uploadAvatarFile } from '@features/users/utils/avatarUpload';
 import type { CreateUserBody } from '@root/core/api/users/types';
 import type { AppErrorType } from '@root/core/base';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
-	const [avatarFile, setAvatarFile] = useState<File | null>(null);
-	const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
-	const [avatarError, setAvatarError] = useState('');
 	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 	const navigate = useNavigate();
-
-	useEffect(
-		() => () => {
-			if (avatarPreviewUrl) URL.revokeObjectURL(avatarPreviewUrl);
-		},
-		[avatarPreviewUrl],
-	);
 
 	const form = useForm<RegisterDataType>({
 		resolver: zodResolver(registerSchema),
 		mode: 'onChange',
 		defaultValues: {
 			bio: '',
+			avatar: null,
 		},
 	});
 
@@ -51,18 +38,19 @@ export function useRegisterForm() {
 
 	function onSubmit(data: RegisterDataType) {
 		setGeneralError('');
-		setAvatarError('');
 
 		if (!form.formState.isValid) return;
 
 		void (async () => {
 			setIsUploadingAvatar(true);
-			const payload: CreateUserBody = { ...data };
+			const { avatar, ...rest } = data;
+			const payload: CreateUserBody = { ...rest };
+			const avatarFile = avatar instanceof File ? avatar : null;
 
 			if (avatarFile) {
 				const fileError = getAvatarFileError(avatarFile);
 				if (fileError) {
-					setAvatarError(fileError);
+					form.setError('avatar', { type: 'manual', message: fileError });
 					setIsUploadingAvatar(false);
 					return;
 				}
@@ -76,12 +64,14 @@ export function useRegisterForm() {
 							: null;
 
 					if (statusCode === 401 || statusCode === 403) {
-						setAvatarError(
-							'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
-						);
+						form.setError('avatar', {
+							type: 'manual',
+							message:
+								'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
+						});
 					} else {
 						const message = error instanceof Error ? error.message : 'Erro ao enviar avatar.';
-						setAvatarError(message);
+						form.setError('avatar', { type: 'manual', message });
 						setIsUploadingAvatar(false);
 						return;
 					}
@@ -93,22 +83,6 @@ export function useRegisterForm() {
 		})();
 	}
 
-	function onPickAvatar(file: File | null) {
-		setAvatarFile(file);
-		setAvatarPreviewUrl((current) => {
-			if (current) URL.revokeObjectURL(current);
-			return file ? URL.createObjectURL(file) : null;
-		});
-
-		if (!file) {
-			setAvatarError('');
-			return;
-		}
-
-		const error = getAvatarFileError(file);
-		setAvatarError(error ?? '');
-	}
-
 	return {
 		onSubmit,
 		generalError,
@@ -118,11 +92,6 @@ export function useRegisterForm() {
 		isPending: registerMutation.isPending || isUploadingAvatar,
 		setError: form.setError,
 		clearErrors: form.clearErrors,
-		avatarFile,
-		avatarPreviewUrl,
-		onPickAvatar,
-		avatarError,
-		maxAvatarSizeMb: MAX_AVATAR_SIZE_MB,
 	};
 }
 //------------------------------

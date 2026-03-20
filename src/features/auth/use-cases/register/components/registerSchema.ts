@@ -52,6 +52,7 @@ export const registerSchema = z
 			.trim()
 			.min(REGISTER_BIO_MIN_LENGTH, `Bio deve ter pelo menos ${REGISTER_BIO_MIN_LENGTH} caracteres`)
 			.max(REGISTER_BIO_MAX_LENGTH, `Bio deve ter no máximo ${REGISTER_BIO_MAX_LENGTH} caracteres`),
+		avatar: z.any().optional().nullable(),
 	})
 	.superRefine((data, ctx) => {
 		const fields: Array<{ key: 'nickname' | 'name' | 'bio'; value: string }> = [
