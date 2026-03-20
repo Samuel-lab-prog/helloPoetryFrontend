@@ -1,7 +1,8 @@
 import { Text, Heading, Box } from '@chakra-ui/react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
-import { useUsersPreview, UserDedicationCombobox } from '@features/users';
+import { useUsersPreview } from '@root/features/users/hooks/useUsersPreview';
+import { UserDedicationCombobox } from '@root/features/users/components/UserDedicationCombobox';
 import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@root/core/base';
 import { PoemHeader } from '../../poem/components/PoemHeader';
 import { uploadPoemAudioFile } from '../utils/poemAudioUpload';

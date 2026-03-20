@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import { useSavedPoems } from '@root/features/poems';
+import { useSavedPoems } from '@root/features/poems/use-cases/poems/hooks/useSavedPoems';
 import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
 import { SavedPoemsSection } from '../components/my-profile/SavedPoemsSection';
 

@@ -1,13 +1,13 @@
 import { Box, Flex, IconButton, Text } from '@chakra-ui/react';
 import { ExternalLink, Plus, Trash2, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import {
-	PoemCombobox,
-	type PoemCollectionType,
-	type PoemMinimalDataType,
-	type FullPoemType,
-	type SavedPoemType,
-} from '@root/features/poems';
+import { PoemCombobox } from '@root/features/poems/use-cases/poems/components/PoemCombobox';
+import type {
+	PoemCollectionType,
+	PoemMinimalDataType,
+	FullPoemType,
+	SavedPoemType,
+} from '@root/features/poems/types';
 import { useForm } from 'react-hook-form';
 
 type AddPoemFormValues = {
