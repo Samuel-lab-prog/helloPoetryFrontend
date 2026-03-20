@@ -16,7 +16,7 @@ import {
 } from '../constants';
 import type { RegisterDataType } from './registerSchema';
 
-const baseRegisterFields: Field<RegisterDataType>[] = [
+const registerFields: Field<RegisterDataType>[] = [
 	{
 		name: 'nickname',
 		label: 'Nickname',
@@ -65,6 +65,16 @@ const baseRegisterFields: Field<RegisterDataType>[] = [
 		maxLength: REGISTER_BIO_MAX_LENGTH,
 		showCharacterCount: true,
 	},
+	{
+		kind: 'file',
+		name: 'avatar',
+		label: 'Avatar (optional)',
+		accept: 'image/*',
+		buttonLabel: 'Choose file',
+		helpText: `Max size: ${MAX_AVATAR_SIZE_MB}MB`,
+		preview: 'image',
+		validateFile: (file) => (file ? getAvatarFileError(file) : null),
+	},
 ];
 
 export function RegisterForm() {
@@ -78,20 +88,6 @@ export function RegisterForm() {
 		setError,
 		clearErrors,
 	} = useRegisterForm();
-
-	const registerFields: Field<RegisterDataType>[] = [
-		...baseRegisterFields,
-		{
-			kind: 'file',
-			name: 'avatar',
-			label: 'Avatar (optional)',
-			accept: 'image/*',
-			buttonLabel: 'Choose file',
-			helpText: `Max size: ${MAX_AVATAR_SIZE_MB}MB`,
-			preview: 'image',
-			validateFile: (file) => (file ? getAvatarFileError(file) : null),
-		},
-	];
 
 	return (
 		<DynamicForm<RegisterDataType>

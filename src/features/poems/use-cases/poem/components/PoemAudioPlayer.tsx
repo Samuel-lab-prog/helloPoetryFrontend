@@ -106,7 +106,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 			borderColor='purple.700'
 			borderRadius='xl'
 			bg='rgba(255, 255, 255, 0.02)'
-			sx={{
+			css={{
 				'input[type="range"]': {
 					WebkitAppearance: 'none',
 					appearance: 'none',

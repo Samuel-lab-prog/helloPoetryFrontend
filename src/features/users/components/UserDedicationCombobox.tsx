@@ -65,7 +65,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 				color={hasError ? 'error' : 'text'}
 				transition='color 0.22s ease'
 			>
-				Dedicado a
+				Dedicate to (up to 5 users)
 			</Field.Label>
 
 			<Controller
@@ -127,7 +127,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 								>
 									<Combobox.Input
 										placeholder={
-											isLoading ? 'Carregando usuários...' : 'Buscar usuários para dedicar'
+											isLoading ? 'Loading users...' : 'Search users to dedicate to'
 										}
 										textStyle='small'
 										color='text'
@@ -150,7 +150,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 											overflow='hidden'
 										>
 											<Combobox.Empty>
-												{isLoading ? 'Carregando usuários...' : 'Nenhum usuário encontrado.'}
+												{isLoading ? 'Loading users...' : 'No users found.'}
 											</Combobox.Empty>
 											{collection.items.map((item) => (
 												<Combobox.Item
@@ -171,7 +171,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 
 							<Flex mt={2} gap={2} wrap='wrap' align='center'>
 								<Text textStyle='small' color='pink.200'>
-									Selecionados: {selectedUsers.length}/5
+									Selected: {selectedUsers.length}/5
 								</Text>
 								{selectedUsers.map((user) => (
 									<Button

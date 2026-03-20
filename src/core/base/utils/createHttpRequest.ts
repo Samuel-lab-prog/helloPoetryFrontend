@@ -16,7 +16,30 @@ export type HttpRequestOptions<TBody> = {
 };
 
 /**
- * Sends an HTTP request to the given API endpoint and returns the parsed JSON response.
+ * Creates and sends an HTTP request to the API and returns the parsed JSON payload.
+ *
+ * This helper:
+ * - Prefixes `path` with `import.meta.env.VITE_API_URL`.
+ * - Appends `params` as additional path segments.
+ * - Serializes `query` into the URL, skipping `undefined` values.
+ * - Sends JSON when `body` is provided and sets `Content-Type: application/json`.
+ * - Parses JSON responses and throws a typed `AppErrorType` for non-2xx statuses.
+ *
+ * @example
+ * const profile = await createHTTPRequest<User>({
+ *   path: '/users',
+ *   params: [userId],
+ *   query: { include: 'settings', tags: ['a', 'b'] },
+ * });
+ *
+ * @example
+ * await createHTTPRequest<void, UpdatePayload>({
+ *   path: '/users',
+ *   params: [userId],
+ *   method: 'PATCH',
+ *   body: { name: 'Ana' },
+ *   signal: abortController.signal,
+ * });
  *
  * @throws AppErrorType When the response status is not successful.
  *

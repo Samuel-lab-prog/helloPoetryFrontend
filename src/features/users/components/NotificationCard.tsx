@@ -7,21 +7,21 @@ import type { NotificationItem } from '../hooks/useNotificationsPanel';
 function getFallbackTitle(type: string) {
 	switch (type) {
 		case 'POEM_COMMENT_CREATED':
-			return 'Novo comentario';
+			return 'New comment';
 		case 'NEW_FRIEND':
-			return 'Novo amigo';
+			return 'New friend';
 		case 'NEW_FRIEND_REQUEST':
-			return 'Pedido de amizade';
+			return 'Friend request';
 		case 'POEM_LIKED':
-			return 'Poema curtido';
+			return 'Your poem was liked';
 		case 'POEM_COMMENT_REPLIED':
-			return 'Resposta em comentario';
+			return 'New reply to your comment';
 		case 'POEM_DEDICATED':
-			return 'Poema dedicado';
+			return 'Poema dedicated';
 		case 'USER_MENTION_IN_POEM':
-			return 'Voce foi mencionado';
+			return 'You were mentioned';
 		default:
-			return 'Notificacao';
+			return 'Notification';
 	}
 }
 
@@ -33,9 +33,9 @@ function getNotificationBody(item: NotificationItem): string {
 	const body = item.data?.body?.trim();
 	if (body) return body;
 	if (item.aggregatedCount > 1) {
-		return `Voce recebeu ${item.aggregatedCount} notificacoes desse tipo.`;
+		return `You received ${item.aggregatedCount} notifications of this type.`;
 	}
-	return 'Sem detalhes adicionais.';
+	return 'No additional details.';
 }
 
 function getNotificationLink(item: NotificationItem) {
@@ -118,12 +118,12 @@ export function NotificationCard({
 							</Badge>
 							{item.aggregatedCount > 1 && (
 								<Badge size='sm' colorPalette='pink' variant='subtle'>
-									{item.aggregatedCount} notificacoes
+									{item.aggregatedCount} notifications
 								</Badge>
 							)}
 							{item.readAt && (
 								<Badge size='sm' colorPalette='gray' variant='subtle'>
-									Lida
+									Read
 								</Badge>
 							)}
 						</HStack>
@@ -135,8 +135,8 @@ export function NotificationCard({
 								asChild
 								size='sm'
 								variant='solidPink'
-								aria-label='Abrir notificacao'
-								title='Abrir'
+								aria-label='Open notification'
+								title='Open'
 							>
 								<NavLink to={link}>
 									<Eye size={16} />
@@ -147,8 +147,8 @@ export function NotificationCard({
 							<IconButton
 								size='sm'
 								variant='solidPink'
-								aria-label='Marcar como lida'
-								title='Marcar como lida'
+								aria-label='Mark as read'
+								title='Mark as read'
 								onClick={() => {
 									void onMarkAsRead(item.id);
 								}}
@@ -160,8 +160,8 @@ export function NotificationCard({
 						<IconButton
 							size='sm'
 							variant='danger'
-							aria-label='Excluir notificacao'
-							title='Excluir'
+							aria-label='Delete notification'
+							title='Delete'
 							onClick={() => {
 								void onDelete(item.id);
 							}}
