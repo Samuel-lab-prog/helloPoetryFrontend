@@ -19,16 +19,16 @@ export function FooterBrand() {
 				</Box>
 				<VStack align='start' gap={0}>
 					<Heading as='h3' textStyle='h4' color='pink.100'>
-						Olapoesia
+						HelloPoetry
 					</Heading>
 					<Badge size='sm' colorPalette='pink' variant='subtle'>
-						Plataforma de Poemas
+						Poetry Platform
 					</Badge>
 				</VStack>
 			</HStack>
 
 			<Text textStyle='small' color='pink.200' maxW='sm'>
-				Publique poemas, salve favoritos, comente e construa conexoes com outros autores.
+				Publish poems, save favorites, comment, and build connections with other authors.
 			</Text>
 		</VStack>
 	);

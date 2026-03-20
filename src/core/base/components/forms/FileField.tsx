@@ -32,7 +32,7 @@ export function FileField<T extends FieldValues>({
 	required,
 	error,
 	accept,
-	buttonLabel = 'Escolher arquivo',
+	buttonLabel = 'Choose file',
 	helpText,
 	preview = 'none',
 	disabled,
@@ -132,7 +132,7 @@ export function FileField<T extends FieldValues>({
 								</VisuallyHidden>
 							</Button>
 							<Text textStyle='smaller' color='pink.200'>
-								{file ? file.name : 'Nenhum arquivo selecionado'}
+								{file ? file.name : 'File not selected'}
 							</Text>
 						</Flex>
 

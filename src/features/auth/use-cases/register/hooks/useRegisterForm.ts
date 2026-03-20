@@ -67,10 +67,10 @@ export function useRegisterForm() {
 						form.setError('avatar', {
 							type: 'manual',
 							message:
-								'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
+								'Sign in to upload an avatar. You can complete registration and add it later.',
 						});
 					} else {
-						const message = error instanceof Error ? error.message : 'Erro ao enviar avatar.';
+						const message = error instanceof Error ? error.message : 'Error uploading avatar.';
 						form.setError('avatar', { type: 'manual', message });
 						setIsUploadingAvatar(false);
 						return;
@@ -112,7 +112,7 @@ function handleRegisterError(
 		if (message.includes('nickname')) {
 			setError('nickname', {
 				type: 'manual',
-				message: 'Apelido já está em uso',
+				message: 'Nickname is already in use',
 			});
 			mapped = true;
 		}
@@ -120,26 +120,26 @@ function handleRegisterError(
 		if (message.includes('email')) {
 			setError('email', {
 				type: 'manual',
-				message: 'E-mail já está em uso',
+				message: 'Email is already in use',
 			});
 			mapped = true;
 		}
 
 		if (mapped) return;
 
-		setGeneralError('Conflito ao criar conta. Revise os dados e tente novamente.');
+		setGeneralError('Conflict while creating the account. Review the data and try again.');
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Invalid data. Check the fields and try again.');
 		return;
 	}
 
 	if (status === 429) {
-		setGeneralError('Muitas tentativas. Tente novamente mais tarde.');
+		setGeneralError('Too many attempts. Please try again later.');
 		return;
 	}
 
-	setGeneralError('Erro de rede. Tente novamente.');
+	setGeneralError('Network error. Please try again.');
 }

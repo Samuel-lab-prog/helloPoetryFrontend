@@ -7,8 +7,8 @@ type LinkItem = {
 };
 
 const links: LinkItem[] = [
-	{ label: 'Explorar poemas', to: '/poems' },
-	{ label: 'Criar poema', to: '/poems/new' },
+	{ label: 'Explore Poems', to: '/poems' },
+	{ label: 'Create Poem', to: '/poems/new' },
 ];
 
 export function FooterPrimaryActions() {

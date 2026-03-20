@@ -15,7 +15,7 @@ function formatTime(seconds: number) {
 	return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-export function PoemAudioPlayer({ src, title = 'Audio do poema' }: PoemAudioPlayerProps) {
+export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerProps) {
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [currentTime, setCurrentTime] = useState(0);
@@ -207,7 +207,7 @@ export function PoemAudioPlayer({ src, title = 'Audio do poema' }: PoemAudioPlay
 					step={0.1}
 					value={currentTime}
 					onChange={handleSeek}
-					aria-label='Progresso'
+						aria-label='Progress'
 					data-range='progress'
 					style={
 						{

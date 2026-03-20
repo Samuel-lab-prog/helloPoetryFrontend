@@ -4,7 +4,7 @@ export function FooterCommunity() {
 	return (
 		<VStack align='start' gap={2}>
 			<Text textStyle='small' color='pink.200'>
-				Comunidade
+				Community
 			</Text>
 			<Link
 				href='https://github.com/samuel-lab-prog'
@@ -13,7 +13,7 @@ export function FooterCommunity() {
 				variant='muted'
 				size='sm'
 			>
-				Repositorio
+				Repository
 			</Link>
 			<Link
 				href='https://www.linkedin.com/in/samuel-gomes-149251342/'

@@ -44,7 +44,7 @@ export function UpdatePoemForm() {
 			<PoemCombobox name='id' control={control} poems={poems} />
 
 			<FormField
-				label='T�tulo'
+				label='Title'
 				control={control}
 				name='title'
 				error={errors.title}
@@ -57,8 +57,8 @@ export function UpdatePoemForm() {
 				name='status'
 				control={control}
 				options={[
-					{ value: 'draft', label: 'Rascunho' },
-					{ value: 'published', label: 'Publicado' },
+					{ value: 'draft', label: 'Draft' },
+					{ value: 'published', label: 'Published' },
 				]}
 				error={errors.status}
 				required
@@ -66,14 +66,14 @@ export function UpdatePoemForm() {
 			/>
 
 			<SelectField
-				label='Visibilidade'
+				label='Visibility'
 				name='visibility'
 				control={control}
 				options={[
-					{ value: 'public', label: 'P�blico' },
-					{ value: 'friends', label: 'Amigos' },
-					{ value: 'private', label: 'Privado' },
-					{ value: 'unlisted', label: 'N�o listado' },
+					{ value: 'public', label: 'Public' },
+					{ value: 'friends', label: 'Friends' },
+					{ value: 'private', label: 'Private' },
+					{ value: 'unlisted', label: 'Unlisted' },
 				]}
 				error={errors.visibility}
 				required
@@ -81,12 +81,12 @@ export function UpdatePoemForm() {
 			/>
 
 			<SelectField
-				label='Coment�rios'
+				label='Comments'
 				name='isCommentable'
 				control={control}
 				options={[
-					{ value: 'true', label: 'Permitidos' },
-					{ value: 'false', label: 'Desativados' },
+					{ value: 'true', label: 'Allowed' },
+					{ value: 'false', label: 'Disabled' },
 				]}
 				transformValue={(value) => value === 'true'}
 				error={errors.isCommentable}
@@ -95,7 +95,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<FormField
-				label='Resumo'
+				label='Summary'
 				as='textarea'
 				rows={5}
 				control={control}
@@ -106,7 +106,7 @@ export function UpdatePoemForm() {
 			/>
 
 			<FormField
-				label='Conte�do (Markdown)'
+				label='Content (Markdown)'
 				as='textarea'
 				rows={20}
 				control={control}
@@ -124,7 +124,7 @@ export function UpdatePoemForm() {
 				disabled={isLoading || !poemId}
 				maxTags={POEM_TAGS_MAX_AMOUNT}
 				maxTagLength={POEM_TAG_MAX_LENGTH}
-				placeholder='Adicione suas tags'
+				placeholder='Add your tags'
 			/>
 
 			<Button
@@ -136,7 +136,7 @@ export function UpdatePoemForm() {
 				w='full'
 				mt={4}
 			>
-				Atualizar Poema
+				Update Poem
 			</Button>
 		</Flex>
 	);

@@ -6,6 +6,9 @@ import { FormCard } from './FormCard';
 import { FormField } from './FormField';
 import { FormButton } from './FormButton';
 import { FileField } from './FileField';
+import { SelectField } from './SelectField';
+import { TagsField } from '../TagsField';
+import { AudioField } from './AudioField';
 
 import type {
 	FieldValues,
@@ -29,9 +32,11 @@ type InputField<T extends FieldValues> = BaseField & {
 	required?: boolean;
 	autoFocus?: boolean;
 	type?: FieldType;
+	rows?: number;
 	minLength?: number;
 	maxLength?: number;
 	showCharacterCount?: boolean;
+	disabled?: boolean;
 
 	asyncValidator?: (value: string) => Promise<string | null>;
 	debounce?: number;
@@ -50,6 +55,57 @@ type FileUploadField<T extends FieldValues> = BaseField & {
 	validateFile?: (file: File | null) => string | null;
 };
 
+type SelectFieldOption = {
+	value: string;
+	label: string;
+};
+
+type SelectInputField<T extends FieldValues> = BaseField & {
+	kind: 'select';
+	name: Path<T>;
+	label: string;
+	options: SelectFieldOption[];
+	required?: boolean;
+	placeholder?: string;
+	disabled?: boolean;
+	transformValue?: (value: string) => unknown;
+};
+
+type TagsInputField<T extends FieldValues> = BaseField & {
+	kind: 'tags';
+	name: Path<T>;
+	label: string;
+	required?: boolean;
+	disabled?: boolean;
+	maxTags?: number;
+	maxTagLength?: number;
+	placeholder?: string;
+	transformValue?: (value: string[]) => unknown;
+};
+
+type AudioInputField<T extends FieldValues> = BaseField & {
+	kind: 'audio';
+	name: Path<T>;
+	label: string;
+	required?: boolean;
+	accept?: string;
+	disabled?: boolean;
+	labels?: {
+		record?: string;
+		stop?: string;
+		discard?: string;
+		upload?: string;
+		clear?: string;
+		previewRecorded?: string;
+		previewUploaded?: string;
+	};
+};
+
+type DedicationInputField<T extends FieldValues> = BaseField & {
+	kind: 'dedication';
+	name: Path<T>;
+};
+
 type CustomFieldRenderContext<T extends FieldValues> = {
 	control: Control<T>;
 	errors: any;
@@ -66,7 +122,18 @@ type CustomField<T extends FieldValues> = BaseField & {
 	hasError?: boolean;
 };
 
-export type Field<T extends FieldValues> = InputField<T> | FileUploadField<T> | CustomField<T>;
+export type Field<T extends FieldValues> =
+	| InputField<T>
+	| FileUploadField<T>
+	| SelectInputField<T>
+	| TagsInputField<T>
+	| AudioInputField<T>
+	| DedicationInputField<T>
+	| CustomField<T>;
+
+type FieldRenderers<T extends FieldValues> = {
+	dedication?: (context: CustomFieldRenderContext<T> & { field: DedicationInputField<T> }) => ReactNode;
+};
 
 interface DynamicFormProps<T extends FieldValues> {
 	fields: Field<T>[];
@@ -83,6 +150,7 @@ interface DynamicFormProps<T extends FieldValues> {
 	handleSubmitFn: (fn: SubmitHandler<T>) => (e?: React.BaseSyntheticEvent) => Promise<void>;
 	extraContent?: ReactNode;
 	cardProps?: ComponentProps<typeof FormCard>;
+	renderers?: FieldRenderers<T>;
 }
 
 export function DynamicForm<T extends FieldValues>({
@@ -100,7 +168,116 @@ export function DynamicForm<T extends FieldValues>({
 	handleSubmitFn,
 	extraContent,
 	cardProps,
+	renderers,
 }: DynamicFormProps<T>) {
+	const renderField = (field: Field<T>, index: number) => {
+		const delay = field.delay ?? 40 + index * 80;
+		const hasError = field.kind === 'custom' ? field.hasError : !!errors[field.name];
+		const key = field.kind === 'custom' ? field.id : String(field.name);
+
+		let content: ReactNode = null;
+
+		switch (field.kind) {
+			case 'custom':
+				content = field.render({ control, errors, setError, clearErrors, isValid, loading });
+				break;
+			case 'file':
+				content = (
+					<FileField
+						control={control}
+						name={field.name}
+						label={field.label}
+						required={field.required}
+						error={errors[field.name]}
+						accept={field.accept}
+						buttonLabel={field.buttonLabel}
+						helpText={field.helpText}
+						preview={field.preview}
+						disabled={field.disabled}
+						validateFile={field.validateFile}
+					/>
+				);
+				break;
+			case 'select':
+				content = (
+					<SelectField
+						control={control}
+						name={field.name}
+						label={field.label}
+						options={field.options}
+						error={errors[field.name]}
+						required={field.required}
+						placeholder={field.placeholder}
+						disabled={field.disabled}
+						transformValue={field.transformValue}
+					/>
+				);
+				break;
+			case 'tags':
+				content = (
+					<TagsField
+						control={control}
+						name={field.name}
+						label={field.label}
+						error={errors[field.name]}
+						required={field.required}
+						disabled={field.disabled}
+						maxTags={field.maxTags}
+						maxTagLength={field.maxTagLength}
+						placeholder={field.placeholder}
+						transformValue={field.transformValue}
+					/>
+				);
+				break;
+			case 'audio':
+				content = (
+					<AudioField
+						control={control}
+						name={field.name}
+						label={field.label}
+						required={field.required}
+						error={errors[field.name]}
+						accept={field.accept}
+						disabled={field.disabled}
+						labels={field.labels}
+					/>
+				);
+				break;
+			case 'dedication':
+				if (!renderers?.dedication) return null;
+				content = renderers.dedication({
+					control,
+					errors,
+					setError,
+					clearErrors,
+					isValid,
+					loading,
+					field,
+				});
+				break;
+			default:
+				content = (
+					<FormField
+						{...field}
+						control={control}
+						error={errors[field.name]}
+						setError={setError}
+						clearErrors={clearErrors}
+						type={field.type || 'text'}
+						as={field.type === 'textarea' ? 'textarea' : 'input'}
+						rows={field.rows ?? 5}
+						disabled={field.disabled}
+					/>
+				);
+		}
+
+		return (
+			<FieldContainer key={key} delay={delay} hasError={hasError}>
+				{content}
+			</FieldContainer>
+		);
+	};
+
 	return (
 		<FormCard as='form' onSubmit={handleSubmitFn(onSubmit)} {...cardProps}>
 			{generalError && (
@@ -115,67 +292,7 @@ export function DynamicForm<T extends FieldValues>({
 				</Text>
 			)}
 
-			{fields.map((field, i) => {
-				const delay = field.delay ?? 40 + i * 80;
-
-				if (field.kind === 'custom') {
-					return (
-						<FieldContainer key={field.id} delay={delay} hasError={field.hasError}>
-							{field.render({
-								control,
-								errors,
-								setError,
-								clearErrors,
-								isValid,
-								loading,
-							})}
-						</FieldContainer>
-					);
-				}
-
-				if (field.kind === 'file') {
-					return (
-						<FieldContainer
-							key={String(field.name)}
-							delay={delay}
-							hasError={!!errors[field.name]}
-						>
-							<FileField
-								control={control}
-								name={field.name}
-								label={field.label}
-								required={field.required}
-								error={errors[field.name]}
-								accept={field.accept}
-								buttonLabel={field.buttonLabel}
-								helpText={field.helpText}
-								preview={field.preview}
-								disabled={field.disabled}
-								validateFile={field.validateFile}
-							/>
-						</FieldContainer>
-					);
-				}
-
-				return (
-					<FieldContainer
-						key={String(field.name)}
-						delay={delay}
-						hasError={!!errors[field.name]}
-					>
-						<FormField
-							{...field}
-							control={control}
-							error={errors[field.name]}
-							setError={setError}
-							clearErrors={clearErrors}
-							type={field.type || 'text'}
-							as={field.type === 'textarea' ? 'textarea' : 'input'}
-							rows={5}
-						/>
-					</FieldContainer>
-				);
-			})}
+			{fields.map(renderField)}
 
 			{extraContent}
 

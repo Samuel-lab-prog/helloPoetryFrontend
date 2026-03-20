@@ -35,12 +35,12 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 
 			<VStack align='start'>
 				<Text fontStyle='italic' textStyle='small'>
-					Criado em {formatDate(createdAt)}
+					Created on {formatDate(createdAt)}
 				</Text>
 
 				{updatedAt !== createdAt && (
 					<Text fontSize={['xs', 'sm']} fontStyle='italic'>
-						Última atualização em {formatDate(updatedAt)}
+						Last updated on {formatDate(updatedAt)}
 					</Text>
 				)}
 			</VStack>

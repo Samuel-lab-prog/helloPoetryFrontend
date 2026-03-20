@@ -6,7 +6,7 @@ export function formatDate(
 	const parsedDate = typeof date === 'string' ? new Date(date) : date;
 
 	if (Number.isNaN(parsedDate.getTime())) {
-		return 'Data inválida';
+		return 'Invalid date';
 	}
 
 	return parsedDate.toLocaleString(locale, {
@@ -23,7 +23,7 @@ export function formatRelativeTime(input?: string | Date) {
 	if (Number.isNaN(date.getTime())) return '';
 
 	const diffMs = Date.now() - date.getTime();
-	if (diffMs < 0) return 'agora';
+	if (diffMs < 0) return 'now';
 
 	const minute = 60 * 1000;
 	const hour = 60 * minute;
@@ -31,10 +31,10 @@ export function formatRelativeTime(input?: string | Date) {
 	const month = 30 * day;
 	const year = 365 * day;
 
-	if (diffMs < minute) return 'agora';
-	if (diffMs < hour) return `${Math.floor(diffMs / minute)}m atrás`;
-	if (diffMs < day) return `${Math.floor(diffMs / hour)}h atrás`;
-	if (diffMs < month) return `${Math.floor(diffMs / day)}d atrás`;
-	if (diffMs < year) return `${Math.floor(diffMs / month)}mo atrás`;
-	return `${Math.floor(diffMs / year)}a atrás`;
+	if (diffMs < minute) return 'now';
+	if (diffMs < hour) return `${Math.floor(diffMs / minute)}m ago`;
+	if (diffMs < day) return `${Math.floor(diffMs / hour)}h ago`;
+	if (diffMs < month) return `${Math.floor(diffMs / day)}d ago`;
+	if (diffMs < year) return `${Math.floor(diffMs / month)}mo ago`;
+	return `${Math.floor(diffMs / year)}a ago`;
 }

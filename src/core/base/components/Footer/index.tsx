@@ -55,10 +55,10 @@ export function Footer({ links }: FooterProps) {
 					gap={2}
 				>
 					<Text textStyle='smaller' color='pink.200'>
-						© {new Date().getFullYear()} Olapoesia. Todos os direitos reservados.
+						© {new Date().getFullYear()} HelloPoetry.
 					</Text>
 					<Text textStyle='smaller' color='pink.200'>
-						Feito para leitores e autores.
+						Published for readers and authors.
 					</Text>
 				</Flex>
 			</Box>

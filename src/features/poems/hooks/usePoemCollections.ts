@@ -74,13 +74,13 @@ export function usePoemCollections(enabled = true) {
 			addCollectionItemMutation.error ||
 			removeCollectionItemMutation.error) as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 401) return 'Faça login para gerenciar coleções.';
-		if (error.statusCode === 403) return 'Você não tem permissão para alterar esta coleção.';
-		if (error.statusCode === 404) return 'Coleção ou poema não encontrado.';
+		if (error.statusCode === 401) return 'Sign in to manage collections.';
+		if (error.statusCode === 403) return 'You do not have permission to change this collection.';
+		if (error.statusCode === 404) return 'Collection or poem not found.';
 		if (error.statusCode === 409) {
-			return 'Já existe uma coleção com esse nome ou o poema já foi adicionado.';
+			return 'A collection with this name already exists or the poem was already added.';
 		}
-		return 'Erro ao gerenciar coleções.';
+		return 'Error managing collections.';
 	}
 
 	return {

@@ -29,17 +29,17 @@ export function AdminPage() {
 		<Flex as='main' layerStyle='main' direction='column' gap={8}>
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
 				<Heading as='h1' textStyle='h2' mb={6}>
-					Painel Administrativo
+					Admin Panel
 				</Heading>
 				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
 					<Button variant='solidPink' onClick={() => changeForm('create')}>
-						Criar Poema
+						Create Poem
 					</Button>
 					<Button variant='solidPink' onClick={() => changeForm('update')}>
-						Atualizar Poema
+						Update Poem
 					</Button>
 					<Button variant='solidPink' onClick={() => changeForm('delete')}>
-						Deletar Poema
+						Delete Poem
 					</Button>
 				</Flex>
 			</Flex>
@@ -48,7 +48,7 @@ export function AdminPage() {
 					{activeForm === 'create' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Criar Poema
+								Create Poem
 							</Heading>
 							<CreatePoemForm />
 						</>
@@ -57,7 +57,7 @@ export function AdminPage() {
 					{activeForm === 'update' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Atualizar Poema
+								Update Poem
 							</Heading>
 							<UpdatePoemForm />
 						</>
@@ -66,7 +66,7 @@ export function AdminPage() {
 					{activeForm === 'delete' && (
 						<>
 							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Deletar Poema
+								Delete Poem
 							</Heading>
 							<DeletePoemForm />
 						</>

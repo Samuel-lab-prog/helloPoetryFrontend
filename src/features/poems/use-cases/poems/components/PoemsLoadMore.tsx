@@ -15,11 +15,11 @@ export function PoemsLoadMore({ hasNextPage, isFetchingNextPage, onLoadMore }: P
 					disabled={!hasNextPage}
 					loading={isFetchingNextPage}
 					mt={8}
-					loadingText='Carregando...'
+					loadingText='Loading...'
 					alignSelf='center'
 					variant='solidPink'
 				>
-					{isFetchingNextPage ? 'Carregando...' : 'Carregar mais'}
+					{isFetchingNextPage ? 'Loading...' : 'Load more'}
 				</Button>
 			)}
 		</Flex>

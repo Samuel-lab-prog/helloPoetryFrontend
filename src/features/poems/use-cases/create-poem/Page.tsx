@@ -5,9 +5,9 @@ function PageHeader() {
 	return (
 		<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 			<Heading as='h1' textStyle='h1' color='accent'>
-				Criar Poema
+				Create Poem
 			</Heading>
-			<Text color='pink.100'>Preencha os campos para publicar um novo poema.</Text>
+			<Text color='pink.100'>Fill in the fields to publish a new poem.</Text>
 		</Flex>
 	);
 }

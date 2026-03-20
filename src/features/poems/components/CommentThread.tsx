@@ -54,7 +54,7 @@ export const CommentThread = memo(function CommentThread({
 
 	async function handleToggleReplies() {
 		if (!isAuthenticated) {
-			setReplyError('Faca login para responder.');
+			setReplyError('Sign in to reply.');
 			return;
 		}
 		if (activeReplyFor === comment.id) {
@@ -72,7 +72,7 @@ export const CommentThread = memo(function CommentThread({
 				const fetched = await fetchReplies(comment.id);
 				setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
 			} catch {
-				setReplyError('Erro ao carregar respostas.');
+				setReplyError('Error loading replies.');
 			}
 		}
 	}
@@ -80,12 +80,12 @@ export const CommentThread = memo(function CommentThread({
 	async function handleCreateReply() {
 		if (!replyInput.trim()) return;
 		if (!isAuthenticated) {
-			setReplyError('Faca login para responder.');
+			setReplyError('Sign in to reply.');
 			return;
 		}
 		const forbiddenWordsFound = findForbiddenWords(replyInput);
 		if (forbiddenWordsFound.length > 0) {
-			setReplyError(`Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`);
+			setReplyError(`Remove forbidden words: ${forbiddenWordsFound.join(', ')}`);
 			return;
 		}
 
@@ -96,7 +96,7 @@ export const CommentThread = memo(function CommentThread({
 			const fetched = await fetchReplies(comment.id, { force: true });
 			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
 		} catch {
-			setReplyError('Erro ao enviar resposta.');
+			setReplyError('Error sending reply.');
 		}
 	}
 
@@ -143,8 +143,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label='Excluir comentário'
-						title='Excluir comentário'
+						aria-label='Delete comment'
+						title='Delete comment'
 						loading={isDeletingComment}
 						onClick={handleDelete}
 					>
@@ -159,8 +159,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
-						title={activeReplyFor === comment.id ? 'Fechar resposta' : 'Responder comentário'}
+						aria-label={activeReplyFor === comment.id ? 'Close reply' : 'Reply to comment'}
+						title={activeReplyFor === comment.id ? 'Close reply' : 'Reply to comment'}
 						disabled={!isAuthenticated}
 						onClick={handleToggleReplies}
 					>
@@ -170,8 +170,8 @@ export const CommentThread = memo(function CommentThread({
 						size='xs'
 						variant='solidPink'
 						colorPalette='gray'
-						aria-label={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
-						title={comment.likedByCurrentUser ? 'Descurtir comentário' : 'Curtir comentário'}
+						aria-label={comment.likedByCurrentUser ? 'Unlike comment' : 'Like comment'}
+						title={comment.likedByCurrentUser ? 'Unlike comment' : 'Like comment'}
 						disabled={!isAuthenticated}
 						loading={isUpdatingCommentLike}
 						onClick={() =>
@@ -189,15 +189,15 @@ export const CommentThread = memo(function CommentThread({
 				{hasReplies && (
 					<Flex align='center' gap={2}>
 						<Text textStyle='smaller' color='pink.200'>
-							{comment.aggregateChildrenCount} resposta(s)
+							{comment.aggregateChildrenCount} repl{comment.aggregateChildrenCount === 1 ? 'y' : 'ies'}
 						</Text>
 						{!hasLoadedReplies && (
 							<IconButton
 								size='xs'
 								variant='solidPink'
 								colorPalette='gray'
-								aria-label='Ver respostas'
-								title='Ver respostas'
+								aria-label='View replies'
+								title='View replies'
 								onClick={handleToggleReplies}
 							>
 								{activeReplyFor === comment.id ? <ChevronUp /> : <ChevronDown />}
@@ -239,7 +239,7 @@ export const CommentThread = memo(function CommentThread({
 						<Textarea
 							value={replyInput}
 							onChange={(e) => setReplyInput(e.target.value)}
-							placeholder='Responder comentário'
+							placeholder='Reply to comment'
 							rows={3}
 							maxLength={300}
 							disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
@@ -248,8 +248,8 @@ export const CommentThread = memo(function CommentThread({
 							<IconButton
 								size='sm'
 								variant='solidPink'
-								aria-label='Enviar resposta'
-								title='Enviar resposta'
+								aria-label='Send reply'
+								title='Send reply'
 								disabled={
 									!isAuthenticated || !replyInput.trim() || !poemIsCommentable || isCreatingComment
 								}

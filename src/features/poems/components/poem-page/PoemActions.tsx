@@ -31,7 +31,7 @@ export const PoemActions = memo(function PoemActions({
 			align={{ base: 'stretch', md: 'center' }}
 		>
 			<Button
-				aria-label={likedPoem ? 'Descurtir poema' : 'Curtir poema'}
+				aria-label={likedPoem ? 'Unlike poem' : 'Like poem'}
 				size='sm'
 				variant='solidPink'
 				colorPalette='gray'
@@ -42,10 +42,10 @@ export const PoemActions = memo(function PoemActions({
 				}}
 			>
 				{likedPoem ? <HeartOff size={16} /> : <Heart size={16} />}
-				{likedPoem ? 'Descurtir' : 'Curtir'}
+				{likedPoem ? 'Unlike' : 'Like'}
 			</Button>
 			<Button
-				aria-label={isSaved ? 'Remover dos salvos' : 'Salvar poema'}
+				aria-label={isSaved ? 'Remove from saved' : 'Save poem'}
 				size='sm'
 				variant='solidPink'
 				w={{ base: 'full', md: 'auto' }}
@@ -55,7 +55,7 @@ export const PoemActions = memo(function PoemActions({
 				}}
 			>
 				{isSaved ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
-				{isSaved ? 'Salvo' : 'Salvar'}
+				{isSaved ? 'Saved' : 'Save'}
 			</Button>
 		</Flex>
 	);

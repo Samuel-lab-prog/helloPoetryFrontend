@@ -22,7 +22,7 @@ export function useDeletePoemForm() {
 
 		try {
 			await mutateAsync(data.id);
-			alert('Poema deletado com sucesso!');
+			alert('Poem deleted successfully!');
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			form.reset();
 		} catch (err) {

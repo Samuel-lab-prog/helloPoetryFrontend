@@ -30,7 +30,7 @@ export function DeletePoemForm() {
 				w='full'
 				mt={4}
 			>
-				Deletar Poema
+				Delete Poem
 			</Button>
 		</Flex>
 	);

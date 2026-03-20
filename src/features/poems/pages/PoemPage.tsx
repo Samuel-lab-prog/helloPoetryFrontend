@@ -114,8 +114,8 @@ export function PoemPage() {
 					if (!isMounted) return;
 					toaster.create({
 						type: 'error',
-						title: 'Erro ao carregar respostas',
-						description: 'Nao foi possivel buscar algumas respostas.',
+						title: 'Error loading replies',
+						description: 'Could not fetch some replies.',
 						closable: true,
 					});
 				})
@@ -135,7 +135,7 @@ export function PoemPage() {
 		shownErrorsRef.current[key] = message;
 		toaster.create({
 			type: 'error',
-			title: 'Operacao falhou',
+			title: 'Operation failed',
 			description: message,
 			closable: true,
 		});
@@ -166,7 +166,7 @@ export function PoemPage() {
 		if (!content) return;
 		const forbiddenWordsFound = findForbiddenWords(content);
 		if (forbiddenWordsFound.length > 0) {
-			setCommentInputError(`Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`);
+			setCommentInputError(`Remove forbidden words: ${forbiddenWordsFound.join(', ')}`);
 			return;
 		}
 
@@ -176,11 +176,11 @@ export function PoemPage() {
 			setCommentInputError('');
 			toaster.create({
 				type: 'success',
-				title: 'Comentario publicado',
+				title: 'Comment published',
 				closable: true,
 			});
 		} catch {
-			// Erro tratado por createCommentError + toast consolidado.
+			// Error handled by createCommentError + consolidated toast.
 		}
 	}, [commentInput, createComment]);
 
@@ -207,7 +207,7 @@ export function PoemPage() {
 				await unlikePoem();
 				toaster.create({
 					type: 'success',
-					title: 'Curtida removida',
+					title: 'Like removed',
 					closable: true,
 				});
 				return;
@@ -216,13 +216,13 @@ export function PoemPage() {
 			await likePoem();
 			toaster.create({
 				type: 'success',
-				title: 'Poema curtido',
+				title: 'Poem liked',
 				closable: true,
 			});
 		} catch {
 			setLikedPoem(previousLiked);
 			setLikesCount(previousLikesCount);
-			// Erro tratado por likeError + toast consolidado.
+			// Error handled by likeError + consolidated toast.
 		}
 	}, [isUpdatingLike, likedPoem, likesCount, likePoem, unlikePoem]);
 
@@ -232,7 +232,7 @@ export function PoemPage() {
 				await unsavePoem(poemId);
 				toaster.create({
 					type: 'success',
-					title: 'Poema removido dos salvos',
+					title: 'Poem removed from saved',
 					closable: true,
 				});
 				return;
@@ -241,11 +241,11 @@ export function PoemPage() {
 			await savePoem(poemId);
 			toaster.create({
 				type: 'success',
-				title: 'Poema salvo com sucesso',
+				title: 'Poem saved successfully',
 				closable: true,
 			});
 		} catch {
-			// Erro tratado por saveError + toast consolidado.
+			// Error handled by saveError + consolidated toast.
 		}
 	}, [isSaved, poemId, savePoem, unsavePoem]);
 
@@ -253,7 +253,7 @@ export function PoemPage() {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>ID de poema invalido.</Box>
+					<Box textStyle='body'>Invalid poem ID.</Box>
 				</Box>
 			</Flex>
 		);
@@ -266,11 +266,11 @@ export function PoemPage() {
 					isLoading={isLoading}
 					isError={!!isError}
 					isEmpty={!poem}
-					emptyElement={<Box textStyle='body'>Poema nao encontrado</Box>}
+					emptyElement={<Box textStyle='body'>Poem not found</Box>}
 					errorElement={
-						<Box textStyle='body'>Erro ao carregar o poema. Tente novamente mais tarde</Box>
+						<Box textStyle='body'>Error loading the poem. Please try again later.</Box>
 					}
-					loadingElement={<Box textStyle='body'>Carregando poema...</Box>}
+					loadingElement={<Box textStyle='body'>Loading poem...</Box>}
 				>
 					{poem && poemHeaderPoem && (
 						<>
@@ -287,7 +287,7 @@ export function PoemPage() {
 								{immersiveUrl && (
 									<Flex justify='flex-end' mb={4}>
 										<Button asChild size='sm' variant='outlinePurple'>
-											<NavLink to={immersiveUrl}>Modo imersivo</NavLink>
+											<NavLink to={immersiveUrl}>Immersive mode</NavLink>
 										</Button>
 									</Flex>
 								)}
@@ -393,7 +393,7 @@ export function PoemPage() {
 						}}
 					>
 						<NavLink to='/poems'>
-							<Icon as={ArrowLeftIcon} /> Voltar
+							<Icon as={ArrowLeftIcon} /> Back
 						</NavLink>
 					</Link>
 				</Box>

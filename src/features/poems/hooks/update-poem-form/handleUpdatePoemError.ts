@@ -12,24 +12,24 @@ export function handleUpdatePoemError(
 	const message = normalizeErrorMessage(error?.message);
 
 	if (status === 401) {
-		setGeneralError('Você não tem permissao para atualizar poemas.');
+		setGeneralError('You do not have permission to update poems.');
 		return;
 	}
 
 	if (status === 409 && (message.includes('slug') || message.includes('title'))) {
 		setError('title', {
 			type: 'manual',
-			message: 'Ja existe um poema com esse novo título.',
+			message: 'A poem already exists with this new title.',
 		});
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Invalid data. Check the fields and try again.');
 		return;
 	}
 
-	setGeneralError('Erro ao atualizar poema. Tente novamente mais tarde.');
+	setGeneralError('Error updating poem. Please try again later.');
 }
 
 function normalizeErrorMessage(message: unknown) {

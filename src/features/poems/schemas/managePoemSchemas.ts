@@ -14,82 +14,86 @@ import {
 const createOrUpdatePoemSchemaBase = z.object({
 	title: z
 		.string()
-		.min(POEM_TITLE_MIN_LENGTH, `O t�tulo deve ter pelo menos ${POEM_TITLE_MIN_LENGTH} caracteres`)
-		.max(POEM_TITLE_MAX_LENGTH, `O t�tulo deve ter no m�ximo ${POEM_TITLE_MAX_LENGTH} caracteres`),
+		.min(POEM_TITLE_MIN_LENGTH, `Title must be at least ${POEM_TITLE_MIN_LENGTH} characters`)
+		.max(POEM_TITLE_MAX_LENGTH, `Title must be at most ${POEM_TITLE_MAX_LENGTH} characters`),
 	excerpt: z
 		.string()
 		.min(
 			POEM_EXCERPT_MIN_LENGTH,
-			`O resumo deve ter pelo menos ${POEM_EXCERPT_MIN_LENGTH} caracteres`,
+			`Summary must be at least ${POEM_EXCERPT_MIN_LENGTH} characters`,
 		)
 		.max(
 			POEM_EXCERPT_MAX_LENGTH,
-			`O resumo deve ter no m�ximo ${POEM_EXCERPT_MAX_LENGTH} caracteres`,
+			`Summary must be at most ${POEM_EXCERPT_MAX_LENGTH} characters`,
 		),
 	content: z
 		.string()
 		.min(
 			POEM_CONTENT_MIN_LENGTH,
-			`O conte�do deve ter pelo menos ${POEM_CONTENT_MIN_LENGTH} caracteres`,
+			`Content must be at least ${POEM_CONTENT_MIN_LENGTH} characters`,
 		)
 		.max(
 			POEM_CONTENT_MAX_LENGTH,
-			`O conte�do deve ter no m�ximo ${POEM_CONTENT_MAX_LENGTH} caracteres`,
+			`Content must be at most ${POEM_CONTENT_MAX_LENGTH} characters`,
 		),
 	tags: z
 		.array(
 			z
 				.string()
-				.min(1, 'Tag inv�lida')
-				.max(POEM_TAG_MAX_LENGTH, `Tag deve ter no m�ximo ${POEM_TAG_MAX_LENGTH} caracteres`),
+				.min(1, 'Invalid tag')
+				.max(POEM_TAG_MAX_LENGTH, `Tag must be at most ${POEM_TAG_MAX_LENGTH} characters`),
 		)
-		.max(POEM_TAGS_MAX_AMOUNT, `Voc� pode adicionar no m�ximo ${POEM_TAGS_MAX_AMOUNT} tags`)
+		.max(POEM_TAGS_MAX_AMOUNT, `You can add at most ${POEM_TAGS_MAX_AMOUNT} tags`)
 		.optional(),
 	status: z.enum(['draft', 'published']),
 	visibility: z.enum(['public', 'friends', 'private', 'unlisted']),
 	isCommentable: z.boolean(),
 	toUserIds: z
-		.array(z.number().int().positive('ID de usu�rio inv�lido'))
-		.max(POEM_TAGS_MAX_AMOUNT, `Voc� pode dedicar para no m�ximo ${POEM_TAGS_MAX_AMOUNT} usu�rios`)
+		.array(z.number().int().positive('Invalid user ID'))
+		.max(POEM_TAGS_MAX_AMOUNT, `You can dedicate to at most ${POEM_TAGS_MAX_AMOUNT} users`)
 		.optional(),
 });
 
-export const createPoemSchema = createOrUpdatePoemSchemaBase.superRefine((data, ctx) => {
-	const fields: Array<{ key: 'title' | 'excerpt' | 'content'; value: string }> = [
-		{ key: 'title', value: data.title },
-		{ key: 'excerpt', value: data.excerpt },
-		{ key: 'content', value: data.content },
-	];
+export const createPoemSchema = createOrUpdatePoemSchemaBase
+	.extend({
+		audio: z.any().optional().nullable(),
+	})
+	.superRefine((data, ctx) => {
+		const fields: Array<{ key: 'title' | 'excerpt' | 'content'; value: string }> = [
+			{ key: 'title', value: data.title },
+			{ key: 'excerpt', value: data.excerpt },
+			{ key: 'content', value: data.content },
+		];
 
-	for (const field of fields) {
-		const forbiddenWordsFound = findForbiddenWords(field.value);
-		if (forbiddenWordsFound.length === 0) continue;
+		for (const field of fields) {
+			const forbiddenWordsFound = findForbiddenWords(field.value);
+			if (forbiddenWordsFound.length === 0) continue;
 
-		ctx.addIssue({
-			code: 'custom',
-			path: [field.key],
-			message: `Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
-		});
-	}
+			ctx.addIssue({
+				code: 'custom',
+				path: [field.key],
+				message: `Remove forbidden words: ${forbiddenWordsFound.join(', ')}`,
+			});
+		}
 
-	for (const tag of data.tags ?? []) {
-		const forbiddenWordsFound = findForbiddenWords(tag);
-		if (forbiddenWordsFound.length === 0) continue;
+		for (const tag of data.tags ?? []) {
+			const forbiddenWordsFound = findForbiddenWords(tag);
+			if (forbiddenWordsFound.length === 0) continue;
 
-		ctx.addIssue({
-			code: 'custom',
-			path: ['tags'],
-			message: `Tag cont�m palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
-		});
-	}
-});
+			ctx.addIssue({
+				code: 'custom',
+				path: ['tags'],
+				message: `Tag contains forbidden words: ${forbiddenWordsFound.join(', ')}`,
+			});
+		}
+	});
 
 export const deletePoemSchema = z.object({
-	id: z.number('ID inv�lido').min(1, 'ID deve ser um n�mero positivo'),
+	id: z.number('Invalid ID').min(1, 'ID must be a positive number'),
 });
 
 export const updatePoemSchema = createOrUpdatePoemSchemaBase.extend({
-	id: z.number('ID inv�lido').min(1, 'ID deve ser um n�mero positivo'),
+	id: z.number('Invalid ID').min(1, 'ID must be a positive number'),
 });
 
 export type CreatePoemType = z.infer<typeof createPoemSchema>;

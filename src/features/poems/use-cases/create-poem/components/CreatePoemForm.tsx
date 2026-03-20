@@ -1,22 +1,12 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-lines-per-function */
-import { Text, Heading, Box, Flex, Button } from '@chakra-ui/react';
+import { Text, Heading, Box } from '@chakra-ui/react';
 
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview, UserDedicationCombobox } from '@features/users';
-import {
-	DynamicForm,
-	FormField,
-	SelectField,
-	TagsField,
-	MarkdownRenderer,
-	toaster,
-	type Field,
-} from '@root/core/base';
+import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@root/core/base';
 import { PoemHeader } from '@features/poems';
 import { uploadPoemAudioFile } from '../../../utils/poemAudioUpload';
 import { api } from '@root/core/api';
-import { useCallback, useRef, useState, type ChangeEvent } from 'react';
+import { useState } from 'react';
 import type { CreatePoemType } from '../../../schemas/managePoemSchemas';
 import {
 	POEM_CONTENT_MAX_LENGTH,
@@ -30,137 +20,7 @@ import {
 } from './constants';
 
 export function CreatePoemForm() {
-	const [isRecording, setIsRecording] = useState(false);
-	const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-	const [recordedUrl, setRecordedUrl] = useState<string | null>(null);
-	const [audioError, setAudioError] = useState('');
-	const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null);
-	const [selectedAudioUrl, setSelectedAudioUrl] = useState<string | null>(null);
 	const [isUploadingAudio, setIsUploadingAudio] = useState(false);
-
-	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-	const mediaStreamRef = useRef<MediaStream | null>(null);
-	const audioChunksRef = useRef<Blob[]>([]);
-	const audioFileInputRef = useRef<HTMLInputElement | null>(null);
-
-	const stopMediaStream = useCallback(() => {
-		mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
-		mediaStreamRef.current = null;
-	}, []);
-
-	const pickAudioMimeType = useCallback(() => {
-		if (typeof MediaRecorder === 'undefined') return '';
-		const candidates = [
-			'audio/webm;codecs=opus',
-			'audio/webm',
-			'audio/ogg;codecs=opus',
-			'audio/ogg',
-			'audio/mpeg',
-		];
-		return candidates.find((type) => MediaRecorder.isTypeSupported(type)) ?? '';
-	}, []);
-
-	const handleStartRecording = useCallback(async () => {
-		setAudioError('');
-
-		if (isRecording) return;
-		setRecordedBlob(null);
-		setRecordedUrl((prev) => {
-			if (prev) URL.revokeObjectURL(prev);
-			return null;
-		});
-		if (!navigator.mediaDevices?.getUserMedia) {
-			setAudioError('Gravacao de audio nao suportada neste navegador.');
-			return;
-		}
-
-		try {
-			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-			mediaStreamRef.current = stream;
-
-			const mimeType = pickAudioMimeType();
-			const recorder = mimeType
-				? new MediaRecorder(stream, { mimeType })
-				: new MediaRecorder(stream);
-
-			audioChunksRef.current = [];
-			recorder.ondataavailable = (event) => {
-				if (event.data.size > 0) audioChunksRef.current.push(event.data);
-			};
-			recorder.onstop = () => {
-				const blob = new Blob(audioChunksRef.current, {
-					type: recorder.mimeType || mimeType || 'audio/webm',
-				});
-				setRecordedBlob(blob);
-				setRecordedUrl((prev) => {
-					if (prev) URL.revokeObjectURL(prev);
-					return URL.createObjectURL(blob);
-				});
-				stopMediaStream();
-			};
-
-			recorder.start();
-			mediaRecorderRef.current = recorder;
-			setIsRecording(true);
-		} catch {
-			stopMediaStream();
-			setAudioError('Nao foi possivel acessar o microfone.');
-		}
-	}, [isRecording, pickAudioMimeType, stopMediaStream]);
-
-	const handleStopRecording = useCallback(() => {
-		if (!isRecording) return;
-		mediaRecorderRef.current?.stop();
-		setIsRecording(false);
-	}, [isRecording]);
-
-	const handleDiscardRecording = useCallback(() => {
-		if (isRecording) {
-			mediaRecorderRef.current?.stop();
-			setIsRecording(false);
-		}
-
-		setRecordedBlob(null);
-		setRecordedUrl((prev) => {
-			if (prev) URL.revokeObjectURL(prev);
-			return null;
-		});
-	}, [isRecording]);
-
-	const handleSelectAudioFile = useCallback((file: File | null) => {
-		setSelectedAudioFile(file);
-		if (file) {
-			setRecordedBlob(null);
-			setRecordedUrl((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return null;
-			});
-			setSelectedAudioUrl((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return URL.createObjectURL(file);
-			});
-		} else {
-			setSelectedAudioUrl((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return null;
-			});
-		}
-	}, []);
-
-	const handleAudioFileChange = useCallback(
-		(event: ChangeEvent<HTMLInputElement>) => {
-			const file = event.target.files?.[0] ?? null;
-			handleSelectAudioFile(file);
-		},
-		[handleSelectAudioFile],
-	);
-
-	const handleClearSelectedFile = useCallback(() => {
-		if (audioFileInputRef.current) {
-			audioFileInputRef.current.value = '';
-		}
-		handleSelectAudioFile(null);
-	}, [handleSelectAudioFile]);
 
 	const {
 		handleSubmit,
@@ -170,21 +30,16 @@ export function CreatePoemForm() {
 		generalError,
 		control,
 		watch,
+		setValue,
+		setError,
+		clearErrors,
 	} = useCreatePoemForm({
-		onCreated: async (createdPoem) => {
-			const fileToUpload =
-				selectedAudioFile ??
-				(recordedBlob
-					? new File(
-							[recordedBlob],
-							`poem-${createdPoem.id}-audio.${(recordedBlob.type || 'audio/webm').split('/')[1] || 'webm'}`,
-							{ type: recordedBlob.type || 'audio/webm' },
-						)
-					: null);
+		onCreated: async (createdPoem, data) => {
+			const fileToUpload = data.audio instanceof File ? data.audio : null;
 
 			if (!fileToUpload) return;
 			setIsUploadingAudio(true);
-			setAudioError('');
+			clearErrors('audio');
 
 			try {
 				const audioUrl = await uploadPoemAudioFile(createdPoem.id, fileToUpload);
@@ -193,17 +48,16 @@ export function CreatePoemForm() {
 					audioUrl,
 				});
 
-				handleDiscardRecording();
-				handleClearSelectedFile();
+				setValue('audio', null);
 
 				toaster.create({
 					type: 'success',
-					title: 'Audio salvo',
+					title: 'Audio saved',
 					closable: true,
 				});
 			} catch (error) {
-				const message = error instanceof Error ? error.message : 'Erro ao enviar audio.';
-				setAudioError(message);
+				const message = error instanceof Error ? error.message : 'Error uploading audio.';
+				setError('audio', { type: 'manual', message });
 			} finally {
 				setIsUploadingAudio(false);
 			}
@@ -211,16 +65,9 @@ export function CreatePoemForm() {
 	});
 	const { users, isLoadingUsers, isUsersError } = useUsersPreview();
 	const preview = watch();
-	const titleLength = preview?.title?.length ?? 0;
-	const excerptLength = preview?.excerpt?.length ?? 0;
-	const contentLength = preview?.content?.length ?? 0;
-
-	const isTitleBelowMinLength = titleLength < POEM_TITLE_MIN_LENGTH;
-	const isExcerptBelowMinLength = excerptLength < POEM_EXCERPT_MIN_LENGTH;
-	const isContentBelowMinLength = contentLength < POEM_CONTENT_MIN_LENGTH;
 
 	const previewPoem = {
-		title: preview?.title || 'T��tulo do poema',
+		title: preview?.title || 'Poem title',
 		excerpt: preview?.excerpt || '',
 		content: preview?.content || '',
 		tags: preview?.tags || [],
@@ -232,266 +79,81 @@ export function CreatePoemForm() {
 
 	const fields: Field<CreatePoemType>[] = [
 		{
-			kind: 'custom',
-			id: 'title',
-			hasError: Boolean(errors.title),
-			render: ({ control }) => (
-				<>
-					<FormField
-						label='T��tulo'
-						required
-						error={errors.title}
-						control={control}
-						name='title'
-						maxLength={POEM_TITLE_MAX_LENGTH}
-					/>
-					<Text
-						textStyle='small'
-						color={isTitleBelowMinLength ? 'error' : 'pink.300'}
-						textAlign='right'
-						mt={1}
-					>
-						{titleLength}/{POEM_TITLE_MAX_LENGTH} caracteres
-					</Text>
-				</>
-			),
+			name: 'title',
+			label: 'Title',
+			required: true,
+			minLength: POEM_TITLE_MIN_LENGTH,
+			maxLength: POEM_TITLE_MAX_LENGTH,
+			showCharacterCount: true,
 		},
 		{
-			kind: 'custom',
-			id: 'excerpt',
-			hasError: Boolean(errors.excerpt),
-			render: ({ control }) => (
-				<>
-					<FormField
-						label='Resumo'
-						as='textarea'
-						rows={5}
-						control={control}
-						name='excerpt'
-						error={errors.excerpt}
-						maxLength={POEM_EXCERPT_MAX_LENGTH}
-					/>
-					<Text
-						textStyle='small'
-						color={isExcerptBelowMinLength ? 'error' : 'pink.300'}
-						textAlign='right'
-						mt={1}
-					>
-						{excerptLength}/{POEM_EXCERPT_MAX_LENGTH} caracteres
-					</Text>
-				</>
-			),
+			name: 'excerpt',
+			label: 'Summary',
+			required: true,
+			type: 'textarea',
+			rows: 5,
+			minLength: POEM_EXCERPT_MIN_LENGTH,
+			maxLength: POEM_EXCERPT_MAX_LENGTH,
+			showCharacterCount: true,
 		},
 		{
-			kind: 'custom',
-			id: 'content',
-			hasError: Boolean(errors.content),
-			render: ({ control }) => (
-				<>
-					<FormField
-						label='Conte�do (Markdown)'
-						required
-						as='textarea'
-						rows={20}
-						control={control}
-						name='content'
-						error={errors.content}
-						maxLength={POEM_CONTENT_MAX_LENGTH}
-					/>
-					<Text
-						textStyle='small'
-						color={isContentBelowMinLength ? 'error' : 'pink.300'}
-						textAlign='right'
-						mt={1}
-					>
-						{contentLength}/{POEM_CONTENT_MAX_LENGTH} caracteres
-					</Text>
-				</>
-			),
+			name: 'content',
+			label: 'Content (Markdown)',
+			required: true,
+			type: 'textarea',
+			rows: 20,
+			minLength: POEM_CONTENT_MIN_LENGTH,
+			maxLength: POEM_CONTENT_MAX_LENGTH,
+			showCharacterCount: true,
 		},
 		{
-			kind: 'custom',
-			id: 'tags',
-			hasError: Boolean(errors.tags),
-			render: ({ control }) => (
-				<TagsField
-					label='Tags'
-					control={control}
-					name='tags'
-					error={errors.tags}
-					disabled={isPending}
-					maxTags={POEM_TAGS_MAX_AMOUNT}
-					maxTagLength={POEM_TAG_MAX_LENGTH}
-					placeholder='Adicione suas tags'
-				/>
-			),
+			kind: 'tags',
+			name: 'tags',
+			label: 'Tags',
+			disabled: isPending,
+			maxTags: POEM_TAGS_MAX_AMOUNT,
+			maxTagLength: POEM_TAG_MAX_LENGTH,
+			placeholder: 'Add your tags',
 		},
 		{
-			kind: 'custom',
-			id: 'status',
-			hasError: Boolean(errors.status),
-			render: ({ control }) => (
-				<SelectField
-					label='Status'
-					name='status'
-					control={control}
-					options={[
-						{ value: 'draft', label: 'Rascunho' },
-						{ value: 'published', label: 'Publicado' },
-					]}
-					error={errors.status}
-				/>
-			),
+			kind: 'select',
+			name: 'status',
+			label: 'Status',
+			options: [
+				{ value: 'draft', label: 'Draft' },
+				{ value: 'published', label: 'Published' },
+			],
 		},
 		{
-			kind: 'custom',
-			id: 'visibility',
-			hasError: Boolean(errors.visibility),
-			render: ({ control }) => (
-				<SelectField
-					label='Visibilidade'
-					name='visibility'
-					control={control}
-					options={[
-						{ value: 'public', label: 'P�blico' },
-						{ value: 'friends', label: 'Amigos' },
-						{ value: 'private', label: 'Privado' },
-						{ value: 'unlisted', label: 'N�o listado' },
-					]}
-					error={errors.visibility}
-				/>
-			),
+			kind: 'select',
+			name: 'visibility',
+			label: 'Visibility',
+			options: [
+				{ value: 'public', label: 'Public' },
+				{ value: 'friends', label: 'Friends' },
+				{ value: 'private', label: 'Private' },
+				{ value: 'unlisted', label: 'Unlisted' },
+			],
 		},
 		{
-			kind: 'custom',
-			id: 'comments',
-			hasError: Boolean(errors.isCommentable),
-			render: ({ control }) => (
-				<SelectField
-					label='Coment�rios'
-					name='isCommentable'
-					control={control}
-					options={[
-						{ value: 'true', label: 'Permitidos' },
-						{ value: 'false', label: 'Desativados' },
-					]}
-					transformValue={(value) => value === 'true'}
-					error={errors.isCommentable}
-				/>
-			),
+			kind: 'select',
+			name: 'isCommentable',
+			label: 'Comments',
+			options: [
+				{ value: 'true', label: 'Allowed' },
+				{ value: 'false', label: 'Disabled' },
+			],
+			transformValue: (value) => value === 'true',
 		},
 		{
-			kind: 'custom',
-			id: 'dedication',
-			hasError: Boolean(errors.toUserIds),
-			render: ({ control }) => (
-				<>
-					<UserDedicationCombobox
-						name='toUserIds'
-						control={control}
-						users={users}
-						error={errors.toUserIds}
-						disabled={isPending || isLoadingUsers}
-						isLoading={isLoadingUsers}
-					/>
-					{isUsersError && (
-						<Text textStyle='small' color='red.400'>
-							Erro ao carregar usu�rios para dedica��o.
-						</Text>
-					)}
-				</>
-			),
+			kind: 'dedication',
+			name: 'toUserIds',
 		},
 		{
-			kind: 'custom',
-			id: 'audio',
-			hasError: Boolean(audioError),
-			render: () => (
-				<Box>
-					<Text textStyle='small' color='pink.200' mb={2}>
-						Audio do poema (opcional)
-					</Text>
-
-					{recordedUrl && (
-						<Box mb={3}>
-							<Text textStyle='smaller' color='pink.200' mb={2}>
-								Preview da gravacao
-							</Text>
-							<audio controls preload='metadata' src={recordedUrl} />
-						</Box>
-					)}
-					{selectedAudioUrl && (
-						<Box mb={3}>
-							<Text textStyle='smaller' color='pink.200' mb={2}>
-								Preview do arquivo
-							</Text>
-							<audio controls preload='metadata' src={selectedAudioUrl} />
-						</Box>
-					)}
-
-					<Flex gap={2} wrap='wrap'>
-						<Button
-							size='sm'
-							variant='solidPink'
-							onClick={handleStartRecording}
-							disabled={isRecording || isUploadingAudio || isPending}
-						>
-							Gravar
-						</Button>
-						<Button
-							size='sm'
-							variant='outlinePurple'
-							onClick={handleStopRecording}
-							disabled={!isRecording || isUploadingAudio || isPending}
-						>
-							Parar
-						</Button>
-						<Button
-							size='sm'
-							variant='ghost'
-							onClick={handleDiscardRecording}
-							disabled={!recordedBlob || isUploadingAudio || isPending}
-						>
-							Descartar
-						</Button>
-						<Button
-							size='sm'
-							variant='surface'
-							onClick={() => audioFileInputRef.current?.click()}
-							disabled={isUploadingAudio || isPending}
-						>
-							Enviar arquivo
-						</Button>
-						<Button
-							size='sm'
-							variant='ghost'
-							onClick={handleClearSelectedFile}
-							disabled={!selectedAudioFile || isUploadingAudio || isPending}
-						>
-							Limpar arquivo
-						</Button>
-					</Flex>
-					<input
-						ref={audioFileInputRef}
-						type='file'
-						accept='audio/*'
-						hidden
-						onChange={handleAudioFileChange}
-					/>
-
-					{selectedAudioFile && (
-						<Text textStyle='smaller' color='pink.200' mt={2}>
-							Arquivo selecionado: {selectedAudioFile.name}
-						</Text>
-					)}
-
-					{audioError && (
-						<Text textStyle='small' color='red.400' mt={2}>
-							{audioError}
-						</Text>
-					)}
-				</Box>
-			),
+			kind: 'audio',
+			name: 'audio',
+			label: 'Poem audio (optional)',
+			disabled: isUploadingAudio || isPending,
 		},
 	];
 
@@ -506,9 +168,28 @@ export function CreatePoemForm() {
 				generalError={generalError}
 				onSubmit={onSubmit}
 				handleSubmitFn={handleSubmit}
-				buttonLabel='Criar Poema'
+				buttonLabel='Create Poem'
 				buttonVariant='surface'
 				cardProps={{ w: 'full', maxW: '4xl', gap: 3 }}
+				renderers={{
+					dedication: ({ control, errors }) => (
+						<>
+							<UserDedicationCombobox
+								name='toUserIds'
+								control={control}
+								users={users}
+								error={errors.toUserIds}
+								disabled={isPending || isLoadingUsers}
+								isLoading={isLoadingUsers}
+							/>
+							{isUsersError && (
+								<Text textStyle='small' color='red.400'>
+									Error loading users for dedication.
+								</Text>
+							)}
+						</>
+					),
+				}}
 			/>
 
 			<Heading as='h2' textStyle='h2' mt={12}>
@@ -518,7 +199,7 @@ export function CreatePoemForm() {
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
 					<Box textStyle='body' color='gray.500'>
-						Preencha o formul�rio para ver o preview do poema
+						Fill out the form to see the poem preview
 					</Box>
 				) : (
 					<>

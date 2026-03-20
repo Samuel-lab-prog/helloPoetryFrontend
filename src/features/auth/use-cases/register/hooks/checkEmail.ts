@@ -5,5 +5,5 @@ export async function checkEmailAvailability(email: string): Promise<string | nu
 
 	const inUse = await api.users.checkEmail.fetch(String(email));
 
-	return inUse ? 'E-mail já está em uso' : null;
+	return inUse ? 'Email is already in use' : null;
 }

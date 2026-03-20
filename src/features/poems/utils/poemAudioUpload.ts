@@ -43,11 +43,11 @@ export function getPoemAudioFileError(file: File): string | null {
 	const normalizedType = resolveAudioContentType(file);
 
 	if (!allowedAudioTypes.has(normalizedType)) {
-		return 'Formato de audio invalido. Use MP3, WAV, WEBM, OGG, AAC ou M4A.';
+		return 'Invalid audio format. Use MP3, WAV, WEBM, OGG, AAC, or M4A.';
 	}
 
 	if (file.size > MAX_POEM_AUDIO_SIZE_BYTES) {
-		return `O audio deve ter no maximo ${MAX_POEM_AUDIO_SIZE_MB}MB.`;
+		return `Audio must be at most ${MAX_POEM_AUDIO_SIZE_MB}MB.`;
 	}
 
 	return null;
@@ -81,7 +81,7 @@ export async function uploadPoemAudioFile(poemId: number, file: File): Promise<s
 	});
 
 	if (!response.ok) {
-		throw new Error('Erro ao enviar audio.');
+		throw new Error('Error uploading audio.');
 	}
 
 	return fileUrl;

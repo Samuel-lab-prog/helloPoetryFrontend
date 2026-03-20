@@ -18,40 +18,40 @@ export const registerSchema = z
 			.trim()
 			.min(
 				REGISTER_NICKNAME_MIN_LENGTH,
-				`Apelido deve ter pelo menos ${REGISTER_NICKNAME_MIN_LENGTH} caracteres`,
+				`Nickname must be at least ${REGISTER_NICKNAME_MIN_LENGTH} characters`,
 			)
 			.max(
 				REGISTER_NICKNAME_MAX_LENGTH,
-				`Apelido deve ter no máximo ${REGISTER_NICKNAME_MAX_LENGTH} caracteres`,
+				`Nickname must be at most ${REGISTER_NICKNAME_MAX_LENGTH} characters`,
 			)
-			.regex(/^[a-zA-Z0-9_]+$/, 'Apelido pode conter apenas letras, números e underscores'),
+			.regex(/^[a-zA-Z0-9_]+$/, 'Nickname can contain only letters, numbers, and underscores'),
 		name: z
 			.string()
 			.trim()
 			.min(
 				REGISTER_NAME_MIN_LENGTH,
-				`Nome deve ter pelo menos ${REGISTER_NAME_MIN_LENGTH} caracteres`,
+				`Name must be at least ${REGISTER_NAME_MIN_LENGTH} characters`,
 			)
 			.max(
 				REGISTER_NAME_MAX_LENGTH,
-				`Nome deve ter no máximo ${REGISTER_NAME_MAX_LENGTH} caracteres`,
+				`Name must be at most ${REGISTER_NAME_MAX_LENGTH} characters`,
 			),
-		email: z.email('E-mail inválido').trim(),
+		email: z.email('Invalid email').trim(),
 		password: z
 			.string()
 			.min(
 				REGISTER_PASSWORD_MIN_LENGTH,
-				`A senha deve ter pelo menos ${REGISTER_PASSWORD_MIN_LENGTH} caracteres`,
+				`Password must be at least ${REGISTER_PASSWORD_MIN_LENGTH} characters`,
 			)
 			.max(
 				REGISTER_PASSWORD_MAX_LENGTH,
-				`A senha deve ter no máximo ${REGISTER_PASSWORD_MAX_LENGTH} caracteres`,
+				`Password must be at most ${REGISTER_PASSWORD_MAX_LENGTH} characters`,
 			),
 		bio: z
 			.string()
 			.trim()
-			.min(REGISTER_BIO_MIN_LENGTH, `Bio deve ter pelo menos ${REGISTER_BIO_MIN_LENGTH} caracteres`)
-			.max(REGISTER_BIO_MAX_LENGTH, `Bio deve ter no máximo ${REGISTER_BIO_MAX_LENGTH} caracteres`),
+			.min(REGISTER_BIO_MIN_LENGTH, `Bio must be at least ${REGISTER_BIO_MIN_LENGTH} characters`)
+			.max(REGISTER_BIO_MAX_LENGTH, `Bio must be at most ${REGISTER_BIO_MAX_LENGTH} characters`),
 		avatar: z.any().optional().nullable(),
 	})
 	.superRefine((data, ctx) => {
@@ -68,7 +68,7 @@ export const registerSchema = z
 			ctx.addIssue({
 				code: 'custom',
 				path: [field.key],
-				message: `Remova palavras proibidas: ${forbiddenWordsFound.join(', ')}`,
+				message: `Remove forbidden words: ${forbiddenWordsFound.join(', ')}`,
 			});
 		}
 	});

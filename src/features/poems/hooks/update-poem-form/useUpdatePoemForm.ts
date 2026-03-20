@@ -24,7 +24,7 @@ export function useUpdatePoemForm() {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			queryClient.invalidateQueries({ queryKey: ['poem', data.id] });
-			alert('Poema atualizado com sucesso!');
+			alert('Poem updated successfully!');
 		} catch (err) {
 			handleUpdatePoemError(err, form.setError, setGeneralError);
 		}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm, type UseFormSetError} from 'react-hook-form';
+import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPoemSchema, type CreatePoemType } from '../../../schemas/managePoemSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,8 +7,10 @@ import { api } from '@root/core/api';
 import type { CreatePoemResult } from '@root/core/api/poems/types';
 import type { AppErrorType } from '@root/core/base';
 
+type CreatePoemPayload = Omit<CreatePoemType, 'audio'>;
+
 type UseCreatePoemFormOptions = {
-	onCreated?: (poem: CreatePoemResult) => Promise<void> | void;
+	onCreated?: (poem: CreatePoemResult, data: CreatePoemType) => Promise<void> | void;
 };
 
 export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
@@ -25,6 +27,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 			isCommentable: true,
 			tags: [],
 			toUserIds: [],
+			audio: null,
 		},
 	});
 
@@ -34,13 +37,15 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 		setGeneralError('');
 
 		try {
-			const createdPoem = await mutateAsync(data);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { audio, ...rest } = data;
+			const createdPoem = await mutateAsync(rest as CreatePoemPayload);
 			if (options.onCreated) {
-				await options.onCreated(createdPoem);
+				await options.onCreated(createdPoem, data);
 			}
 			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
 			queryClient.invalidateQueries({ queryKey: ['poems'] });
-			alert('Poema criado com sucesso!');
+			alert('Poem created successfully!');
 		} catch (err) {
 			handleCreatePoemError(err, form.setError, setGeneralError);
 		}
@@ -52,6 +57,9 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 		formState: form.formState,
 		control: form.control,
 		watch: form.watch,
+		setValue: form.setValue,
+		setError: form.setError,
+		clearErrors: form.clearErrors,
 		onSubmit,
 		isPending,
 		generalError,
@@ -60,7 +68,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 
 function useCreatePoem() {
 	return useMutation({
-		mutationFn: (newPoem: CreatePoemType) => api.poems.createPoem.mutate(newPoem),
+		mutationFn: (newPoem: CreatePoemPayload) => api.poems.createPoem.mutate(newPoem),
 	});
 }
 
@@ -74,7 +82,7 @@ export function handleCreatePoemError(
 	const lowerMessage = error?.message?.toLowerCase();
 
 	if (status === 401) {
-		setGeneralError('Você não tem permissão para criar poemas.');
+		setGeneralError('You do not have permission to create poems.');
 		return;
 	}
 
@@ -82,17 +90,17 @@ export function handleCreatePoemError(
 		if (lowerMessage.includes('assign or mention themselves')) {
 			setError('toUserIds', {
 				type: 'manual',
-				message: 'Você não pode dedicar o poema para si mesmo.',
+				message: 'You cannot dedicate the poem to yourself.',
 			});
 			return;
 		}
 
 		if (lowerMessage.includes('author is not active')) {
-			setGeneralError('Seu usuário precisa estar ativo para criar poemas.');
+			setGeneralError('Your user must be active to create poems.');
 			return;
 		}
 
-		setGeneralError('Você não tem permissão para criar este poema.');
+		setGeneralError('You do not have permission to create this poem.');
 		return;
 	}
 
@@ -104,22 +112,22 @@ export function handleCreatePoemError(
 		) {
 			setError('title', {
 				type: 'manual',
-				message: 'Você já tem um poema com este título.',
+				message: 'You already have a poem with this title.',
 			});
 			return;
 		}
 
-		setGeneralError('Conflito ao criar poema. Revise os dados e tente novamente.');
+		setGeneralError('Conflict while creating the poem. Review the data and try again.');
 		return;
 	}
 
 	if (status === 422) {
 		if (mapCreatePoemValidationError(lowerMessage, setError)) return;
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Invalid data. Check the fields and try again.');
 		return;
 	}
 
-	setGeneralError('Erro ao criar poema. Tente novamente mais tarde.');
+	setGeneralError('Error creating the poem. Please try again later.');
 }
 
 function mapCreatePoemValidationError(
@@ -129,39 +137,39 @@ function mapCreatePoemValidationError(
 	if (!lowerMessage) return false;
 
 	if (lowerMessage.includes('title')) {
-		setError('title', { type: 'manual', message: 'Título inválido.' });
+		setError('title', { type: 'manual', message: 'Invalid title.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('excerpt') || lowerMessage.includes('summary')) {
-		setError('excerpt', { type: 'manual', message: 'Resumo inválido.' });
+		setError('excerpt', { type: 'manual', message: 'Invalid summary.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('content')) {
-		setError('content', { type: 'manual', message: 'Conteúdo inválido.' });
+		setError('content', { type: 'manual', message: 'Invalid content.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('tag')) {
-		setError('tags', { type: 'manual', message: 'Tags inválidas.' });
+		setError('tags', { type: 'manual', message: 'Invalid tags.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('status')) {
-		setError('status', { type: 'manual', message: 'Status inválido.' });
+		setError('status', { type: 'manual', message: 'Invalid status.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('visibility')) {
-		setError('visibility', { type: 'manual', message: 'Visibilidade inválida.' });
+		setError('visibility', { type: 'manual', message: 'Invalid visibility.' });
 		return true;
 	}
 
 	if (lowerMessage.includes('commentable') || lowerMessage.includes('comments')) {
 		setError('isCommentable', {
 			type: 'manual',
-			message: 'Configuração de comentários inválida.',
+			message: 'Invalid comments setting.',
 		});
 		return true;
 	}
@@ -174,7 +182,7 @@ function mapCreatePoemValidationError(
 	) {
 		setError('toUserIds', {
 			type: 'manual',
-			message: 'Selecione apenas usuários ativos e válidos para dedicação.',
+			message: 'Select only active and valid users for dedication.',
 		});
 		return true;
 	}

@@ -101,14 +101,14 @@ export const CommentsSection = memo(function CommentsSection({
 			bg='rgba(255, 255, 255, 0.03)'
 		>
 			<Heading as='h2' textStyle='h3' mb={4}>
-				Comentarios
+				Comments
 			</Heading>
 
 			<Flex direction='column' gap={3} mb={6}>
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Escreva um comentario (1-300 caracteres)'
+					placeholder='Write a comment (1-300 characters)'
 					rows={4}
 					maxLength={300}
 					borderColor={commentError ? 'red.400' : undefined}
@@ -133,17 +133,17 @@ export const CommentsSection = memo(function CommentsSection({
 							void onPublishComment();
 						}}
 					>
-						Publicar comentario
+						Publish comment
 					</Button>
 				</Flex>
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>
-						Comentarios desativados para este poema.
+						Comments are disabled for this poem.
 					</Text>
 				)}
 				{!isAuthenticated && (
 					<Text textStyle='small' color='pink.200'>
-						Faca login para comentar.
+						Sign in to comment.
 					</Text>
 				)}
 				{commentError && (
@@ -157,13 +157,13 @@ export const CommentsSection = memo(function CommentsSection({
 				isLoading={isLoadingComments}
 				isError={isCommentsError}
 				isEmpty={comments.length === 0}
-				loadingElement={<Text textStyle='body'>Carregando comentarios...</Text>}
-				errorElement={<Text textStyle='body'>Erro ao carregar comentarios.</Text>}
+				loadingElement={<Text textStyle='body'>Loading comments...</Text>}
+				errorElement={<Text textStyle='body'>Error loading comments.</Text>}
 				emptyElement={
 					!isAuthenticated ? (
-						<Text textStyle='body'>Faca login para ver os comentarios.</Text>
+						<Text textStyle='body'>Sign in to see the comments.</Text>
 					) : (
-						<Text textStyle='body'>Seja o primeiro a comentar.</Text>
+						<Text textStyle='body'>Be the first to comment.</Text>
 					)
 				}
 			>

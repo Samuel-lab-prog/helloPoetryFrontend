@@ -83,35 +83,34 @@ export function handleLoginError(
 	if (status === 401) {
 		setError('email', {
 			type: 'manual',
-			message: 'Credenciais incorretas',
+			message: 'Incorrect credentials',
 		});
 		setError('password', {
 			type: 'manual',
-			message: 'Credenciais incorretas',
+			message: 'Incorrect credentials',
 		});
 		return;
 	}
 
 	if (status === 403) {
 		if (message.includes('not active') || message.includes('inactive')) {
-			setGeneralError('Sua conta não está ativa.');
+			setGeneralError('Your account is not active.');
 			return;
 		}
 
-		setGeneralError('Você não tem permissão para acessar.');
+		setGeneralError('You do not have permission to access.');
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados de login inválidos. Revise os campos.');
+		setGeneralError('Invalid login data. Review the fields.');
 		return;
 	}
 
 	if (status === 429) {
-		setGeneralError('Muitas tentativas. Por favor, tente novamente mais tarde.');
+		setGeneralError('Too many attempts. Please try again later.');
 		return;
 	}
 
-	setGeneralError('Erro de rede, por favor tente novamente.');
+	setGeneralError('Network error, please try again.');
 }
-

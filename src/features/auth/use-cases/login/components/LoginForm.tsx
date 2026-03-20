@@ -3,8 +3,8 @@ import type { LoginDataType } from './loginSchema';
 import { DynamicForm, type Field } from '@root/core/base';
 
 const loginFields: Field<LoginDataType>[] = [
-	{ name: 'email', label: 'E-mail', required: true, autoFocus: true },
-	{ name: 'password', label: 'Senha', required: true, type: 'password' },
+	{ name: 'email', label: 'Email', required: true, autoFocus: true },
+	{ name: 'password', label: 'Password', required: true, type: 'password' },
 ];
 
 export function LoginForm() {
@@ -20,7 +20,7 @@ export function LoginForm() {
 			generalError={generalError}
 			onSubmit={onSubmit}
 			handleSubmitFn={handleSubmit}
-			buttonLabel='Entrar'
+			buttonLabel='Sign in'
 			buttonVariant='surface'
 		/>
 	);

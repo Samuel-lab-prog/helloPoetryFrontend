@@ -27,10 +27,10 @@ export function Logo() {
 				</Box>
 				<VStack align='start' gap={0}>
 					<Text textStyle='small' color='pink.100' fontWeight='700' lineHeight='short'>
-						Olapoesia
+						HelloPoetry
 					</Text>
 					<Badge size='sm' colorPalette='pink' variant='subtle'>
-						Poemas
+						Poems
 					</Badge>
 				</VStack>
 			</HStack>

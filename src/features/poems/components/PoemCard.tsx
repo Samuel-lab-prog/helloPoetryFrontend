@@ -51,7 +51,7 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 
 			<Card.Header p={0} mb={5} gap={2}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
-					Poema
+					Poem
 				</Badge>
 				<Card.Title as='h3' textStyle='h3'>
 					{poem.title}
@@ -126,7 +126,7 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 						bg: 'rgba(255, 255, 255, 0.06)',
 					}}
 				>
-					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Ler poema</NavLink>
+					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Read poem</NavLink>
 				</Link>
 			</Card.Footer>
 		</Card.Root>

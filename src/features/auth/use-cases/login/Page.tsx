@@ -6,9 +6,9 @@ function PageHeader() {
 	return (
 		<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 			<Heading as='h1' textStyle='h1' color='accent'>
-				Entrar
+				Sign in
 			</Heading>
-			<Text variant='muted'>Informe suas credenciais para entrar.</Text>
+			<Text variant='muted'>Enter your credentials to sign in.</Text>
 		</Flex>
 	);
 }
@@ -21,9 +21,9 @@ export function LoginPage() {
 				<LoginForm />
 
 				<Text mt={4} variant='muted' textAlign='center'>
-					Ainda não tem uma conta?{' '}
+					Don't have an account yet?{' '}
 					<Link asChild color='pink.300' textDecoration='underline'>
-						<NavLink to='/register'>Criar conta</NavLink>
+						<NavLink to='/register'>Create account</NavLink>
 					</Link>
 				</Text>
 			</Flex>

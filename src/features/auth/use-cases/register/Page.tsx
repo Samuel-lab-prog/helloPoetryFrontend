@@ -8,18 +8,18 @@ export function RegisterPage() {
 			<Flex as='section' direction='column' align='center' justify='end' mt='120px'>
 				<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 					<Heading as='h1' textStyle='h1' color='accent'>
-						Criar conta
+						Create account
 					</Heading>
 
-					<Text variant='muted'>Preencha seus dados para criar sua conta.</Text>
+					<Text variant='muted'>Fill in your details to create your account.</Text>
 				</Flex>
 
 				<RegisterForm />
 
 				<Text mt={4} variant='muted' textAlign='center'>
-					Já tem uma conta?{' '}
+					Already have an account?{' '}
 					<Link asChild color='pink.300' textDecoration='underline'>
-						<NavLink to='/login'>Entrar</NavLink>
+						<NavLink to='/login'>Sign in</NavLink>
 					</Link>
 				</Text>
 			</Flex>

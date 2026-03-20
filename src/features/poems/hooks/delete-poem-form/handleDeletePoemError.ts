@@ -5,19 +5,19 @@ export function handleDeletePoemError(err: unknown, setGeneralError: (msg: strin
 	const status = error?.statusCode;
 
 	if (status === 401) {
-		setGeneralError('Você não tem permissao para deletar poemas.');
+		setGeneralError('You do not have permission to delete poems.');
 		return;
 	}
 
 	if (status === 404) {
-		setGeneralError('Poema não encontrado.');
+		setGeneralError('Poem not found.');
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Dados inválidos. Verifique os campos e tente novamente.');
+		setGeneralError('Invalid data. Check the fields and try again.');
 		return;
 	}
 
-	setGeneralError('Erro ao deletar poema. Tente novamente mais tarde.');
+	setGeneralError('Error deleting poem. Please try again later.');
 }

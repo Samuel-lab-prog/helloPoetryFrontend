@@ -19,7 +19,7 @@ import type { RegisterDataType } from './registerSchema';
 const baseRegisterFields: Field<RegisterDataType>[] = [
 	{
 		name: 'nickname',
-		label: 'Apelido',
+		label: 'Nickname',
 		required: true,
 		autoFocus: true,
 		minLength: REGISTER_NICKNAME_MIN_LENGTH,
@@ -31,7 +31,7 @@ const baseRegisterFields: Field<RegisterDataType>[] = [
 
 	{
 		name: 'name',
-		label: 'Nome',
+		label: 'Name',
 		required: true,
 		minLength: REGISTER_NAME_MIN_LENGTH,
 		maxLength: REGISTER_NAME_MAX_LENGTH,
@@ -40,7 +40,7 @@ const baseRegisterFields: Field<RegisterDataType>[] = [
 
 	{
 		name: 'email',
-		label: 'E-mail',
+		label: 'Email',
 		required: true,
 		asyncValidator: checkEmailAvailability,
 		debounce: 300,
@@ -48,7 +48,7 @@ const baseRegisterFields: Field<RegisterDataType>[] = [
 
 	{
 		name: 'password',
-		label: 'Senha',
+		label: 'Password',
 		required: true,
 		type: 'password',
 		minLength: REGISTER_PASSWORD_MIN_LENGTH,
@@ -84,10 +84,10 @@ export function RegisterForm() {
 		{
 			kind: 'file',
 			name: 'avatar',
-			label: 'Avatar (opcional)',
+			label: 'Avatar (optional)',
 			accept: 'image/*',
-			buttonLabel: 'Escolher arquivo',
-			helpText: `Tamanho máximo: ${MAX_AVATAR_SIZE_MB}MB`,
+			buttonLabel: 'Choose file',
+			helpText: `Max size: ${MAX_AVATAR_SIZE_MB}MB`,
 			preview: 'image',
 			validateFile: (file) => (file ? getAvatarFileError(file) : null),
 		},
@@ -105,7 +105,7 @@ export function RegisterForm() {
 			handleSubmitFn={handleSubmit}
 			setError={setError}
 			clearErrors={clearErrors}
-			buttonLabel='Criar conta'
+			buttonLabel='Create account'
 			buttonVariant='surface'
 		/>
 	);

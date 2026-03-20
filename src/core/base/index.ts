@@ -15,6 +15,7 @@ export * from './components/forms/FormButton';
 export * from './components/forms/FormCard';
 export * from './components/forms/FormField';
 export * from './components/forms/FileField';
+export * from './components/forms/AudioField';
 export * from './components/forms/SelectField';
 export * from './components/ui/color-mode';
 export * from './components/ui/provider';

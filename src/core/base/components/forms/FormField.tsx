@@ -183,7 +183,7 @@ export function FormField<T extends FieldValues>({
 								textAlign='right'
 								mt={1}
 							>
-								{currentLength}/{maxLength} caracteres
+								{currentLength}/{maxLength} characters
 							</Text>
 						)}
 					</Field.Root>

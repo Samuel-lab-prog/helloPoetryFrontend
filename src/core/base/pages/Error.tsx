@@ -10,16 +10,16 @@ export function ErrorPage() {
 				</Heading>
 
 				<Heading as='h2' textStyle='h5' mt={3}>
-					Algo deu errado ou esta página não existe.
+					Something went wrong or this page does not exist.
 				</Heading>
 
 				<Text textStyle='small' mt={1}>
-					Tente voltar para a página inicial ou conferir a URL.
+					Try going back to the home page or checking the URL.
 				</Text>
 
 				<Box mt={6}>
 					<Button asChild variant='solidPink'>
-						<NavLink to='/'>Voltar para o início</NavLink>
+						<NavLink to='/'>Go back to the home page</NavLink>
 					</Button>
 				</Box>
 			</Box>

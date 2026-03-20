@@ -154,7 +154,7 @@ export function PoemImmersivePage() {
 	if (poemId <= 0) {
 		return (
 			<Flex as='main' minH='100vh' align='center' justify='center' p={6}>
-				<Text textStyle='body'>ID de poema invalido.</Text>
+				<Text textStyle='body'>Invalid poem ID.</Text>
 			</Flex>
 		);
 	}
@@ -180,7 +180,7 @@ export function PoemImmersivePage() {
 						_hover={{ color: 'pink.50' }}
 					>
 						<NavLink to={poem?.slug ? `/poems/${poem.slug}/${poem.id}` : `/poems/${poemId}`}>
-							<ArrowLeftIcon /> Voltar ao poema
+							<ArrowLeftIcon /> Back to poem
 						</NavLink>
 					</Link>
 
@@ -188,9 +188,9 @@ export function PoemImmersivePage() {
 						isLoading={isLoading}
 						isError={!!isError}
 						isEmpty={!poem}
-						emptyElement={<Text textStyle='body'>Poema nao encontrado.</Text>}
-						errorElement={<Text textStyle='body'>Erro ao carregar o poema. Tente novamente.</Text>}
-						loadingElement={<Text textStyle='body'>Carregando poema...</Text>}
+						emptyElement={<Text textStyle='body'>Poem not found.</Text>}
+						errorElement={<Text textStyle='body'>Error loading the poem. Please try again.</Text>}
+						loadingElement={<Text textStyle='body'>Loading poem...</Text>}
 					>
 						{poem && (
 							<Box>
@@ -198,7 +198,7 @@ export function PoemImmersivePage() {
 									{poem.title}
 								</Heading>
 								<Text textStyle='smaller' color='pink.200' textAlign='center' mb={10}>
-									por {poem.author.name}
+									by {poem.author.name}
 								</Text>
 
 								<Box
@@ -308,7 +308,7 @@ export function PoemImmersivePage() {
 												textTransform='uppercase'
 												color='purple.200'
 											>
-												Dedicado a
+												Dedicated to
 											</Text>
 											<Text
 												textStyle='body'

@@ -50,7 +50,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 
 				<Flex direction='column' gap={1} flex='1' minW={0}>
 					<Text textStyle='small' color='pink.200'>
-						Autor
+						Author
 					</Text>
 					<Text textStyle='body' wordBreak='break-word'>
 						{author.name}
@@ -59,7 +59,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 						@{author.nickname}
 					</Text>
 					<Text textStyle='smaller' color='pink.200'>
-						Curtidas: {stats.likesCount} | Comentarios: {stats.commentsCount}
+						Likes: {stats.likesCount} | Comments: {stats.commentsCount}
 					</Text>
 				</Flex>
 			</Flex>
@@ -72,7 +72,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 				justify='space-between'
 			>
 				<Link asChild textStyle='small' color='pink.100' alignSelf={{ base: 'start', md: 'auto' }}>
-					<NavLink to={`/authors/${author.id}`}>Ver autor</NavLink>
+					<NavLink to={`/authors/${author.id}`}>View author</NavLink>
 				</Link>
 				{children}
 			</Flex>

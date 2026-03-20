@@ -44,7 +44,7 @@ export function PoemCombobox<T extends FieldValues>({ name, error, control, poem
 				color={error ? 'error' : 'text'}
 				transition='color 0.22s ease'
 			>
-				Poema <Field.RequiredIndicator />
+				Poem <Field.RequiredIndicator />
 			</Field.Label>
 
 			<Controller
@@ -81,7 +81,7 @@ export function PoemCombobox<T extends FieldValues>({ name, error, control, poem
 							}}
 						>
 							<Combobox.Input
-								placeholder='Selecione o poema'
+								placeholder='Select a poem'
 								textStyle='small'
 								color='text'
 								_placeholder={{ color: 'pink.200' }}
@@ -103,7 +103,7 @@ export function PoemCombobox<T extends FieldValues>({ name, error, control, poem
 									overflow='hidden'
 								>
 									<Combobox.Empty>
-										{poems ? 'Nenhum poema encontrado.' : 'Carregando poemas...'}
+										{poems ? 'No poems found.' : 'Loading poems...'}
 									</Combobox.Empty>
 									{collection.items.map((item) => (
 										<Combobox.Item
