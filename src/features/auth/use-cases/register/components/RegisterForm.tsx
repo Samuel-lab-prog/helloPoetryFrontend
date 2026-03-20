@@ -129,7 +129,7 @@ export function RegisterForm() {
 					</Flex>
 
 					<Text textStyle='smaller' color='pink.200'>
-						Tamanho m�ximo: {maxAvatarSizeMb}MB
+						Tamanho máximo: {maxAvatarSizeMb}MB
 					</Text>
 
 					{avatarError && (

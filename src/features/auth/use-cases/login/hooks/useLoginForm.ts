@@ -11,7 +11,6 @@ import { api } from '@root/core/api';
 
 import type { AppErrorType } from '@root/core/base';
 
-
 const FEED_ROUTE = '/';
 const MODERATION_ROUTE = '/admin/moderation';
 

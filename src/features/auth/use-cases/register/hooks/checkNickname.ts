@@ -5,5 +5,5 @@ export async function checkNicknameAvailability(nickname: string): Promise<strin
 
 	const inUse = await api.users.checkNickname.fetch(String(nickname));
 
-	return inUse ? 'Apelido j� est� em uso' : null;
+	return inUse ? 'Apelido já está em uso' : null;
 }

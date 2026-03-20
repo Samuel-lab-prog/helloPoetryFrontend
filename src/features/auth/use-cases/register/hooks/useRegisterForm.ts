@@ -77,7 +77,7 @@ export function useRegisterForm() {
 
 					if (statusCode === 401 || statusCode === 403) {
 						setAvatarError(
-							'Fa�a login para enviar avatar. Voc� pode concluir o cadastro e adicionar depois.',
+							'Faça login para enviar avatar. Você pode concluir o cadastro e adicionar depois.',
 						);
 					} else {
 						const message = error instanceof Error ? error.message : 'Erro ao enviar avatar.';
