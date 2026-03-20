@@ -28,14 +28,8 @@ export const registerSchema = z
 		name: z
 			.string()
 			.trim()
-			.min(
-				REGISTER_NAME_MIN_LENGTH,
-				`Name must be at least ${REGISTER_NAME_MIN_LENGTH} characters`,
-			)
-			.max(
-				REGISTER_NAME_MAX_LENGTH,
-				`Name must be at most ${REGISTER_NAME_MAX_LENGTH} characters`,
-			),
+			.min(REGISTER_NAME_MIN_LENGTH, `Name must be at least ${REGISTER_NAME_MIN_LENGTH} characters`)
+			.max(REGISTER_NAME_MAX_LENGTH, `Name must be at most ${REGISTER_NAME_MAX_LENGTH} characters`),
 		email: z.email('Invalid email').trim(),
 		password: z
 			.string()

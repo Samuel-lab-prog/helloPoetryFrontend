@@ -9,11 +9,7 @@ export class AppError extends Error {
 	public message: string;
 	public code: string;
 
-	constructor({
-		statusCode,
-		message,
-		code,
-	}: AppErrorType) {
+	constructor({ statusCode, message, code }: AppErrorType) {
 		super(message);
 
 		this.name = 'AppError';

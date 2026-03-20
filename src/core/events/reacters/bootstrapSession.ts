@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
-import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '@features/poems';
+import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '@root/features/poems';
 import type { AppEvents } from '../eventBus';
 import type { UserPrivateProfile, UserRole, UserStatus } from '../../api/users/types';
 import { clearSessionQueries } from './clearSession';
@@ -13,7 +13,6 @@ const NOTIFICATIONS_FETCH_LIMIT = 50;
 
 const homeFeedKey = (userId: number, limit: number) =>
 	['home-feed', { isAuthenticated: true, userId, limit }] as const;
-
 
 function mapFeedPoem(item: FeedPoemType): PoemPreviewType {
 	return {

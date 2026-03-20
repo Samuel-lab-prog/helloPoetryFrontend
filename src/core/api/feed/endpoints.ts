@@ -17,5 +17,3 @@ const getFeed = createQueryEndpoint<[], FeedPoem[]>({
 export const feed = {
 	getFeed,
 };
-
-

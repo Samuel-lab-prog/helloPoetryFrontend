@@ -53,4 +53,3 @@ export type MyFriendRequests = {
 		requesterAvatarUrl: string | null;
 	}[];
 };
-

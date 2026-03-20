@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Card, Flex, Heading, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@root/core/base';
-import { usePoetsSearch } from '../../poems/hooks/usePoetsSearch';
+import { usePoetsSearch } from '../../poems/use-cases/poems/hooks/usePoetsSearch';
 import { PoetCard } from '../components/PoetCard';
 
 type SearchForm = {

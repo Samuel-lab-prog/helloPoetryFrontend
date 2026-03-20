@@ -2,7 +2,7 @@ import { Card, Text, Badge, Flex, Link, Box, Avatar, Icon } from '@chakra-ui/rea
 import { NavLink } from 'react-router-dom';
 import { Heart, MessageCircle } from 'lucide-react';
 import { formatRelativeTime } from '@root/core/base';
-import type { PoemPreviewType } from '../types';
+import type { PoemPreviewType } from '../../../types';
 
 type PoemCardProps = {
 	poem: PoemPreviewType;

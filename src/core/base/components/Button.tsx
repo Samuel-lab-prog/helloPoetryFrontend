@@ -8,12 +8,7 @@ export type BaseButtonProps = ButtonProps & {
 
 export const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
 	({ loading, fullWidth, w, ...props }, ref) => (
-		<ChakraButton
-			ref={ref}
-			loading={loading}
-			w={fullWidth ? 'full' : w}
-			{...props}
-		/>
+		<ChakraButton ref={ref} loading={loading} w={fullWidth ? 'full' : w} {...props} />
 	),
 );
 

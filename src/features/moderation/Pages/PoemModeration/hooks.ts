@@ -12,8 +12,7 @@ export function usePoemModerationData(enabled: boolean) {
 	});
 
 	const moderateMutation = useMutation({
-		mutationFn: (payload: ModeratePoemBody) =>
-			api.moderation.moderatePoem.mutate(payload),
+		mutationFn: (payload: ModeratePoemBody) => api.moderation.moderatePoem.mutate(payload),
 	});
 
 	const pendingPoems = useMemo(() => pendingQuery.data ?? [], [pendingQuery.data]);

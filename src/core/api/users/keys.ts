@@ -17,4 +17,3 @@ export const userKeys = createQueryKeys({
 	anyProfile: () => ['users', 'profile'] as const,
 	anySearch: () => ['users', 'search'] as const,
 });
-

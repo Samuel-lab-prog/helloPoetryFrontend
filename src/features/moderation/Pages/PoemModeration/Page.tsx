@@ -16,15 +16,14 @@ export function PoemModerationPage() {
 	type Tab = {
 		value: string;
 		label: string;
-	}
+	};
 
 	const tabs: Tab[] = [
 		{ value: 'pending', label: 'Poemas pendentes' },
 		{ value: 'actions', label: 'Ações administrativas' },
 	];
 
-	if (!canAccess)
-		return <UnauthorizedPage onBack={() => navigate('/')} />;
+	if (!canAccess) return <UnauthorizedPage onBack={() => navigate('/')} />;
 
 	function PageHeader() {
 		return (
@@ -36,7 +35,7 @@ export function PoemModerationPage() {
 					Analise os poemas pendentes e mantenha a comunidade saudável e acolhedora.
 				</Text>
 			</Flex>
-		)
+		);
 	}
 
 	return (
@@ -54,10 +53,7 @@ export function PoemModerationPage() {
 			<Tabs.Root variant='enclosed' colorPalette='pink' defaultValue='pending'>
 				<Tabs.List colorPalette={'pink'}>
 					{tabs.map((tab) => (
-						<Tabs.Trigger
-							key={tab.value}
-							value={tab.value}
-						>
+						<Tabs.Trigger key={tab.value} value={tab.value}>
 							{tab.label}
 						</Tabs.Trigger>
 					))}

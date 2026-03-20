@@ -1,10 +1,4 @@
-import {
-	Flex,
-	Spinner,
-	Tabs,
-	Text,
-	VStack,
-} from '@chakra-ui/react';
+import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
 import { AsyncState } from '@root/core/base';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
 import { ModerationPoemCard } from '../PoemModerationCard';
@@ -19,13 +13,7 @@ type Props = {
 	isModerating: boolean;
 	onModerate: (poemId: number, status: ModeratePoemBody['moderationStatus']) => void;
 };
-export function AnalyzeTab({
-	pendingQuery,
-	pendingPoems,
-	isModerating,
-	onModerate,
-}: Props) {
-
+export function AnalyzeTab({ pendingQuery, pendingPoems, isModerating, onModerate }: Props) {
 	function formatError(err: unknown) {
 		const appError = err as AppErrorType | null;
 		if (!appError) return 'Erro ao carregar poemas pendentes.';

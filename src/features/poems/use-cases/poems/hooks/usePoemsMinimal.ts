@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { FullPoemType } from '@features/poems';
+import type { FullPoemType } from '@root/features/poems';
 import { api } from '@root/core/api';
 
 type UsePoemsMinimalOptions = {

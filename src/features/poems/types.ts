@@ -1,70 +1,18 @@
-export type FullPoemType = {
-	tags: {
-		name: string;
-		id: number;
-	}[];
-	title: string;
-	slug: string;
-	excerpt: string | null;
-	id: number;
-	createdAt: Date;
-	content: string;
-	audioUrl: string | null;
-	status: 'draft' | 'published';
-	visibility: 'public' | 'friends' | 'private' | 'unlisted';
-	isCommentable: boolean;
-	author: {
-		id: number;
-		name: string;
-		nickname: string;
-		avatarUrl: string | null;
-	};
-	stats: {
-		likesCount: number;
-		commentsCount: number;
-		likedByCurrentUser: boolean;
-	};
-	updatedAt: Date;
-};
+import type { FullPoem as FullPoemType } from '@root/core/api/poems/types';
 
-export type TagType = {
-	id: number;
-	name: string;
-};
+export type {
+	FullPoem as FullPoemType,
+	PoemPreview as PoemPreviewType,
+	PoemTag as TagType,
+	PoemAuthor as PoemAuthorType,
+	PaginatedPoems as PaginatedPoemsType,
+	SavedPoem as SavedPoemType,
+	PoemCollection as PoemCollectionType,
+	PoemVisibility,
+	PoemStatus,
+} from '@root/core/api/poems/types';
 
-export type PoemPreviewType = {
-	title: string;
-	slug: string;
-	id: number;
-	createdAt?: string | Date;
-	likesCount?: number;
-	commentsCount?: number;
-	stats?: {
-		likesCount?: number;
-		commentsCount?: number;
-	};
-	tags: {
-		id: number;
-		name: string;
-	}[];
-	author: {
-		id: number;
-		name: string;
-		nickname: string;
-		avatarUrl: string | null;
-	};
-};
-
-export type PoemMinimalDataType = {
-	id: number;
-	title: string;
-};
-
-export type PaginatedPoemsType = {
-	nextCursor?: number | null;
-	poems: PoemPreviewType[];
-	hasMore: boolean;
-};
+export type PoemMinimalDataType = Pick<FullPoemType, 'id' | 'title'>;
 
 export type FeedPoemType = {
 	id: number;

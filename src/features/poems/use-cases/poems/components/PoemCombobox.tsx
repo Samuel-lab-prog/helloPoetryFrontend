@@ -7,7 +7,7 @@ import {
 	type FieldValues,
 } from 'react-hook-form';
 import { useEffect } from 'react';
-import { type PoemMinimalDataType } from '../types';
+import { type PoemMinimalDataType } from '../../../types';
 
 interface Props<T extends FieldValues> {
 	control: Control<T>;
@@ -102,9 +102,7 @@ export function PoemCombobox<T extends FieldValues>({ name, error, control, poem
 									backdropFilter='blur(6px)'
 									overflow='hidden'
 								>
-									<Combobox.Empty>
-										{poems ? 'No poems found.' : 'Loading poems...'}
-									</Combobox.Empty>
+									<Combobox.Empty>{poems ? 'No poems found.' : 'Loading poems...'}</Combobox.Empty>
 									{collection.items.map((item) => (
 										<Combobox.Item
 											key={item.id}

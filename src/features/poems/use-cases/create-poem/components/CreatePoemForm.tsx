@@ -3,11 +3,11 @@ import { Text, Heading, Box } from '@chakra-ui/react';
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview, UserDedicationCombobox } from '@features/users';
 import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@root/core/base';
-import { PoemHeader } from '@features/poems';
-import { uploadPoemAudioFile } from '../../../utils/poemAudioUpload';
+import { PoemHeader } from '../../poem/components/PoemHeader';
+import { uploadPoemAudioFile } from '../utils/poemAudioUpload';
 import { api } from '@root/core/api';
 import { useState } from 'react';
-import type { CreatePoemType } from '../../../schemas/managePoemSchemas';
+import type { CreatePoemType } from '../../manage-poem/schemas/managePoemSchemas';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,

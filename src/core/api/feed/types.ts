@@ -14,4 +14,3 @@
 		avatarUrl: string;
 	};
 };
-

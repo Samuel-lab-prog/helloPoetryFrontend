@@ -37,11 +37,11 @@ const PoemsPage = lazyPage(
 	(module) => module.PoemsPage,
 );
 const PoemPage = lazyPage(
-	() => import('./features/poems/pages/PoemPage'),
+	() => import('./features/poems/use-cases/poem/Page'),
 	(module) => module.PoemPage,
 );
 const PoemImmersivePage = lazyPage(
-	() => import('./features/poems/pages/PoemImmersivePage'),
+	() => import('./features/poems/use-cases/poem/ImmersivePage'),
 	(module) => module.PoemImmersivePage,
 );
 const CreatePoemPage = lazyPage(
@@ -49,7 +49,7 @@ const CreatePoemPage = lazyPage(
 	(module) => module.CreatePoemPage,
 );
 const AdminPage = lazyPage(
-	() => import('./features/poems/pages/AdminPage'),
+	() => import('./features/poems/use-cases/admin/Page'),
 	(module) => module.AdminPage,
 );
 const PoemModerationPage = lazyPage(

@@ -107,7 +107,9 @@ export function TagsInputControl({
 					</TagsInput.Items>
 
 					<TagsInput.Input
-						placeholder={limitReached ? 'Limite de tags atingido' : (placeholder ?? 'Adicione uma tag')}
+						placeholder={
+							limitReached ? 'Limite de tags atingido' : (placeholder ?? 'Adicione uma tag')
+						}
 						bg='transparent'
 						color='text'
 						disabled={disabled || limitReached}

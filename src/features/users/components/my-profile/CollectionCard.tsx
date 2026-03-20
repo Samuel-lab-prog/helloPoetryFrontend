@@ -7,7 +7,7 @@ import {
 	type PoemMinimalDataType,
 	type FullPoemType,
 	type SavedPoemType,
-} from '@features/poems';
+} from '@root/features/poems';
 import { useForm } from 'react-hook-form';
 
 type AddPoemFormValues = {

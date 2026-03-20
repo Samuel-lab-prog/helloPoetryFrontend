@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer } from '@root/core/base';
-import { usePoem } from '../hooks/usePoem';
+import { usePoem } from './hooks/usePoem';
 import { keyframes } from '@emotion/react';
 import { useReducedMotion } from 'framer-motion';
 

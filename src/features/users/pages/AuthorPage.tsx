@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { AsyncState } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
-import { PoemCard } from '@features/poems';
+import { PoemCard } from '@root/features/poems';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
-import { useAuthorPoems } from '../../poems/hooks/useAuthorPoems';
+import { useAuthorPoems } from '../../poems/use-cases/poems/hooks/useAuthorPoems';
 import type { FullPoemType, PoemPreviewType } from '../../poems/types';
 
 function toPreviewPoem(poem: FullPoemType): PoemPreviewType {

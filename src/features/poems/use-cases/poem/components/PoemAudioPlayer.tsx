@@ -207,7 +207,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					step={0.1}
 					value={currentTime}
 					onChange={handleSeek}
-						aria-label='Progress'
+					aria-label='Progress'
 					data-range='progress'
 					style={
 						{

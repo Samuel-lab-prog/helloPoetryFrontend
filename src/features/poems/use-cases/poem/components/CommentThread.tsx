@@ -189,7 +189,8 @@ export const CommentThread = memo(function CommentThread({
 				{hasReplies && (
 					<Flex align='center' gap={2}>
 						<Text textStyle='smaller' color='pink.200'>
-							{comment.aggregateChildrenCount} repl{comment.aggregateChildrenCount === 1 ? 'y' : 'ies'}
+							{comment.aggregateChildrenCount} repl
+							{comment.aggregateChildrenCount === 1 ? 'y' : 'ies'}
 						</Text>
 						{!hasLoadedReplies && (
 							<IconButton

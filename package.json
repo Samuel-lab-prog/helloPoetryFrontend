@@ -15,7 +15,7 @@
 		"generate": "cd ./src/themes/ && npx @chakra-ui/cli typegen ./main.ts",
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",
-		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run barrels && bun run check-deps && bun run metrics",
+		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run check-deps && bun run metrics",
 		"metrics": "node ./architecture-analysis/metrics.mjs",
 		"generate:api": "orval"
 	},

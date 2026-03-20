@@ -132,7 +132,9 @@ export type Field<T extends FieldValues> =
 	| CustomField<T>;
 
 type FieldRenderers<T extends FieldValues> = {
-	dedication?: (context: CustomFieldRenderContext<T> & { field: DedicationInputField<T> }) => ReactNode;
+	dedication?: (
+		context: CustomFieldRenderContext<T> & { field: DedicationInputField<T> },
+	) => ReactNode;
 };
 
 interface DynamicFormProps<T extends FieldValues> {
@@ -175,6 +177,7 @@ export function DynamicForm<T extends FieldValues>({
 		const hasError = field.kind === 'custom' ? field.hasError : !!errors[field.name];
 		const key = field.kind === 'custom' ? field.id : String(field.name);
 
+		// eslint-disable-next-line no-useless-assignment
 		let content: ReactNode = null;
 
 		switch (field.kind) {

@@ -9,7 +9,7 @@ import {
 	POEM_TAGS_MAX_AMOUNT,
 	POEM_TITLE_MAX_LENGTH,
 	POEM_TITLE_MIN_LENGTH,
-} from '../use-cases/create-poem/components/constants';
+} from '../../create-poem/components/constants';
 
 const createOrUpdatePoemSchemaBase = z.object({
 	title: z
@@ -18,24 +18,12 @@ const createOrUpdatePoemSchemaBase = z.object({
 		.max(POEM_TITLE_MAX_LENGTH, `Title must be at most ${POEM_TITLE_MAX_LENGTH} characters`),
 	excerpt: z
 		.string()
-		.min(
-			POEM_EXCERPT_MIN_LENGTH,
-			`Summary must be at least ${POEM_EXCERPT_MIN_LENGTH} characters`,
-		)
-		.max(
-			POEM_EXCERPT_MAX_LENGTH,
-			`Summary must be at most ${POEM_EXCERPT_MAX_LENGTH} characters`,
-		),
+		.min(POEM_EXCERPT_MIN_LENGTH, `Summary must be at least ${POEM_EXCERPT_MIN_LENGTH} characters`)
+		.max(POEM_EXCERPT_MAX_LENGTH, `Summary must be at most ${POEM_EXCERPT_MAX_LENGTH} characters`),
 	content: z
 		.string()
-		.min(
-			POEM_CONTENT_MIN_LENGTH,
-			`Content must be at least ${POEM_CONTENT_MIN_LENGTH} characters`,
-		)
-		.max(
-			POEM_CONTENT_MAX_LENGTH,
-			`Content must be at most ${POEM_CONTENT_MAX_LENGTH} characters`,
-		),
+		.min(POEM_CONTENT_MIN_LENGTH, `Content must be at least ${POEM_CONTENT_MIN_LENGTH} characters`)
+		.max(POEM_CONTENT_MAX_LENGTH, `Content must be at most ${POEM_CONTENT_MAX_LENGTH} characters`),
 	tags: z
 		.array(
 			z

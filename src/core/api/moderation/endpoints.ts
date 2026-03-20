@@ -44,7 +44,10 @@ const getPendingPoems = createQueryEndpoint<[], ModerationPoem[]>({
 
 const moderatePoem = createMutationEndpoint<ModeratePoemBody, ModeratePoemResult>({
 	fn: (data) =>
-		createHTTPRequest<ModeratePoemResult, { moderationStatus: ModeratePoemBody['moderationStatus'] }>({
+		createHTTPRequest<
+			ModeratePoemResult,
+			{ moderationStatus: ModeratePoemBody['moderationStatus'] }
+		>({
 			method: 'PATCH',
 			path: `/poems/${data.poemId}/moderation`,
 			body: {
@@ -60,4 +63,3 @@ export const moderation = {
 	getPendingPoems,
 	moderatePoem,
 };
-

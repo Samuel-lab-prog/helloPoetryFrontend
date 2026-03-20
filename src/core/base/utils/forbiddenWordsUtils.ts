@@ -1,21 +1,6 @@
-const PROFANITY = [
-	'carai',
-	'merda',
-	'bosta',
-	'porra',
-	'caralho',
-	'pqp',
-];
+const PROFANITY = ['carai', 'merda', 'bosta', 'porra', 'caralho', 'pqp'];
 
-const INSULTS = [
-	'otario',
-	'otaria',
-	'idiota',
-	'babaca',
-	'fdp',
-	'arrombado',
-	'arrombada',
-];
+const INSULTS = ['otario', 'otaria', 'idiota', 'babaca', 'fdp', 'arrombado', 'arrombada'];
 
 const SEXUAL = [
 	'vsf',
@@ -54,12 +39,7 @@ const DICTATOR_NAMES = [
 	'milosevic',
 ];
 
-export const FORBIDDEN_WORDS = [
-	...DICTATOR_NAMES,
-	...PROFANITY,
-	...INSULTS,
-	...SEXUAL,
-] as const;
+export const FORBIDDEN_WORDS = [...DICTATOR_NAMES, ...PROFANITY, ...INSULTS, ...SEXUAL] as const;
 
 const LEET_MAP: Record<string, string> = {
 	'0': 'o',

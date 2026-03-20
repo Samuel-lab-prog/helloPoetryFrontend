@@ -6,4 +6,3 @@ export const notificationsKeys = createQueryKeys({
 	page: (params?: { onlyUnread?: boolean; limit?: number; nextCursor?: string }) =>
 		['notifications', 'page', params ?? {}] as const,
 });
-

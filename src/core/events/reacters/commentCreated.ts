@@ -19,7 +19,5 @@ export async function onCommentCreated(
 		parentCommentsKey as readonly unknown[] | null,
 	].filter(Boolean) as ReadonlyArray<readonly unknown[]>;
 
-	await Promise.all(
-		keysToInvalidate.map((queryKey) => queryClient.refetchQueries({ queryKey })),
-	);
+	await Promise.all(keysToInvalidate.map((queryKey) => queryClient.refetchQueries({ queryKey })));
 }

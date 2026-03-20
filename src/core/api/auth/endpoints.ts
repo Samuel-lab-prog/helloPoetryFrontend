@@ -14,5 +14,3 @@ const login = createMutationEndpoint<LoginBody, AuthClient>({
 export const auth = {
 	login,
 };
-
-

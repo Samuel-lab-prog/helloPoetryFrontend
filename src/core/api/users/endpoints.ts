@@ -116,4 +116,3 @@ export const users = {
 	updateUser,
 	requestAvatarUploadUrl,
 };
-

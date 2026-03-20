@@ -7,7 +7,7 @@ import { useMyProfile } from '../hooks/useMyProfile';
 import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
 import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 import { useFriendRequestActions } from '@features/interactions';
-import { useMyPoems, usePoemCollections, useSavedPoems } from '@features/poems';
+import { useMyPoems, usePoemCollections, useSavedPoems } from '@root/features/poems';
 import { eventBus } from '@root/core/events/eventBus';
 import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
 import { ProfileHeader } from '../components/my-profile/ProfileHeader';

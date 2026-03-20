@@ -40,9 +40,7 @@ export function useLoginForm() {
 				loggedInAt: new Date().toISOString(),
 			});
 			const redirect =
-				client.role === 'moderator' || client.role === 'admin'
-					? MODERATION_ROUTE
-					: FEED_ROUTE;
+				client.role === 'moderator' || client.role === 'admin' ? MODERATION_ROUTE : FEED_ROUTE;
 			navigate(redirect, { replace: true });
 		},
 

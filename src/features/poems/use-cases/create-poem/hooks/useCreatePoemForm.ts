@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPoemSchema, type CreatePoemType } from '../../../schemas/managePoemSchemas';
+import { createPoemSchema, type CreatePoemType } from '../../manage-poem/schemas/managePoemSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@root/core/api';
 import type { CreatePoemResult } from '@root/core/api/poems/types';

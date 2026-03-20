@@ -62,10 +62,13 @@ export function AudioField<T extends FieldValues>({
 		mediaStreamRef.current = null;
 	}, []);
 
-	useEffect(() => () => {
+	useEffect(
+		() => () => {
 			stopMediaStream();
 			if (previewUrl) URL.revokeObjectURL(previewUrl);
-		}, [previewUrl, stopMediaStream]);
+		},
+		[previewUrl, stopMediaStream],
+	);
 
 	useEffect(() => {
 		if (!file) {

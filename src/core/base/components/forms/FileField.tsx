@@ -103,9 +103,7 @@ export function FileField<T extends FieldValues>({
 										<Avatar.Fallback name='Avatar' />
 									</Avatar.Root>
 								)}
-								{preview === 'audio' && (
-									<audio controls preload='metadata' src={previewUrl} />
-								)}
+								{preview === 'audio' && <audio controls preload='metadata' src={previewUrl} />}
 							</Box>
 						)}
 

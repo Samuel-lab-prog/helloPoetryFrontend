@@ -8,13 +8,13 @@ import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@root
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
-import { usePoem } from '../hooks/usePoem';
-import { useSavedPoems } from '../hooks/useSavedPoems';
-import { PoemHeader } from '../components/PoemHeader';
-import { PoemAuthorCard } from '../components/poem-page/PoemAuthorCard';
-import { PoemActions } from '../components/poem-page/PoemActions';
-import { CommentsSection } from '../components/poem-page/CommentsSection';
-import { PoemAudioPlayer } from '../components/poem-page/PoemAudioPlayer';
+import { usePoem } from './hooks/usePoem';
+import { useSavedPoems } from '../poems/hooks/useSavedPoems';
+import { PoemHeader } from './components/PoemHeader';
+import { PoemAuthorCard } from './components/PoemAuthorCard';
+import { PoemActions } from './components/PoemActions';
+import { CommentsSection } from './components/CommentsSection';
+import { PoemAudioPlayer } from './components/PoemAudioPlayer';
 
 function parsePoemId(rawId: string | undefined) {
 	if (!rawId) return -1;
@@ -267,9 +267,7 @@ export function PoemPage() {
 					isError={!!isError}
 					isEmpty={!poem}
 					emptyElement={<Box textStyle='body'>Poem not found</Box>}
-					errorElement={
-						<Box textStyle='body'>Error loading the poem. Please try again later.</Box>
-					}
+					errorElement={<Box textStyle='body'>Error loading the poem. Please try again later.</Box>}
 					loadingElement={<Box textStyle='body'>Loading poem...</Box>}
 				>
 					{poem && poemHeaderPoem && (

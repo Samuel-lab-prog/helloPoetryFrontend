@@ -235,4 +235,3 @@ export const poems = {
 	removeItemFromCollection,
 	deleteCollection,
 };
-

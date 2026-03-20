@@ -25,4 +25,3 @@ export type UpdateCommentBody = {
 	commentId: string;
 	content: string;
 };
-
