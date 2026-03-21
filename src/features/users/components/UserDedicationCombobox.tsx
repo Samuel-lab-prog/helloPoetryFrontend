@@ -126,9 +126,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 									}}
 								>
 									<Combobox.Input
-										placeholder={
-											isLoading ? 'Loading users...' : 'Search users to dedicate to'
-										}
+										placeholder={isLoading ? 'Loading users...' : 'Search users to dedicate to'}
 										textStyle='small'
 										color='text'
 										_placeholder={{ color: 'pink.200' }}

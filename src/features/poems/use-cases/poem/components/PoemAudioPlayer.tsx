@@ -110,10 +110,13 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 				'input[type="range"]': {
 					WebkitAppearance: 'none',
 					appearance: 'none',
-					height: '6px',
+					height: '16px',
 					borderRadius: '999px',
 					background: 'transparent',
 					outline: 'none',
+					padding: 0,
+					margin: 0,
+					overflow: 'visible',
 					accentColor: '#F472B6',
 				},
 				'input[type="range"]::-webkit-slider-runnable-track': {
