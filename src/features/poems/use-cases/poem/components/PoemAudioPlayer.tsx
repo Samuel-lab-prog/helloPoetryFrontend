@@ -107,7 +107,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 			borderRadius='xl'
 			bg='rgba(255, 255, 255, 0.02)'
 			css={{
-				'input[type="range"]': {
+				'& input[type="range"]': {
 					WebkitAppearance: 'none',
 					appearance: 'none',
 					height: '16px',
@@ -119,13 +119,13 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					overflow: 'visible',
 					accentColor: '#F472B6',
 				},
-				'input[type="range"]::-webkit-slider-runnable-track': {
+				'& input[type="range"]::-webkit-slider-runnable-track': {
 					height: '6px',
 					borderRadius: '999px',
 					background:
 						'linear-gradient(90deg, #F472B6 0%, #F472B6 var(--range-progress), rgba(255, 255, 255, 0.16) var(--range-progress), rgba(255, 255, 255, 0.16) 100%)',
 				},
-				'input[type="range"]::-webkit-slider-thumb': {
+				'& input[type="range"]::-webkit-slider-thumb': {
 					WebkitAppearance: 'none',
 					appearance: 'none',
 					width: '14px',
@@ -137,7 +137,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					cursor: 'pointer',
 					marginTop: '-4px',
 				},
-				'input[type="range"]::-moz-range-thumb': {
+				'& input[type="range"]::-moz-range-thumb': {
 					width: '14px',
 					height: '14px',
 					borderRadius: '999px',
@@ -146,20 +146,20 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					boxShadow: '0 0 0 3px rgba(251, 207, 232, 0.2)',
 					cursor: 'pointer',
 				},
-				'input[type="range"]::-moz-range-track': {
+				'& input[type="range"]::-moz-range-track': {
 					height: '6px',
 					borderRadius: '999px',
 					background: 'rgba(255, 255, 255, 0.16)',
 				},
-				'input[type="range"]::-moz-range-progress': {
+				'& input[type="range"]::-moz-range-progress': {
 					height: '6px',
 					borderRadius: '999px',
 					background: '#F472B6',
 				},
-				'input[type="range"][data-range="progress"]': {
+				'& input[type="range"][data-range="progress"]': {
 					'--range-progress': '0%',
 				},
-				'input[type="range"][data-range="volume"]': {
+				'& input[type="range"][data-range="volume"]': {
 					'--range-progress': '0%',
 				},
 			}}

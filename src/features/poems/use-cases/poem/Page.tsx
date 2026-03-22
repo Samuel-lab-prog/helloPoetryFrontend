@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
@@ -35,9 +34,6 @@ export function PoemPage() {
 	const [repliesByCommentId, setRepliesByCommentId] = useState<Record<number, PoemCommentType[]>>(
 		{},
 	);
-	const [likedPoem, setLikedPoem] = useState(false);
-	const [likesCount, setLikesCount] = useState(0);
-
 	const { poem, isError, isLoading } = usePoem(poemId);
 	const {
 		comments,
@@ -85,11 +81,8 @@ export function PoemPage() {
 	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
 	const shownErrorsRef = useRef<Record<string, string>>({});
 
-	useEffect(() => {
-		if (!poem) return;
-		setLikedPoem(poem.stats.likedByCurrentUser);
-		setLikesCount(poem.stats.likesCount);
-	}, [poem]);
+	const likedPoem = poem?.stats?.likedByCurrentUser ?? false;
+	const likesCount = poem?.stats?.likesCount ?? 0;
 
 	useEffect(() => {
 		if (!comments.length) return;
@@ -194,56 +187,27 @@ export function PoemPage() {
 
 	const handleTogglePoemLike = useCallback(async () => {
 		if (isUpdatingLike) return;
-		const nextLiked = !likedPoem;
-		const previousLiked = likedPoem;
-		const previousLikesCount = likesCount;
-		const nextLikesCount = Math.max(0, previousLikesCount + (nextLiked ? 1 : -1));
-
-		setLikedPoem(nextLiked);
-		setLikesCount(nextLikesCount);
 
 		try {
-			if (!nextLiked) {
+			if (likedPoem) {
 				await unlikePoem();
-				toaster.create({
-					type: 'success',
-					title: 'Like removed',
-					closable: true,
-				});
 				return;
 			}
 
 			await likePoem();
-			toaster.create({
-				type: 'success',
-				title: 'Poem liked',
-				closable: true,
-			});
 		} catch {
-			setLikedPoem(previousLiked);
-			setLikesCount(previousLikesCount);
 			// Error handled by likeError + consolidated toast.
 		}
-	}, [isUpdatingLike, likedPoem, likesCount, likePoem, unlikePoem]);
+	}, [isUpdatingLike, likedPoem, likePoem, unlikePoem]);
 
 	const handleToggleSavePoem = useCallback(async () => {
 		try {
 			if (isSaved) {
 				await unsavePoem(poemId);
-				toaster.create({
-					type: 'success',
-					title: 'Poem removed from saved',
-					closable: true,
-				});
 				return;
 			}
 
 			await savePoem(poemId);
-			toaster.create({
-				type: 'success',
-				title: 'Poem saved successfully',
-				closable: true,
-			});
 		} catch {
 			// Error handled by saveError + consolidated toast.
 		}

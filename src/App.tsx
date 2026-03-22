@@ -2,7 +2,7 @@
 import { Flex, Spinner } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { ErrorPage, Navbar } from '@root/core/base';
+import { ErrorPage, Navbar, Toaster } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 function lazyPage<TModule extends object>(
@@ -154,5 +154,10 @@ export default function App() {
 		},
 	]);
 
-	return <RouterProvider router={router} />;
+	return (
+		<>
+			<RouterProvider router={router} />
+			<Toaster />
+		</>
+	);
 }
