@@ -117,14 +117,14 @@ export type SearchPoemsParams = {
 };
 
 export type CreateCollectionBody = {
-	userId: string;
+	userId: number;
 	name: string;
-	description: string;
+	description?: string;
 };
 
 export type CollectionItemBody = {
-	collectionId: string;
-	poemId: string;
+	collectionId: number;
+	poemId: number;
 };
 
 export type CreatePoemResult = {

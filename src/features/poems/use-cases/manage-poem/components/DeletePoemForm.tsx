@@ -1,7 +1,7 @@
 import { Flex, Button, Text } from '@chakra-ui/react';
 import { useDeletePoemForm } from '../hooks/delete-poem-form';
-import { usePoemsMinimal } from '../../poems/hooks/usePoemsMinimal';
-import { PoemCombobox } from '../../poems/components/PoemCombobox';
+import { usePoemsMinimal } from '../../../public/hooks/useGetPoemsMinimal';
+import { PoemCombobox } from '../../../public/components/PoemCombobox';
 
 export function DeletePoemForm() {
 	const { poems } = usePoemsMinimal();

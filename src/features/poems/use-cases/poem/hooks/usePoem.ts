@@ -4,11 +4,10 @@ import { api } from '@root/core/api';
 export function usePoem(id: number) {
 	const stringId = String(id);
 	const query = useQuery({
-		queryKey: api.poems.getPoem.query(stringId).queryKey,
+		...api.poems.getPoem.query(stringId),
 		retry: 3,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,
-		queryFn: () => api.poems.getPoem.query(stringId).queryFn(),
 	});
 	return {
 		poem: query.data,

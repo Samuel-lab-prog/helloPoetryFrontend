@@ -15,8 +15,12 @@
 		"generate": "cd ./src/themes/ && npx @chakra-ui/cli typegen ./main.ts",
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",
+		"metrics:cloc": "cloc src --by-file --exclude-dir=node_modules,dist,build,coverage --json --out cloc.json",
+		"metrics:depcruise": "depcruise src --exclude \"node_modules|dist|coverage\" --output-type json --output-to depcruise.json",
+		"metrics:analysis": "bun architecture-analysis/src/main.ts",
+		"metrics": "bun run metrics:cloc && bun run metrics:depcruise && bun run metrics:analysis",
+		"depcruise": "bunx depcruise src",
 		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run check-deps && bun run metrics",
-		"metrics": "node ./architecture-analysis/metrics.mjs",
 		"generate:api": "orval"
 	},
 	"dependencies": {
@@ -46,6 +50,7 @@
 		"@vitejs/plugin-react": "^5.0.0",
 		"barrelsby": "^2.8.1",
 		"baseline-browser-mapping": "^2.9.11",
+		"cloc": "^2.6.0-cloc",
 		"dependency-cruiser": "^17.3.5",
 		"eslint": "^9.33.0",
 		"eslint-config-prettier": "^10.1.8",

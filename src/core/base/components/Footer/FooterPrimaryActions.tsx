@@ -15,7 +15,7 @@ export function FooterPrimaryActions() {
 	return (
 		<HStack gap={2} flexWrap='wrap'>
 			{links.map((link) => (
-				<Button key={link.to} asChild variant='solidPink'>
+				<Button key={link.to} asChild variant='solidPink' size={{ base: 'sm', md: 'md' }}>
 					<NavLink to={link.to}>{link.label}</NavLink>
 				</Button>
 			))}

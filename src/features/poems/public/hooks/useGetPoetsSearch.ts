@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { api, apiKeys } from '@root/core/api';
+import { api } from '@root/core/api';
 
 export type PoetPreview = {
 	id: number;
-	name: string;
 	nickname: string;
 	avatarUrl: string | null;
 	role: string;
@@ -19,17 +18,10 @@ export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();
 
 	const query = useQuery<UsersPage>({
-		queryKey: apiKeys.users.publicSearch({
+		...api.users.getPublicUsers.query({
 			limit,
 			searchNickname: normalizedSearch || undefined,
 		}),
-		queryFn: () =>
-			api.users.getPublicUsers
-				.query({
-					limit,
-					searchNickname: normalizedSearch || undefined,
-				})
-				.queryFn() as Promise<UsersPage>,
 	});
 
 	return {

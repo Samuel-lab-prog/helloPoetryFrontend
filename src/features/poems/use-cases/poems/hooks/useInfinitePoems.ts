@@ -10,25 +10,56 @@ type UseInfinitePoemsOption = {
 	limit?: number;
 };
 
+type PoemsSearchParams = {
+	limit: number;
+	orderBy: 'createdAt';
+	orderDirection: 'asc' | 'desc';
+	tags?: string[];
+	searchTitle?: string;
+};
+
+function normalizeTags(tags: string[]) {
+	return tags.map((tag) => tag.trim()).filter(Boolean);
+}
+
+function normalizeSearchTitle(searchTitle: string) {
+	return searchTitle.trim() || undefined;
+}
+
+function getBaseParams(
+	order: OrderOption,
+	limit: number,
+	tags: string[],
+	searchTitle: string | undefined,
+): PoemsSearchParams {
+	return {
+		limit,
+		orderBy: 'createdAt',
+		orderDirection: order === 'newest' ? 'desc' : 'asc',
+		tags: tags.length > 0 ? tags : undefined,
+		searchTitle,
+	};
+}
+
+function getNextCursor(lastPage: PaginatedPoemsType) {
+	if (!lastPage.hasMore) return undefined;
+	// Fallback to last poem id when the API does not return nextCursor.
+	return lastPage.nextCursor ?? lastPage.poems.at(-1)?.id ?? undefined;
+}
+
 export function useInfinitePoems({
 	order,
 	tags = [],
 	searchTitle = '',
 	limit = 8,
 }: UseInfinitePoemsOption) {
-	const normalizedTags = tags.map((tag) => tag.trim()).filter(Boolean);
-	const normalizedSearchTitle = searchTitle.trim();
+	const normalizedTags = normalizeTags(tags);
+	const normalizedSearchTitle = normalizeSearchTitle(searchTitle);
+	const baseParams = getBaseParams(order, limit, normalizedTags, normalizedSearchTitle);
 
 	const query = useInfiniteQuery({
-		queryKey: [
-			'poems',
-			{
-				order,
-				tags: normalizedTags,
-				searchTitle: normalizedSearchTitle,
-				limit,
-			},
-		],
+		// Keep the cache key aligned with the API query shape.
+		queryKey: api.poems.getPoems.query(baseParams).queryKey,
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		retry: 3,
 		initialPageParam: undefined as number | undefined,
@@ -36,19 +67,12 @@ export function useInfinitePoems({
 		queryFn: ({ pageParam }) =>
 			api.poems.getPoems
 				.query({
-					limit,
+					...baseParams,
 					cursor: pageParam,
-					orderBy: 'createdAt',
-					orderDirection: order === 'newest' ? 'desc' : 'asc',
-					tags: normalizedTags.length > 0 ? normalizedTags : undefined,
-					searchTitle: normalizedSearchTitle || undefined,
 				})
 				.queryFn() as Promise<PaginatedPoemsType>,
 
-		getNextPageParam: (lastPage) => {
-			if (!lastPage.hasMore) return undefined;
-			return lastPage.nextCursor ?? lastPage.poems.at(-1)?.id ?? undefined;
-		},
+		getNextPageParam: getNextCursor,
 	});
 
 	return {

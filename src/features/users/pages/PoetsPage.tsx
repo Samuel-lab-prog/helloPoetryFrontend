@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Card, Flex, Heading, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@root/core/base';
-import { usePoetsSearch } from '../../poems/use-cases/poems/hooks/usePoetsSearch';
+import { usePoetsSearch } from '../../poems/public/hooks/useGetPoetsSearch';
 import { PoetCard } from '../components/PoetCard';
 
 type SearchForm = {
@@ -53,7 +53,15 @@ export function PoetsPage() {
 	);
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' w='4xl' mx='auto'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			w='full'
+			maxW='4xl'
+			mx='auto'
+			px={{ base: 4, md: 6 }}
+		>
 			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
 				<Heading as='h1' textStyle='h2'>
 					Buscar Poetas

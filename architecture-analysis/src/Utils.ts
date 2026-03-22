@@ -1,0 +1,106 @@
+/**
+ * Given a file path, determines if it is an abstract file based on certain conventions or content.
+ * @param path The file path
+ * @param content Optional content of the file to check for abstract declarations
+ * @returns True if the file is considered abstract, false otherwise
+ */
+export function isAbstractFile(path: string, content?: string): boolean {
+	return (
+		path.includes('/ports/') ||
+		path.includes('\\ports\\') ||
+		path.includes('/types/') ||
+		path.includes('\\types\\') ||
+		(content?.includes('interface ') ?? false) ||
+		(content?.includes('abstract class') ?? false)
+	);
+}
+
+/**
+ * Given a file path, extracts the domain name based on the convention of being under src/domains or src/generic-subdomains.
+ * @param path The file path
+ * @returns The domain name
+ */
+export function extractDomainFromPath(path: string): string | null {
+	const normalized = path.replace(/\\/g, '/');
+
+	const featureMatch = normalized.match(/(?:^|\/)src\/features\/([^/]+)\//);
+	if (featureMatch) return featureMatch[1]!;
+
+	if (normalized.includes('/src/core/')) return 'core';
+	if (normalized.includes('/src/components/')) return 'components';
+	if (normalized.includes('/src/themes/')) return 'themes';
+
+	return null;
+}
+
+export function extractIntegrationTestDomainFromPath(path: string): string | null {
+	const match = path.match(/(?:^|[/\\])src[/\\]tests[/\\](?!test-helpers[/\\])([^/\\]+)[/\\]/i);
+	if ((match && match[1] === 'endpoints') || (match && match[1] === 'data')) return null;
+	return match ? match[1]! : null;
+}
+
+/**
+ * Given a file path, determines if it is a test file based on common test file suffixes.
+ * @param path The file path
+ * @returns True if the file is a test file, false otherwise
+ */
+export function isTestFile(path: string): boolean {
+	const testHelpersPattern = /[/\\]test-helpers([/\\]|$)/i;
+	const integrationTestsPattern = /[/\\]tests([/\\].*)?/i;
+
+	if (testHelpersPattern.test(path)) return true;
+	if (integrationTestsPattern.test(path)) return true;
+
+	return (
+		path.endsWith('.test.ts') ||
+		path.endsWith('.spec.ts') ||
+		path.endsWith('.test.tsx') ||
+		path.endsWith('.spec.tsx')
+	);
+}
+
+export type DomainKind = 'CORE' | 'UTILITY' | 'INFRA_SHARED';
+
+/**
+ * Classifies the domain into one of the predefined DomainKind categories.
+ * @param domain The domain name to classify
+ * @returns The DomainKind classification
+ */
+export function classifyDomainKind(domain: string): DomainKind {
+	if (domain === 'components' || domain === 'themes') return 'UTILITY';
+	if (domain === 'core') return 'INFRA_SHARED';
+	return 'CORE';
+}
+
+/**
+ * Determines if the given path belongs to a generic subdomain.
+ * @param path The file path
+ * @returns True if the path is within a generic subdomain, false otherwise
+ */
+export function isGenericSubdomain(path: string): boolean {
+	const normalized = path.replace(/\\/g, '/');
+	return (
+		normalized.startsWith('src/core/') ||
+		normalized.startsWith('src/components/') ||
+		normalized.startsWith('src/themes/')
+	);
+}
+
+/**
+ * Extracts the root namespace from a given file path.
+ * @param path The file path
+ * @returns The root namespace or null if not found
+ */
+export function extractRootNamespace(path: string): string | null {
+	const match = path.match(/^src\/([^/]+)\//);
+	return match?.[1] ?? null;
+}
+
+/**
+ * Determines if the given path is a root-level source file.
+ * @param path The file path
+ * @returns True if the path is a root-level source file, false otherwise
+ */
+export function isRootLevelSourceFile(path: string): boolean {
+	return /^src\/[^/]+\.(ts|tsx|js|jsx)$/.test(path);
+}

@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { AsyncState } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
-import { PoemCard } from '@root/features/poems/use-cases/poems/components/PoemCard';
+import { PoemCard } from '@root/features/poems/public/components/PoemCard';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
-import { useAuthorPoems } from '../../poems/use-cases/poems/hooks/useAuthorPoems';
+import { useAuthorPoems } from '../../poems/public/hooks/useGetAuthorPoems';
 import type { FullPoemType, PoemPreviewType } from '../../poems/types';
 
 function toPreviewPoem(poem: FullPoemType): PoemPreviewType {
@@ -202,7 +202,11 @@ export function AuthorPage() {
 						</Flex>
 					}
 				>
-					<Grid templateColumns={['1fr', undefined, '1fr 1fr', '1fr 1fr 1fr']} gap={3}>
+					<Grid
+						w='full'
+						templateColumns={{ base: '1fr', lg: '1fr 1fr', xl: '1fr 1fr 1fr' }}
+						gap={3}
+					>
 						{poems.map((poem, index) => (
 							<Box
 								key={poem.id}

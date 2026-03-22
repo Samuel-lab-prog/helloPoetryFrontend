@@ -1,21 +1,26 @@
-import { bold } from 'kleur/colors';
+import { blue } from 'kleur/colors';
 
-export function padLeft(text: string, length: number): string {
-	if (text.length >= length) return text;
-	return ' '.repeat(length - text.length) + text;
+const TERMINAL_WIDTH = 120;
+
+export function center(text: string, width = TERMINAL_WIDTH): string {
+	const pad = Math.max(0, Math.floor((width - text.length) / 2));
+	return ' '.repeat(pad) + text;
 }
 
-export function padRight(text: string, length: number): string {
-	if (text.length >= length) return text;
-	return text + ' '.repeat(length - text.length);
+export function divider(char = '─', width = TERMINAL_WIDTH): string {
+	return char.repeat(width);
 }
 
-export function divider(char: string, length: number): string {
-	return char.repeat(length);
+export function padRight(text: string, width: number): string {
+	return text.padEnd(width, ' ');
+}
+
+export function padLeft(text: string, width: number): string {
+	return text.padStart(width, ' ');
 }
 
 export function section(title: string): void {
-	console.log('');
-	console.log(bold(title.toUpperCase()));
-	console.log(divider('─', 120));
+	console.log('\n' + divider());
+	console.log(center(blue(title.toUpperCase())));
+	console.log(divider());
 }

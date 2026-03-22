@@ -52,7 +52,7 @@ export type CollectionsSectionProps = {
 	onCreateCollection: (input: {
 		userId: number;
 		name: string;
-		description: string;
+		description?: string;
 	}) => Promise<void>;
 	onDeleteCollection: (collectionId: number) => Promise<void>;
 	onAddPoemToCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;

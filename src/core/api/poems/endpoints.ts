@@ -182,7 +182,7 @@ const createCollection = createMutationEndpoint<CreateCollectionBody, void>({
 
 const addItemToCollection = createMutationEndpoint<CollectionItemBody, void>({
 	fn: (data) =>
-		createHTTPRequest<void, { poemId: string }>({
+		createHTTPRequest<void, { poemId: number }>({
 			method: 'POST',
 			path: `/poems/collections/${data.collectionId}/items`,
 			body: {
@@ -195,7 +195,7 @@ const addItemToCollection = createMutationEndpoint<CollectionItemBody, void>({
 
 const removeItemFromCollection = createMutationEndpoint<CollectionItemBody, void>({
 	fn: (data) =>
-		createHTTPRequest<void, { poemId: string }>({
+		createHTTPRequest<void, { poemId: number }>({
 			method: 'DELETE',
 			path: `/poems/collections/${data.collectionId}/items`,
 			body: {

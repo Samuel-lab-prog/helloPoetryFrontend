@@ -1,11 +1,11 @@
 ﻿import { Box } from '@chakra-ui/react';
 import { AsyncState } from '@root/core/base';
-import { PoemCard } from '../../poems/components/PoemCard';
-import { PoemGrid } from '../../poems/components/PoemGrid';
-import type { PoemPreviewType } from '../../../types';
+import { PoemCard } from '../../../public/components/PoemCard';
+import { PoemGrid } from '../../../public/components/PoemGrid';
+import type { PoemPreview } from '@root/core/api/poems/types';
 
 type HomeFeedProps = {
-	poems: PoemPreviewType[];
+	poems: PoemPreview[];
 	isLoading: boolean;
 	isError: boolean;
 };

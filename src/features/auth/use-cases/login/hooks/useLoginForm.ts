@@ -12,7 +12,6 @@ import { api } from '@root/core/api';
 import type { AppErrorType } from '@root/core/base';
 
 const FEED_ROUTE = '/';
-const MODERATION_ROUTE = '/admin/moderation';
 
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -39,9 +38,7 @@ export function useLoginForm() {
 				status: client.status,
 				loggedInAt: new Date().toISOString(),
 			});
-			const redirect =
-				client.role === 'moderator' || client.role === 'admin' ? MODERATION_ROUTE : FEED_ROUTE;
-			navigate(redirect, { replace: true });
+			navigate(FEED_ROUTE, { replace: true });
 		},
 
 		onError: (err: unknown) => {

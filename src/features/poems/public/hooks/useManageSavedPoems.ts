@@ -15,10 +15,9 @@ export function useSavedPoems(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: apiKeys.poems.saved(),
+		...api.poems.getSavedPoems.query(),
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () => api.poems.getSavedPoems.query().queryFn(),
 	});
 
 	const saveMutation = useMutation({

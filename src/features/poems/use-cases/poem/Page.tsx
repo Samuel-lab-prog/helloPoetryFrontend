@@ -9,7 +9,7 @@ import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
 import { usePoem } from './hooks/usePoem';
-import { useSavedPoems } from '../poems/hooks/useSavedPoems';
+import { useSavedPoems } from '../../public/hooks/useManageSavedPoems';
 import { PoemHeader } from './components/PoemHeader';
 import { PoemAuthorCard } from './components/PoemAuthorCard';
 import { PoemActions } from './components/PoemActions';

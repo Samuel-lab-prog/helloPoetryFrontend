@@ -14,7 +14,7 @@ type CreateCollectionFormProps = {
 	onCreateCollection: (input: {
 		userId: number;
 		name: string;
-		description: string;
+		description?: string;
 	}) => Promise<void>;
 };
 
@@ -45,7 +45,7 @@ export function CreateCollectionForm({
 				await onCreateCollection({
 					userId,
 					name,
-					description: values.description.trim(),
+					description: values.description.trim() || undefined,
 				});
 
 				form.reset({

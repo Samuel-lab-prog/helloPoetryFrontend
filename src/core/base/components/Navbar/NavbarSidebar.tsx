@@ -20,7 +20,7 @@ export function NavbarSidebar({
 	return (
 		<Flex
 			as='aside'
-			display={{ base: 'none', md: 'flex' }}
+			display={{ base: 'none', lg: 'flex' }}
 			direction='column'
 			justify='space-between'
 			w='260px'

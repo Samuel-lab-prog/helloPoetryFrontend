@@ -2,44 +2,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
-
-export type PoemCollectionType = {
-	id: number;
-	poemIds: number[];
-	name: string;
-	description: string | null;
-	createdAt: string;
-	updatedAt: string;
-};
-
-type CreateCollectionInput = {
-	userId: number;
-	name: string;
-	description: string;
-};
-
-type UpdateCollectionItemInput = {
-	collectionId: number;
-	poemId: number;
-};
+import type { CollectionItemBody, CreateCollectionBody } from '@root/core/api/poems/types';
 
 export function usePoemCollections(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: apiKeys.poems.collections(),
+		...api.poems.getCollections.query(),
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () => api.poems.getCollections.query().queryFn(),
 	});
 
 	const createCollectionMutation = useMutation({
-		mutationFn: (data: CreateCollectionInput) =>
+		mutationFn: (data: CreateCollectionBody) =>
 			api.poems.createCollection.mutate({
-				userId: String(data.userId),
+				userId: data.userId,
 				name: data.name,
-				description: data.description,
+				description: data.description?.trim() || undefined,
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
@@ -50,19 +30,19 @@ export function usePoemCollections(enabled = true) {
 	});
 
 	const addCollectionItemMutation = useMutation({
-		mutationFn: (data: UpdateCollectionItemInput) =>
+		mutationFn: (data: CollectionItemBody) =>
 			api.poems.addItemToCollection.mutate({
-				collectionId: String(data.collectionId),
-				poemId: String(data.poemId),
+				collectionId: data.collectionId,
+				poemId: data.poemId,
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});
 
 	const removeCollectionItemMutation = useMutation({
-		mutationFn: (data: UpdateCollectionItemInput) =>
+		mutationFn: (data: CollectionItemBody) =>
 			api.poems.removeItemFromCollection.mutate({
-				collectionId: String(data.collectionId),
-				poemId: String(data.poemId),
+				collectionId: data.collectionId,
+				poemId: data.poemId,
 			}),
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: apiKeys.poems.collections() }),
 	});

@@ -2,7 +2,7 @@
 import { AsyncState } from '@root/core/base';
 import { PoemCard } from './PoemCard';
 import { PoemGrid } from './PoemGrid';
-import type { PoemPreviewType } from '../../../types';
+import type { PoemPreviewType } from '../../types';
 
 type PoemsGridProps = {
 	poems: PoemPreviewType[];

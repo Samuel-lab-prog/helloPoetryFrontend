@@ -7,7 +7,7 @@ import {
 	type FieldValues,
 } from 'react-hook-form';
 import { useEffect } from 'react';
-import { type PoemMinimalDataType } from '../../../types';
+import { type PoemMinimalDataType } from '../../types';
 
 interface Props<T extends FieldValues> {
 	control: Control<T>;

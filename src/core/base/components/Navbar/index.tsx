@@ -28,7 +28,7 @@ export function Navbar({ links }: NavbarProps) {
 				onSameRouteClick={scrollToTop}
 			/>
 
-			<Flex flex='1' minW={0} direction='column' w='full' pb={{ base: '84px', md: 0 }}>
+			<Flex flex='1' minW={0} direction='column' w='full' pb={{ base: '84px', lg: 0 }}>
 				<Outlet />
 			</Flex>
 

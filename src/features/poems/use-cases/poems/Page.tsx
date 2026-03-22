@@ -1,6 +1,6 @@
 ﻿import { Flex } from '@chakra-ui/react';
 import { PoemsFilters } from './components/PoemsFilters';
-import { PoemsGrid } from './components/PoemsGrid';
+import { PoemsGrid } from '../../public/components/PoemsGrid';
 import { PoemsLoadMore } from './components/PoemsLoadMore';
 import { useInfinitePoems } from './hooks/useInfinitePoems';
 import { usePoemsFilters } from './hooks/usePoemsFilters';

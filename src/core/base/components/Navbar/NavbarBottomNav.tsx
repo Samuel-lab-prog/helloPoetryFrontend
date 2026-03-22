@@ -19,7 +19,7 @@ export function NavbarBottomNav({
 	return (
 		<Box
 			as='nav'
-			display={{ base: 'block', md: 'none' }}
+			display={{ base: 'block', lg: 'none' }}
 			position='fixed'
 			left={0}
 			right={0}

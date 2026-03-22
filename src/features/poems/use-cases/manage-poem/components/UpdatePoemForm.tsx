@@ -1,9 +1,9 @@
 import { Flex, Button, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useUpdatePoemForm } from '../hooks/update-poem-form';
-import { usePoemsMinimal } from '../../poems/hooks/usePoemsMinimal';
+import { usePoemsMinimal } from '../../../public/hooks/useGetPoemsMinimal';
 import { usePoem } from '../../poem/hooks/usePoem';
-import { PoemCombobox } from '../../poems/components/PoemCombobox';
+import { PoemCombobox } from '../../../public/components/PoemCombobox';
 import { FormField, SelectField, TagsField } from '@root/core/base';
 import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../create-poem/components/constants';
 

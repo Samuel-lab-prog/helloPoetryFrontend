@@ -1,7 +1,7 @@
 import { Box, Flex, IconButton, Text } from '@chakra-ui/react';
 import { ExternalLink, Plus, Trash2, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { PoemCombobox } from '@root/features/poems/use-cases/poems/components/PoemCombobox';
+import { PoemCombobox } from '@root/features/poems/public/components/PoemCombobox';
 import type {
 	PoemCollectionType,
 	PoemMinimalDataType,
