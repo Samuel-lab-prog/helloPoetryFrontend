@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+ï»¿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
@@ -111,24 +111,24 @@ function updateLikeState(
 
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Poema não encontrado.';
-	if (error.statusCode === 403) return 'Você não pode comentar neste poema.';
-	if (error.statusCode === 422) return 'Comentário inválido (1-300 chars).';
-	return 'Erro ao enviar comentário.';
+	if (error.statusCode === 404) return 'Poema nÃ£o encontrado.';
+	if (error.statusCode === 403) return 'VocÃª nÃ£o pode comentar neste poema.';
+	if (error.statusCode === 422) return 'ComentÃ¡rio invÃ¡lido (1-300 chars).';
+	return 'Erro ao enviar comentÃ¡rio.';
 }
 
 function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 403) return 'Você não pode deletar este comentário.';
-	if (error.statusCode === 404) return 'Comentário não encontrado.';
-	return 'Erro ao deletar comentário.';
+	if (error.statusCode === 403) return 'VocÃª nÃ£o pode deletar este comentÃ¡rio.';
+	if (error.statusCode === 404) return 'ComentÃ¡rio nÃ£o encontrado.';
+	return 'Erro ao deletar comentÃ¡rio.';
 }
 
 function getToggleLikeErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Comentário não encontrado.';
-	if (error.statusCode === 409) return 'Estado de curtida inválido.';
-	return 'Erro ao atualizar curtida do comentário.';
+	if (error.statusCode === 404) return 'ComentÃ¡rio nÃ£o encontrado.';
+	if (error.statusCode === 409) return '';
+	return 'Erro ao atualizar curtida do comentÃ¡rio.';
 }
 
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {
@@ -206,12 +206,10 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			}
 			return context;
 		},
-		onError: (_, __, context) => restoreCommentQueries(queryClient, context),
-		onSuccess: (_, params) => {
-			const baseKey = buildCommentsKey(poemId);
-			const repliesKey = params.parentId ? buildCommentsKey(poemId, params.parentId) : null;
-			queryClient.invalidateQueries({ queryKey: baseKey });
-			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
+		onError: (error, _variables, context) => {
+			const appError = error as AppErrorType;
+			if (appError?.statusCode === 409) return;
+			restoreCommentQueries(queryClient, context);
 		},
 	});
 
@@ -234,12 +232,10 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			}
 			return context;
 		},
-		onError: (_, __, context) => restoreCommentQueries(queryClient, context),
-		onSuccess: (_, params) => {
-			const baseKey = buildCommentsKey(poemId);
-			const repliesKey = params.parentId ? buildCommentsKey(poemId, params.parentId) : null;
-			queryClient.invalidateQueries({ queryKey: baseKey });
-			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
+		onError: (error, _variables, context) => {
+			const appError = error as AppErrorType;
+			if (appError?.statusCode === 409) return;
+			restoreCommentQueries(queryClient, context);
 		},
 	});
 
