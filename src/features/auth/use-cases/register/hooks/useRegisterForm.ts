@@ -6,13 +6,13 @@ import { useMutation } from '@tanstack/react-query';
 
 import { registerSchema, type RegisterDataType } from '../components/registerSchema';
 import { api } from '@root/core/api';
-import { getAvatarFileError, uploadAvatarFile } from '@features/users/utils/avatarUpload';
 import type { CreateUserBody } from '@root/core/api/users/types';
 import type { AppErrorType } from '@root/core/base';
 
+const DEFAULT_AVATAR_URL = 'https://cdn.olapoesia.dev/avatar/john.png';
+
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
-	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 	const navigate = useNavigate();
 
 	const form = useForm<RegisterDataType>({
@@ -42,44 +42,13 @@ export function useRegisterForm() {
 		if (!form.formState.isValid) return;
 
 		void (async () => {
-			setIsUploadingAvatar(true);
 			const { avatar, ...rest } = data;
-			const payload: CreateUserBody = { ...rest };
-			const avatarFile = avatar instanceof File ? avatar : null;
-
-			if (avatarFile) {
-				const fileError = getAvatarFileError(avatarFile);
-				if (fileError) {
-					form.setError('avatar', { type: 'manual', message: fileError });
-					setIsUploadingAvatar(false);
-					return;
-				}
-
-				try {
-					payload.avatarUrl = await uploadAvatarFile(avatarFile);
-				} catch (error) {
-					const statusCode =
-						typeof error === 'object' && error !== null && 'statusCode' in error
-							? Number((error as { statusCode?: number }).statusCode)
-							: null;
-
-					if (statusCode === 401 || statusCode === 403) {
-						form.setError('avatar', {
-							type: 'manual',
-							message:
-								'Sign in to upload an avatar. You can complete registration and add it later.',
-						});
-					} else {
-						const message = error instanceof Error ? error.message : 'Error uploading avatar.';
-						form.setError('avatar', { type: 'manual', message });
-						setIsUploadingAvatar(false);
-						return;
-					}
-				}
-			}
+			const payload: CreateUserBody = {
+				...rest,
+				avatarUrl: DEFAULT_AVATAR_URL,
+			};
 
 			registerMutation.mutate(payload);
-			setIsUploadingAvatar(false);
 		})();
 	}
 
@@ -89,7 +58,7 @@ export function useRegisterForm() {
 		handleSubmit: form.handleSubmit,
 		formState: form.formState,
 		control: form.control,
-		isPending: registerMutation.isPending || isUploadingAvatar,
+		isPending: registerMutation.isPending,
 		setError: form.setError,
 		clearErrors: form.clearErrors,
 	};
