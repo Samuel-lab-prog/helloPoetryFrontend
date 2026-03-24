@@ -165,10 +165,12 @@ export type UpdatePoemResult = {
 export type PoemAudioUploadUrlRequest = {
 	poemId: string;
 	contentType: string;
+	contentLength?: number;
 };
 
 export type PoemAudioUploadUrlResponse = {
 	uploadUrl: string;
+	fields: Record<string, string>;
 	fileUrl: string;
 };
 

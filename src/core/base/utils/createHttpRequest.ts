@@ -60,6 +60,8 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	if (!baseUrl) throw new Error('VITE_API_URL is not defined');
 
 	const url = buildUrl(baseUrl, path, params, query);
+	const csrfToken = getCookieValue('csrf_token');
+	const isUnsafeMethod = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
 
 	const response = await fetch(url, {
 		method,
@@ -67,6 +69,7 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 		signal,
 		headers: {
 			...(body ? { 'Content-Type': 'application/json' } : {}),
+			...(isUnsafeMethod && csrfToken ? { 'x-csrf-token': csrfToken } : {}),
 			...headers,
 		},
 		body: body ? JSON.stringify(body) : undefined,
@@ -85,6 +88,14 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 		throw error;
 	}
 	return parsedBody;
+}
+
+function getCookieValue(name: string): string | null {
+	if (typeof document === 'undefined') return null;
+	const cookies = document.cookie.split(';').map((cookie) => cookie.trim());
+	const target = cookies.find((cookie) => cookie.startsWith(`${name}=`));
+	if (!target) return null;
+	return decodeURIComponent(target.split('=').slice(1).join('='));
 }
 
 function buildUrl(

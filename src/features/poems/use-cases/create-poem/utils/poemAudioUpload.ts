@@ -1,4 +1,4 @@
-import { api } from '@root/core/api';
+﻿import { api } from '@root/core/api';
 
 const allowedAudioTypes = new Set([
 	'audio/mpeg',

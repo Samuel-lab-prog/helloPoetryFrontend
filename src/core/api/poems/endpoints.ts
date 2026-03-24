@@ -128,11 +128,12 @@ const requestPoemAudioUploadUrl = createMutationEndpoint<
 	PoemAudioUploadUrlResponse
 >({
 	fn: (data) =>
-		createHTTPRequest<PoemAudioUploadUrlResponse, { contentType: string }>({
+		createHTTPRequest<PoemAudioUploadUrlResponse, { contentType: string; contentLength?: number }>({
 			method: 'POST',
 			path: `/poems/${data.poemId}/audio/upload-url`,
 			body: {
 				contentType: data.contentType,
+				contentLength: data.contentLength,
 			},
 		}),
 });

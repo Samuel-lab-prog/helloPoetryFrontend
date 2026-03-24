@@ -84,10 +84,12 @@ export type UpdateUserBody = {
 
 export type AvatarUploadUrlRequest = {
 	contentType: string;
+	contentLength?: number;
 };
 
 export type AvatarUploadUrlResponse = {
 	uploadUrl: string;
+	fields: Record<string, string>;
 	fileUrl: string;
 };
 
