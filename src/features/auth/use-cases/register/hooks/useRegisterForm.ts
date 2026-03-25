@@ -6,10 +6,9 @@ import { useMutation } from '@tanstack/react-query';
 
 import { registerSchema, type RegisterDataType } from '../components/registerSchema';
 import { api } from '@root/core/api';
+import { uploadAvatarFile } from '@features/users/utils/avatarUpload';
 import type { CreateUserBody } from '@root/core/api/users/types';
 import type { AppErrorType } from '@root/core/base';
-
-const DEFAULT_AVATAR_URL = 'https://cdn.olapoesia.dev/avatar/john.png';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -43,9 +42,19 @@ export function useRegisterForm() {
 
 		void (async () => {
 			const { avatar, ...rest } = data;
+			let avatarUrl: string | undefined;
+			if (avatar) {
+				try {
+					avatarUrl = await uploadAvatarFile(avatar as File);
+				} catch (err) {
+					const message = err instanceof Error ? err.message : 'Erro ao enviar avatar.';
+					setGeneralError(message);
+					return;
+				}
+			}
 			const payload: CreateUserBody = {
 				...rest,
-				avatarUrl: DEFAULT_AVATAR_URL,
+				avatarUrl,
 			};
 
 			registerMutation.mutate(payload);

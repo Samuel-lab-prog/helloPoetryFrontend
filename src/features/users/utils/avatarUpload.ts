@@ -31,15 +31,47 @@ export async function uploadAvatarFile(file: File): Promise<string> {
 	const error = getAvatarFileError(file);
 	if (error) throw new Error(error);
 
-	const { uploadUrl, fileUrl } = await api.users.requestAvatarUploadUrl.mutate({
+	const { uploadUrl, fileUrl, fields } = await api.users.requestAvatarUploadUrl.mutate({
 		contentType: file.type,
+		contentLength: file.size,
 	});
 
 	if (!uploadUrl || uploadUrl === 'SIGNED_URL_PLACEHOLDER') {
 		return fileUrl;
 	}
 
-	const response = await fetch(uploadUrl, {
+	const hasPostFields = fields && Object.keys(fields).length > 0;
+	const response = hasPostFields
+		? await uploadViaPresignedPost(uploadUrl, fields, file)
+		: await uploadViaPresignedPut(uploadUrl, file);
+
+	if (!response.ok) {
+		throw new Error('Erro ao enviar avatar.');
+	}
+
+	return fileUrl;
+}
+
+async function uploadViaPresignedPost(
+	uploadUrl: string,
+	fields: Record<string, string>,
+	file: File,
+) {
+	const formData = new FormData();
+	Object.entries(fields).forEach(([key, value]) => {
+		formData.append(key, value);
+	});
+	formData.append('file', file);
+
+	return fetch(uploadUrl, {
+		method: 'POST',
+		body: formData,
+		credentials: 'omit',
+	});
+}
+
+async function uploadViaPresignedPut(uploadUrl: string, file: File) {
+	return fetch(uploadUrl, {
 		method: 'PUT',
 		headers: {
 			'Content-Type': file.type,
@@ -47,10 +79,4 @@ export async function uploadAvatarFile(file: File): Promise<string> {
 		body: file,
 		credentials: 'omit',
 	});
-
-	if (!response.ok) {
-		throw new Error('Erro ao enviar avatar.');
-	}
-
-	return fileUrl;
 }
