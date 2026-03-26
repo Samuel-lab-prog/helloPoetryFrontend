@@ -28,6 +28,7 @@ export function ProfileOverviewSection({
 	onUpdateProfile,
 }: ProfileOverviewSectionProps) {
 	const profileInputStyles = {
+		w: 'full',
 		textStyle: 'small',
 		transition: 'all 0.22s ease',
 		bg: 'rgba(255, 255, 255, 0.03)',
@@ -126,7 +127,7 @@ export function ProfileOverviewSection({
 					direction={{ base: 'column', md: 'row' }}
 					gap={4}
 				>
-					<VStack align='start' gap={2} flex='1'>
+					<VStack align='start' gap={2} flex='1' w='full'>
 						<Avatar.Root
 							size='2xl'
 							w={{ base: '6rem', md: '8rem' }}

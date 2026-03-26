@@ -248,7 +248,27 @@ export function PoemPage() {
 								<PoemHeader poem={poemHeaderPoem} />
 								{immersiveUrl && (
 									<Flex justify='flex-end' mb={4}>
-										<Button asChild size='sm' variant='outlinePurple'>
+										<Button
+											asChild
+											size={{ base: 'md', md: 'sm' }}
+											variant='outlinePurple'
+											px={{ base: 5, md: 4 }}
+											py={{ base: 3, md: 2.5 }}
+											minH={{ base: 11, md: 9 }}
+											bg='rgba(255, 255, 255, 0.04)'
+											borderColor='pink.400'
+											color='pink.50'
+											boxShadow='0 10px 18px rgba(10, 0, 9, 0.22)'
+											_hover={{
+												bg: 'rgba(255, 255, 255, 0.08)',
+												borderColor: 'pink.300',
+											}}
+											_focusVisible={{
+												outline: '2px solid',
+												outlineColor: 'pink.300',
+												outlineOffset: '2px',
+											}}
+										>
 											<NavLink to={immersiveUrl}>Immersive mode</NavLink>
 										</Button>
 									</Flex>
@@ -294,9 +314,9 @@ export function PoemPage() {
 									},
 								}}
 							>
-								<Box w='full' maxW='3xl' textAlign='left'>
+								<Box w='full' maxW='full' textAlign='left'>
 									{poem.audioUrl && (
-										<Box mb={6}>
+										<Box mb={6} w='full'>
 											<PoemAudioPlayer src={poem.audioUrl} />
 										</Box>
 									)}

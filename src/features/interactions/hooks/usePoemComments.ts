@@ -113,7 +113,7 @@ function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
 	if (error.statusCode === 404) return 'Poem not found.';
 	if (error.statusCode === 403) return 'You cannot comment on this poem.';
-	if (error.statusCode === 422) return 'Invalid comment (1-300 chars).';
+	if (error.statusCode === 422) return 'Invalid comment (1-3000 chars).';
 	return 'Error sending comment.';
 }
 

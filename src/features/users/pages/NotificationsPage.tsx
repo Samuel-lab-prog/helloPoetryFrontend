@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Badge, Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { AsyncState } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
@@ -41,10 +41,10 @@ export function NotificationsPage() {
 					</Badge>
 				</Flex>
 
-				<HStack mb={6} gap={2} wrap='wrap'>
+				<Flex mb={6} gap={2} wrap='wrap'>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
-						w={{ base: 'full', md: 'auto' }}
+						w='auto'
 						variant='solidPink'
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
@@ -53,7 +53,7 @@ export function NotificationsPage() {
 					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
-						w={{ base: 'full', md: 'auto' }}
+						w='auto'
 						variant='solidPink'
 						onClick={() => {
 							void markAllAsRead();
@@ -65,7 +65,7 @@ export function NotificationsPage() {
 					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
-						w={{ base: 'full', md: 'auto' }}
+						w='auto'
 						variant='solidPink'
 						colorPalette='gray'
 						onClick={() => {
@@ -76,7 +76,7 @@ export function NotificationsPage() {
 					>
 						Delete all
 					</Button>
-				</HStack>
+				</Flex>
 
 				<AsyncState
 					isLoading={isLoading}

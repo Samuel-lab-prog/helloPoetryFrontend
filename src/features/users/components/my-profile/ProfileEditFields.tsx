@@ -39,17 +39,19 @@ export function ProfileEditFields({
 	onPickAvatar,
 }: ProfileEditFieldsProps) {
 	return (
-		<>
+		<Flex direction='column' gap={2} w='full'>
 			<Input
 				value={nameDraft}
 				onChange={(e) => onChangeName(e.target.value)}
 				placeholder='Name'
+				w='full'
 				{...profileInputStyles}
 			/>
 			<Input
 				value={nicknameDraft}
 				onChange={(e) => onChangeNickname(e.target.value)}
 				placeholder='Nickname'
+				w='full'
 				{...profileInputStyles}
 				borderColor={conflictField === 'nickname' ? 'red.400' : undefined}
 				_focusVisible={
@@ -110,6 +112,7 @@ export function ProfileEditFields({
 				onChange={(e) => onChangeBio(e.target.value)}
 				placeholder='Bio'
 				rows={4}
+				w='full'
 				{...profileInputStyles}
 			/>
 			{updateProfileError && (
@@ -117,6 +120,6 @@ export function ProfileEditFields({
 					{updateProfileError}
 				</Text>
 			)}
-		</>
+		</Flex>
 	);
 }

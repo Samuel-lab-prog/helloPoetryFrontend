@@ -39,9 +39,7 @@ export function CommentThreadHeader({
 								outlineOffset: '2px',
 							}}
 						>
-							<NavLink to={`/authors/${comment.author.id}`}>
-								@{comment.author.nickname}
-							</NavLink>
+							<NavLink to={`/authors/${comment.author.id}`}>@{comment.author.nickname}</NavLink>
 						</Link>
 						<Text textStyle='smaller' color='pink.200'>
 							{formatRelativeTime(comment.createdAt)}

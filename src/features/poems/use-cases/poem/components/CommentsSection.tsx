@@ -108,9 +108,9 @@ export const CommentsSection = memo(function CommentsSection({
 				<Textarea
 					value={commentInput}
 					onChange={(e) => onCommentInputChange(e.target.value)}
-					placeholder='Write a comment (1-300 characters)'
+					placeholder='Write a comment (1-3000 characters)'
 					rows={4}
-					maxLength={300}
+					maxLength={3000}
 					borderColor={commentError ? 'red.400' : undefined}
 					_focusVisible={commentError ? { borderColor: 'red.400' } : undefined}
 					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
@@ -122,7 +122,7 @@ export const CommentsSection = memo(function CommentsSection({
 					gap={2}
 				>
 					<Text textStyle='smaller' color='pink.200'>
-						{commentInput.length}/300
+						{commentInput.length}/3000
 					</Text>
 					<Button
 						variant='solidPink'

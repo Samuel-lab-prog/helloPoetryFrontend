@@ -102,11 +102,7 @@ async function uploadViaPresignedPost(
 	});
 }
 
-async function uploadViaPresignedPut(
-	uploadUrl: string,
-	contentType: string,
-	file: File,
-) {
+async function uploadViaPresignedPut(uploadUrl: string, contentType: string, file: File) {
 	return fetch(uploadUrl, {
 		method: 'PUT',
 		headers: {

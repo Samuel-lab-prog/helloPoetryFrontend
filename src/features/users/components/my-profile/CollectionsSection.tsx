@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { Flex, Heading, Link, Text } from '@chakra-ui/react';
+import { Flex, Heading, HStack, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
+import { Layers } from 'lucide-react';
 import { Surface } from '@root/core/base';
 import { type PoemMinimalDataType } from '@root/features/poems/types';
 import type { CollectionsSectionProps } from './types';
@@ -46,9 +47,12 @@ export function CollectionsSection({
 				gap={3}
 				mb={4}
 			>
-				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Poem collections
-				</Heading>
+				<HStack gap={2}>
+					<Layers size={18} color='var(--chakra-colors-pink-300)' />
+					<Heading as='h2' textStyle='h4' color='pink.300'>
+						Poem collections
+					</Heading>
+				</HStack>
 				{viewAllHref && (
 					<Link
 						asChild

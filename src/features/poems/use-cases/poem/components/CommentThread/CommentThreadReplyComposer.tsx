@@ -28,7 +28,7 @@ export function CommentThreadReplyComposer({
 					onChange={(e) => onChange(e.target.value)}
 					placeholder='Reply to comment'
 					rows={3}
-					maxLength={300}
+					maxLength={3000}
 					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
 				/>
 				<Flex justify='flex-end'>

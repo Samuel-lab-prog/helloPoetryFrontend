@@ -101,6 +101,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 
 	return (
 		<Box
+			w='full'
 			p={4}
 			border='1px solid'
 			borderColor='purple.700'

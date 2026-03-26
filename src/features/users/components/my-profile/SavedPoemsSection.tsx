@@ -1,6 +1,6 @@
-import { Flex, Heading, IconButton, Link, Text } from '@chakra-ui/react';
+import { Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { ExternalLink, X } from 'lucide-react';
+import { Bookmark, ExternalLink, X } from 'lucide-react';
 import { Surface, formatDate } from '@root/core/base';
 import type { SavedPoemsSectionProps } from './types';
 
@@ -22,9 +22,12 @@ export function SavedPoemsSection({
 				gap={3}
 				mb={4}
 			>
-				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Saved poems
-				</Heading>
+				<HStack gap={2}>
+					<Bookmark size={18} color='var(--chakra-colors-pink-300)' />
+					<Heading as='h2' textStyle='h4' color='pink.300'>
+						Saved poems
+					</Heading>
+				</HStack>
 				{viewAllHref && (
 					<Link
 						asChild

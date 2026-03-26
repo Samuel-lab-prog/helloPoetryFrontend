@@ -7,7 +7,7 @@ type ProfileStatsGridProps = {
 
 export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 	return (
-		<Grid mt={5} templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={4}>
+		<Grid mt={5} templateColumns='repeat(3, minmax(0, 1fr))' gap={4}>
 			<Box
 				p={4}
 				border='1px solid'

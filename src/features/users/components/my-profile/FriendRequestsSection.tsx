@@ -1,6 +1,6 @@
 import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { Check, X } from 'lucide-react';
+import { Check, UserPlus, X } from 'lucide-react';
 import { Surface } from '@root/core/base';
 import type { FriendRequestsSectionProps } from './types';
 
@@ -24,9 +24,12 @@ export function FriendRequestsSection({
 				gap={3}
 				mb={4}
 			>
-				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Friend requests received
-				</Heading>
+				<HStack gap={2}>
+					<UserPlus size={18} color='var(--chakra-colors-pink-300)' />
+					<Heading as='h2' textStyle='h4' color='pink.300'>
+						Friend requests received
+					</Heading>
+				</HStack>
 				{viewAllHref && (
 					<Link
 						asChild

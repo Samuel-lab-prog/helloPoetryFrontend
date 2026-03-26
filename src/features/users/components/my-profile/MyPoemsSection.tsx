@@ -9,7 +9,7 @@ import {
 	Portal,
 	Text,
 } from '@chakra-ui/react';
-import { EllipsisVertical } from 'lucide-react';
+import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { Surface, formatDate } from '@root/core/base';
 import type { MyPoemsSectionProps } from './types';
@@ -59,9 +59,12 @@ export function MyPoemsSection({
 				gap={3}
 				mb={4}
 			>
-				<Heading as='h2' textStyle='h4' color='pink.300'>
-					My poems
-				</Heading>
+				<HStack gap={2}>
+					<Feather size={18} color='var(--chakra-colors-pink-300)' />
+					<Heading as='h2' textStyle='h4' color='pink.300'>
+						My poems
+					</Heading>
+				</HStack>
 				{viewAllHref && (totalPoemsCount ?? myPoems.length) > myPoems.length && (
 					<Link
 						asChild
