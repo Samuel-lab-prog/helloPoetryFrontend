@@ -1,5 +1,6 @@
 import { memo, useMemo, type Dispatch, type SetStateAction } from 'react';
-import { Box, Button, Flex, Heading, Text, Textarea } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
+import { SendHorizontal } from 'lucide-react';
 import { AsyncState } from '@root/core/base';
 import { CommentThread } from './CommentThread';
 import type { PoemCommentType } from '@features/interactions';
@@ -124,17 +125,20 @@ export const CommentsSection = memo(function CommentsSection({
 					<Text textStyle='smaller' color='pink.200'>
 						{commentInput.length}/3000
 					</Text>
-					<Button
+					<IconButton
+						aria-label='Send comment'
+						title='Send comment'
 						variant='solidPink'
-						w={{ base: 'full', md: 'auto' }}
+						size='sm'
+						alignSelf={{ base: 'end', md: 'auto' }}
 						disabled={!canPublishComment}
 						loading={isCreatingComment}
 						onClick={() => {
 							void onPublishComment();
 						}}
 					>
-						Publish comment
-					</Button>
+						<SendHorizontal />
+					</IconButton>
 				</Flex>
 				{!poemIsCommentable && (
 					<Text textStyle='small' color='pink.200'>

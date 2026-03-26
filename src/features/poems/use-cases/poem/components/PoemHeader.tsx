@@ -39,7 +39,7 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 				</Text>
 
 				{updatedAt !== createdAt && (
-					<Text fontSize={['xs', 'sm']} fontStyle='italic'>
+					<Text textStyle='small' fontStyle='italic'>
 						Last updated on {formatDate(updatedAt)}
 					</Text>
 				)}

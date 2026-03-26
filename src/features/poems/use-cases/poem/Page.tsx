@@ -247,14 +247,13 @@ export function PoemPage() {
 							>
 								<PoemHeader poem={poemHeaderPoem} />
 								{immersiveUrl && (
-									<Flex justify='flex-end' mb={4}>
+									<Flex justify='flex-end' mb={4} mt={3}>
 										<Button
 											asChild
-											size={{ base: 'md', md: 'sm' }}
+											size={{ base: 'sm', md: 'sm' }}
 											variant='outlinePurple'
-											px={{ base: 5, md: 4 }}
-											py={{ base: 3, md: 2.5 }}
-											minH={{ base: 11, md: 9 }}
+											px={{ base: 4, md: 4 }}
+											py={{ base: 2.5, md: 2.5 }}
 											bg='rgba(255, 255, 255, 0.04)'
 											borderColor='pink.400'
 											color='pink.50'

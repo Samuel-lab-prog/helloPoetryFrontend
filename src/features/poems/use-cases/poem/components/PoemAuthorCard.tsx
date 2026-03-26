@@ -40,7 +40,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 			<Flex
 				w='full'
 				gap={3}
-				align={{ base: 'start', md: 'center' }}
+				align={{ base: 'center', md: 'center' }}
 				direction={{ base: 'row', md: 'row' }}
 			>
 				<Avatar.Root size={{ base: 'lg', md: 'xl' }}>
@@ -55,9 +55,15 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 					<Text textStyle='body' wordBreak='break-word'>
 						{author.name}
 					</Text>
-					<Text textStyle='smaller' color='pink.200' wordBreak='break-all'>
-						@{author.nickname}
-					</Text>
+					<Link
+						asChild
+						textStyle='smaller'
+						color='pink.200'
+						wordBreak='break-all'
+						_hover={{ color: 'pink.100' }}
+					>
+						<NavLink to={`/authors/${author.id}`}>@{author.nickname}</NavLink>
+					</Link>
 					<Text textStyle='smaller' color='pink.200'>
 						Likes: {stats.likesCount} | Comments: {stats.commentsCount}
 					</Text>
@@ -71,9 +77,6 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 				align={{ base: 'stretch', md: 'center' }}
 				justify='space-between'
 			>
-				<Link asChild textStyle='small' color='pink.100' alignSelf={{ base: 'start', md: 'auto' }}>
-					<NavLink to={`/authors/${author.id}`}>View author</NavLink>
-				</Link>
 				{children}
 			</Flex>
 		</Flex>
