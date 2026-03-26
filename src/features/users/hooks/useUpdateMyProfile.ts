@@ -56,12 +56,12 @@ export function useUpdateMyProfile() {
 	function getErrorMessage() {
 		const error = mutation.error as AppErrorType | Error | null;
 		if (!error) return '';
-		if (!('statusCode' in error)) return error.message || 'Erro ao atualizar perfil.';
-		if (error.statusCode === 401) return 'Faca login para editar seu perfil.';
-		if (error.statusCode === 403) return 'Voce nao tem permissao para editar este perfil.';
-		if (error.statusCode === 409) return 'Este apelido ja esta em uso.';
-		if (error.statusCode === 422) return 'Dados invalidos. Revise os campos.';
-		return 'Erro ao atualizar perfil.';
+		if (!('statusCode' in error)) return error.message || 'Error updating profile.';
+		if (error.statusCode === 401) return 'Sign in to edit your profile.';
+		if (error.statusCode === 403) return 'You do not have permission to edit this profile.';
+		if (error.statusCode === 409) return 'This nickname is already in use.';
+		if (error.statusCode === 422) return 'Invalid data. Please review the fields.';
+		return 'Error updating profile.';
 	}
 
 	function getConflictField(): ConflictField {

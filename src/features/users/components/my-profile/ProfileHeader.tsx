@@ -17,10 +17,10 @@ export function ProfileHeader({ isLoggingOut, onLogout }: ProfileHeaderProps) {
 		>
 			<VStack align='start' gap={1}>
 				<Heading as='h1' textStyle='h2'>
-					Meu Perfil
+					My Profile
 				</Heading>
 				<Text textStyle='small' color='pink.200'>
-					Gerencie sua conta, colecoes e poemas.
+					Manage your account, collections, and poems.
 				</Text>
 			</VStack>
 			<Button
@@ -32,7 +32,7 @@ export function ProfileHeader({ isLoggingOut, onLogout }: ProfileHeaderProps) {
 			>
 				<HStack gap={2}>
 					<LogOut size={16} />
-					<Text>Sair</Text>
+					<Text>Sign out</Text>
 				</HStack>
 			</Button>
 		</Flex>

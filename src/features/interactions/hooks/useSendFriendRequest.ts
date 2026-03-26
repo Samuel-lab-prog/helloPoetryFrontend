@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+ï»¿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys } from '@root/core/api';
 
@@ -24,10 +24,10 @@ export function useSendFriendRequest() {
 		const err = mutation.error as AppErrorType | null;
 		if (!err) return '';
 
-		if (err.statusCode === 409) return 'Pedido ja enviado ou relação ja existe.';
-		if (err.statusCode === 403) return 'Você não pode enviar pedido para este usuário.';
-		if (err.statusCode === 404) return 'Autor não encontrado.';
-		return 'Erro ao enviar pedido de amizade.';
+		if (err.statusCode === 409) return 'Request already sent or relationship already exists.';
+		if (err.statusCode === 403) return 'You cannot send a request to this user.';
+		if (err.statusCode === 404) return 'Author not found.';
+		return 'Error sending friend request.';
 	}
 
 	return {

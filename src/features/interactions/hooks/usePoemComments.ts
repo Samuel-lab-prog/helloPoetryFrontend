@@ -111,24 +111,24 @@ function updateLikeState(
 
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Poema não encontrado.';
-	if (error.statusCode === 403) return 'Você não pode comentar neste poema.';
-	if (error.statusCode === 422) return 'Comentário inválido (1-300 chars).';
-	return 'Erro ao enviar comentário.';
+	if (error.statusCode === 404) return 'Poem not found.';
+	if (error.statusCode === 403) return 'You cannot comment on this poem.';
+	if (error.statusCode === 422) return 'Invalid comment (1-300 chars).';
+	return 'Error sending comment.';
 }
 
 function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 403) return 'Você não pode deletar este comentário.';
-	if (error.statusCode === 404) return 'Comentário não encontrado.';
-	return 'Erro ao deletar comentário.';
+	if (error.statusCode === 403) return 'You cannot delete this comment.';
+	if (error.statusCode === 404) return 'Comment not found.';
+	return 'Error deleting comment.';
 }
 
 function getToggleLikeErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 404) return 'Comentário não encontrado.';
+	if (error.statusCode === 404) return 'Comment not found.';
 	if (error.statusCode === 409) return '';
-	return 'Erro ao atualizar curtida do comentário.';
+	return 'Error updating comment like.';
 }
 
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {

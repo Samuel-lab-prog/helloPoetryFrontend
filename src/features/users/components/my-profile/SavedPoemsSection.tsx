@@ -23,7 +23,7 @@ export function SavedPoemsSection({
 				mb={4}
 			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Poemas salvos
+					Saved poems
 				</Heading>
 				{viewAllHref && (
 					<Link
@@ -33,19 +33,19 @@ export function SavedPoemsSection({
 						textDecoration='underline'
 						textUnderlineOffset='3px'
 					>
-						<NavLink to={viewAllHref}>Ver todos</NavLink>
+						<NavLink to={viewAllHref}>View all</NavLink>
 					</Link>
 				)}
 			</Flex>
 
 			<Flex direction='column' gap={3}>
-				{isLoadingSavedPoems && <Text textStyle='small'>Carregando poemas salvos...</Text>}
+				{isLoadingSavedPoems && <Text textStyle='small'>Loading saved poems...</Text>}
 				{!isLoadingSavedPoems && savedPoems.length === 0 && (
-					<Text textStyle='small'>Voce ainda nao salvou poemas.</Text>
+					<Text textStyle='small'>You have not saved any poems yet.</Text>
 				)}
 				{!isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (
 					<Text textStyle='smaller' color='pink.200'>
-						Mostrando {savedPoems.length} de {totalSavedPoemsCount} poemas salvos.
+						Showing {savedPoems.length} of {totalSavedPoemsCount} saved poems.
 					</Text>
 				)}
 
@@ -69,12 +69,12 @@ export function SavedPoemsSection({
 						<Flex direction='column' gap={1}>
 							<Text textStyle='small'>{poem.title}</Text>
 							<Text textStyle='smaller' color='pink.200'>
-								Salvo em {formatDate(poem.savedAt)}
+								Saved on {formatDate(poem.savedAt)}
 							</Text>
 						</Flex>
 						<Flex gap={2}>
 							<IconButton
-								aria-label='Abrir poema salvo'
+								aria-label='Open saved poem'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								asChild
@@ -85,7 +85,7 @@ export function SavedPoemsSection({
 							</IconButton>
 							{onUnsavePoem && (
 								<IconButton
-									aria-label='Remover dos salvos'
+									aria-label='Remove from saved'
 									size={{ base: 'xs', md: 'sm' }}
 									variant='solidPink'
 									colorPalette='gray'

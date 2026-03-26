@@ -17,9 +17,9 @@ import type { MyPoemsSectionProps } from './types';
 function translateStatus(status: string) {
 	switch (status) {
 		case 'draft':
-			return 'Rascunho';
+			return 'Draft';
 		case 'published':
-			return 'Publicado';
+			return 'Published';
 		default:
 			return status;
 	}
@@ -28,13 +28,13 @@ function translateStatus(status: string) {
 function translateVisibility(visibility: string) {
 	switch (visibility) {
 		case 'public':
-			return 'Público';
+			return 'Public';
 		case 'friends':
-			return 'Amigos';
+			return 'Friends';
 		case 'private':
-			return 'Privado';
+			return 'Private';
 		case 'unlisted':
-			return 'Não listado';
+			return 'Unlisted';
 		default:
 			return visibility;
 	}
@@ -60,7 +60,7 @@ export function MyPoemsSection({
 				mb={4}
 			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Meus poemas
+					My poems
 				</Heading>
 				{viewAllHref && (totalPoemsCount ?? myPoems.length) > myPoems.length && (
 					<Link
@@ -70,19 +70,19 @@ export function MyPoemsSection({
 						textDecoration='underline'
 						textUnderlineOffset='3px'
 					>
-						<NavLink to={viewAllHref}>Ver todos</NavLink>
+						<NavLink to={viewAllHref}>View all</NavLink>
 					</Link>
 				)}
 			</Flex>
 
 			<Flex direction='column' gap={3}>
-				{isLoadingMyPoems && <Text textStyle='small'>Carregando meus poemas...</Text>}
+				{isLoadingMyPoems && <Text textStyle='small'>Loading your poems...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
-					<Text textStyle='small'>Você ainda não publicou poemas.</Text>
+					<Text textStyle='small'>You have not published any poems yet.</Text>
 				)}
 				{isMyPoemsError && (
 					<Text textStyle='small' color='red.400'>
-						Erro ao carregar seus poemas.
+						Error loading your poems.
 					</Text>
 				)}
 
@@ -111,7 +111,7 @@ export function MyPoemsSection({
 							</Text>
 							{poem.stats && (
 								<Text textStyle='smaller' color='pink.200'>
-									{poem.stats.likesCount} curtidas | {poem.stats.commentsCount} comentários
+									{poem.stats.likesCount} likes | {poem.stats.commentsCount} comments
 								</Text>
 							)}
 							{poem.tags?.length > 0 && (
@@ -128,7 +128,7 @@ export function MyPoemsSection({
 						<Menu.Root positioning={{ placement: 'bottom-end' }}>
 							<Menu.Trigger asChild>
 								<IconButton
-									aria-label='Abrir menu de a��es'
+									aria-label='Open actions menu'
 									variant='solidPink'
 									size={{ base: 'xs', md: 'sm' }}
 									alignSelf={{ base: 'end', md: 'auto' }}
@@ -149,7 +149,7 @@ export function MyPoemsSection({
 											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
 											onClick={() => onOpenPoem(poem.slug, poem.id)}
 										>
-											Abrir
+											Open
 										</Menu.Item>
 										<Menu.Item
 											value={`update-${poem.id}`}
@@ -157,7 +157,7 @@ export function MyPoemsSection({
 											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
 											onClick={() => onUpdatePoem(poem.id)}
 										>
-											Atualizar
+											Edit
 										</Menu.Item>
 										<Menu.Item
 											value={`delete-${poem.id}`}
@@ -165,7 +165,7 @@ export function MyPoemsSection({
 											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
 											onClick={() => onDeletePoem(poem.id)}
 										>
-											Deletar
+											Delete
 										</Menu.Item>
 									</Menu.Content>
 								</Menu.Positioner>

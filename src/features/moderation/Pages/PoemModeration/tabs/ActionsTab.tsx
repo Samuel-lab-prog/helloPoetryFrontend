@@ -1,4 +1,4 @@
-import { Badge, Heading, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+﻿import { Badge, Heading, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
 import { Surface } from '@root/core/base';
 
 export function ActionsTab() {
@@ -7,20 +7,20 @@ export function ActionsTab() {
 			<Surface variant='panel'>
 				<VStack align='start' gap={3}>
 					<Heading as='h2' textStyle='h3'>
-						Ações administrativas
+						Administrative actions
 					</Heading>
 					<Text textStyle='body' color='pink.100'>
-						Em breve: ferramentas de moderação mais amplas.
+						Coming soon: broader moderation tools.
 					</Text>
 					<Wrap>
 						<WrapItem>
 							<Badge colorPalette='pink' variant='subtle'>
-								Banir usuário
+								Ban user
 							</Badge>
 						</WrapItem>
 						<WrapItem>
 							<Badge colorPalette='pink' variant='subtle'>
-								Remover poema
+								Remove poem
 							</Badge>
 						</WrapItem>
 					</Wrap>

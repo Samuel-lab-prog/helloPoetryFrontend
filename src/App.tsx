@@ -99,20 +99,20 @@ const NotificationsPage = lazyPage(
 
 function generateNavLinks(isAuthenticated: boolean, role?: string) {
 	const links = [
-		{ to: '/', label: 'Inicio' },
-		{ to: '/poems', label: 'Poemas' },
-		{ to: '/poets', label: 'Poetas' },
+		{ to: '/', label: 'Home' },
+		{ to: '/poems', label: 'Poems' },
+		{ to: '/poets', label: 'Poets' },
 	];
 	if (isAuthenticated) {
-		links.push({ to: '/poems/new', label: 'Criar' });
-		links.push({ to: '/my-profile', label: 'Meu Perfil' });
-		links.push({ to: '/notifications', label: 'Notificacoes' });
+		links.push({ to: '/poems/new', label: 'Create' });
+		links.push({ to: '/my-profile', label: 'My Profile' });
+		links.push({ to: '/notifications', label: 'Notifications' });
 		if (role === 'moderator' || role === 'admin') {
-			links.push({ to: '/admin/moderation', label: 'Moderacao' });
+			links.push({ to: '/admin/moderation', label: 'Moderation' });
 		}
 	} else {
-		links.push({ to: '/register', label: 'Cadastrar' });
-		links.push({ to: '/login', label: 'Entrar' });
+		links.push({ to: '/register', label: 'Sign up' });
+		links.push({ to: '/login', label: 'Sign in' });
 	}
 	return links;
 }

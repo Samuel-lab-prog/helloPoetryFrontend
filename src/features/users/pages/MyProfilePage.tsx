@@ -55,7 +55,7 @@ export function MyProfilePage() {
 	if (isLoggingOut) {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' align='center'>
-				<Text textStyle='body'>Saindo...</Text>
+				<Text textStyle='body'>Signing out...</Text>
 			</Flex>
 		);
 	}
@@ -90,9 +90,9 @@ export function MyProfilePage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={!profile}
-					loadingElement={<Text textStyle='body'>Carregando perfil...</Text>}
-					errorElement={<Text textStyle='body'>Erro ao carregar perfil.</Text>}
-					emptyElement={<Text textStyle='body'>Perfil não encontrado.</Text>}
+					loadingElement={<Text textStyle='body'>Loading profile...</Text>}
+					errorElement={<Text textStyle='body'>Error loading profile.</Text>}
+					emptyElement={<Text textStyle='body'>Profile not found.</Text>}
 				>
 					{profile && (
 						<Flex direction='column' gap={6}>

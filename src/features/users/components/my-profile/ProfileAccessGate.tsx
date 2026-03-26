@@ -13,18 +13,18 @@ export function ProfileAccessGate() {
 		>
 			<VStack align='start' gap={4}>
 				<Badge colorPalette='pink' variant='subtle'>
-					Perfil
+					Profile
 				</Badge>
-				<Text textStyle='h2'>Entre para ver seu perfil</Text>
+				<Text textStyle='h2'>Sign in to view your profile</Text>
 				<Text textStyle='body' color='pink.100'>
-					Acompanhe poemas salvos, pedidos de amizade e suas estatísticas em um único lugar.
+					Track saved poems, friend requests, and your stats in one place.
 				</Text>
 				<HStack gap={3} wrap='wrap'>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-						<NavLink to='/login'>Entrar</NavLink>
+						<NavLink to='/login'>Sign in</NavLink>
 					</Button>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/register'>Criar conta</NavLink>
+						<NavLink to='/register'>Create account</NavLink>
 					</Button>
 				</HStack>
 			</VStack>

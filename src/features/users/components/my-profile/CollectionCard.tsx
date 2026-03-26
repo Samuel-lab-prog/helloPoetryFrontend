@@ -53,7 +53,7 @@ function AddPoemToCollectionForm({
 			</Box>
 			<IconButton
 				type='submit'
-				aria-label='Adicionar poema a colecao'
+				aria-label='Add poem to collection'
 				size={{ base: 'xs', md: 'sm' }}
 				variant='solidPink'
 				loading={isUpdatingCollections}
@@ -103,15 +103,15 @@ export function CollectionCard({
 				<Flex direction='column' gap={1}>
 					<Text textStyle='small'>{collection.name}</Text>
 					<Text textStyle='smaller' color='pink.200'>
-						{collection.description || 'Sem descricao.'}
+						{collection.description || 'No description.'}
 					</Text>
 					<Text textStyle='smaller' color='pink.200'>
-						{collection.poemIds.length} poemas
+						{collection.poemIds.length} poems
 					</Text>
 				</Flex>
 				{showManagementControls && (
 					<IconButton
-						aria-label='Excluir colecao'
+						aria-label='Delete collection'
 						size={{ base: 'xs', md: 'sm' }}
 						variant='solidPink'
 						colorPalette='gray'
@@ -128,7 +128,7 @@ export function CollectionCard({
 			<Flex direction='column' gap={2} mb={3}>
 				{collection.poemIds.length === 0 && (
 					<Text textStyle='smaller' color='pink.200'>
-						Nenhum poema nesta colecao.
+						No poems in this collection.
 					</Text>
 				)}
 				{collection.poemIds.map((poemId) => {
@@ -146,13 +146,13 @@ export function CollectionCard({
 							borderRadius='md'
 						>
 							<Text textStyle='smaller' color='pink.100'>
-								{poem ? poem.title : `Poema #${poemId}`}
+								{poem ? poem.title : `Poem #${poemId}`}
 							</Text>
 							{showManagementControls && (
 								<Flex gap={2}>
 									{poem?.slug && (
 										<IconButton
-											aria-label='Abrir poema'
+											aria-label='Open poem'
 											size={{ base: 'xs', md: 'sm' }}
 											variant='solidPink'
 											asChild
@@ -163,7 +163,7 @@ export function CollectionCard({
 										</IconButton>
 									)}
 									<IconButton
-										aria-label='Remover poema da colecao'
+										aria-label='Remove poem from collection'
 										size={{ base: 'xs', md: 'sm' }}
 										variant='solidPink'
 										colorPalette='gray'

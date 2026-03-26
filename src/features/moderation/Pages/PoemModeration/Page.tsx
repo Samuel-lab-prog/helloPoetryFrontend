@@ -19,8 +19,8 @@ export function PoemModerationPage() {
 	};
 
 	const tabs: Tab[] = [
-		{ value: 'pending', label: 'Poemas pendentes' },
-		{ value: 'actions', label: 'Ações administrativas' },
+		{ value: 'pending', label: 'Pending poems' },
+		{ value: 'actions', label: 'Administrative actions' },
 	];
 
 	if (!canAccess) return <UnauthorizedPage onBack={() => navigate('/')} />;
@@ -29,10 +29,10 @@ export function PoemModerationPage() {
 		return (
 			<Flex as='section' direction='column' align='center' textAlign='center'>
 				<Heading as='h1' textStyle='h2' mb={2}>
-					Moderação de poemas
+					Poem moderation
 				</Heading>
 				<Text textStyle='body' color='pink.100'>
-					Analise os poemas pendentes e mantenha a comunidade saudável e acolhedora.
+					Review pending poems and keep the community healthy and welcoming.
 				</Text>
 			</Flex>
 		);

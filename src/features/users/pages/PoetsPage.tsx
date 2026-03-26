@@ -64,20 +64,20 @@ export function PoetsPage() {
 		>
 			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
 				<Heading as='h1' textStyle='h2'>
-					Buscar Poetas
+					Find Poets
 				</Heading>
 				<Text textStyle='small' color='pink.200' mt={-1}>
-					Encontre outros poetas por nickname.
+					Find other poets by nickname.
 				</Text>
 				<FormField
-					label='Pesquisar por nickname'
+					label='Search by nickname'
 					name='searchNickname'
 					control={form.control}
 					type='text'
 				/>
 				{isFetching && (
 					<Text textStyle='smaller' color='pink.200'>
-						Buscando poetas...
+						Searching poets...
 					</Text>
 				)}
 			</Flex>
@@ -87,8 +87,8 @@ export function PoetsPage() {
 				isError={isError}
 				isEmpty={poets.length === 0}
 				loadingElement={loadingSkeletons}
-				errorElement={<Text textStyle='body'>Erro ao buscar poetas.</Text>}
-				emptyElement={<Text textStyle='body'>Nenhum poeta encontrado.</Text>}
+				errorElement={<Text textStyle='body'>Error searching poets.</Text>}
+				emptyElement={<Text textStyle='body'>No poets found.</Text>}
 			>
 				<Flex direction='column' gap={3}>
 					{poets.map((poet, index) => (

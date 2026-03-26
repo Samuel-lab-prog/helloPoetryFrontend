@@ -47,7 +47,7 @@ export function useRegisterForm() {
 				try {
 					avatarUrl = await uploadAvatarFile(avatar as File);
 				} catch (err) {
-					const message = err instanceof Error ? err.message : 'Erro ao enviar avatar.';
+					const message = err instanceof Error ? err.message : 'Error uploading avatar.';
 					setGeneralError(message);
 					return;
 				}

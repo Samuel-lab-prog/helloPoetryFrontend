@@ -15,7 +15,7 @@ export function ProfileReadOnly({ profile }: ProfileReadOnlyProps) {
 			<Text textStyle='small' color='pink.100'>
 				{profile.email}
 			</Text>
-			<Text textStyle='body'>{profile.bio || 'Sem bio.'}</Text>
+			<Text textStyle='body'>{profile.bio || 'No bio.'}</Text>
 		</>
 	);
 }

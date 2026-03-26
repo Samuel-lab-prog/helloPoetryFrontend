@@ -16,7 +16,7 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 				bg='rgba(255, 255, 255, 0.02)'
 			>
 				<Text textStyle='smaller' color='pink.200'>
-					Poemas
+					Poems
 				</Text>
 				<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
 			</Box>
@@ -28,7 +28,7 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 				bg='rgba(255, 255, 255, 0.02)'
 			>
 				<Text textStyle='smaller' color='pink.200'>
-					Comentários
+					Comments
 				</Text>
 				<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
 			</Box>
@@ -40,7 +40,7 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 				bg='rgba(255, 255, 255, 0.02)'
 			>
 				<Text textStyle='smaller' color='pink.200'>
-					Amigos
+					Friends
 				</Text>
 				<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
 			</Box>

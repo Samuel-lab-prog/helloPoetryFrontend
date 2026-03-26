@@ -17,7 +17,7 @@ function getFallbackTitle(type: string) {
 		case 'POEM_COMMENT_REPLIED':
 			return 'New reply to your comment';
 		case 'POEM_DEDICATED':
-			return 'Poema dedicated';
+			return 'Poem dedicated';
 		case 'USER_MENTION_IN_POEM':
 			return 'You were mentioned';
 		default:

@@ -35,10 +35,10 @@ export function MyProfileFriendRequestsPage() {
 					gap={3}
 				>
 					<Heading as='h1' textStyle='h2'>
-						Todas as minhas solicitacoes
+						All my requests
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/my-profile'>Voltar ao perfil</NavLink>
+						<NavLink to='/my-profile'>Back to profile</NavLink>
 					</Button>
 				</Flex>
 

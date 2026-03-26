@@ -3,11 +3,11 @@ import type { ModerationPoem } from '@root/core/api/moderation/types';
 export function translateVisibility(visibility: ModerationPoem['visibility']) {
 	switch (visibility) {
 		case 'public':
-			return 'Publico';
+			return 'Public';
 		case 'private':
-			return 'Privado';
+			return 'Private';
 		case 'unlisted':
-			return 'Nao listado';
+			return 'Unlisted';
 		default:
 			return visibility;
 	}
@@ -16,13 +16,13 @@ export function translateVisibility(visibility: ModerationPoem['visibility']) {
 export function translateModerationStatus(status: ModerationPoem['moderationStatus']) {
 	switch (status) {
 		case 'approved':
-			return 'Aprovado';
+			return 'Approved';
 		case 'rejected':
-			return 'Rejeitado';
+			return 'Rejected';
 		case 'pending':
-			return 'Pendente';
+			return 'Pending';
 		case 'removed':
-			return 'Removido';
+			return 'Removed';
 		default:
 			return status;
 	}

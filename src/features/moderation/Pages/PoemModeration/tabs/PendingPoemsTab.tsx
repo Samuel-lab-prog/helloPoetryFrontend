@@ -1,4 +1,4 @@
-import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
+﻿import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
 import { AsyncState } from '@root/core/base';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
 import { ModerationPoemCard } from '../PoemModerationCard';
@@ -16,9 +16,9 @@ type Props = {
 export function AnalyzeTab({ pendingQuery, pendingPoems, isModerating, onModerate }: Props) {
 	function formatError(err: unknown) {
 		const appError = err as AppErrorType | null;
-		if (!appError) return 'Erro ao carregar poemas pendentes.';
-		if (appError.statusCode === 403) return 'Acesso restrito para moderação.';
-		return appError.message ?? 'Erro ao carregar poemas pendentes.';
+		if (!appError) return 'Error loading pending poems.';
+		if (appError.statusCode === 403) return 'Restricted access for moderation.';
+		return appError.message ?? 'Error loading pending poems.';
 	}
 
 	return (
@@ -39,7 +39,7 @@ export function AnalyzeTab({ pendingQuery, pendingPoems, isModerating, onModerat
 				}
 				emptyElement={
 					<Text textStyle='body' color='pink.100' textAlign='center'>
-						Nenhum poema pendente no momento.
+						No pending poems at the moment.
 					</Text>
 				}
 			>

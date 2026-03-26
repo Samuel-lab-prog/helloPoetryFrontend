@@ -54,16 +54,16 @@ export function AuthorPage() {
 	const relationStatus = (() => {
 		if (!author) return null;
 		if (!isAuthenticated)
-			return { icon: LogIn, color: 'pink.200', text: 'Faça login para enviar pedido.' };
+			return { icon: LogIn, color: 'pink.200', text: 'Sign in to send a request.' };
 		if (isSelf) return null;
 		if (author.hasBlockedRequester)
-			return { icon: UserX, color: 'red.300', text: 'Você foi bloqueado por este usuário.' };
+			return { icon: UserX, color: 'red.300', text: 'You were blocked by this user.' };
 		if (author.isBlockedByRequester)
-			return { icon: UserX, color: 'red.300', text: 'Você bloqueou este usuário.' };
-		if (author.isFriend) return { icon: UserCheck, color: 'green.300', text: 'Vocês são amigos.' };
-		if (hasOutgoingRequest) return { icon: Clock3, color: 'yellow.300', text: 'Pedido enviado.' };
+			return { icon: UserX, color: 'red.300', text: 'You blocked this user.' };
+		if (author.isFriend) return { icon: UserCheck, color: 'green.300', text: 'You are friends.' };
+		if (hasOutgoingRequest) return { icon: Clock3, color: 'yellow.300', text: 'Request sent.' };
 		if (hasIncomingRequest)
-			return { icon: UserPlus, color: 'yellow.300', text: 'Pedido recebido.' };
+			return { icon: UserPlus, color: 'yellow.300', text: 'Request received.' };
 		return null;
 	})();
 
@@ -71,15 +71,15 @@ export function AuthorPage() {
 		<Flex as='main' layerStyle='main' direction='column' align='center' gap={8}>
 			<Box w='full' maxW='4xl'>
 				{!isValidAuthorId ? (
-					<Text textStyle='body'>Autor invalido.</Text>
+					<Text textStyle='body'>Invalid author.</Text>
 				) : (
 					<AsyncState
 						isLoading={isAuthorLoading}
 						isError={isAuthorError}
 						isEmpty={!author}
-						loadingElement={<Text textStyle='body'>Carregando autor...</Text>}
-						errorElement={<Text textStyle='body'>Erro ao carregar autor.</Text>}
-						emptyElement={<Text textStyle='body'>Autor nao encontrado.</Text>}
+						loadingElement={<Text textStyle='body'>Loading author...</Text>}
+						errorElement={<Text textStyle='body'>Error loading author.</Text>}
+						emptyElement={<Text textStyle='body'>Author not found.</Text>}
 					>
 						{author && (
 							<Flex
@@ -114,10 +114,10 @@ export function AuthorPage() {
 									<Text textStyle='small' color='pink.200'>
 										@{author.nickname}
 									</Text>
-									<Text textStyle='small'>{author.bio || 'Sem bio'}</Text>
+									<Text textStyle='small'>{author.bio || 'No bio'}</Text>
 									<Text textStyle='smaller' color='pink.200'>
-										Poemas: {author.stats.poemsCount} | Comentarios: {author.stats.commentsCount} |
-										Amigos: {author.stats.friendsCount}
+										Poems: {author.stats.poemsCount} | Comments: {author.stats.commentsCount} |
+										Friends: {author.stats.friendsCount}
 									</Text>
 
 									<Flex mt={2} direction='column' gap={2} align='start'>
@@ -137,7 +137,7 @@ export function AuthorPage() {
 												onClick={() => sendFriendRequest(author.id)}
 												loading={isSending}
 											>
-												Enviar pedido de amizade
+												Send friend request
 											</Button>
 										)}
 
@@ -157,10 +157,10 @@ export function AuthorPage() {
 			<Box w='full' maxW='4xl'>
 				<Flex align='center' justify='space-between' gap={3} mb={4} wrap='wrap'>
 					<Heading as='h2' textStyle='h3'>
-						Poemas do autor
+						Author poems
 					</Heading>
 					<Text textStyle='small' color='pink.200'>
-						{poems.length} {poems.length === 1 ? 'poema' : 'poemas'}
+						{poems.length} {poems.length === 1 ? 'poem' : 'poems'}
 					</Text>
 				</Flex>
 
@@ -176,7 +176,7 @@ export function AuthorPage() {
 							borderRadius='xl'
 							bg='rgba(255, 255, 255, 0.02)'
 						>
-							<Text textStyle='body'>Carregando poemas...</Text>
+							<Text textStyle='body'>Loading poems...</Text>
 						</Flex>
 					}
 					errorElement={
@@ -187,7 +187,7 @@ export function AuthorPage() {
 							borderRadius='xl'
 							bg='rgba(255, 255, 255, 0.02)'
 						>
-							<Text textStyle='body'>Erro ao carregar poemas.</Text>
+							<Text textStyle='body'>Error loading poems.</Text>
 						</Flex>
 					}
 					emptyElement={
@@ -198,7 +198,7 @@ export function AuthorPage() {
 							borderRadius='xl'
 							bg='rgba(255, 255, 255, 0.02)'
 						>
-							<Text textStyle='body'>Sem poemas publicados.</Text>
+							<Text textStyle='body'>No poems published.</Text>
 						</Flex>
 					}
 				>

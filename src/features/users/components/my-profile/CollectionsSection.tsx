@@ -47,7 +47,7 @@ export function CollectionsSection({
 				mb={4}
 			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Colecoes de poemas
+					Poem collections
 				</Heading>
 				{viewAllHref && (
 					<Link
@@ -57,7 +57,7 @@ export function CollectionsSection({
 						textDecoration='underline'
 						textUnderlineOffset='3px'
 					>
-						<NavLink to={viewAllHref}>Ver todas</NavLink>
+						<NavLink to={viewAllHref}>View all</NavLink>
 					</Link>
 				)}
 			</Flex>
@@ -71,13 +71,13 @@ export function CollectionsSection({
 			)}
 
 			<Flex direction='column' gap={4}>
-				{isLoadingCollections && <Text textStyle='small'>Carregando colecoes...</Text>}
+				{isLoadingCollections && <Text textStyle='small'>Loading collections...</Text>}
 				{!isLoadingCollections && collections.length === 0 && (
-					<Text textStyle='small'>Voce ainda nao criou colecoes.</Text>
+					<Text textStyle='small'>You have not created any collections yet.</Text>
 				)}
 				{!isLoadingCollections && Boolean(totalCollectionsCount) && (
 					<Text textStyle='smaller' color='pink.200'>
-						Mostrando {collections.length} de {totalCollectionsCount} colecoes.
+						Showing {collections.length} of {totalCollectionsCount} collections.
 					</Text>
 				)}
 

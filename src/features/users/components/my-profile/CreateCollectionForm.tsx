@@ -54,17 +54,17 @@ export function CreateCollectionForm({
 				});
 			})}
 		>
-			<FormField control={form.control} name='name' label='Nome da colecao' required />
+			<FormField control={form.control} name='name' label='Collection name' required />
 			<FormField
 				control={form.control}
 				name='description'
-				label='Descricao da colecao'
+				label='Collection description'
 				as='textarea'
 				rows={3}
 			/>
 			<IconButton
 				type='submit'
-				aria-label='Criar colecao'
+				aria-label='Create collection'
 				size={{ base: 'xs', md: 'sm' }}
 				variant='solidPink'
 				loading={isUpdatingCollections}

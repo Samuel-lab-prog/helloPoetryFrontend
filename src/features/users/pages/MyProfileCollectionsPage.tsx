@@ -33,7 +33,7 @@ export function MyProfileCollectionsPage() {
 	if (isProfileLoading || !profile) {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' align='center'>
-				<Text textStyle='body'>Carregando perfil...</Text>
+				<Text textStyle='body'>Loading profile...</Text>
 			</Flex>
 		);
 	}
@@ -49,10 +49,10 @@ export function MyProfileCollectionsPage() {
 					gap={3}
 				>
 					<Heading as='h1' textStyle='h2'>
-						Todas as minhas colecoes
+						All my collections
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/my-profile'>Voltar ao perfil</NavLink>
+						<NavLink to='/my-profile'>Back to profile</NavLink>
 					</Button>
 				</Flex>
 

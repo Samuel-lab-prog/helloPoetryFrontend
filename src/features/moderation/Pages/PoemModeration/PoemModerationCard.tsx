@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import {
 	Badge,
 	Button,
@@ -20,6 +20,7 @@ import {
 } from '@root/core/base';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
 import { Tag } from '@root/features/poems/use-cases/poem/components/PoemTag';
+import { PoemAudioPlayer } from '@root/features/poems/use-cases/poem/components/PoemAudioPlayer';
 
 export function ModerationPoemCard({
 	poem,
@@ -36,7 +37,7 @@ export function ModerationPoemCard({
 	function getPreviewText(poem: ModerationPoem) {
 		if (poem.excerpt && poem.excerpt.trim().length > 0) return poem.excerpt;
 		const content = poem.content?.trim() ?? '';
-		if (!content) return 'Sem conteudo.';
+		if (!content) return 'No content.';
 		return content.length > 280 ? `${content.slice(0, 280)}...` : content;
 	}
 	return (
@@ -44,13 +45,13 @@ export function ModerationPoemCard({
 			<VStack align='stretch' gap={5}>
 				<VStack align='start' gap={1}>
 					<Badge colorPalette='purple' variant='outline'>
-						Pendente
+						Pending
 					</Badge>
 					<Heading as='h2' textStyle='h3'>
 						{poem.title}
 					</Heading>
 					<Text textStyle='small' color='pink.100'>
-						Autor:{' '}
+						Author:{' '}
 						<Link asChild color='pink.200' _hover={{ color: 'pink.50' }}>
 							<NavLink to={`/authors/${poem.author.id}`}>
 								{poem.author.name} (@{poem.author.nickname})
@@ -73,12 +74,12 @@ export function ModerationPoemCard({
 					</WrapItem>
 					<WrapItem>
 						<Badge colorPalette='pink' variant='subtle'>
-							{poem.stats?.likesCount ?? 0} Curtidas
+							{poem.stats?.likesCount ?? 0} Likes
 						</Badge>
 					</WrapItem>
 					<WrapItem>
 						<Badge colorPalette='pink' variant='subtle'>
-							{poem.stats?.commentsCount ?? 0} Comentários
+							{poem.stats?.commentsCount ?? 0} Comments
 						</Badge>
 					</WrapItem>
 				</Wrap>
@@ -94,7 +95,7 @@ export function ModerationPoemCard({
 				<Surface variant='panel'>
 					<VStack align='stretch' gap={3}>
 						<Text textStyle='small' color='pink.200' textTransform='uppercase'>
-							Resumo
+							Summary
 						</Text>
 						<Text textStyle='body' color='pink.100'>
 							{getPreviewText(poem)}
@@ -107,7 +108,7 @@ export function ModerationPoemCard({
 							width='auto'
 							onClick={() => setExpanded((value) => !value)}
 						>
-							{expanded ? 'Ocultar texto completo' : 'Mostrar texto completo'}
+							{expanded ? 'Hide full text' : 'Show full text'}
 						</Button>
 						{expanded ? (
 							<Surface variant='soft'>
@@ -117,6 +118,17 @@ export function ModerationPoemCard({
 					</VStack>
 				</Surface>
 
+				{poem.AudioUrl ? (
+					<Surface variant='panel'>
+						<VStack align='stretch' gap={3}>
+							<Text textStyle='small' color='pink.200' textTransform='uppercase'>
+								Audio
+							</Text>
+							<PoemAudioPlayer src={poem.AudioUrl} title='Poem Audio' />
+						</VStack>
+					</Surface>
+				) : null}
+
 				<HStack gap={3} flexWrap='wrap'>
 					<Button
 						variant='solidPink'
@@ -124,7 +136,7 @@ export function ModerationPoemCard({
 						loading={isPending}
 						onClick={() => onModerate(poem.id, 'approved')}
 					>
-						Aprovar
+						Approve
 					</Button>
 					<Button
 						variant='solidPink'
@@ -133,7 +145,7 @@ export function ModerationPoemCard({
 						loading={isPending}
 						onClick={() => onModerate(poem.id, 'rejected')}
 					>
-						Rejeitar
+						Reject
 					</Button>
 				</HStack>
 			</VStack>

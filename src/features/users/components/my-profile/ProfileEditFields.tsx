@@ -43,13 +43,13 @@ export function ProfileEditFields({
 			<Input
 				value={nameDraft}
 				onChange={(e) => onChangeName(e.target.value)}
-				placeholder='Nome'
+				placeholder='Name'
 				{...profileInputStyles}
 			/>
 			<Input
 				value={nicknameDraft}
 				onChange={(e) => onChangeNickname(e.target.value)}
-				placeholder='Apelido'
+				placeholder='Nickname'
 				{...profileInputStyles}
 				borderColor={conflictField === 'nickname' ? 'red.400' : undefined}
 				_focusVisible={
@@ -69,17 +69,17 @@ export function ProfileEditFields({
 			/>
 			{conflictField === 'nickname' && (
 				<Text textStyle='smaller' color='red.400'>
-					Este apelido já está em uso. Escolha outro.
+					This nickname is already in use. Choose another.
 				</Text>
 			)}
 
 			<Flex direction='column' gap={2} w='full'>
 				<Text textStyle='smaller' color='pink.200'>
-					Avatar (arquivo)
+					Avatar (file)
 				</Text>
 				<Flex align='center' gap={3} wrap='wrap'>
 					<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
-						Escolher arquivo
+						Choose file
 						<VisuallyHidden>
 							<Input
 								type='file'
@@ -91,11 +91,11 @@ export function ProfileEditFields({
 						</VisuallyHidden>
 					</Button>
 					<Text textStyle='smaller' color='pink.200'>
-						{avatarFile ? avatarFile.name : 'Nenhum arquivo selecionado'}
+						{avatarFile ? avatarFile.name : 'No file selected'}
 					</Text>
 				</Flex>
 				<Text textStyle='smaller' color='pink.200'>
-					Tamanho máximo: {MAX_AVATAR_SIZE_MB}MB
+					Max size: {MAX_AVATAR_SIZE_MB}MB
 				</Text>
 
 				{avatarFileError && (

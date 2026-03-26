@@ -1,4 +1,4 @@
-import { Badge, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+﻿import { Badge, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import { Surface } from '@root/core/base';
 
 export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
@@ -7,16 +7,16 @@ export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
 			<Surface variant='gradient' maxW='2xl' w='full'>
 				<VStack align='start' gap={3}>
 					<Badge colorPalette='pink' variant='subtle'>
-						Moderação
+						Moderation
 					</Badge>
 					<Heading as='h1' textStyle='h2'>
-						Acesso restrito
+						Restricted access
 					</Heading>
 					<Text textStyle='body' color='pink.100'>
-						Esta página é exclusiva para moderadores e administradores.
+						This page is restricted to moderators and administrators.
 					</Text>
 					<Button size='sm' variant='solidPink' onClick={onBack}>
-						Voltar
+						Back
 					</Button>
 				</VStack>
 			</Surface>

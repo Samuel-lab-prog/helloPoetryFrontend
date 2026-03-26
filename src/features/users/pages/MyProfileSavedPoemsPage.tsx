@@ -30,10 +30,10 @@ export function MyProfileSavedPoemsPage() {
 					gap={3}
 				>
 					<Heading as='h1' textStyle='h2'>
-						Todos os poemas salvos
+						All saved poems
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/my-profile'>Voltar ao perfil</NavLink>
+						<NavLink to='/my-profile'>Back to profile</NavLink>
 					</Button>
 				</Flex>
 

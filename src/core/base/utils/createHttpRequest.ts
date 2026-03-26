@@ -82,7 +82,7 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	if (!response.ok) {
 		const error: AppErrorType = {
 			statusCode: response.status,
-			message: parsedBody?.message ?? [`Erro HTTP ${response.status}`],
+			message: parsedBody?.message ?? [`HTTP error ${response.status}`],
 			code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
 		};
 		throw error;

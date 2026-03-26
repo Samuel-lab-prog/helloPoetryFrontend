@@ -34,10 +34,10 @@ export function NotificationsPage() {
 					flexWrap='wrap'
 				>
 					<Heading as='h1' textStyle='h2'>
-						Notificações
+						Notifications
 					</Heading>
 					<Badge colorPalette='pink' variant='subtle'>
-						{unreadCount} Não lidas
+						{unreadCount} Unread
 					</Badge>
 				</Flex>
 
@@ -49,7 +49,7 @@ export function NotificationsPage() {
 						onClick={() => setOnlyUnread((v) => !v)}
 						colorPalette='gray'
 					>
-						{onlyUnread ? 'Mostrar todas' : 'Somente não lidas'}
+						{onlyUnread ? 'Show all' : 'Unread only'}
 					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
@@ -61,7 +61,7 @@ export function NotificationsPage() {
 						disabled={notifications.length === 0}
 						loading={isMarkingAllAsRead}
 					>
-						Marcar todas como lidas
+						Mark all as read
 					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
@@ -74,7 +74,7 @@ export function NotificationsPage() {
 						disabled={notifications.length === 0}
 						loading={isDeletingAll}
 					>
-						Excluir todas
+						Delete all
 					</Button>
 				</HStack>
 
@@ -82,9 +82,9 @@ export function NotificationsPage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={notifications.length === 0}
-					loadingElement={<Text textStyle='body'>Carregando notificações...</Text>}
-					errorElement={<Text textStyle='body'>Erro ao carregar notificações.</Text>}
-					emptyElement={<Text textStyle='body'>Nenhuma notificação encontrada.</Text>}
+					loadingElement={<Text textStyle='body'>Loading notifications...</Text>}
+					errorElement={<Text textStyle='body'>Error loading notifications.</Text>}
+					emptyElement={<Text textStyle='body'>No notifications found.</Text>}
 				>
 					<Flex direction='column' gap={3}>
 						{notifications.map((item, index) => (

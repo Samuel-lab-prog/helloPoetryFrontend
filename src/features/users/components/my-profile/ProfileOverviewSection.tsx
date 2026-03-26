@@ -169,7 +169,7 @@ export function ProfileOverviewSection({
 									}}
 									disabled={!!avatarFileError}
 								>
-									Salvar
+									Save
 								</Button>
 								<Button
 									size={{ base: 'xs', md: 'sm' }}
@@ -178,7 +178,7 @@ export function ProfileOverviewSection({
 									w={{ base: 'full', md: 'auto' }}
 									onClick={handleCancelEdit}
 								>
-									Cancelar
+									Cancel
 								</Button>
 							</>
 						) : (
@@ -188,7 +188,7 @@ export function ProfileOverviewSection({
 								w={{ base: 'full', md: 'auto' }}
 								onClick={() => setIsEditingProfile(true)}
 							>
-								Editar perfil
+								Edit profile
 							</Button>
 						)}
 					</Flex>

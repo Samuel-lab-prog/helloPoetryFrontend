@@ -25,7 +25,7 @@ export function FriendRequestsSection({
 				mb={4}
 			>
 				<Heading as='h2' textStyle='h4' color='pink.300'>
-					Solicitacoes de amizade recebidas
+					Friend requests received
 				</Heading>
 				{viewAllHref && (
 					<Link
@@ -35,21 +35,21 @@ export function FriendRequestsSection({
 						textDecoration='underline'
 						textUnderlineOffset='3px'
 					>
-						<NavLink to={viewAllHref}>Ver todas</NavLink>
+						<NavLink to={viewAllHref}>View all</NavLink>
 					</Link>
 				)}
 			</Flex>
 
 			<Flex direction='column' gap={3}>
-				{isFriendRequestsLoading && <Text textStyle='small'>Carregando solicitacoes...</Text>}
+				{isFriendRequestsLoading && <Text textStyle='small'>Loading requests...</Text>}
 				{!isFriendRequestsLoading &&
 					!isFriendRequestsError &&
 					friendRequests.received.length === 0 && (
-						<Text textStyle='small'>Nenhuma solicitacao pendente.</Text>
+						<Text textStyle='small'>No pending requests.</Text>
 					)}
 				{isFriendRequestsError && (
 					<Text textStyle='small' color='red.400'>
-						Erro ao carregar solicitacoes.
+						Error loading requests.
 					</Text>
 				)}
 
@@ -100,7 +100,7 @@ export function FriendRequestsSection({
 						</HStack>
 						<Flex gap={2}>
 							<IconButton
-								aria-label='Aceitar solicitacao'
+								aria-label='Accept request'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								onClick={() => onAcceptRequest(request.requesterId)}
@@ -109,7 +109,7 @@ export function FriendRequestsSection({
 								<Check />
 							</IconButton>
 							<IconButton
-								aria-label='Recusar solicitacao'
+								aria-label='Decline request'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								colorPalette='gray'

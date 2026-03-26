@@ -62,27 +62,57 @@ export async function uploadPoemAudioFile(poemId: number, file: File): Promise<s
 	if (error) throw new Error(error);
 
 	const normalizedType = resolveAudioContentType(file);
-	const { uploadUrl, fileUrl } = await api.poems.requestPoemAudioUploadUrl.mutate({
+	const { uploadUrl, fileUrl, fields } = await api.poems.requestPoemAudioUploadUrl.mutate({
 		poemId: String(poemId),
 		contentType: normalizedType,
+		contentLength: file.size,
 	});
 
 	if (!uploadUrl || uploadUrl === 'SIGNED_URL_PLACEHOLDER') {
 		return fileUrl;
 	}
 
-	const response = await fetch(uploadUrl, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': normalizedType,
-		},
-		body: file,
-		credentials: 'omit',
-	});
+	const hasPostFields = fields && Object.keys(fields).length > 0;
+	const response = hasPostFields
+		? await uploadViaPresignedPost(uploadUrl, fields, file)
+		: await uploadViaPresignedPut(uploadUrl, normalizedType, file);
 
 	if (!response.ok) {
 		throw new Error('Error uploading audio.');
 	}
 
 	return fileUrl;
+}
+
+async function uploadViaPresignedPost(
+	uploadUrl: string,
+	fields: Record<string, string>,
+	file: File,
+) {
+	const formData = new FormData();
+	Object.entries(fields).forEach(([key, value]) => {
+		formData.append(key, value);
+	});
+	formData.append('file', file);
+
+	return fetch(uploadUrl, {
+		method: 'POST',
+		body: formData,
+		credentials: 'omit',
+	});
+}
+
+async function uploadViaPresignedPut(
+	uploadUrl: string,
+	contentType: string,
+	file: File,
+) {
+	return fetch(uploadUrl, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': contentType,
+		},
+		body: file,
+		credentials: 'omit',
+	});
 }

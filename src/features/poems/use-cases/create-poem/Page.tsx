@@ -26,18 +26,18 @@ function CreatePoemAccessGate() {
 		>
 			<VStack align='start' gap={4}>
 				<Badge colorPalette='pink' variant='subtle'>
-					Poemas
+					Poems
 				</Badge>
-				<Text textStyle='h2'>Entre para criar um poema</Text>
+				<Text textStyle='h2'>Sign in to create a poem</Text>
 				<Text textStyle='body' color='pink.100'>
-					Você precisa estar autenticado para publicar novos poemas.
+					You need to be authenticated to publish new poems.
 				</Text>
 				<HStack gap={3} wrap='wrap'>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-						<NavLink to='/login'>Entrar</NavLink>
+						<NavLink to='/login'>Sign in</NavLink>
 					</Button>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/register'>Criar conta</NavLink>
+						<NavLink to='/register'>Create account</NavLink>
 					</Button>
 				</HStack>
 			</VStack>
