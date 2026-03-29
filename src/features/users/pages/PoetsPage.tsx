@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Box, Card, Flex, Heading, Skeleton, Text } from '@chakra-ui/react';
+import { Box, Card, Flex, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@root/core/base';
+import { useMyProfile } from '../hooks/useMyProfile';
 import { usePoetsSearch } from '../../poems/public/hooks/useGetPoetsSearch';
 import { PoetCard } from '../components/PoetCard';
 
@@ -29,11 +30,13 @@ export function PoetsPage() {
 	}, [searchNickname]);
 
 	const { poets, isLoading, isFetching, isError } = usePoetsSearch(debouncedSearch);
+	const { profile } = useMyProfile();
 	const showSkeletons = isLoading && poets.length === 0;
+	const visiblePoets = profile ? poets.filter((poet) => poet.id !== profile.id) : poets;
 
 	const loadingSkeletons = (
 		<Flex direction='column' gap={3}>
-			{Array.from({ length: 6 }).map((_, index) => (
+			{Array.from({ length: 4 }).map((_, index) => (
 				<Card.Root key={`poet-skeleton-${index}`} variant='interactive'>
 					<Card.Body>
 						<Flex align='center' justify='space-between' gap={2}>
@@ -63,12 +66,6 @@ export function PoetsPage() {
 			px={{ base: 4, md: 6 }}
 		>
 			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
-				<Heading as='h1' textStyle='h2'>
-					Find Poets
-				</Heading>
-				<Text textStyle='small' color='pink.200' mt={-1}>
-					Find other poets by nickname.
-				</Text>
 				<FormField
 					label='Search by nickname'
 					name='searchNickname'
@@ -85,13 +82,13 @@ export function PoetsPage() {
 			<AsyncState
 				isLoading={showSkeletons}
 				isError={isError}
-				isEmpty={poets.length === 0}
+				isEmpty={visiblePoets.length === 0}
 				loadingElement={loadingSkeletons}
 				errorElement={<Text textStyle='body'>Error searching poets.</Text>}
 				emptyElement={<Text textStyle='body'>No poets found.</Text>}
 			>
 				<Flex direction='column' gap={3}>
-					{poets.map((poet, index) => (
+					{visiblePoets.map((poet, index) => (
 						<Box
 							key={poet.id}
 							animationName='slide-from-bottom, fade-in'

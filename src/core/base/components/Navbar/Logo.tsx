@@ -1,4 +1,4 @@
-import { Badge, Box, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export function Logo() {
@@ -11,29 +11,9 @@ export function Logo() {
 			transition='opacity 0.2s ease'
 			_hover={{ opacity: 0.8 }}
 		>
-			<HStack gap={3}>
-				<Box
-					w='40px'
-					h='40px'
-					display='grid'
-					placeItems='center'
-					borderRadius='full'
-					bg='linear-gradient(135deg, {colors.purple.600}, {colors.pink.400})'
-					color='white'
-					fontWeight='700'
-					fontSize='xs'
-				>
-					OP
-				</Box>
-				<VStack align='start' gap={0}>
-					<Text textStyle='small' color='pink.100' fontWeight='700' lineHeight='short'>
-						HelloPoetry
-					</Text>
-					<Badge size='sm' colorPalette='pink' variant='subtle'>
-						Poems
-					</Badge>
-				</VStack>
-			</HStack>
+			<Text textStyle='small' color='pink.100' fontWeight='700' lineHeight='short'>
+				HelloPoetry
+			</Text>
 		</Box>
 	);
 }

@@ -13,12 +13,8 @@ export function NotificationsPage() {
 		isError,
 		markAsRead,
 		markAllAsRead,
-		deleteAllNotifications,
-		deleteNotification,
 		isMarkingAsRead,
 		isMarkingAllAsRead,
-		isDeletingAll,
-		isDeleting,
 	} = useNotificationsPanel(onlyUnread);
 
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
@@ -63,19 +59,6 @@ export function NotificationsPage() {
 					>
 						Mark all as read
 					</Button>
-					<Button
-						size={{ base: 'xs', md: 'sm' }}
-						w='auto'
-						variant='solidPink'
-						colorPalette='gray'
-						onClick={() => {
-							void deleteAllNotifications();
-						}}
-						disabled={notifications.length === 0}
-						loading={isDeletingAll}
-					>
-						Delete all
-					</Button>
 				</Flex>
 
 				<AsyncState
@@ -99,9 +82,7 @@ export function NotificationsPage() {
 								<NotificationCard
 									item={item}
 									onMarkAsRead={(id) => markAsRead(id).then(() => {})}
-									onDelete={(id) => deleteNotification(id).then(() => {})}
 									isMarkingAsRead={isMarkingAsRead}
-									isDeleting={isDeleting}
 								/>
 							</Box>
 						))}

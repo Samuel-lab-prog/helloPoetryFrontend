@@ -4,6 +4,8 @@ import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 
 type NotificationPayload = {
+	avatarUrl?: string | null;
+	actorAvatarUrl?: string | null;
 	title?: string;
 	body?: string;
 	poemId?: number;

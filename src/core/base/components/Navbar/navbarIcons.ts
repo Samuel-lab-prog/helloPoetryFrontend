@@ -1,4 +1,14 @@
-import { Bell, BookOpen, House, LogIn, PenSquare, User, UserPlus, Users } from 'lucide-react';
+import {
+	Bell,
+	BookOpen,
+	House,
+	LogIn,
+	PenSquare,
+	Shield,
+	User,
+	UserPlus,
+	Users,
+} from 'lucide-react';
 
 export function getLinkIcon(to: string) {
 	switch (to) {
@@ -14,6 +24,8 @@ export function getLinkIcon(to: string) {
 			return User;
 		case '/notifications':
 			return Bell;
+		case '/admin/moderation':
+			return Shield;
 		case '/register':
 			return UserPlus;
 		case '/login':

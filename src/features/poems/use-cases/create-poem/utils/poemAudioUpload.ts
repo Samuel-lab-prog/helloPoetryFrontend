@@ -84,11 +84,7 @@ export async function uploadPoemAudioFile(poemId: number, file: File): Promise<s
 	return fileUrl;
 }
 
-async function uploadViaPresignedPost(
-	uploadUrl: string,
-	fields: Record<string, string>,
-	file: File,
-) {
+function uploadViaPresignedPost(uploadUrl: string, fields: Record<string, string>, file: File) {
 	const formData = new FormData();
 	Object.entries(fields).forEach(([key, value]) => {
 		formData.append(key, value);
@@ -102,7 +98,7 @@ async function uploadViaPresignedPost(
 	});
 }
 
-async function uploadViaPresignedPut(uploadUrl: string, contentType: string, file: File) {
+function uploadViaPresignedPut(uploadUrl: string, contentType: string, file: File) {
 	return fetch(uploadUrl, {
 		method: 'PUT',
 		headers: {

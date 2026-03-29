@@ -8,7 +8,7 @@ import { getFooterLinks } from './utils';
 
 export function HomePage() {
 	const isAuthenticated = useIsAuthenticated();
-	const { poems, isError, isLoading, isPersonalizedFeed } = useHomeFeed({
+	const { poems, isError, isLoading } = useHomeFeed({
 		isAuthenticated,
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
 	});

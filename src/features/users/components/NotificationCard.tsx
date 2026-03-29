@@ -1,33 +1,8 @@
 import { NavLink } from 'react-router-dom';
-import { Eye, Check, Trash2 } from 'lucide-react';
-import { Badge, Card, Flex, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
-import { formatDate } from '@root/core/base';
+import { Check } from 'lucide-react';
+import { Avatar, Badge, Card, Flex, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { formatRelativeTime } from '@root/core/base';
 import type { NotificationItem } from '../hooks/useNotificationsPanel';
-
-function getFallbackTitle(type: string) {
-	switch (type) {
-		case 'POEM_COMMENT_CREATED':
-			return 'New comment';
-		case 'NEW_FRIEND':
-			return 'New friend';
-		case 'NEW_FRIEND_REQUEST':
-			return 'Friend request';
-		case 'POEM_LIKED':
-			return 'Your poem was liked';
-		case 'POEM_COMMENT_REPLIED':
-			return 'New reply to your comment';
-		case 'POEM_DEDICATED':
-			return 'Poem dedicated';
-		case 'USER_MENTION_IN_POEM':
-			return 'You were mentioned';
-		default:
-			return 'Notification';
-	}
-}
-
-function getNotificationTitle(item: NotificationItem): string {
-	return item.data?.title?.trim() || getFallbackTitle(item.type);
-}
 
 function getNotificationBody(item: NotificationItem): string {
 	const body = item.data?.body?.trim();
@@ -36,6 +11,18 @@ function getNotificationBody(item: NotificationItem): string {
 		return `You received ${item.aggregatedCount} notifications of this type.`;
 	}
 	return 'No additional details.';
+}
+
+function getNotificationActorName(item: NotificationItem): string {
+	return (
+		item.data?.requesterNickname ??
+		item.data?.likerNickname ??
+		item.data?.commenterNickname ??
+		item.data?.dedicatorNickname ??
+		item.data?.replierNickname ??
+		item.data?.newFriendNickname ??
+		'User'
+	);
 }
 
 function getNotificationLink(item: NotificationItem) {
@@ -74,48 +61,34 @@ function getAccentForType(type: string) {
 type NotificationCardProps = {
 	item: NotificationItem;
 	onMarkAsRead: (id: number) => Promise<void>;
-	onDelete: (id: number) => Promise<void>;
 	isMarkingAsRead: boolean;
-	isDeleting: boolean;
 };
 
-export function NotificationCard({
-	item,
-	onMarkAsRead,
-	onDelete,
-	isMarkingAsRead,
-	isDeleting,
-}: NotificationCardProps) {
+export function NotificationCard({ item, onMarkAsRead, isMarkingAsRead }: NotificationCardProps) {
 	const link = getNotificationLink(item);
 	const accentColor = getAccentForType(item.type);
+	const relativeCreatedAt = formatRelativeTime(item.createdAt);
+	const avatarUrl = item.data?.avatarUrl ?? item.data?.actorAvatarUrl ?? null;
+	const actorName = getNotificationActorName(item);
 
-	return (
-		<Card.Root
-			variant='interactive'
-			size='sm'
-			borderColor={item.readAt ? 'purple.700' : 'pink.400'}
-			borderLeft='4px solid'
-			borderLeftColor={accentColor}
-		>
-			<Card.Header pb={2}>
-				<Flex direction='column' gap={1} flex='1'>
-					<Text color='pink.100' fontWeight='semibold'>
-						{getNotificationTitle(item)}
-					</Text>
-					<Text variant='muted'>{getNotificationBody(item)}</Text>
-				</Flex>
-			</Card.Header>
-
-			<Card.Body pt={0}>
-				<Flex align='start' justify='space-between' gap={3}>
+	const cardContent = (
+		<Card.Body>
+			<Flex align='start' justify='space-between' gap={3}>
+				<HStack align='start' gap={3} flex='1' minW={0}>
+					<Avatar.Root size='md'>
+						<Avatar.Image src={avatarUrl ?? undefined} />
+						<Avatar.Fallback name={actorName} />
+					</Avatar.Root>
 					<VStack align='start' gap={2} flex='1' minW={0}>
-						<Text variant='caption' color='pink.300'>
-							{formatDate(item.createdAt)}
+						<Text color='pink.100' fontWeight='semibold'>
+							{getNotificationBody(item)}
 						</Text>
+						{relativeCreatedAt && (
+							<Text variant='caption' color='pink.300'>
+								{relativeCreatedAt}
+							</Text>
+						)}
 						<HStack gap={2} wrap='wrap'>
-							<Badge size='sm' colorPalette='purple' variant='subtle'>
-								{item.type}
-							</Badge>
 							{item.aggregatedCount > 1 && (
 								<Badge size='sm' colorPalette='pink' variant='subtle'>
 									{item.aggregatedCount} notifications
@@ -128,50 +101,46 @@ export function NotificationCard({
 							)}
 						</HStack>
 					</VStack>
+				</HStack>
 
-					<HStack gap={2} align='start'>
-						{link && (
-							<IconButton
-								asChild
-								size='sm'
-								variant='solidPink'
-								aria-label='Open notification'
-								title='Open'
-							>
-								<NavLink to={link}>
-									<Eye size={16} />
-								</NavLink>
-							</IconButton>
-						)}
-						{!item.readAt && (
-							<IconButton
-								size='sm'
-								variant='solidPink'
-								aria-label='Mark as read'
-								title='Mark as read'
-								onClick={() => {
-									void onMarkAsRead(item.id);
-								}}
-								loading={isMarkingAsRead}
-							>
-								<Check size={16} />
-							</IconButton>
-						)}
+				<HStack gap={2} align='start'>
+					{!item.readAt && (
 						<IconButton
 							size='sm'
-							variant='danger'
-							aria-label='Delete notification'
-							title='Delete'
-							onClick={() => {
-								void onDelete(item.id);
+							variant='solidPink'
+							aria-label='Mark as read'
+							title='Mark as read'
+							onClick={(event) => {
+								event.preventDefault();
+								event.stopPropagation();
+								void onMarkAsRead(item.id);
 							}}
-							loading={isDeleting}
+							loading={isMarkingAsRead}
 						>
-							<Trash2 size={16} />
+							<Check size={16} />
 						</IconButton>
-					</HStack>
-				</Flex>
-			</Card.Body>
+					)}
+				</HStack>
+			</Flex>
+		</Card.Body>
+	);
+
+	return (
+		<Card.Root
+			asChild={Boolean(link)}
+			variant='interactive'
+			size='sm'
+			borderColor={item.readAt ? 'purple.700' : 'pink.400'}
+			borderLeft='4px solid'
+			borderLeftColor={accentColor}
+		>
+			{link ? (
+				<NavLink to={link} style={{ display: 'block' }}>
+					{cardContent}
+				</NavLink>
+			) : (
+				cardContent
+			)}
 		</Card.Root>
 	);
 }

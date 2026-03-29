@@ -32,48 +32,50 @@ export function NavbarBottomNav({
 			pb='calc(env(safe-area-inset-bottom, 0px))'
 		>
 			<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
-				{links.map((link) => (
-					<Link key={link.label} asChild variant='navIcon' size='sm'>
-						<NavLink
-							to={link.to}
-							style={{ display: 'block' }}
-							onClick={() => {
-								if (currentPath === link.to) {
-									onSameRouteClick();
-								}
-							}}
-						>
-							<Flex
-								direction='column'
-								align='center'
-								justifyContent='center'
-								gap={0}
-								position='relative'
+				{links
+					.filter((link) => link.to !== '/my-profile')
+					.map((link) => (
+						<Link key={link.label} asChild variant='navIcon' size='sm'>
+							<NavLink
+								to={link.to}
+								style={{ display: 'block' }}
+								onClick={() => {
+									if (currentPath === link.to) {
+										onSameRouteClick();
+									}
+								}}
 							>
-								<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
-								{link.to === '/notifications' && unreadCount > 0 && (
-									<Badge
-										position='absolute'
-										top='-2'
-										right='-2'
-										minW='1.1rem'
-										h='1.1rem'
-										px='1'
-										display='inline-flex'
-										alignItems='center'
-										justifyContent='center'
-										borderRadius='full'
-										colorPalette='pink'
-										variant='solid'
-										fontSize='2xs'
-									>
-										{unreadCount > 9 ? '9+' : unreadCount}
-									</Badge>
-								)}
-							</Flex>
-						</NavLink>
-					</Link>
-				))}
+								<Flex
+									direction='column'
+									align='center'
+									justifyContent='center'
+									gap={0}
+									position='relative'
+								>
+									<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
+									{link.to === '/notifications' && unreadCount > 0 && (
+										<Badge
+											position='absolute'
+											top='-2'
+											right='-2'
+											minW='1.1rem'
+											h='1.1rem'
+											px='1'
+											display='inline-flex'
+											alignItems='center'
+											justifyContent='center'
+											borderRadius='full'
+											colorPalette='pink'
+											variant='solid'
+											fontSize='2xs'
+										>
+											{unreadCount > 9 ? '9+' : unreadCount}
+										</Badge>
+									)}
+								</Flex>
+							</NavLink>
+						</Link>
+					))}
 			</HStack>
 		</Box>
 	);

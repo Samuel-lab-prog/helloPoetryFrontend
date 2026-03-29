@@ -32,10 +32,6 @@ const HomePage = lazyPage(
 	() => import('./features/poems/use-cases/home/Page'),
 	(module) => module.HomePage,
 );
-const PoemsPage = lazyPage(
-	() => import('./features/poems/use-cases/poems/Page'),
-	(module) => module.PoemsPage,
-);
 const PoemPage = lazyPage(
 	() => import('./features/poems/use-cases/poem/Page'),
 	(module) => module.PoemPage,
@@ -100,7 +96,6 @@ const NotificationsPage = lazyPage(
 function generateNavLinks(isAuthenticated: boolean, role?: string) {
 	const links = [
 		{ to: '/', label: 'Home' },
-		{ to: '/poems', label: 'Poems' },
 		{ to: '/poets', label: 'Poets' },
 	];
 	if (isAuthenticated) {
@@ -129,7 +124,6 @@ export default function App() {
 			errorElement: <ErrorPage />,
 			children: [
 				{ index: true, element: renderLazyPage(HomePage) },
-				{ path: 'poems', element: renderLazyPage(PoemsPage) },
 				{ path: 'poets', element: renderLazyPage(PoetsPage) },
 				{ path: 'poems/:id', element: renderLazyPage(PoemPage) },
 				{ path: 'poems/:slug/:id', element: renderLazyPage(PoemPage) },
