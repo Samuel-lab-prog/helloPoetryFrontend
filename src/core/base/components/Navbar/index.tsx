@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Avatar, Badge, Flex, Icon, Link, Text } from '@chakra-ui/react';
 import { Bell, PenSquare } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
@@ -17,10 +17,12 @@ export function Navbar({ links }: NavbarProps) {
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const { profile } = useMyProfile();
 	const location = useLocation();
+	const contentRef = useRef<HTMLDivElement | null>(null);
 	const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+		contentRef.current?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	}, [location.pathname]);
 
 	return (
@@ -140,6 +142,7 @@ export function Navbar({ links }: NavbarProps) {
 					w='full'
 					pb={{ base: '84px', lg: 0 }}
 					overflowY='auto'
+					ref={contentRef}
 				>
 					<Outlet />
 				</Flex>

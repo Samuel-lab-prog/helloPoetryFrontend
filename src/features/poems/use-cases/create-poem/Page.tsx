@@ -6,12 +6,9 @@ import { CreatePoemForm } from './components/CreatePoemForm';
 
 function PageHeader() {
 	return (
-		<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
-			<Heading as='h1' textStyle='h1' color='accent'>
-				Create Poem
-			</Heading>
-			<Text color='pink.100'>Fill in the fields to publish a new poem.</Text>
-		</Flex>
+		<Heading as='h1' textStyle='h1' color='accent' textAlign='center' mb={4}>
+			Create Poem
+		</Heading>
 	);
 }
 
@@ -58,9 +55,7 @@ export function CreatePoemPage() {
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' gap={8}>
-			<Flex as='section' direction='column' align='center' w='full'>
-				<PageHeader />
-			</Flex>
+			<PageHeader />
 
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
 				<Flex direction='column' w='full' maxW='xl'>

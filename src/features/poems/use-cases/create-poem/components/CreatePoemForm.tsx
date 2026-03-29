@@ -102,7 +102,7 @@ export function CreatePoemForm() {
 			label: 'Content (Markdown)',
 			required: true,
 			type: 'textarea',
-			rows: 20,
+			rows: 12,
 			minLength: POEM_CONTENT_MIN_LENGTH,
 			maxLength: POEM_CONTENT_MAX_LENGTH,
 			showCharacterCount: true,

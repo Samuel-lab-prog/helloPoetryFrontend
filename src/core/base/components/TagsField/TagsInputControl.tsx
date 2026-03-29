@@ -23,6 +23,17 @@ export function TagsInputControl({
 	const [isFocused, setIsFocused] = useState(false);
 	const tagsCount = selectedTags.length;
 	const limitReached = tagsCount >= maxTags;
+	const tagSet = new Set(selectedTags.map((tag) => tag.toLowerCase()));
+
+	const commitInputValue = (value: string, clear?: () => void) => {
+		const trimmed = value.trim();
+		if (!trimmed) return;
+		if (limitReached) return;
+		if (tagSet.has(trimmed.toLowerCase())) return;
+
+		onValueChange([...selectedTags, trimmed]);
+		clear?.();
+	};
 
 	return (
 		<>
@@ -116,7 +127,13 @@ export function TagsInputControl({
 						maxLength={maxTagLength}
 						_placeholder={{ color: 'pink.200' }}
 						onFocus={() => setIsFocused(true)}
-						onBlur={() => setIsFocused(false)}
+						onBlur={(event) => {
+							setIsFocused(false);
+							if (disabled) return;
+							commitInputValue(event.currentTarget.value, () => {
+								event.currentTarget.value = '';
+							});
+						}}
 					/>
 					<TagsInput.ClearTrigger
 						color='pink.200'

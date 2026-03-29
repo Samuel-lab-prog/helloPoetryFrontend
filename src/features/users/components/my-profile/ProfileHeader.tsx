@@ -19,9 +19,6 @@ export function ProfileHeader({ isLoggingOut, onLogout }: ProfileHeaderProps) {
 				<Heading as='h1' textStyle='h2'>
 					My Profile
 				</Heading>
-				<Text textStyle='small' color='pink.200'>
-					Manage your account, collections, and poems.
-				</Text>
 			</VStack>
 			<Button
 				size={{ base: 'sm', md: 'md' }}
