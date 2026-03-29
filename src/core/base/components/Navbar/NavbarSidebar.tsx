@@ -23,7 +23,7 @@ export function NavbarSidebar({
 			display={{ base: 'none', lg: 'flex' }}
 			direction='column'
 			justify='space-between'
-			w='260px'
+			w='320px'
 			minH='100vh'
 			position='sticky'
 			top={0}

@@ -3,16 +3,15 @@ import { Children, type ReactNode } from 'react';
 
 type PoemGridProps = {
 	children: ReactNode;
+	templateColumns?: string | string[];
 };
 
-export function PoemGrid({ children }: PoemGridProps) {
+export function PoemGrid({ children, templateColumns }: PoemGridProps) {
 	const items = Children.toArray(children);
+	const defaultColumns = ['1fr', undefined, '1fr 1fr', undefined, undefined, '1fr 1fr 1fr 1fr'];
 
 	return (
-		<Grid
-			templateColumns={['1fr', undefined, '1fr 1fr', undefined, undefined, '1fr 1fr 1fr 1fr']}
-			gap={2}
-		>
+		<Grid templateColumns={templateColumns ?? defaultColumns} gap={2}>
 			{items.map((child, index) => (
 				<Box
 					key={`poem-grid-item-${index}`}

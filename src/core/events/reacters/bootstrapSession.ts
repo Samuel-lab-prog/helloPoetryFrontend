@@ -20,6 +20,7 @@ function mapFeedPoem(item: FeedPoemType): PoemPreviewType {
 		title: item.title,
 		slug: item.slug,
 		createdAt: item.createdAt,
+		excerpt: item.excerpt ?? null,
 		tags: item.tags.map((name, index) => ({
 			id: index + 1,
 			name,

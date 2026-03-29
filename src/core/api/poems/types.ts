@@ -48,6 +48,7 @@ export type FullPoem = {
 export type PoemPreview = {
 	title: string;
 	slug: string;
+	excerpt?: string | null;
 	id: number;
 	createdAt?: string | Date;
 	likesCount?: number;

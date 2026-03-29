@@ -3,6 +3,7 @@
 	content: string;
 	title: string;
 	slug: string;
+	excerpt?: string | null;
 	tags: string[];
 	createdAt: string | Date;
 	likesCount: number;

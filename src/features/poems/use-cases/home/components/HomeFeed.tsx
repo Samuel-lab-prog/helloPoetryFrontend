@@ -8,13 +8,14 @@ type HomeFeedProps = {
 	poems: PoemPreview[];
 	isLoading: boolean;
 	isError: boolean;
+	templateColumns?: string | string[];
 };
 
-export function HomeFeed({ poems, isLoading, isError }: HomeFeedProps) {
+export function HomeFeed({ poems, isLoading, isError, templateColumns }: HomeFeedProps) {
 	return (
 		<Box>
 			<AsyncState isLoading={isLoading} isError={isError} isEmpty={poems.length === 0}>
-				<PoemGrid>
+				<PoemGrid templateColumns={templateColumns}>
 					{poems.map((poem) => (
 						<PoemCard key={poem.id} poem={poem} />
 					))}

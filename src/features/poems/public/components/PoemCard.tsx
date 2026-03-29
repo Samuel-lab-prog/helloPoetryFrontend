@@ -49,20 +49,25 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header p={0} mb={5} gap={2}>
+			<Card.Header p={0} mb={5} gap={1}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poem
 				</Badge>
 				<Card.Title as='h3' textStyle='h3'>
 					{poem.title}
 				</Card.Title>
+				{poem.excerpt && (
+					<Text textStyle='smaller' color='pink.100' opacity={0.9} noOfLines={3}>
+						{poem.excerpt}
+					</Text>
+				)}
 			</Card.Header>
 
 			<Card.Body p={0} flex='1'>
 				<Flex direction='column' gap={3}>
 					{!hideAuthorMeta && (
 						<Flex align='center' gap={2}>
-							<Avatar.Root size='sm'>
+							<Avatar.Root size='md'>
 								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
 								<Avatar.Fallback name={poem.author.nickname} />
 							</Avatar.Root>

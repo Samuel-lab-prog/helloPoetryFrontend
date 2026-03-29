@@ -21,6 +21,7 @@ function toPoemPreviewType(item: FeedPoemType): PoemPreviewType {
 		id: item.id,
 		title: item.title,
 		slug: item.slug,
+		excerpt: item.excerpt ?? null,
 		createdAt: item.createdAt,
 		likesCount: item.likesCount,
 		commentsCount: item.commentsCount,
