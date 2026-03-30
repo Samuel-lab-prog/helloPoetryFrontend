@@ -43,7 +43,7 @@ export function FriendRequestsSection({
 				)}
 			</Flex>
 
-			<Flex direction='column' gap={3}>
+			<Flex direction='column' gap={1}>
 				{isFriendRequestsLoading && <Text textStyle='small'>Loading requests...</Text>}
 				{!isFriendRequestsLoading &&
 					!isFriendRequestsError &&
@@ -59,14 +59,13 @@ export function FriendRequestsSection({
 				{friendRequests.received.map((request, index) => (
 					<Flex
 						key={request.requesterId}
-						align={{ base: 'start', md: 'center' }}
+						align='center'
 						justify='space-between'
-						direction={{ base: 'column', md: 'row' }}
+						direction='row'
 						gap={3}
-						p={3}
-						border='1px solid'
-						borderColor='purple.700'
-						borderRadius='md'
+						py={3}
+						borderTop='1px solid'
+						borderColor='border'
 						animationName='slide-from-bottom, fade-in'
 						animationDuration='320ms'
 						animationTimingFunction='ease-out'
@@ -101,7 +100,7 @@ export function FriendRequestsSection({
 								</Link>
 							</Flex>
 						</HStack>
-						<Flex gap={2}>
+						<Flex gap={2} ml='auto'>
 							<IconButton
 								aria-label='Accept request'
 								size={{ base: 'xs', md: 'sm' }}

@@ -1,4 +1,5 @@
-import { Box, Grid, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
+import { BookOpen, MessageSquare, Users } from 'lucide-react';
 import type { MyProfileViewModel } from './types';
 
 type ProfileStatsGridProps = {
@@ -7,43 +8,59 @@ type ProfileStatsGridProps = {
 
 export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 	return (
-		<Grid mt={5} templateColumns='repeat(3, minmax(0, 1fr))' gap={4}>
-			<Box
+		<Flex
+			mt={5}
+			direction={{ base: 'column', sm: 'row' }}
+		>
+			<Flex
+				flex='1'
 				p={4}
-				border='1px solid'
-				borderColor='purple.700'
-				borderRadius='xl'
-				bg='rgba(255, 255, 255, 0.02)'
+				gap={3}
+				align='center'
+				borderBottomWidth={{ base: '1px', sm: '0' }}
+				borderBottomStyle='solid'
+				borderBottomColor='pink.300'
+				borderRightWidth={{ base: '0', sm: '1px' }}
+				borderRightStyle='solid'
+				borderRightColor='pink.300'
 			>
-				<Text textStyle='smaller' color='pink.200'>
-					Poems
-				</Text>
-				<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
-			</Box>
-			<Box
+				<BookOpen size={18} />
+				<Flex direction='column'>
+					<Text textStyle='smaller' color='pink.200'>
+						Poems
+					</Text>
+					<Text textStyle='h3'>{profile.stats?.poems?.length ?? 0}</Text>
+				</Flex>
+			</Flex>
+			<Flex
+				flex='1'
 				p={4}
-				border='1px solid'
-				borderColor='purple.700'
-				borderRadius='xl'
-				bg='rgba(255, 255, 255, 0.02)'
+				gap={3}
+				align='center'
+				borderBottomWidth={{ base: '1px', sm: '0' }}
+				borderBottomStyle='solid'
+				borderBottomColor='pink.300'
+				borderRightWidth={{ base: '0', sm: '1px' }}
+				borderRightStyle='solid'
+				borderRightColor='pink.300'
 			>
-				<Text textStyle='smaller' color='pink.200'>
-					Comments
-				</Text>
-				<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
-			</Box>
-			<Box
-				p={4}
-				border='1px solid'
-				borderColor='purple.700'
-				borderRadius='xl'
-				bg='rgba(255, 255, 255, 0.02)'
-			>
-				<Text textStyle='smaller' color='pink.200'>
-					Friends
-				</Text>
-				<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
-			</Box>
-		</Grid>
+				<MessageSquare size={18} />
+				<Flex direction='column'>
+					<Text textStyle='smaller' color='pink.200'>
+						Comments
+					</Text>
+					<Text textStyle='h3'>{profile.stats?.commentsIds?.length ?? 0}</Text>
+				</Flex>
+			</Flex>
+			<Flex flex='1' p={4} gap={3} align='center'>
+				<Users size={18} />
+				<Flex direction='column'>
+					<Text textStyle='smaller' color='pink.200'>
+						Friends
+					</Text>
+					<Text textStyle='h3'>{profile.stats?.friends?.length ?? 0}</Text>
+				</Flex>
+			</Flex>
+		</Flex>
 	);
 }

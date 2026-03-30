@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Card, Flex, Skeleton, Text } from '@chakra-ui/react';
+import { Box, Card, Field, Flex, Input, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@root/core/base';
 import { useMyProfile } from '../hooks/useMyProfile';
@@ -66,12 +66,33 @@ export function PoetsPage() {
 			px={{ base: 4, md: 6 }}
 		>
 			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
-				<FormField
-					label='Search by nickname'
-					name='searchNickname'
-					control={form.control}
-					type='text'
-				/>
+				<Field.Root>
+					<Field.Label textStyle='small' fontWeight='medium' color='text'>
+						Search poets
+					</Field.Label>
+					<Input
+						value={searchNickname}
+						onChange={(event) => form.setValue('searchNickname', event.target.value)}
+						placeholder='Search by nickname'
+						textStyle='small'
+						transition='all 0.22s ease'
+						bg='rgba(255, 255, 255, 0.03)'
+						borderColor='border'
+						_hover={{
+							borderColor: 'borderHover',
+							bg: 'rgba(255, 255, 255, 0.05)',
+						}}
+						_focusVisible={{
+							borderColor: 'pink.300',
+							boxShadow: '0 0 0 3px rgba(255, 143, 189, 1)',
+							bg: 'rgba(255, 255, 255, 0.06)',
+						}}
+						_focus={{
+							borderColor: 'pink.300',
+							bg: 'rgba(255, 255, 255, 0.06)',
+						}}
+					/>
+				</Field.Root>
 				{isFetching && (
 					<Text textStyle='smaller' color='pink.200'>
 						Searching poets...

@@ -82,8 +82,16 @@ export function MyProfilePage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center'>
-			<Box as='section' w='full' maxW='4xl'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			w='full'
+			maxW='4xl'
+			mx='auto'
+			px={{ base: 4, md: 6 }}
+		>
+			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
 
 				<AsyncState

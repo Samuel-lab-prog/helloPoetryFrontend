@@ -38,6 +38,7 @@ export type FullPoem = {
 	audioUrl: string | null;
 	status: PoemStatus;
 	visibility: PoemVisibility;
+	moderationStatus: 'rejected' | 'removed' | 'approved' | 'pending';
 	isCommentable: boolean;
 	author: PoemAuthor;
 	toUsers?: PoemDedicationUser[];

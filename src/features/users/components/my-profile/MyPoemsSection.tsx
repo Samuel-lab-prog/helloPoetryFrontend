@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Surface, formatDate } from '@root/core/base';
+import { Surface, formatDate, translateModerationStatus } from '@root/core/base';
 import type { MyPoemsSectionProps } from './types';
 
 function translateStatus(status: string) {
@@ -37,6 +37,21 @@ function translateVisibility(visibility: string) {
 			return 'Unlisted';
 		default:
 			return visibility;
+	}
+}
+
+function getModerationTextColor(status: string) {
+	switch (status) {
+		case 'approved':
+			return 'green.300';
+		case 'pending':
+			return 'yellow.300';
+		case 'rejected':
+			return 'red.500';
+		case 'removed':
+			return 'red.300';
+		default:
+			return 'gray.300';
 	}
 }
 
@@ -111,6 +126,13 @@ export function MyPoemsSection({
 							<Text textStyle='smaller' color='pink.200'>
 								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
 								{translateVisibility(poem.visibility)}
+							</Text>
+							<Text
+								textStyle='smaller'
+								color={getModerationTextColor(poem.moderationStatus)}
+								fontWeight='semibold'
+							>
+								{translateModerationStatus(poem.moderationStatus)}
 							</Text>
 							{poem.stats && (
 								<Text textStyle='smaller' color='pink.200'>

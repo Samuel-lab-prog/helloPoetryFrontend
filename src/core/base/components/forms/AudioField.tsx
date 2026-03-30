@@ -1,5 +1,6 @@
-import { Box, Button, Field, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Field, Flex, HStack, Text } from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Mic, Square, Upload, Trash2 } from 'lucide-react';
 import {
 	useController,
 	type Control,
@@ -186,13 +187,6 @@ export function AudioField<T extends FieldValues>({
 		[field],
 	);
 
-	const handleClearSelectedFile = useCallback(() => {
-		if (audioFileInputRef.current) {
-			audioFileInputRef.current.value = '';
-		}
-		setPreviewSource(null);
-		field.onChange(null);
-	}, [field]);
 
 	return (
 		<Field.Root required={required} invalid={hasError} w='full'>
@@ -219,44 +213,54 @@ export function AudioField<T extends FieldValues>({
 
 			<Flex gap={2} wrap='wrap'>
 				<Button
-					size='sm'
+					size='xs'
+					fontSize='xs'
 					variant='solidPink'
 					onClick={handleStartRecording}
 					disabled={isRecording || disabled}
 				>
-					{labelsResolved.record}
+					<HStack gap={2}>
+						<Mic size={14} />
+						<Text fontSize='xs'>{labelsResolved.record}</Text>
+					</HStack>
 				</Button>
 				<Button
-					size='sm'
-					variant='outlinePurple'
+					size='xs'
+					fontSize='xs'
+					variant='solidPink'
+					colorPalette='gray'
 					onClick={handleStopRecording}
 					disabled={!isRecording || disabled}
 				>
-					{labelsResolved.stop}
+					<HStack gap={2}>
+						<Square size={14} />
+						<Text fontSize='xs'>{labelsResolved.stop}</Text>
+					</HStack>
 				</Button>
 				<Button
-					size='sm'
+					size='xs'
+					fontSize='xs'
 					variant='ghost'
+					colorPalette='gray'
 					onClick={handleDiscardRecording}
 					disabled={!file || disabled}
 				>
-					{labelsResolved.discard}
+					<HStack gap={2}>
+						<Trash2 size={14} />
+						<Text fontSize='xs'>{labelsResolved.discard}</Text>
+					</HStack>
 				</Button>
 				<Button
-					size='sm'
-					variant='surface'
+					size='xs'
+					fontSize='xs'
+					variant='outlinePurple'
 					onClick={() => audioFileInputRef.current?.click()}
 					disabled={disabled}
 				>
-					{labelsResolved.upload}
-				</Button>
-				<Button
-					size='sm'
-					variant='ghost'
-					onClick={handleClearSelectedFile}
-					disabled={!file || disabled}
-				>
-					{labelsResolved.clear}
+					<HStack gap={2}>
+						<Upload size={14} />
+						<Text fontSize='xs'>{labelsResolved.upload}</Text>
+					</HStack>
 				</Button>
 			</Flex>
 			<input

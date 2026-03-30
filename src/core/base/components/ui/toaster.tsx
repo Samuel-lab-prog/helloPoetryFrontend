@@ -18,8 +18,16 @@ export const toaster = createToaster({
 export const Toaster = () => (
 	<Portal>
 		<ChakraToaster toaster={toaster} insetInline={{ mdDown: '4' }}>
-			{(toast) => (
-				<Toast.Root width={{ md: 'sm' }}>
+			{(toast) => {
+				const colorPalette = (toast.meta as { colorPalette?: string } | undefined)?.colorPalette;
+				return (
+				<Toast.Root
+					width={{ md: 'sm' }}
+					colorPalette={colorPalette}
+					bg={colorPalette ? 'purple.600' : undefined}
+					borderColor={colorPalette ? 'purple.400' : undefined}
+					color={colorPalette ? 'purple.50' : undefined}
+				>
 					{toast.type === 'loading' ? (
 						<Spinner size='sm' color='blue.solid' />
 					) : (
@@ -32,7 +40,7 @@ export const Toaster = () => (
 					{toast.action && <Toast.ActionTrigger>{toast.action.label}</Toast.ActionTrigger>}
 					{toast.closable && <Toast.CloseTrigger />}
 				</Toast.Root>
-			)}
+			)}}
 		</ChakraToaster>
 	</Portal>
 );

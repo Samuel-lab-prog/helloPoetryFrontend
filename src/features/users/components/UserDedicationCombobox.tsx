@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
+import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 
 type UserOption = {
 	id: number;
@@ -34,6 +35,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 	disabled,
 	isLoading,
 }: UserDedicationComboboxProps<T>) {
+	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const { contains } = useFilter({
@@ -51,8 +53,11 @@ export function UserDedicationCombobox<T extends FieldValues>({
 	});
 
 	useEffect(() => {
-		set(users);
-	}, [set, users]);
+		const filteredUsers = authClientId
+			? users.filter((user) => user.id !== authClientId)
+			: users;
+		set(filteredUsers);
+	}, [authClientId, set, users]);
 
 	const errorMessage = error?.message?.toString();
 	const hasError = Boolean(errorMessage);
@@ -75,7 +80,10 @@ export function UserDedicationCombobox<T extends FieldValues>({
 					const selectedIds = Array.isArray(field.value)
 						? (field.value as number[]).filter((id) => Number.isFinite(id))
 						: [];
-					const selectedUsers = selectedIds
+					const filteredSelectedIds = authClientId
+						? selectedIds.filter((id) => id !== authClientId)
+						: selectedIds;
+					const selectedUsers = filteredSelectedIds
 						.map((id) => users.find((user) => user.id === id))
 						.filter((user): user is UserOption => Boolean(user));
 
@@ -86,9 +94,9 @@ export function UserDedicationCombobox<T extends FieldValues>({
 								multiple
 								open={isOpen}
 								disabled={disabled}
-								value={selectedIds.map((id) => String(id))}
+								value={filteredSelectedIds.map((id) => String(id))}
 								onOpenChange={(details) => {
-									if (details.open && selectedIds.length >= 5) {
+									if (details.open && filteredSelectedIds.length >= 5) {
 										setIsOpen(false);
 										return;
 									}
@@ -99,7 +107,10 @@ export function UserDedicationCombobox<T extends FieldValues>({
 									const nextIds = details.value
 										.map((id) => Number(id))
 										.filter((id) => Number.isInteger(id) && id > 0);
-									const uniqueIds = [...new Set(nextIds)].slice(0, 5);
+									const filteredIds = authClientId
+										? nextIds.filter((id) => id !== authClientId)
+										: nextIds;
+									const uniqueIds = [...new Set(filteredIds)].slice(0, 5);
 									field.onChange(uniqueIds);
 									if (uniqueIds.length >= 5) {
 										setIsOpen(false);

@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPoemSchema, type CreatePoemType } from '../../manage-poem/schemas/managePoemSchemas';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { api } from '@root/core/api';
 import type { CreatePoemResult } from '@root/core/api/poems/types';
-import type { AppErrorType } from '@root/core/base';
+import { toaster, type AppErrorType } from '@root/core/base';
+import { eventBus } from '@root/core/events/eventBus';
 
 type CreatePoemPayload = Omit<CreatePoemType, 'audio'>;
 
@@ -14,7 +15,6 @@ type UseCreatePoemFormOptions = {
 };
 
 export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
-	const queryClient = useQueryClient();
 	const [generalError, setGeneralError] = useState('');
 
 	const form = useForm<CreatePoemType>({
@@ -43,9 +43,20 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 			if (options.onCreated) {
 				await options.onCreated(createdPoem, data);
 			}
-			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
-			queryClient.invalidateQueries({ queryKey: ['poems'] });
-			alert('Poem created successfully!');
+			void eventBus.publish('poemCreated', {
+				poemId: createdPoem.id,
+				createdAt: new Date().toISOString(),
+			});
+			toaster.create({
+				type: 'success',
+				title: 'Poem created',
+				description: 'Your poem has been created and will be reviewed for moderation.',
+				duration: 6000,
+				meta: {
+					colorPalette: 'purple',
+				},
+				closable: true,
+			});
 		} catch (err) {
 			handleCreatePoemError(err, form.setError, setGeneralError);
 		}

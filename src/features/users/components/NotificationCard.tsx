@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Check } from 'lucide-react';
-import { Avatar, Badge, Card, Flex, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { formatRelativeTime } from '@root/core/base';
 import type { NotificationItem } from '../hooks/useNotificationsPanel';
 
@@ -41,106 +40,79 @@ function getNotificationLink(item: NotificationItem) {
 	return null;
 }
 
-function getAccentForType(type: string) {
-	switch (type) {
-		case 'NEW_FRIEND':
-		case 'NEW_FRIEND_REQUEST':
-			return 'purple.400';
-		case 'POEM_DEDICATED':
-			return 'pink.300';
-		case 'POEM_COMMENT_CREATED':
-		case 'POEM_COMMENT_REPLIED':
-			return 'pink.400';
-		case 'POEM_LIKED':
-			return 'pink.500';
-		default:
-			return 'purple.500';
-	}
-}
-
 type NotificationCardProps = {
 	item: NotificationItem;
 	onMarkAsRead: (id: number) => Promise<void>;
-	isMarkingAsRead: boolean;
 };
 
-export function NotificationCard({ item, onMarkAsRead, isMarkingAsRead }: NotificationCardProps) {
+export function NotificationCard({ item, onMarkAsRead }: NotificationCardProps) {
 	const link = getNotificationLink(item);
-	const accentColor = getAccentForType(item.type);
 	const relativeCreatedAt = formatRelativeTime(item.createdAt);
 	const avatarUrl = item.data?.avatarUrl ?? item.data?.actorAvatarUrl ?? null;
 	const actorName = getNotificationActorName(item);
 
 	const cardContent = (
-		<Card.Body>
-			<Flex align='start' justify='space-between' gap={3}>
+		<Box py={4}>
+			<Flex align='start' gap={3}>
 				<HStack align='start' gap={3} flex='1' minW={0}>
 					<Avatar.Root size='md'>
 						<Avatar.Image src={avatarUrl ?? undefined} />
 						<Avatar.Fallback name={actorName} />
 					</Avatar.Root>
 					<VStack align='start' gap={2} flex='1' minW={0}>
-						<Text color='pink.100' fontWeight='semibold'>
+						<Text color='pink.100' fontWeight='semibold' lineHeight='short'>
 							{getNotificationBody(item)}
 						</Text>
-						{relativeCreatedAt && (
-							<Text variant='caption' color='pink.300'>
-								{relativeCreatedAt}
-							</Text>
-						)}
+						<Flex align='center' justify='space-between' w='full' gap={3}>
+							{relativeCreatedAt && (
+								<Text variant='caption' color='pink.300'>
+									{relativeCreatedAt}
+								</Text>
+							)}
+							{item.readAt && (
+								<Text variant='caption' color='pink.200'>
+									Read
+								</Text>
+							)}
+						</Flex>
 						<HStack gap={2} wrap='wrap'>
 							{item.aggregatedCount > 1 && (
 								<Badge size='sm' colorPalette='pink' variant='subtle'>
 									{item.aggregatedCount} notifications
 								</Badge>
 							)}
-							{item.readAt && (
-								<Badge size='sm' colorPalette='gray' variant='subtle'>
-									Read
-								</Badge>
-							)}
 						</HStack>
 					</VStack>
 				</HStack>
 
-				<HStack gap={2} align='start'>
-					{!item.readAt && (
-						<IconButton
-							size='sm'
-							variant='solidPink'
-							aria-label='Mark as read'
-							title='Mark as read'
-							onClick={(event) => {
-								event.preventDefault();
-								event.stopPropagation();
-								void onMarkAsRead(item.id);
-							}}
-							loading={isMarkingAsRead}
-						>
-							<Check size={16} />
-						</IconButton>
-					)}
-				</HStack>
+				<Box />
 			</Flex>
-		</Card.Body>
+		</Box>
 	);
 
 	return (
-		<Card.Root
-			asChild={Boolean(link)}
-			variant='interactive'
-			size='sm'
-			borderColor={item.readAt ? 'purple.700' : 'pink.400'}
-			borderLeft='4px solid'
-			borderLeftColor={accentColor}
+		<Box
+			as={link ? NavLink : 'div'}
+			to={link ?? undefined}
+			display='block'
+			borderTop='1px solid'
+			borderColor='purple.700'
+			onClick={() => {
+				if (!link) return;
+				if (item.readAt) return;
+				void onMarkAsRead(item.id);
+			}}
+			_hover={
+				link
+					? {
+							bg: 'rgba(255, 255, 255, 0.03)',
+							borderColor: 'purple.600',
+						}
+					: undefined
+			}
+			transition={link ? 'background 0.2s ease, border-color 0.2s ease' : undefined}
 		>
-			{link ? (
-				<NavLink to={link} style={{ display: 'block' }}>
-					{cardContent}
-				</NavLink>
-			) : (
-				cardContent
-			)}
-		</Card.Root>
+			{cardContent}
+		</Box>
 	);
 }

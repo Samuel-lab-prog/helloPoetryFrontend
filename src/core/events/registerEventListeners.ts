@@ -1,6 +1,11 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { eventBus } from './eventBus';
-import { bootstrapUserDataOnLogin, clearUserDataFromCache, onCommentCreated } from './reacters';
+import {
+	bootstrapUserDataOnLogin,
+	clearUserDataFromCache,
+	onCommentCreated,
+	onPoemCreated,
+} from './reacters';
 
 const GLOBAL_KEY = '__olapoesia_event_listeners__';
 
@@ -19,10 +24,15 @@ export function registerEventListeners(queryClient: QueryClient): void {
 		'commentCreated',
 		onCommentCreated.bind(null, queryClient),
 	);
+	const unsubscribePoemCreated = eventBus.subscribe(
+		'poemCreated',
+		onPoemCreated.bind(null, queryClient),
+	);
 
 	(globalThis as Record<string, unknown>)[GLOBAL_KEY] = () => {
 		unsubscribeLogin();
 		unsubscribeLogout();
 		unsubscribeComment();
+		unsubscribePoemCreated();
 	};
 }

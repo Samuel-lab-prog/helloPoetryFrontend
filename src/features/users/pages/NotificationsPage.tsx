@@ -13,7 +13,6 @@ export function NotificationsPage() {
 		isError,
 		markAsRead,
 		markAllAsRead,
-		isMarkingAsRead,
 		isMarkingAllAsRead,
 	} = useNotificationsPanel(onlyUnread);
 
@@ -69,7 +68,7 @@ export function NotificationsPage() {
 					errorElement={<Text textStyle='body'>Error loading notifications.</Text>}
 					emptyElement={<Text textStyle='body'>No notifications found.</Text>}
 				>
-					<Flex direction='column' gap={3}>
+					<Flex direction='column' gap={1}>
 						{notifications.map((item, index) => (
 							<Box
 								key={item.id}
@@ -82,7 +81,6 @@ export function NotificationsPage() {
 								<NotificationCard
 									item={item}
 									onMarkAsRead={(id) => markAsRead(id).then(() => {})}
-									isMarkingAsRead={isMarkingAsRead}
 								/>
 							</Box>
 						))}

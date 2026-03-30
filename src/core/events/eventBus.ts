@@ -15,6 +15,10 @@ export interface AppEvents {
 		parentId?: number;
 		createdAt: string;
 	};
+	poemCreated: {
+		poemId: number;
+		createdAt: string;
+	};
 }
 
 type EventMap = object;
