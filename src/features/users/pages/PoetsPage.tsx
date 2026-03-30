@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Field, Flex, Input, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { AsyncState, FormField } from '@root/core/base';
+import { AsyncState } from '@root/core/base';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { usePoetsSearch } from '../../poems/public/hooks/useGetPoetsSearch';
 import { PoetCard } from '../components/PoetCard';

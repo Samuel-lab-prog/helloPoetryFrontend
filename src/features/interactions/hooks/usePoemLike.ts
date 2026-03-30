@@ -1,6 +1,7 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys } from '@root/core/api';
+import { eventBus } from '@root/core/events/eventBus';
 import type { FullPoem } from '@root/core/api/poems/types';
 
 export function usePoemLike(poemId: number) {
@@ -35,6 +36,12 @@ export function usePoemLike(poemId: number) {
 			optimisticUpdate(true);
 			return { previousPoem, nextLiked: true };
 		},
+		onSuccess: () =>
+			eventBus.publish('poemLiked', {
+				poemId,
+				liked: true,
+				likedAt: new Date().toISOString(),
+			}),
 		onError: (error, _variables, context) => {
 			const appError = error as AppErrorType;
 			if (appError?.statusCode === 409) return;
@@ -52,6 +59,12 @@ export function usePoemLike(poemId: number) {
 			optimisticUpdate(false);
 			return { previousPoem, nextLiked: false };
 		},
+		onSuccess: () =>
+			eventBus.publish('poemLiked', {
+				poemId,
+				liked: false,
+				likedAt: new Date().toISOString(),
+			}),
 		onError: (error, _variables, context) => {
 			const appError = error as AppErrorType;
 			if (appError?.statusCode === 409) return;

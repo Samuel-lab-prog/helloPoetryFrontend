@@ -1,19 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@root/core/api';
 
-type UserPreview = {
-	id: number;
-	nickname: string;
-	avatarUrl: string | null;
-	role: string;
-};
-
-type UsersPage = {
-	users: UserPreview[];
-	nextCursor?: number;
-	hasMore: boolean;
-};
-
 export function useUsersPreview() {
 	const query = useQuery({
 		...api.users.getUsersPreview.query({

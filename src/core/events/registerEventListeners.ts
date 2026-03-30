@@ -5,6 +5,7 @@ import {
 	clearUserDataFromCache,
 	onCommentCreated,
 	onPoemCreated,
+	onPoemLiked,
 } from './reacters';
 
 const GLOBAL_KEY = '__olapoesia_event_listeners__';
@@ -28,11 +29,16 @@ export function registerEventListeners(queryClient: QueryClient): void {
 		'poemCreated',
 		onPoemCreated.bind(null, queryClient),
 	);
+	const unsubscribePoemLiked = eventBus.subscribe(
+		'poemLiked',
+		onPoemLiked.bind(null, queryClient),
+	);
 
 	(globalThis as Record<string, unknown>)[GLOBAL_KEY] = () => {
 		unsubscribeLogin();
 		unsubscribeLogout();
 		unsubscribeComment();
 		unsubscribePoemCreated();
+		unsubscribePoemLiked();
 	};
 }

@@ -48,12 +48,13 @@ export function PoemPage() {
 		deleteCommentError,
 		likeComment,
 		unlikeComment,
-		isUpdatingCommentLike,
+		updatingLikeCommentId,
 		likeCommentError,
 		fetchReplies,
+		prefetchReplies,
 	} = usePoemComments(poemId, { enabled: isAuthenticated });
 	const { likePoem, unlikePoem, isUpdatingLike, likeError } = usePoemLike(poemId);
-	const { savedPoems, savePoem, unsavePoem, isSavingPoem, saveError } = useSavedPoems(
+	const { savedPoems, savePoem, unsavePoem, updatingSavedPoemId, saveError } = useSavedPoems(
 		authClientId > 0,
 	);
 
@@ -202,6 +203,7 @@ export function PoemPage() {
 	}, [isUpdatingLike, likedPoem, likePoem, unlikePoem]);
 
 	const handleToggleSavePoem = useCallback(async () => {
+		if (updatingSavedPoemId === poemId) return;
 		try {
 			if (isSaved) {
 				await unsavePoem(poemId);
@@ -212,7 +214,7 @@ export function PoemPage() {
 		} catch {
 			// Error handled by saveError + consolidated toast.
 		}
-	}, [isSaved, poemId, savePoem, unsavePoem]);
+	}, [isSaved, poemId, savePoem, unsavePoem, updatingSavedPoemId]);
 
 	const handleBack = useCallback(() => {
 		if (window.history.length > 1) {
@@ -322,11 +324,11 @@ export function PoemPage() {
 										<PoemActions
 											authClientId={authClientId}
 											likedPoem={likedPoem}
-											isSaved={isSaved}
-											isUpdatingLike={isUpdatingLike}
-											isSavingPoem={isSavingPoem}
-											onToggleLike={handleTogglePoemLike}
-											onToggleSave={handleToggleSavePoem}
+										isSaved={isSaved}
+										isUpdatingLike={isUpdatingLike}
+										isSavingPoem={updatingSavedPoemId === poemId}
+										onToggleLike={handleTogglePoemLike}
+										onToggleSave={handleToggleSavePoem}
 										/>
 									</Flex>
 								</Box>
@@ -343,7 +345,7 @@ export function PoemPage() {
 								isCommentsError={isCommentsError}
 								isCreatingComment={isCreatingComment}
 								isDeletingComment={isDeletingComment}
-								isUpdatingCommentLike={isUpdatingCommentLike}
+								updatingLikeCommentId={updatingLikeCommentId}
 								repliesByCommentId={repliesByCommentId}
 								setRepliesByCommentId={setRepliesByCommentId}
 								onCommentInputChange={handleCommentInputChange}
@@ -353,6 +355,7 @@ export function PoemPage() {
 								likeComment={likeComment}
 								unlikeComment={unlikeComment}
 								fetchReplies={fetchReplies}
+								prefetchReplies={prefetchReplies}
 							/>
 						</>
 					)}

@@ -3,8 +3,9 @@ import type { AppEvents } from '../eventBus';
 
 export async function onPoemCreated(
 	queryClient: QueryClient,
-	_payload: AppEvents['poemCreated'],
+	payload: AppEvents['poemCreated'],
 ): Promise<void> {
+	void payload;
 	await Promise.all([
 		queryClient.invalidateQueries({ queryKey: ['poems'] }),
 		queryClient.invalidateQueries({ queryKey: ['poems-minimal'] }),

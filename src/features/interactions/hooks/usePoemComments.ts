@@ -1,4 +1,5 @@
-﻿import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { type AppErrorType } from '@root/core/base';
 import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
@@ -135,6 +136,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	const queryClient = useQueryClient();
 	const isEnabled = options.enabled ?? true;
 	const poemKey = buildPoemKey(poemId);
+	const [updatingLikeCommentId, setUpdatingLikeCommentId] = useState<number | null>(null);
 
 	const query = useQuery({
 		queryKey: buildCommentsKey(poemId),
@@ -191,6 +193,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		mutationFn: (params: CommentMutationParams) =>
 			api.interactions.likeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
+			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
 			if (context.previousBase) {
 				queryClient.setQueryData(
@@ -211,12 +214,17 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (appError?.statusCode === 409) return;
 			restoreCommentQueries(queryClient, context);
 		},
+		onSettled: (_data, _error, params) => {
+			if (!params?.id) return;
+			setUpdatingLikeCommentId((current) => (current === params.id ? null : current));
+		},
 	});
 
 	const unlikeCommentMutation = useMutation({
 		mutationFn: (params: CommentMutationParams) =>
 			api.interactions.unlikeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
+			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
 			if (context.previousBase) {
 				queryClient.setQueryData(
@@ -237,6 +245,10 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (appError?.statusCode === 409) return;
 			restoreCommentQueries(queryClient, context);
 		},
+		onSettled: (_data, _error, params) => {
+			if (!params?.id) return;
+			setUpdatingLikeCommentId((current) => (current === params.id ? null : current));
+		},
 	});
 
 	function fetchReplies(parentId: number) {
@@ -244,7 +256,16 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			queryKey: buildCommentsKey(poemId, parentId),
 			queryFn: () =>
 				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
-			staleTime: 1000 * 30,
+			staleTime: 1000 * 60 * 5,
+		});
+	}
+
+	function prefetchReplies(parentId: number) {
+		return queryClient.prefetchQuery({
+			queryKey: buildCommentsKey(poemId, parentId),
+			queryFn: () =>
+				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
+			staleTime: 1000 * 60 * 5,
 		});
 	}
 
@@ -260,11 +281,13 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		deleteCommentError: getDeleteCommentErrorMessage(deleteMutation.error as AppErrorType | null),
 		likeComment: (args: CommentMutationParams) => likeCommentMutation.mutateAsync(args),
 		unlikeComment: (args: CommentMutationParams) => unlikeCommentMutation.mutateAsync(args),
-		isUpdatingCommentLike: likeCommentMutation.isPending || unlikeCommentMutation.isPending,
+		updatingLikeCommentId,
 		likeCommentError: getToggleLikeErrorMessage(
 			(likeCommentMutation.error || unlikeCommentMutation.error) as AppErrorType | null,
 		),
 		fetchReplies,
+		prefetchReplies,
 		refetchComments: query.refetch,
 	};
 }
+

@@ -8,7 +8,6 @@ interface CommentThreadHeaderProps {
 	comment: PoemCommentType;
 	parentAuthorId?: number;
 	parentAuthorNickname?: string;
-	parentCommentId?: number;
 	authClientId: number;
 	isDeletingComment: boolean;
 	onDelete: () => Promise<void>;
@@ -18,14 +17,13 @@ export function CommentThreadHeader({
 	comment,
 	parentAuthorId,
 	parentAuthorNickname,
-	parentCommentId,
 	authClientId,
 	isDeletingComment,
 	onDelete,
 }: CommentThreadHeaderProps) {
 	return (
-		<Flex justify='space-between' align='start' gap={3}>
-			<Box flex='1'>
+		<Flex align='start' gap={3} w='full' position='relative' pr={comment.author.id === authClientId ? 8 : 0}>
+			<Box flex='1' minW={0}>
 				<Flex align='center' gap={2} mb={2}>
 					<Avatar.Root size='xs'>
 						<Avatar.Image src={comment.author.avatarUrl ?? undefined} />
@@ -50,41 +48,34 @@ export function CommentThreadHeader({
 						<Text textStyle='smaller' color='pink.200'>
 							{formatRelativeTime(comment.createdAt)}
 						</Text>
-						{parentAuthorId && parentAuthorNickname && (
-							<Text textStyle='smaller' color='pink.300'>
-								In reply to{' '}
-								<Link
-									asChild
-									color='pink.200'
-									textDecoration='underline'
-									textUnderlineOffset='3px'
-								>
-									<NavLink to={`/authors/${parentAuthorId}`}>
-										@{parentAuthorNickname}
-									</NavLink>
-								</Link>
-								{parentCommentId && (
-									<Link
-										ml={2}
-										color='pink.300'
-										textDecoration='underline'
-										textUnderlineOffset='3px'
-										href={`#comment-${parentCommentId}`}
-									>
-										view
-									</Link>
-								)}
-							</Text>
-						)}
 					</Box>
 				</Flex>
-				<Text textStyle='small'>{comment.content}</Text>
+				<Text textStyle='small'>
+					{parentAuthorId && parentAuthorNickname && (
+						<>
+							<Link
+								asChild
+								color='pink.200'
+								textDecoration='underline'
+								textUnderlineOffset='3px'
+							>
+								<NavLink to={`/authors/${parentAuthorId}`}>
+									@{parentAuthorNickname}
+								</NavLink>
+							</Link>{' '}
+						</>
+					)}
+					{comment.content}
+				</Text>
 			</Box>
 			{comment.author.id === authClientId && (
 				<IconButton
+					position='absolute'
+					top='0'
+					right='0'
 					size='xs'
-					variant='solidPink'
-					colorPalette='gray'
+					variant='ghost'
+					colorPalette='red'
 					aria-label='Delete comment'
 					title='Delete comment'
 					loading={isDeletingComment}

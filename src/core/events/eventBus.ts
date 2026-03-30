@@ -19,6 +19,11 @@ export interface AppEvents {
 		poemId: number;
 		createdAt: string;
 	};
+	poemLiked: {
+		poemId: number;
+		liked: boolean;
+		likedAt: string;
+	};
 }
 
 type EventMap = object;

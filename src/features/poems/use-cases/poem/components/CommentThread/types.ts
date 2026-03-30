@@ -13,6 +13,10 @@ export interface CommentThreadProps {
 	parentAuthorNickname?: string;
 	parentCommentId?: number;
 	/**
+	 * Hide the top divider for the first item in a list.
+	 */
+	hideTopBorder?: boolean;
+	/**
 	 * The authenticated client id, used to decide when the delete action is shown.
 	 */
 	authClientId: number;
@@ -49,9 +53,9 @@ export interface CommentThreadProps {
 	 */
 	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	/**
-	 * Loading state for like/unlike mutation.
+	 * Current comment id being liked/unliked.
 	 */
-	isUpdatingCommentLike: boolean;
+	updatingLikeCommentId: number | null;
 	/**
 	 * Fetches replies for a parent comment, optionally forcing a refresh.
 	 */

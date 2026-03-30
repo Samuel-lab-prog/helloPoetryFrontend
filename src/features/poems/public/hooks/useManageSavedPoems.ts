@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { type AppErrorType } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
@@ -15,6 +16,7 @@ export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const savedKey = apiKeys.poems.saved();
+	const [updatingSavedPoemId, setUpdatingSavedPoemId] = useState<number | null>(null);
 
 	const query = useQuery({
 		...api.poems.getSavedPoems.query(),
@@ -25,6 +27,7 @@ export function useSavedPoems(enabled = true) {
 	const saveMutation = useMutation({
 		mutationFn: (poemId: number) => api.poems.savePoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
+			setUpdatingSavedPoemId(poemId);
 			await queryClient.cancelQueries({ queryKey: savedKey });
 			const previous = queryClient.getQueryData<SavedPoem[]>(savedKey) ?? [];
 			if (previous.some((poem) => poem.id === poemId)) return { previous };
@@ -45,12 +48,16 @@ export function useSavedPoems(enabled = true) {
 				queryClient.setQueryData(savedKey, context.previous);
 			}
 		},
-		onSettled: () => queryClient.invalidateQueries({ queryKey: savedKey }),
+		onSettled: (_data, _error, poemId) => {
+			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));
+			return queryClient.invalidateQueries({ queryKey: savedKey });
+		},
 	});
 
 	const unsaveMutation = useMutation({
 		mutationFn: (poemId: number) => api.poems.removeSavedPoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
+			setUpdatingSavedPoemId(poemId);
 			await queryClient.cancelQueries({ queryKey: savedKey });
 			const previous = queryClient.getQueryData<SavedPoem[]>(savedKey) ?? [];
 			queryClient.setQueryData<SavedPoem[]>(
@@ -66,7 +73,10 @@ export function useSavedPoems(enabled = true) {
 				queryClient.setQueryData(savedKey, context.previous);
 			}
 		},
-		onSettled: () => queryClient.invalidateQueries({ queryKey: savedKey }),
+		onSettled: (_data, _error, poemId) => {
+			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));
+			return queryClient.invalidateQueries({ queryKey: savedKey });
+		},
 	});
 
 	function getErrorMessage() {
@@ -83,7 +93,8 @@ export function useSavedPoems(enabled = true) {
 		isLoadingSavedPoems: query.isLoading,
 		savePoem: saveMutation.mutateAsync,
 		unsavePoem: unsaveMutation.mutateAsync,
-		isSavingPoem: saveMutation.isPending || unsaveMutation.isPending,
+		updatingSavedPoemId,
 		saveError: getErrorMessage(),
 	};
 }
+

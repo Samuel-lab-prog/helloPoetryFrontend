@@ -1,5 +1,5 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react';
-import { ChevronDown, ChevronUp, Heart, MessageCircleReply } from 'lucide-react';
+import { ChevronDown, ChevronUp, MessageCircleReply } from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
 
 interface CommentThreadActionsProps {
@@ -7,12 +7,11 @@ interface CommentThreadActionsProps {
 	isReplyComposerOpen: boolean;
 	areRepliesOpen: boolean;
 	isAuthenticated: boolean;
-	isUpdatingCommentLike: boolean;
 	hasReplies: boolean;
 	hasLoadedReplies: boolean;
 	onToggleReplies: () => Promise<void>;
 	onToggleReplyComposer: () => void;
-	onToggleLike: () => Promise<void> | void;
+	onPrefetchReplies?: () => void;
 }
 
 export function CommentThreadActions({
@@ -20,52 +19,24 @@ export function CommentThreadActions({
 	isReplyComposerOpen,
 	areRepliesOpen,
 	isAuthenticated,
-	isUpdatingCommentLike,
 	hasReplies,
 	hasLoadedReplies,
 	onToggleReplies,
 	onToggleReplyComposer,
-	onToggleLike,
+	onPrefetchReplies,
 }: CommentThreadActionsProps) {
 	return (
-		<Flex mt={3} justify='space-between' align='center' gap={2} wrap='wrap'>
-			<Flex align='center' gap={2}>
-				<IconButton
-					size='xs'
-					variant='solidPink'
-					colorPalette='gray'
-					aria-label={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
-					title={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
-					disabled={!isAuthenticated}
-					onClick={onToggleReplyComposer}
-				>
-					<MessageCircleReply />
-				</IconButton>
-				<IconButton
-					size='xs'
-					variant='solidPink'
-					colorPalette='gray'
-					aria-label={comment.likedByCurrentUser ? 'Unlike comment' : 'Like comment'}
-					title={comment.likedByCurrentUser ? 'Unlike comment' : 'Like comment'}
-					disabled={!isAuthenticated}
-					loading={isUpdatingCommentLike}
-					onClick={onToggleLike}
-				>
-					<Heart />
-				</IconButton>
-				<Text textStyle='smaller' color='pink.200'>
-					{comment.likesCount}
-				</Text>
-			</Flex>
+		<Flex mt={2} justify='space-between' align='center' gap={2} wrap='wrap'>
 			{hasReplies && (
 				<Flex align='center' gap={2}>
 					<IconButton
-						size='xs'
-						variant='solidPink'
+						size={{ base: '2xs', md: 'xs' }}
+						variant='ghost'
 						colorPalette='gray'
 						aria-label={areRepliesOpen ? 'Hide replies' : 'View replies'}
 						title={areRepliesOpen ? 'Hide replies' : 'View replies'}
 						onClick={onToggleReplies}
+						onMouseEnter={onPrefetchReplies}
 					>
 						{areRepliesOpen ? <ChevronUp /> : <ChevronDown />}
 					</IconButton>
@@ -80,6 +51,20 @@ export function CommentThreadActions({
 					)}
 				</Flex>
 			)}
+			<Flex align='center' gap={2} ml='auto'>
+				<IconButton
+					size={{ base: '2xs', md: 'xs' }}
+					variant='ghost'
+					colorPalette='pink'
+					aria-label={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
+					title={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
+					disabled={!isAuthenticated}
+					onClick={onToggleReplyComposer}
+				>
+					<MessageCircleReply />
+				</IconButton>
+				{/* TODO: Re-enable comment likes once backend returns like state consistently. */}
+			</Flex>
 		</Flex>
 	);
 }
