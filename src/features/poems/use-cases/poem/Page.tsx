@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Heading, Icon, Link } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@root/core/base';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
@@ -255,33 +255,6 @@ export function PoemPage() {
 								mb={6}
 							>
 								<PoemHeader poem={poemHeaderPoem} />
-								{immersiveUrl && (
-									<Flex justify='flex-end' mb={4} mt={3}>
-										<Button
-											asChild
-											size={{ base: 'sm', md: 'sm' }}
-											variant='outlinePurple'
-											px={{ base: 4, md: 4 }}
-											py={{ base: 2.5, md: 2.5 }}
-											bg='rgba(255, 255, 255, 0.04)'
-											borderColor='pink.400'
-											color='pink.50'
-											boxShadow='0 10px 18px rgba(10, 0, 9, 0.22)'
-											_hover={{
-												bg: 'rgba(255, 255, 255, 0.08)',
-												borderColor: 'pink.300',
-											}}
-											_focusVisible={{
-												outline: '2px solid',
-												outlineColor: 'pink.300',
-												outlineOffset: '2px',
-											}}
-										>
-											<NavLink to={immersiveUrl}>Immersive mode</NavLink>
-										</Button>
-									</Flex>
-								)}
-
 								<PoemAuthorCard
 									embedded
 									author={poem.author}
@@ -289,23 +262,13 @@ export function PoemPage() {
 										...poem.stats,
 										likesCount,
 									}}
-								>
-									<PoemActions
-										authClientId={authClientId}
-										likedPoem={likedPoem}
-										isSaved={isSaved}
-										isUpdatingLike={isUpdatingLike}
-										isSavingPoem={isSavingPoem}
-										onToggleLike={handleTogglePoemLike}
-										onToggleSave={handleToggleSavePoem}
-									/>
-								</PoemAuthorCard>
+								/>
 							</Box>
 
 							<Box
 								as='article'
 								display='flex'
-								mt={8}
+								mt={6}
 								p={[4, 6]}
 								border='1px solid'
 								borderColor='purple.700'
@@ -324,14 +287,48 @@ export function PoemPage() {
 							>
 								<Box w='full' maxW='full' textAlign='left'>
 									{poem.audioUrl && (
-										<Box mb={6} w='full'>
+										<Box mb={4} w='full'>
 											<PoemAudioPlayer src={poem.audioUrl} />
 										</Box>
 									)}
-									<Heading as='h2' textStyle='h2' color='pink.300' mb={4}>
-										{poem.title}
-									</Heading>
+									{immersiveUrl && (
+										<Box w='full' textAlign='left' mb={5}>
+											<Button
+												asChild
+												size={{ base: 'sm', md: 'sm' }}
+												variant='outlinePurple'
+												px={{ base: 4, md: 4 }}
+												py={{ base: 2.5, md: 2.5 }}
+												bg='rgba(255, 255, 255, 0.04)'
+												borderColor='pink.400'
+												color='pink.50'
+												boxShadow='0 10px 18px rgba(10, 0, 9, 0.22)'
+												_hover={{
+													bg: 'rgba(255, 255, 255, 0.08)',
+													borderColor: 'pink.300',
+												}}
+												_focusVisible={{
+													outline: '2px solid',
+													outlineColor: 'pink.300',
+													outlineOffset: '2px',
+												}}
+											>
+												<NavLink to={immersiveUrl}>Immersive mode</NavLink>
+											</Button>
+										</Box>
+									)}
 									<MarkdownRenderer content={poem.content} />
+									<Flex justify='flex-end' mt={6}>
+										<PoemActions
+											authClientId={authClientId}
+											likedPoem={likedPoem}
+											isSaved={isSaved}
+											isUpdatingLike={isUpdatingLike}
+											isSavingPoem={isSavingPoem}
+											onToggleLike={handleTogglePoemLike}
+											onToggleSave={handleToggleSavePoem}
+										/>
+									</Flex>
 								</Box>
 							</Box>
 

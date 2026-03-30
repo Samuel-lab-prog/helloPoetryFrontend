@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Card, Field, Flex, Input, Skeleton, Text } from '@chakra-ui/react';
+import { Box, Field, Flex, Input, Skeleton, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { AsyncState, FormField } from '@root/core/base';
 import { useMyProfile } from '../hooks/useMyProfile';
@@ -37,20 +37,26 @@ export function PoetsPage() {
 	const loadingSkeletons = (
 		<Flex direction='column' gap={3}>
 			{Array.from({ length: 4 }).map((_, index) => (
-				<Card.Root key={`poet-skeleton-${index}`} variant='interactive'>
-					<Card.Body>
-						<Flex align='center' justify='space-between' gap={2}>
-							<Flex align='center' gap={3}>
-								<Skeleton boxSize='12' borderRadius='full' />
-								<Flex direction='column' gap={2}>
-									<Skeleton height='12px' width='140px' />
-									<Skeleton height='10px' width='90px' />
-								</Flex>
+				<Box
+					key={`poet-skeleton-${index}`}
+					borderTop='1px solid'
+					borderColor='purple.700'
+					w='full'
+					pt={2}
+					pb={1}
+					_first={{ borderTop: 'none' }}
+				>
+					<Flex align='center' justify='space-between' gap={2}>
+						<Flex align='center' gap={3}>
+							<Skeleton boxSize='12' borderRadius='full' />
+							<Flex direction='column' gap={2}>
+								<Skeleton height='12px' width='140px' />
+								<Skeleton height='10px' width='90px' />
 							</Flex>
-							<Skeleton height='28px' width='96px' borderRadius='md' />
 						</Flex>
-					</Card.Body>
-				</Card.Root>
+						<Skeleton height='28px' width='96px' borderRadius='md' />
+					</Flex>
+				</Box>
 			))}
 		</Flex>
 	);
@@ -117,6 +123,10 @@ export function PoetsPage() {
 							animationTimingFunction='ease-out'
 							animationFillMode='backwards'
 							animationDelay={`${30 + index * 30}ms`}
+							borderTop='1px solid'
+							borderColor='purple.700'
+							w='full'
+							_first={{ borderTop: 'none' }}
 						>
 							<PoetCard poet={poet} />
 						</Box>

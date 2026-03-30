@@ -102,11 +102,6 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 	return (
 		<Box
 			w='full'
-			p={4}
-			border='1px solid'
-			borderColor='purple.700'
-			borderRadius='xl'
-			bg='rgba(255, 255, 255, 0.02)'
 			css={{
 				'& input[type="range"]': {
 					WebkitAppearance: 'none',
@@ -168,7 +163,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 			<Text textStyle='small' color='pink.200' mb={2}>
 				{title}
 			</Text>
-			<Flex align='center' justify='space-between' mb={3} gap={3} wrap='wrap'>
+			<Flex align='center' justify='space-between' mb={2} gap={3} wrap='wrap'>
 				<Flex align='center' gap={2}>
 					<Button size='sm' variant='outlinePurple' onClick={togglePlay}>
 						{isPlaying ? <PauseIcon /> : <PlayIcon />}
@@ -177,27 +172,27 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 						{formatTime(currentTime)} / {formatTime(duration)}
 					</Text>
 				</Flex>
-				<Flex align='center' gap={2}>
-					<Button size='sm' variant='ghost' onClick={toggleMute}>
-						{isMuted || volume === 0 ? <VolumeXIcon /> : <Volume2Icon />}
-					</Button>
-					<input
-						type='range'
-						min={0}
-						max={1}
-						step={0.01}
-						value={isMuted ? 0 : volume}
-						onChange={handleVolumeChange}
-						aria-label='Volume'
-						data-range='volume'
-						style={
-							{
-								width: 120,
-								'--range-progress': `${Math.round((isMuted ? 0 : volume) * 100)}%`,
-							} as CSSProperties
-						}
-					/>
-				</Flex>
+			</Flex>
+			<Flex align='center' gap={2} mb={3} wrap='wrap'>
+				<Button size='sm' variant='ghost' onClick={toggleMute}>
+					{isMuted || volume === 0 ? <VolumeXIcon /> : <Volume2Icon />}
+				</Button>
+				<input
+					type='range'
+					min={0}
+					max={1}
+					step={0.01}
+					value={isMuted ? 0 : volume}
+					onChange={handleVolumeChange}
+					aria-label='Volume'
+					data-range='volume'
+					style={
+						{
+							width: 160,
+							'--range-progress': `${Math.round((isMuted ? 0 : volume) * 100)}%`,
+						} as CSSProperties
+					}
+				/>
 			</Flex>
 
 			<Flex align='center' gap={3}>

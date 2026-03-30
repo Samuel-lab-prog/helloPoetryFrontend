@@ -33,16 +33,17 @@ export const PoemActions = memo(function PoemActions({
 	return (
 		<Flex
 			gap={2}
-			w={{ base: 'full', md: 'auto' }}
-			direction={{ base: 'column', md: 'row' }}
-			align={{ base: 'stretch', md: 'center' }}
+			w='auto'
+			direction='row'
+			align='center'
 		>
 			<Button
 				aria-label={likedPoem ? 'Unlike poem' : 'Like poem'}
 				size='sm'
+				px={{ base: 2.5, md: 3.5 }}
 				variant='solidPink'
 				colorPalette={likedPoem ? 'pink' : 'gray'}
-				w={{ base: 'full', md: 'auto' }}
+				minW='auto'
 				isLoading={isUpdatingLike}
 				isDisabled={isUpdatingLike}
 				boxShadow={likedPoem ? '0 0 0 1px rgba(255, 92, 145, 0.6)' : undefined}
@@ -64,8 +65,9 @@ export const PoemActions = memo(function PoemActions({
 			<Button
 				aria-label={isSaved ? 'Remove from saved' : 'Save poem'}
 				size='sm'
+				px={{ base: 2.5, md: 3.5 }}
 				variant='solidPink'
-				w={{ base: 'full', md: 'auto' }}
+				minW='auto'
 				isLoading={isSavingPoem}
 				isDisabled={isSavingPoem}
 				onClick={() => {
