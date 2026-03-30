@@ -4,19 +4,8 @@ import { RegisterForm } from './components/RegisterForm';
 
 export function RegisterPage() {
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			pt={{ base: '2', md: '8' }}
-		>
-			<Flex
-				as='section'
-				direction='column'
-				align='center'
-				justify='flex-start'
-				mt='0'
-			>
+		<Flex as='main' layerStyle='main' direction='column' pt={{ base: '2', md: '8' }}>
+			<Flex as='section' direction='column' align='center' justify='flex-start' mt='0'>
 				<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
 					<Heading as='h1' textStyle='h1' color='accent'>
 						Create account

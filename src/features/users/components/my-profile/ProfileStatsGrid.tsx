@@ -8,10 +8,7 @@ type ProfileStatsGridProps = {
 
 export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 	return (
-		<Flex
-			mt={5}
-			direction={{ base: 'column', sm: 'row' }}
-		>
+		<Flex mt={5} direction={{ base: 'column', sm: 'row' }}>
 			<Flex
 				flex='1'
 				p={4}

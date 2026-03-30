@@ -53,9 +53,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 	});
 
 	useEffect(() => {
-		const filteredUsers = authClientId
-			? users.filter((user) => user.id !== authClientId)
-			: users;
+		const filteredUsers = authClientId ? users.filter((user) => user.id !== authClientId) : users;
 		set(filteredUsers);
 	}, [authClientId, set, users]);
 

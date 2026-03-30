@@ -8,12 +8,7 @@ type ProfileHeaderProps = {
 
 export function ProfileHeader({ isLoggingOut, onLogout }: ProfileHeaderProps) {
 	return (
-		<Flex
-			mb={8}
-			align='center'
-			justify='space-between'
-			gap={3}
-		>
+		<Flex mb={8} align='center' justify='space-between' gap={3}>
 			<Heading as='h1' textStyle='h2'>
 				My Profile
 			</Heading>

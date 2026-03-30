@@ -16,7 +16,6 @@ type CommentsSectionProps = {
 	isCommentsError: boolean;
 	isCreatingComment: boolean;
 	isDeletingComment: boolean;
-	updatingLikeCommentId: number | null;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
 	setRepliesByCommentId: Dispatch<SetStateAction<Record<number, PoemCommentType[]>>>;
 	onCommentInputChange: (value: string) => void;
@@ -40,15 +39,12 @@ export const CommentsSection = memo(function CommentsSection({
 	isCommentsError,
 	isCreatingComment,
 	isDeletingComment,
-	updatingLikeCommentId,
 	repliesByCommentId,
 	setRepliesByCommentId,
 	onCommentInputChange,
 	onPublishComment,
 	createComment,
 	deleteComment,
-	likeComment,
-	unlikeComment,
 	fetchReplies,
 	prefetchReplies,
 }: CommentsSectionProps) {
@@ -70,9 +66,6 @@ export const CommentsSection = memo(function CommentsSection({
 					isDeletingComment={isDeletingComment}
 					createComment={createComment}
 					deleteComment={deleteComment}
-					likeComment={likeComment}
-					unlikeComment={unlikeComment}
-					updatingLikeCommentId={updatingLikeCommentId}
 					fetchReplies={fetchReplies}
 					repliesByCommentId={repliesByCommentId}
 					setRepliesByCommentId={setRepliesByCommentId}
@@ -87,12 +80,9 @@ export const CommentsSection = memo(function CommentsSection({
 			isAuthenticated,
 			isCreatingComment,
 			isDeletingComment,
-			updatingLikeCommentId,
-			likeComment,
 			poemIsCommentable,
 			repliesByCommentId,
 			setRepliesByCommentId,
-			unlikeComment,
 		],
 	);
 

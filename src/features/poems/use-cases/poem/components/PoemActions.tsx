@@ -31,12 +31,7 @@ export const PoemActions = memo(function PoemActions({
 	if (authClientId <= 0) return null;
 
 	return (
-		<Flex
-			gap={2}
-			w='auto'
-			direction='row'
-			align='center'
-		>
+		<Flex gap={2} w='auto' direction='row' align='center'>
 			<Button
 				aria-label={likedPoem ? 'Unlike poem' : 'Like poem'}
 				size='sm'

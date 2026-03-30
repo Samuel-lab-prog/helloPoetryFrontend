@@ -22,7 +22,13 @@ export function CommentThreadHeader({
 	onDelete,
 }: CommentThreadHeaderProps) {
 	return (
-		<Flex align='start' gap={3} w='full' position='relative' pr={comment.author.id === authClientId ? 8 : 0}>
+		<Flex
+			align='start'
+			gap={3}
+			w='full'
+			position='relative'
+			pr={comment.author.id === authClientId ? 8 : 0}
+		>
 			<Box flex='1' minW={0}>
 				<Flex align='center' gap={2} mb={2}>
 					<Avatar.Root size='xs'>
@@ -53,15 +59,8 @@ export function CommentThreadHeader({
 				<Text textStyle='small'>
 					{parentAuthorId && parentAuthorNickname && (
 						<>
-							<Link
-								asChild
-								color='pink.200'
-								textDecoration='underline'
-								textUnderlineOffset='3px'
-							>
-								<NavLink to={`/authors/${parentAuthorId}`}>
-									@{parentAuthorNickname}
-								</NavLink>
+							<Link asChild color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>
+								<NavLink to={`/authors/${parentAuthorId}`}>@{parentAuthorNickname}</NavLink>
 							</Link>{' '}
 						</>
 					)}

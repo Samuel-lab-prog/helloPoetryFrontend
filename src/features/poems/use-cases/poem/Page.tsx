@@ -46,9 +46,6 @@ export function PoemPage() {
 		deleteComment,
 		isDeletingComment,
 		deleteCommentError,
-		likeComment,
-		unlikeComment,
-		updatingLikeCommentId,
 		likeCommentError,
 		fetchReplies,
 		prefetchReplies,
@@ -324,11 +321,11 @@ export function PoemPage() {
 										<PoemActions
 											authClientId={authClientId}
 											likedPoem={likedPoem}
-										isSaved={isSaved}
-										isUpdatingLike={isUpdatingLike}
-										isSavingPoem={updatingSavedPoemId === poemId}
-										onToggleLike={handleTogglePoemLike}
-										onToggleSave={handleToggleSavePoem}
+											isSaved={isSaved}
+											isUpdatingLike={isUpdatingLike}
+											isSavingPoem={updatingSavedPoemId === poemId}
+											onToggleLike={handleTogglePoemLike}
+											onToggleSave={handleToggleSavePoem}
 										/>
 									</Flex>
 								</Box>
@@ -345,15 +342,12 @@ export function PoemPage() {
 								isCommentsError={isCommentsError}
 								isCreatingComment={isCreatingComment}
 								isDeletingComment={isDeletingComment}
-								updatingLikeCommentId={updatingLikeCommentId}
 								repliesByCommentId={repliesByCommentId}
 								setRepliesByCommentId={setRepliesByCommentId}
 								onCommentInputChange={handleCommentInputChange}
 								onPublishComment={handlePublishComment}
 								createComment={createComment}
 								deleteComment={deleteComment}
-								likeComment={likeComment}
-								unlikeComment={unlikeComment}
 								fetchReplies={fetchReplies}
 								prefetchReplies={prefetchReplies}
 							/>

@@ -187,7 +187,6 @@ export function AudioField<T extends FieldValues>({
 		[field],
 	);
 
-
 	return (
 		<Field.Root required={required} invalid={hasError} w='full'>
 			<Field.Label

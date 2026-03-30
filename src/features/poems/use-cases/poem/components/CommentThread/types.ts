@@ -11,7 +11,6 @@ export interface CommentThreadProps {
 	 */
 	parentAuthorId?: number;
 	parentAuthorNickname?: string;
-	parentCommentId?: number;
 	/**
 	 * Hide the top divider for the first item in a list.
 	 */
@@ -44,18 +43,6 @@ export interface CommentThreadProps {
 	 * Deletes a comment by id (optionally scoped to a parent comment).
 	 */
 	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	/**
-	 * Adds a like to a comment.
-	 */
-	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	/**
-	 * Removes a like from a comment.
-	 */
-	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	/**
-	 * Current comment id being liked/unliked.
-	 */
-	updatingLikeCommentId: number | null;
 	/**
 	 * Fetches replies for a parent comment, optionally forcing a refresh.
 	 */

@@ -290,4 +290,3 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		refetchComments: query.refetch,
 	};
 }
-

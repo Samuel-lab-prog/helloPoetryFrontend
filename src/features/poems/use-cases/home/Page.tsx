@@ -38,7 +38,7 @@ export function HomePage() {
 		enabled: isSearching,
 	});
 
-	const displayedPoems = isSearching ? searchQuery.data?.poems ?? [] : poems;
+	const displayedPoems = isSearching ? (searchQuery.data?.poems ?? []) : poems;
 	const isFeedLoading = isSearching ? searchQuery.isLoading : isLoading;
 	const isFeedError = isSearching ? searchQuery.isError : isError;
 
@@ -54,12 +54,7 @@ export function HomePage() {
 				mx='auto'
 				px={{ base: 4, md: 6 }}
 			>
-				<VStack
-					as='section'
-					w='full'
-					align='stretch'
-					gap={{ base: 6, md: 8 }}
-				>
+				<VStack as='section' w='full' align='stretch' gap={{ base: 6, md: 8 }}>
 					<Field.Root>
 						<Field.Label textStyle='small' fontWeight='medium' color='text'>
 							Search poems

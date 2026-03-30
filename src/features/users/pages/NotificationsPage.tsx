@@ -7,14 +7,8 @@ import { NotificationCard } from '../components/NotificationCard';
 
 export function NotificationsPage() {
 	const [onlyUnread, setOnlyUnread] = useState(false);
-	const {
-		notifications,
-		isLoading,
-		isError,
-		markAsRead,
-		markAllAsRead,
-		isMarkingAllAsRead,
-	} = useNotificationsPanel(onlyUnread);
+	const { notifications, isLoading, isError, markAsRead, markAllAsRead, isMarkingAllAsRead } =
+		useNotificationsPanel(onlyUnread);
 
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 

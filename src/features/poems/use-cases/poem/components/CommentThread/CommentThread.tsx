@@ -27,9 +27,6 @@ export const CommentThread = memo(function CommentThread({
 	isDeletingComment,
 	createComment,
 	deleteComment,
-	likeComment,
-	unlikeComment,
-	updatingLikeCommentId,
 	fetchReplies,
 	repliesByCommentId,
 	setRepliesByCommentId,
@@ -38,32 +35,10 @@ export const CommentThread = memo(function CommentThread({
 	const [areRepliesOpen, setAreRepliesOpen] = useState(false);
 	const [replyInput, setReplyInput] = useState('');
 	const [replyError, setReplyError] = useState('');
-	const [optimisticLike, setOptimisticLike] = useState<{
-		likedByCurrentUser: boolean;
-		likesCount: number;
-	} | null>(null);
 
 	const replies = repliesByCommentId[comment.id] ?? [];
 	const hasReplies = comment.aggregateChildrenCount > 0;
 	const hasLoadedReplies = replies.length > 0;
-	const displayedLikeState = useMemo(
-		() =>
-			optimisticLike ?? {
-				likedByCurrentUser: comment.likedByCurrentUser,
-				likesCount: comment.likesCount,
-			},
-		[comment.likedByCurrentUser, comment.likesCount, optimisticLike],
-	);
-
-	useEffect(() => {
-		if (!optimisticLike) return;
-		if (
-			optimisticLike.likedByCurrentUser === comment.likedByCurrentUser &&
-			optimisticLike.likesCount === comment.likesCount
-		) {
-			setOptimisticLike(null);
-		}
-	}, [comment.likedByCurrentUser, comment.likesCount, optimisticLike]);
 
 	const handleToggleReplyComposer = useCallback(() => {
 		if (!isAuthenticated) {
@@ -161,17 +136,17 @@ export const CommentThread = memo(function CommentThread({
 					onDelete={handleDelete}
 				/>
 
-			<CommentThreadActions
-				comment={comment}
-				isReplyComposerOpen={isReplyComposerOpen}
-				areRepliesOpen={areRepliesOpen}
-				isAuthenticated={isAuthenticated}
-				hasReplies={hasReplies}
-				hasLoadedReplies={hasLoadedReplies}
-				onToggleReplies={handleToggleRepliesView}
-				onToggleReplyComposer={handleToggleReplyComposer}
-				onPrefetchReplies={handlePrefetchReplies}
-			/>
+				<CommentThreadActions
+					comment={comment}
+					isReplyComposerOpen={isReplyComposerOpen}
+					areRepliesOpen={areRepliesOpen}
+					isAuthenticated={isAuthenticated}
+					hasReplies={hasReplies}
+					hasLoadedReplies={hasLoadedReplies}
+					onToggleReplies={handleToggleRepliesView}
+					onToggleReplyComposer={handleToggleReplyComposer}
+					onPrefetchReplies={handlePrefetchReplies}
+				/>
 
 				{isReplyComposerOpen && (
 					<CommentThreadReplyComposer
@@ -195,7 +170,6 @@ export const CommentThread = memo(function CommentThread({
 							comment={reply}
 							parentAuthorId={comment.author.id}
 							parentAuthorNickname={comment.author.nickname}
-							parentCommentId={comment.id}
 							hideTopBorder={index === 0}
 							authClientId={authClientId}
 							poemIsCommentable={poemIsCommentable}
@@ -207,9 +181,6 @@ export const CommentThread = memo(function CommentThread({
 							fetchReplies={fetchReplies}
 							repliesByCommentId={repliesByCommentId}
 							setRepliesByCommentId={setRepliesByCommentId}
-							likeComment={likeComment}
-							unlikeComment={unlikeComment}
-							updatingLikeCommentId={updatingLikeCommentId}
 						/>
 					)}
 				/>
@@ -217,4 +188,3 @@ export const CommentThread = memo(function CommentThread({
 		</Box>
 	);
 });
-
