@@ -52,18 +52,18 @@ export function NotificationCard({ item, onMarkAsRead }: NotificationCardProps) 
 	const actorName = getNotificationActorName(item);
 
 	const cardContent = (
-		<Box py={4}>
+		<Box py={2}>
 			<Flex align='start' gap={3}>
 				<HStack align='start' gap={3} flex='1' minW={0}>
 					<Avatar.Root size='md'>
 						<Avatar.Image src={avatarUrl ?? undefined} />
 						<Avatar.Fallback name={actorName} />
 					</Avatar.Root>
-					<VStack align='start' gap={2} flex='1' minW={0}>
+					<VStack align='start' gap={1} flex='1' minW={0}>
 						<Text color='pink.100' fontWeight='semibold' lineHeight='short'>
 							{getNotificationBody(item)}
 						</Text>
-						<Flex align='center' justify='space-between' w='full' gap={3}>
+						<Flex align='center' justify='space-between' w='full' gap={2}>
 							{relativeCreatedAt && (
 								<Text variant='caption' color='pink.300'>
 									{relativeCreatedAt}

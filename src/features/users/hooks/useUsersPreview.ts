@@ -16,15 +16,10 @@ type UsersPage = {
 
 export function useUsersPreview() {
 	const query = useQuery({
-		queryKey: ['users-preview'],
-		queryFn: () =>
-			api.users.getUsers
-				.query({
-					limit: 50,
-					orderBy: 'nickname',
-					orderDirection: 'asc',
-				})
-				.queryFn() as Promise<UsersPage>,
+		...api.users.getUsersPreview.query({
+			limit: 50,
+		}),
+		staleTime: 5 * 60 * 1000,
 	});
 
 	return {

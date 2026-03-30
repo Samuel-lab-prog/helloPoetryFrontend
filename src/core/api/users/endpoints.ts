@@ -8,6 +8,7 @@ import type {
 	UsersPage,
 	UsersSearchParams,
 	PublicUsersSearchParams,
+	UsersPreviewParams,
 	UserProfile,
 	AvatarUploadUrlRequest,
 	AvatarUploadUrlResponse,
@@ -53,6 +54,17 @@ const getPublicUsers = createQueryEndpoint<[PublicUsersSearchParams], UsersPage>
 		createHTTPRequest<UsersPage>({
 			method: 'GET',
 			path: `/users/public`,
+			query: params,
+		}),
+});
+
+const getUsersPreview = createQueryEndpoint<[UsersPreviewParams], UsersPage>({
+	key: userKeys.preview,
+
+	fn: (params) =>
+		createHTTPRequest<UsersPage>({
+			method: 'GET',
+			path: `/users/preview`,
 			query: params,
 		}),
 });
@@ -111,6 +123,7 @@ export const users = {
 	checkEmail,
 	getUsers,
 	getPublicUsers,
+	getUsersPreview,
 	getProfile,
 	createUser,
 	updateUser,

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Heading, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@root/core/base';
@@ -24,6 +24,7 @@ function parsePoemId(rawId: string | undefined) {
 
 export function PoemPage() {
 	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
 	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
 	const isAuthenticated = authClientId > 0;
@@ -213,6 +214,14 @@ export function PoemPage() {
 		}
 	}, [isSaved, poemId, savePoem, unsavePoem]);
 
+	const handleBack = useCallback(() => {
+		if (window.history.length > 1) {
+			navigate(-1);
+			return;
+		}
+		navigate('/');
+	}, [navigate]);
+
 	if (!isPoemIdValid) {
 		return (
 			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
@@ -361,21 +370,21 @@ export function PoemPage() {
 					<Link
 						px={4}
 						py={2}
-						asChild
 						color='pink.100'
 						border='1px solid'
 						borderColor='purple.500'
 						borderRadius='md'
 						transition='all 0.2s ease'
+						onClick={handleBack}
 						_hover={{
 							color: 'pink.50',
 							borderColor: 'pink.400',
 							bg: 'rgba(255, 255, 255, 0.06)',
 						}}
 					>
-						<NavLink to='/poems'>
+						<>
 							<Icon as={ArrowLeftIcon} /> Back
-						</NavLink>
+						</>
 					</Link>
 				</Box>
 			</Box>
