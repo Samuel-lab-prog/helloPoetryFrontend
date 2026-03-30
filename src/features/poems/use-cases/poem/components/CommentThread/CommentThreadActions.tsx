@@ -4,23 +4,27 @@ import { type PoemCommentType } from '@features/interactions';
 
 interface CommentThreadActionsProps {
 	comment: PoemCommentType;
-	activeReplyFor: number | null;
+	isReplyComposerOpen: boolean;
+	areRepliesOpen: boolean;
 	isAuthenticated: boolean;
 	isUpdatingCommentLike: boolean;
 	hasReplies: boolean;
 	hasLoadedReplies: boolean;
 	onToggleReplies: () => Promise<void>;
+	onToggleReplyComposer: () => void;
 	onToggleLike: () => Promise<void> | void;
 }
 
 export function CommentThreadActions({
 	comment,
-	activeReplyFor,
+	isReplyComposerOpen,
+	areRepliesOpen,
 	isAuthenticated,
 	isUpdatingCommentLike,
 	hasReplies,
 	hasLoadedReplies,
 	onToggleReplies,
+	onToggleReplyComposer,
 	onToggleLike,
 }: CommentThreadActionsProps) {
 	return (
@@ -30,10 +34,10 @@ export function CommentThreadActions({
 					size='xs'
 					variant='solidPink'
 					colorPalette='gray'
-					aria-label={activeReplyFor === comment.id ? 'Close reply' : 'Reply to comment'}
-					title={activeReplyFor === comment.id ? 'Close reply' : 'Reply to comment'}
+					aria-label={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
+					title={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
 					disabled={!isAuthenticated}
-					onClick={onToggleReplies}
+					onClick={onToggleReplyComposer}
 				>
 					<MessageCircleReply />
 				</IconButton>
@@ -55,21 +59,24 @@ export function CommentThreadActions({
 			</Flex>
 			{hasReplies && (
 				<Flex align='center' gap={2}>
+					<IconButton
+						size='xs'
+						variant='solidPink'
+						colorPalette='gray'
+						aria-label={areRepliesOpen ? 'Hide replies' : 'View replies'}
+						title={areRepliesOpen ? 'Hide replies' : 'View replies'}
+						onClick={onToggleReplies}
+					>
+						{areRepliesOpen ? <ChevronUp /> : <ChevronDown />}
+					</IconButton>
 					<Text textStyle='smaller' color='pink.200'>
-						{comment.aggregateChildrenCount} repl
+						{areRepliesOpen ? 'Hide' : 'View'} {comment.aggregateChildrenCount} repl
 						{comment.aggregateChildrenCount === 1 ? 'y' : 'ies'}
 					</Text>
-					{!hasLoadedReplies && (
-						<IconButton
-							size='xs'
-							variant='solidPink'
-							colorPalette='gray'
-							aria-label='View replies'
-							title='View replies'
-							onClick={onToggleReplies}
-						>
-							{activeReplyFor === comment.id ? <ChevronUp /> : <ChevronDown />}
-						</IconButton>
+					{!hasLoadedReplies && areRepliesOpen && (
+						<Text textStyle='smaller' color='pink.300'>
+							Loading...
+						</Text>
 					)}
 				</Flex>
 			)}

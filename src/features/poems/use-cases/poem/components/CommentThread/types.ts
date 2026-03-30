@@ -7,6 +7,12 @@ export interface CommentThreadProps {
 	 */
 	comment: PoemCommentType;
 	/**
+	 * Parent comment author info, used to render breadcrumb text.
+	 */
+	parentAuthorId?: number;
+	parentAuthorNickname?: string;
+	parentCommentId?: number;
+	/**
 	 * The authenticated client id, used to decide when the delete action is shown.
 	 */
 	authClientId: number;

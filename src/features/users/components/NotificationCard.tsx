@@ -43,9 +43,10 @@ function getNotificationLink(item: NotificationItem) {
 type NotificationCardProps = {
 	item: NotificationItem;
 	onMarkAsRead: (id: number) => Promise<void>;
+	hideTopBorder?: boolean;
 };
 
-export function NotificationCard({ item, onMarkAsRead }: NotificationCardProps) {
+export function NotificationCard({ item, onMarkAsRead, hideTopBorder }: NotificationCardProps) {
 	const link = getNotificationLink(item);
 	const relativeCreatedAt = formatRelativeTime(item.createdAt);
 	const avatarUrl = item.data?.avatarUrl ?? item.data?.actorAvatarUrl ?? null;
@@ -95,8 +96,8 @@ export function NotificationCard({ item, onMarkAsRead }: NotificationCardProps) 
 			as={link ? NavLink : 'div'}
 			to={link ?? undefined}
 			display='block'
-			borderTop='1px solid'
-			borderColor='purple.700'
+			borderTop={hideTopBorder ? 'none' : '1px solid'}
+			borderColor={hideTopBorder ? 'transparent' : 'purple.700'}
 			onClick={() => {
 				if (!link) return;
 				if (item.readAt) return;

@@ -17,6 +17,9 @@ import { type CommentThreadProps } from './types';
  */
 export const CommentThread = memo(function CommentThread({
 	comment,
+	parentAuthorId,
+	parentAuthorNickname,
+	parentCommentId,
 	authClientId,
 	poemIsCommentable,
 	isAuthenticated,
@@ -31,7 +34,8 @@ export const CommentThread = memo(function CommentThread({
 	repliesByCommentId,
 	setRepliesByCommentId,
 }: CommentThreadProps) {
-	const [activeReplyFor, setActiveReplyFor] = useState<number | null>(null);
+	const [isReplyComposerOpen, setIsReplyComposerOpen] = useState(false);
+	const [areRepliesOpen, setAreRepliesOpen] = useState(false);
 	const [replyInput, setReplyInput] = useState('');
 	const [replyError, setReplyError] = useState('');
 
@@ -39,22 +43,24 @@ export const CommentThread = memo(function CommentThread({
 	const hasReplies = comment.aggregateChildrenCount > 0;
 	const hasLoadedReplies = replies.length > 0;
 
-	const handleToggleReplies = useCallback(async () => {
+	const handleToggleReplyComposer = useCallback(() => {
 		if (!isAuthenticated) {
 			setReplyError('Sign in to reply.');
 			return;
 		}
-		if (activeReplyFor === comment.id) {
-			setActiveReplyFor(null);
-			setReplyInput('');
-			setReplyError('');
-			return;
-		}
+		setIsReplyComposerOpen((prev) => {
+			const next = !prev;
+			if (!next) {
+				setReplyInput('');
+				setReplyError('');
+			}
+			return next;
+		});
+	}, [isAuthenticated]);
 
-		setActiveReplyFor(comment.id);
-		setReplyError('');
-		setReplyInput('');
-		if (!repliesByCommentId[comment.id] && hasReplies) {
+	const handleToggleRepliesView = useCallback(async () => {
+		setAreRepliesOpen((prev) => !prev);
+		if (!areRepliesOpen && !repliesByCommentId[comment.id] && hasReplies) {
 			try {
 				const fetched = await fetchReplies(comment.id);
 				setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
@@ -63,11 +69,10 @@ export const CommentThread = memo(function CommentThread({
 			}
 		}
 	}, [
-		activeReplyFor,
+		areRepliesOpen,
 		comment.id,
-		hasReplies,
-		isAuthenticated,
 		fetchReplies,
+		hasReplies,
 		repliesByCommentId,
 		setRepliesByCommentId,
 	]);
@@ -88,6 +93,7 @@ export const CommentThread = memo(function CommentThread({
 			await createComment({ content: replyInput.trim(), parentId: comment.id });
 			setReplyInput('');
 			setReplyError('');
+			setAreRepliesOpen(true);
 			const fetched = await fetchReplies(comment.id, { force: true });
 			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
 		} catch {
@@ -115,39 +121,62 @@ export const CommentThread = memo(function CommentThread({
 	}, [comment.id, comment.likedByCurrentUser, comment.parentId, likeComment, unlikeComment]);
 
 	return (
-		<Box
-			p={3}
-			border='1px solid'
-			borderColor='purple.700'
-			borderRadius='md'
-			bg='rgba(255,255,255,0.02)'
-			ml={0}
-		>
-			<CommentThreadHeader
-				comment={comment}
-				authClientId={authClientId}
-				isDeletingComment={isDeletingComment}
-				onDelete={handleDelete}
-			/>
+		<Box w='full'>
+			<Box
+				id={`comment-${comment.id}`}
+				p={3}
+				border='1px solid'
+				borderColor='purple.700'
+				borderRadius='md'
+				bg='rgba(255,255,255,0.02)'
+				ml={0}
+			>
+				<CommentThreadHeader
+					comment={comment}
+					parentAuthorId={parentAuthorId}
+					parentAuthorNickname={parentAuthorNickname}
+					parentCommentId={parentCommentId}
+					authClientId={authClientId}
+					isDeletingComment={isDeletingComment}
+					onDelete={handleDelete}
+				/>
 
-			<CommentThreadActions
-				comment={comment}
-				activeReplyFor={activeReplyFor}
-				isAuthenticated={isAuthenticated}
-				isUpdatingCommentLike={isUpdatingCommentLike}
-				hasReplies={hasReplies}
-				hasLoadedReplies={hasLoadedReplies}
-				onToggleReplies={handleToggleReplies}
-				onToggleLike={handleToggleLike}
-			/>
+				<CommentThreadActions
+					comment={comment}
+					isReplyComposerOpen={isReplyComposerOpen}
+					areRepliesOpen={areRepliesOpen}
+					isAuthenticated={isAuthenticated}
+					isUpdatingCommentLike={isUpdatingCommentLike}
+					hasReplies={hasReplies}
+					hasLoadedReplies={hasLoadedReplies}
+					onToggleReplies={handleToggleRepliesView}
+					onToggleReplyComposer={handleToggleReplyComposer}
+					onToggleLike={handleToggleLike}
+				/>
 
-			{hasLoadedReplies && (
+				{isReplyComposerOpen && (
+					<CommentThreadReplyComposer
+						replyInput={replyInput}
+						replyError={replyError}
+						isAuthenticated={isAuthenticated}
+						poemIsCommentable={poemIsCommentable}
+						isCreatingComment={isCreatingComment}
+						onChange={setReplyInput}
+						onSubmit={handleCreateReply}
+					/>
+				)}
+			</Box>
+
+			{areRepliesOpen && hasLoadedReplies && (
 				<CommentThreadReplies
 					replies={replies}
 					renderReply={(reply: PoemCommentType) => (
 						<CommentThread
 							key={reply.id}
 							comment={reply}
+							parentAuthorId={comment.author.id}
+							parentAuthorNickname={comment.author.nickname}
+							parentCommentId={comment.id}
 							authClientId={authClientId}
 							poemIsCommentable={poemIsCommentable}
 							isAuthenticated={isAuthenticated}
@@ -163,18 +192,6 @@ export const CommentThread = memo(function CommentThread({
 							isUpdatingCommentLike={isUpdatingCommentLike}
 						/>
 					)}
-				/>
-			)}
-
-			{activeReplyFor === comment.id && (
-				<CommentThreadReplyComposer
-					replyInput={replyInput}
-					replyError={replyError}
-					isAuthenticated={isAuthenticated}
-					poemIsCommentable={poemIsCommentable}
-					isCreatingComment={isCreatingComment}
-					onChange={setReplyInput}
-					onSubmit={handleCreateReply}
 				/>
 			)}
 		</Box>

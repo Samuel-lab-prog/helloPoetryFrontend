@@ -6,6 +6,9 @@ import { NavLink } from 'react-router-dom';
 
 interface CommentThreadHeaderProps {
 	comment: PoemCommentType;
+	parentAuthorId?: number;
+	parentAuthorNickname?: string;
+	parentCommentId?: number;
 	authClientId: number;
 	isDeletingComment: boolean;
 	onDelete: () => Promise<void>;
@@ -13,6 +16,9 @@ interface CommentThreadHeaderProps {
 
 export function CommentThreadHeader({
 	comment,
+	parentAuthorId,
+	parentAuthorNickname,
+	parentCommentId,
 	authClientId,
 	isDeletingComment,
 	onDelete,
@@ -44,6 +50,32 @@ export function CommentThreadHeader({
 						<Text textStyle='smaller' color='pink.200'>
 							{formatRelativeTime(comment.createdAt)}
 						</Text>
+						{parentAuthorId && parentAuthorNickname && (
+							<Text textStyle='smaller' color='pink.300'>
+								In reply to{' '}
+								<Link
+									asChild
+									color='pink.200'
+									textDecoration='underline'
+									textUnderlineOffset='3px'
+								>
+									<NavLink to={`/authors/${parentAuthorId}`}>
+										@{parentAuthorNickname}
+									</NavLink>
+								</Link>
+								{parentCommentId && (
+									<Link
+										ml={2}
+										color='pink.300'
+										textDecoration='underline'
+										textUnderlineOffset='3px'
+										href={`#comment-${parentCommentId}`}
+									>
+										view
+									</Link>
+								)}
+							</Text>
+						)}
 					</Box>
 				</Flex>
 				<Text textStyle='small'>{comment.content}</Text>

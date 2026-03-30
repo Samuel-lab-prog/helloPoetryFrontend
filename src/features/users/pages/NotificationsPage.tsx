@@ -81,6 +81,7 @@ export function NotificationsPage() {
 								<NotificationCard
 									item={item}
 									onMarkAsRead={(id) => markAsRead(id).then(() => {})}
+									hideTopBorder={index === 0}
 								/>
 							</Box>
 						))}
