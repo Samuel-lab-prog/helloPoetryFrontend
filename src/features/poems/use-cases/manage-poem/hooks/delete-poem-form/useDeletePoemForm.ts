@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePoemSchema, type DeletePoemType } from '../../schemas/managePoemSchemas';
 import { handleDeletePoemError } from './handleDeletePoemError';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 export function useDeletePoemForm() {
 	const queryClient = useQueryClient();
@@ -23,7 +23,7 @@ export function useDeletePoemForm() {
 		try {
 			await mutateAsync(data.id);
 			alert('Poem deleted successfully!');
-			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
+			queryClient.invalidateQueries({ queryKey: apiKeys.poems.minimal() });
 			form.reset();
 		} catch (err) {
 			handleDeletePoemError(err, setGeneralError);

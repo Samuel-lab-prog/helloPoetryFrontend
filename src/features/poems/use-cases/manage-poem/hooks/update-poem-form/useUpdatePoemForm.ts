@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { updatePoemSchema, type UpdatePoemType } from '../../schemas/managePoemSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { handleUpdatePoemError } from './handleUpdatePoemError';
-import { api } from '@root/core/api';
+import { api, apiKeys } from '@root/core/api';
 
 export function useUpdatePoemForm() {
 	const queryClient = useQueryClient();
@@ -22,7 +22,7 @@ export function useUpdatePoemForm() {
 
 		try {
 			await mutateAsync(data);
-			queryClient.invalidateQueries({ queryKey: ['poems-minimal'] });
+			queryClient.invalidateQueries({ queryKey: apiKeys.poems.minimal() });
 			queryClient.invalidateQueries({ queryKey: ['poem', data.id] });
 			alert('Poem updated successfully!');
 		} catch (err) {

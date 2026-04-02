@@ -1,4 +1,4 @@
-﻿import { createHTTPRequest } from '@http-request';
+﻿import { createHTTPRequest } from '@utils/createHttpRequest';
 import { createMutationEndpoint } from '../utils';
 import type { AuthClient, LoginBody } from './types';
 

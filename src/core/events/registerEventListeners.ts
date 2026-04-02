@@ -8,7 +8,7 @@ import {
 	onPoemLiked,
 } from './reacters';
 
-const GLOBAL_KEY = '__olapoesia_event_listeners__';
+const GLOBAL_KEY = '__hellopoetry_event_listeners__';
 
 export function registerEventListeners(queryClient: QueryClient): void {
 	if ((globalThis as Record<string, unknown>)[GLOBAL_KEY]) return;

@@ -1,3 +1,6 @@
+/**
+ * Formats a date into a localized date/time string.
+ */
 export function formatDate(
 	date: Date | string,
 	options?: Intl.DateTimeFormatOptions,
@@ -16,6 +19,9 @@ export function formatDate(
 	});
 }
 
+/**
+ * Produces a compact relative time string (e.g. "5m ago").
+ */
 export function formatRelativeTime(input?: string | Date) {
 	if (!input) return '';
 

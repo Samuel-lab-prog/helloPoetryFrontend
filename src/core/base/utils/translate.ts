@@ -1,5 +1,8 @@
 import type { ModerationPoem } from '@root/core/api/moderation/types';
 
+/**
+ * Maps internal visibility values to user-facing labels.
+ */
 export function translateVisibility(visibility: ModerationPoem['visibility']) {
 	switch (visibility) {
 		case 'public':
@@ -13,6 +16,9 @@ export function translateVisibility(visibility: ModerationPoem['visibility']) {
 	}
 }
 
+/**
+ * Maps moderation status values to user-facing labels.
+ */
 export function translateModerationStatus(status: ModerationPoem['moderationStatus']) {
 	switch (status) {
 		case 'approved':

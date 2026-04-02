@@ -4,10 +4,10 @@ import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
 import { useMyProfile } from '@root/features/users/hooks/useMyProfile';
-import { NavbarBottomNav } from './NavbarBottomNav';
+import { NavbarBottomNav } from './BottomNav';
 import { Logo } from './Logo';
-import { NavbarSidebar } from './NavbarSidebar';
-import type { NavbarLink } from './types';
+import { NavbarSidebar } from './Sidebar';
+import type { NavbarLink } from './utils';
 
 type NavbarProps = {
 	links: NavbarLink[];

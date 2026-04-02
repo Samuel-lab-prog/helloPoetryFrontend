@@ -82,7 +82,7 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	if (!response.ok) {
 		const error: AppErrorType = {
 			statusCode: response.status,
-			message: parsedBody?.message ?? [`HTTP error ${response.status}`],
+			message: parsedBody?.message ?? `HTTP error ${response.status}`,
 			code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
 		};
 		throw error;
@@ -90,6 +90,9 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	return parsedBody;
 }
 
+/**
+ * Reads a cookie value by name from `document.cookie`.
+ */
 function getCookieValue(name: string): string | null {
 	if (typeof document === 'undefined') return null;
 	const cookies = document.cookie.split(';').map((cookie) => cookie.trim());
@@ -98,6 +101,9 @@ function getCookieValue(name: string): string | null {
 	return decodeURIComponent(target.split('=').slice(1).join('='));
 }
 
+/**
+ * Builds a URL with optional path params and query string.
+ */
 function buildUrl(
 	baseUrl: string,
 	path: string,

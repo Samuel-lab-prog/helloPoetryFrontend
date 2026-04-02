@@ -53,10 +53,15 @@ export function createInMemoryEventBus<TEvents extends EventMap>(): EventBus<TEv
 		if (!set || set.size === 0) return;
 
 		const list = Array.from(set);
-		await list.reduce<Promise<void>>(async (chain, handler) => {
-			await chain;
-			await handler(payload);
-		}, Promise.resolve());
+		for (const handler of list) {
+			try {
+				// eslint-disable-next-line no-await-in-loop
+				await handler(payload);
+			} catch (error) {
+				// Avoid breaking the publish flow for other subscribers.
+				console.error(`Event handler failed for "${name}"`, error);
+			}
+		}
 	}
 
 	function subscribe<N extends EventName<TEvents>>(

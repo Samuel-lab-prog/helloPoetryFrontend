@@ -1,5 +1,5 @@
 import { type ButtonProps } from '@chakra-ui/react';
-import { BaseButton } from '../Button';
+import { BaseButton } from '../../Button';
 
 interface FormButtonProps extends ButtonProps {
 	isValid?: boolean;

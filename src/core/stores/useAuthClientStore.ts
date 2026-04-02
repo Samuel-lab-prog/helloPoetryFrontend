@@ -1,15 +1,7 @@
 import { create } from 'zustand';
+import type { AuthClient } from '../api/auth/types';
 
 const AUTH_STORAGE_KEY = 'auth-client';
-
-type UserRole = 'user' | 'admin' | 'moderator';
-type UserStatus = 'active' | 'banned' | 'suspended';
-
-export type AuthClient = {
-	id: number;
-	role: UserRole;
-	status: UserStatus;
-};
 
 type PersistedAuthState = {
 	authClient: AuthClient | null;

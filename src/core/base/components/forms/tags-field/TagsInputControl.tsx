@@ -11,6 +11,10 @@ type TagsInputControlProps = {
 	onValueChange: (value: string[]) => void;
 };
 
+/**
+ * Chakra tags input wrapper with custom styling and local UX rules.
+ * Handles dedupe, limits, and commits on blur.
+ */
 export function TagsInputControl({
 	selectedTags,
 	disabled,

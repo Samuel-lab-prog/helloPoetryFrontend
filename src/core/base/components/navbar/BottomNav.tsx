@@ -1,7 +1,6 @@
 import { Badge, Box, Flex, HStack, Icon, Link } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { getLinkIcon } from './navbarIcons';
-import type { NavbarLink } from './types';
+import { getLinkIcon, type NavbarLink } from './utils';
 
 type NavbarBottomNavProps = {
 	links: NavbarLink[];

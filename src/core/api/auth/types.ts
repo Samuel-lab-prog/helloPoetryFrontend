@@ -1,7 +1,9 @@
-﻿export type AuthClient = {
+﻿import type { UserRole, UserStatus } from '../users/types';
+
+export type AuthClient = {
 	id: number;
-	role: string;
-	status: string;
+	role: UserRole;
+	status: UserStatus;
 };
 
 export type LoginBody = {

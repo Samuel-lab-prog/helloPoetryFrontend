@@ -1,15 +1,11 @@
 import { Box, Heading, Link, Mark, Text } from '@chakra-ui/react';
-import ReactMarkdown from 'react-markdown';
-// eslint-disable-next-line no-duplicate-imports
 import { type Components } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
-type MarkdownRendererProps = {
-	content: string;
-	componentsOverride?: Components;
-};
-
-const components: Components = {
+/**
+ * Chakra-flavored renderers for common Markdown nodes.
+ * These keep typography consistent with the design system.
+ */
+export const components: Components = {
 	h1: ({ children }) => (
 		<Heading as='h1' textStyle='h1' mt={8} mb={4}>
 			{children}
@@ -142,16 +138,3 @@ const components: Components = {
 	),
 	hr: () => <Box as='hr' my={6} borderColor='purple.700' />,
 };
-
-export function MarkdownRenderer({ content, componentsOverride }: MarkdownRendererProps) {
-	if (!content) return null;
-
-	return (
-		<ReactMarkdown
-			remarkPlugins={[remarkGfm]}
-			components={componentsOverride ? { ...components, ...componentsOverride } : components}
-		>
-			{content}
-		</ReactMarkdown>
-	);
-}

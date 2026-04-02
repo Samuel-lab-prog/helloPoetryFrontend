@@ -1,36 +1,10 @@
 import { Box, Button, Field, Flex, HStack, Text } from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Mic, Square, Upload, Trash2 } from 'lucide-react';
-import {
-	useController,
-	type Control,
-	type FieldError,
-	type FieldValues,
-	type Path,
-} from 'react-hook-form';
-
-type PreviewSource = 'recorded' | 'uploaded' | null;
-
-type AudioFieldLabels = {
-	record?: string;
-	stop?: string;
-	discard?: string;
-	upload?: string;
-	clear?: string;
-	previewRecorded?: string;
-	previewUploaded?: string;
-};
-
-interface AudioFieldProps<T extends FieldValues> {
-	control: Control<T>;
-	name: Path<T>;
-	label: string;
-	required?: boolean;
-	error?: FieldError;
-	accept?: string;
-	disabled?: boolean;
-	labels?: AudioFieldLabels;
-}
+import { useController, type FieldValues } from 'react-hook-form';
+import type { AudioFieldProps } from './types';
+import { pickAudioMimeType, resolveAudioLabels } from './utils';
+import { useAudioPreview } from './hooks';
 
 export function AudioField<T extends FieldValues>({
 	control,
@@ -48,8 +22,6 @@ export function AudioField<T extends FieldValues>({
 	const audioFileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const [isRecording, setIsRecording] = useState(false);
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-	const [previewSource, setPreviewSource] = useState<PreviewSource>(null);
 	const [recorderError, setRecorderError] = useState('');
 
 	const { field, fieldState } = useController({ control, name });
@@ -57,6 +29,8 @@ export function AudioField<T extends FieldValues>({
 	const resolvedError = fieldState.error ?? error;
 	const errorMessage = resolvedError?.message?.toString();
 	const hasError = Boolean(errorMessage);
+
+	const { previewUrl, previewSource, setPreviewSource } = useAudioPreview(file);
 
 	const stopMediaStream = useCallback(() => {
 		mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
@@ -66,56 +40,11 @@ export function AudioField<T extends FieldValues>({
 	useEffect(
 		() => () => {
 			stopMediaStream();
-			if (previewUrl) URL.revokeObjectURL(previewUrl);
 		},
-		[previewUrl, stopMediaStream],
+		[stopMediaStream],
 	);
 
-	useEffect(() => {
-		if (!file) {
-			setPreviewSource(null);
-			setPreviewUrl((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return null;
-			});
-			return;
-		}
-
-		const nextUrl = URL.createObjectURL(file);
-		setPreviewUrl((prev) => {
-			if (prev) URL.revokeObjectURL(prev);
-			return nextUrl;
-		});
-
-		return () => {
-			URL.revokeObjectURL(nextUrl);
-		};
-	}, [file]);
-
-	const pickAudioMimeType = useCallback(() => {
-		if (typeof MediaRecorder === 'undefined') return '';
-		const candidates = [
-			'audio/webm;codecs=opus',
-			'audio/webm',
-			'audio/ogg;codecs=opus',
-			'audio/ogg',
-			'audio/mpeg',
-		];
-		return candidates.find((type) => MediaRecorder.isTypeSupported(type)) ?? '';
-	}, []);
-
-	const labelsResolved = useMemo(
-		() => ({
-			record: labels?.record ?? 'Record',
-			stop: labels?.stop ?? 'Stop',
-			discard: labels?.discard ?? 'Discard',
-			upload: labels?.upload ?? 'Upload file',
-			clear: labels?.clear ?? 'Clear file',
-			previewRecorded: labels?.previewRecorded ?? 'Recording preview',
-			previewUploaded: labels?.previewUploaded ?? 'Uploaded file preview',
-		}),
-		[labels],
-	);
+	const labelsResolved = resolveAudioLabels(labels);
 
 	const handleStartRecording = useCallback(async () => {
 		setRecorderError('');
@@ -161,7 +90,7 @@ export function AudioField<T extends FieldValues>({
 			stopMediaStream();
 			setRecorderError('Could not access the microphone.');
 		}
-	}, [disabled, field, isRecording, pickAudioMimeType, stopMediaStream]);
+	}, [disabled, field, isRecording, setPreviewSource, stopMediaStream]);
 
 	const handleStopRecording = useCallback(() => {
 		if (!isRecording) return;
@@ -177,14 +106,14 @@ export function AudioField<T extends FieldValues>({
 
 		setPreviewSource(null);
 		field.onChange(null);
-	}, [field, isRecording]);
+	}, [field, isRecording, setPreviewSource]);
 
 	const handleSelectAudioFile = useCallback(
 		(nextFile: File | null) => {
 			setPreviewSource(nextFile ? 'uploaded' : null);
 			field.onChange(nextFile);
 		},
-		[field],
+		[field, setPreviewSource],
 	);
 
 	return (

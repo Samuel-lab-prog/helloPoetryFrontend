@@ -1,7 +1,6 @@
 import { Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { getLinkIcon } from './navbarIcons';
-import type { NavbarLink } from './types';
+import { getLinkIcon, type NavbarLink } from './utils';
 
 type NavbarSidebarProps = {
 	links: NavbarLink[];
@@ -35,9 +34,7 @@ export function NavbarSidebar({ links, currentPath, onSameRouteClick }: NavbarSi
 								<NavLink
 									to={link.to}
 									onClick={() => {
-										if (currentPath === link.to) {
-											onSameRouteClick();
-										}
+										if (currentPath === link.to) onSameRouteClick();
 									}}
 								>
 									<HStack gap={2} justify='space-between' w='full'>

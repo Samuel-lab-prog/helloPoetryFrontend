@@ -1,29 +1,9 @@
 import { Avatar, Box, Button, Field, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-	Controller,
-	useWatch,
-	type Control,
-	type FieldError,
-	type FieldValues,
-	type Path,
-} from 'react-hook-form';
-
-type PreviewType = 'image' | 'audio' | 'none';
-
-interface FileFieldProps<T extends FieldValues> {
-	control: Control<T>;
-	name: Path<T>;
-	label: string;
-	required?: boolean;
-	error?: FieldError;
-	accept?: string;
-	buttonLabel?: string;
-	helpText?: string;
-	preview?: PreviewType;
-	disabled?: boolean;
-	validateFile?: (file: File | null) => string | null;
-}
+import { useMemo, useRef } from 'react';
+import { Controller, useWatch, type FieldValues } from 'react-hook-form';
+import type { FileFieldProps } from './types';
+import { buildFileValidationRules } from './utils';
+import { useFilePreview } from './hooks';
 
 export function FileField<T extends FieldValues>({
 	control,
@@ -40,37 +20,9 @@ export function FileField<T extends FieldValues>({
 }: FileFieldProps<T>) {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const watchedFile = useWatch({ control, name }) as File | null | undefined;
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+	const previewUrl = useFilePreview(watchedFile);
 
-	useEffect(() => {
-		if (!watchedFile) {
-			setPreviewUrl((prev) => {
-				if (prev) URL.revokeObjectURL(prev);
-				return null;
-			});
-			return;
-		}
-
-		const nextUrl = URL.createObjectURL(watchedFile);
-		setPreviewUrl((prev) => {
-			if (prev) URL.revokeObjectURL(prev);
-			return nextUrl;
-		});
-
-		return () => {
-			URL.revokeObjectURL(nextUrl);
-		};
-	}, [watchedFile]);
-
-	const rules = useMemo(() => {
-		if (!validateFile) return undefined;
-		return {
-			validate: (value: File | null | undefined) => {
-				const message = validateFile(value ?? null);
-				return message ?? true;
-			},
-		};
-	}, [validateFile]);
+	const rules = useMemo(() => buildFileValidationRules(validateFile), [validateFile]);
 
 	return (
 		<Controller

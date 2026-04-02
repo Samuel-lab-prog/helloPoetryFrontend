@@ -1,3 +1,8 @@
+export type NavbarLink = {
+	label: string;
+	to: string;
+};
+
 import {
 	Bell,
 	BookOpen,
@@ -10,7 +15,7 @@ import {
 	Users,
 } from 'lucide-react';
 
-export function getLinkIcon(to: string) {
+export function getLinkIcon(to: string): React.ComponentType<React.SVGProps<SVGSVGElement>> {
 	switch (to) {
 		case '/':
 			return House;

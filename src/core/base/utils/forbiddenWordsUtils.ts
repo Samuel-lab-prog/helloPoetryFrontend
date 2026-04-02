@@ -1,3 +1,6 @@
+/**
+ * Word lists used to detect forbidden content across user input.
+ */
 const PROFANITY = ['carai', 'merda', 'bosta', 'porra', 'caralho', 'pqp'];
 
 const INSULTS = ['otario', 'otaria', 'idiota', 'babaca', 'fdp', 'arrombado', 'arrombada'];
@@ -39,8 +42,14 @@ const DICTATOR_NAMES = [
 	'milosevic',
 ];
 
+/**
+ * Flattened list of all forbidden words.
+ */
 export const FORBIDDEN_WORDS = [...DICTATOR_NAMES, ...PROFANITY, ...INSULTS, ...SEXUAL] as const;
 
+/**
+ * Maps common leet substitutions back to their base characters.
+ */
 const LEET_MAP: Record<string, string> = {
 	'0': 'o',
 	'1': 'i',
@@ -56,6 +65,9 @@ const LEET_MAP: Record<string, string> = {
 	'+': 't',
 };
 
+/**
+ * Normalizes text by lowercasing, removing accents, and collapsing leet.
+ */
 function normalizeText(value: string) {
 	return value
 		.toLowerCase()
@@ -65,10 +77,16 @@ function normalizeText(value: string) {
 		.replace(/[^a-z0-9\s]/g, ' ');
 }
 
+/**
+ * Collapses repeated letters (e.g. "heyyy" → "hey").
+ */
 function simplifyRepeatedLetters(token: string) {
 	return token.replace(/(.)\1+/g, '$1');
 }
 
+/**
+ * Returns the list of forbidden words found in the provided text.
+ */
 export function findForbiddenWords(value: string) {
 	const baseTokens = normalizeText(value).split(/\s+/).filter(Boolean);
 	const normalizedTokens = new Set<string>();

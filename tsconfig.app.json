@@ -12,7 +12,8 @@
 			"@features/*": ["features/*"],
 			"@assets/*": ["assets/*"],
 			"@themes/*": ["themes/*"],
-			"@http-request": ["core/base/utils/createHttpRequest"]
+			"@http-request": ["core/base/utils/createHttpRequest"],
+			"@utils/*": ["core/base/utils/*"]
 		},
 
 		/* Bundler mode */

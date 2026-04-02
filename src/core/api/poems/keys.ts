@@ -2,6 +2,7 @@
 
 export const poemKeys = createQueryKeys({
 	all: () => ['poems'] as const,
+	minimal: () => ['poems-minimal'] as const,
 	byId: (id: string) => ['poem', id] as const,
 	mine: () => ['poems', 'me'] as const,
 	byAuthor: (authorId: string) => ['poems', 'author', authorId] as const,

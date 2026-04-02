@@ -2,8 +2,8 @@
 import { FooterBrand } from './FooterBrand';
 import { FooterCommunity } from './FooterCommunity';
 import { FooterNav } from './FooterNav';
-import type { FooterLink } from './types';
 
+type FooterLink = { label: string; to: string };
 type FooterProps = {
 	links: FooterLink[];
 };
@@ -49,5 +49,3 @@ export function Footer({ links }: FooterProps) {
 		</Box>
 	);
 }
-
-export type { FooterLink };

@@ -1,12 +1,14 @@
-import { forwardRef } from 'react';
-import { Box, type BoxProps } from '@chakra-ui/react';
+import { type BoxProps } from '@chakra-ui/react';
 
 const baseStyle: BoxProps = {
 	px: { base: 4, md: 6 },
 	py: { base: 5, md: 7 },
 };
 
-const surfaceVariants = {
+/**
+ * Shared surface variants for cards/panels and layout containers.
+ */
+export const surfaceVariants = {
 	panel: {
 		...baseStyle,
 		border: '1px solid',
@@ -40,16 +42,3 @@ const surfaceVariants = {
 		boxShadow: '0 12px 32px rgba(18, 0, 17, 0.3)',
 	},
 } as const;
-
-export type SurfaceVariant = keyof typeof surfaceVariants;
-
-export interface SurfaceProps extends BoxProps {
-	variant?: SurfaceVariant;
-}
-
-export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(function Surface(
-	{ variant = 'panel', ...props },
-	ref,
-) {
-	return <Box ref={ref} {...surfaceVariants[variant]} {...props} />;
-});

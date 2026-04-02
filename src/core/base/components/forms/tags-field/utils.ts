@@ -1,15 +1,26 @@
+import { findForbiddenWords } from '../../../utils/forbiddenWordsUtils';
+
 type SanitizeConfig = {
 	maxTags: number;
 	maxTagLength?: number;
+	filterForbiddenWords?: boolean;
 };
 
-export function sanitizeTags(rawTags: string[], { maxTags, maxTagLength }: SanitizeConfig) {
+/**
+ * Normalizes and deduplicates tags, respecting length/count limits and optional
+ * forbidden-word filtering.
+ */
+export function sanitizeTags(
+	rawTags: string[],
+	{ maxTags, maxTagLength, filterForbiddenWords = false }: SanitizeConfig,
+) {
 	const seen = new Set<string>();
 	const normalized: string[] = [];
 
 	for (const rawTag of rawTags) {
 		const trimmed = rawTag.trim();
 		if (!trimmed) continue;
+		if (filterForbiddenWords && findForbiddenWords(trimmed).length > 0) continue;
 
 		const normalizedTag = maxTagLength ? trimmed.slice(0, maxTagLength) : trimmed;
 		if (!normalizedTag) continue;
@@ -26,6 +37,9 @@ export function sanitizeTags(rawTags: string[], { maxTags, maxTagLength }: Sanit
 	return normalized;
 }
 
+/**
+ * Attempts to extract a readable error message from unknown shapes.
+ */
 export function resolveErrorMessage(error: unknown): string | undefined {
 	if (!error) return undefined;
 

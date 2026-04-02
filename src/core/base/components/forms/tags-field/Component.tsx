@@ -1,9 +1,26 @@
 import { Box, Field } from '@chakra-ui/react';
-import { Controller, type FieldValues } from 'react-hook-form';
+import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import { TagsInputControl } from './TagsInputControl';
-import type { TagsFieldProps } from './types';
 import { resolveErrorMessage, sanitizeTags } from './utils';
 
+type TagsFieldProps<T extends FieldValues> = {
+	control: Control<T>;
+	name: Path<T>;
+	label: string;
+	placeholder?: string;
+	error?: unknown;
+	required?: boolean;
+	disabled?: boolean;
+	maxTags?: number;
+	maxTagLength?: number;
+	filterForbiddenWords?: boolean;
+	transformValue?: (value: string[]) => unknown;
+};
+
+/**
+ * Form-friendly tags field with validation, limits, and deduplication.
+ * Integrates with react-hook-form via `Controller`.
+ */
 export function TagsField<T extends FieldValues>({
 	control,
 	name,
@@ -13,6 +30,7 @@ export function TagsField<T extends FieldValues>({
 	disabled,
 	maxTags = 10,
 	maxTagLength,
+	filterForbiddenWords = false,
 	transformValue,
 	placeholder,
 }: TagsFieldProps<T>) {
@@ -48,7 +66,11 @@ export function TagsField<T extends FieldValues>({
 							maxTagLength={maxTagLength}
 							placeholder={placeholder}
 							onValueChange={(value) => {
-								const sanitizedTags = sanitizeTags(value, { maxTags, maxTagLength });
+								const sanitizedTags = sanitizeTags(value, {
+									maxTags,
+									maxTagLength,
+									filterForbiddenWords,
+								});
 								const nextValue = transformValue ? transformValue(sanitizedTags) : sanitizedTags;
 								field.onChange(nextValue);
 							}}

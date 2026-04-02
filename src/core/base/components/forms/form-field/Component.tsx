@@ -1,36 +1,13 @@
-/* eslint-disable no-useless-assignment */
 import { Box, Field, Input, Text, Textarea } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
-import {
-	Controller,
-	type Control,
-	type FieldError,
-	type FieldValues,
-	type Path,
-	type UseFormClearErrors,
-	type UseFormSetError,
-} from 'react-hook-form';
+import { Controller, type FieldValues } from 'react-hook-form';
+import type { FormFieldProps } from './types';
+import { useAsyncValidation } from './hooks';
 
-interface Props<T extends FieldValues> {
-	control: Control<T>;
-	name: Path<T>;
-	label: string;
-	required?: boolean;
-	autoFocus?: boolean;
-	error?: FieldError;
-	as?: 'input' | 'textarea';
-	rows?: number;
-	minLength?: number;
-	maxLength?: number;
-	showCharacterCount?: boolean;
-	disabled?: boolean;
-	type?: string;
-	transformValue?: (value: string) => unknown;
-	asyncValidator?: (value: string) => Promise<string | null>;
-	debounce?: number;
-	setError?: UseFormSetError<T>;
-	clearErrors?: UseFormClearErrors<T>;
-}
+/**
+ * Form-friendly input/textarea field with optional async validation,
+ * length counters, and consistent error display.
+ */
 
 export function FormField<T extends FieldValues>({
 	control,
@@ -51,20 +28,29 @@ export function FormField<T extends FieldValues>({
 	clearErrors,
 	disabled,
 	autoFocus,
-}: Props<T>) {
+}: FormFieldProps<T>) {
 	const Component = as === 'textarea' ? Textarea : Input;
 	const debounceRef = useRef<number | null>(null);
 	const validationRunRef = useRef(0);
 	const hasOwnValidationErrorRef = useRef(false);
 
+	const { scheduleValidation, clearValidationState } = useAsyncValidation({
+		name,
+		asyncValidator,
+		setError,
+		clearErrors,
+		debounce,
+		debounceRef,
+		validationRunRef,
+		hasOwnValidationErrorRef,
+	});
+
 	// eslint-disable-next-line arrow-body-style
 	useEffect(() => {
 		return () => {
-			if (debounceRef.current) {
-				window.clearTimeout(debounceRef.current);
-			}
+			clearValidationState();
 		};
-	}, []);
+	}, [clearValidationState]);
 
 	return (
 		<Controller
@@ -125,35 +111,7 @@ export function FormField<T extends FieldValues>({
 
 								field.onChange(nextValue);
 
-								if (!asyncValidator || !setError || !clearErrors) return;
-
-								const currentRun = ++validationRunRef.current;
-								if (debounceRef.current) window.clearTimeout(debounceRef.current);
-
-								debounceRef.current = window.setTimeout(async () => {
-									let validationError: string | null = null;
-									try {
-										validationError = await asyncValidator(rawValue);
-									} catch {
-										validationError = null;
-									}
-
-									if (currentRun !== validationRunRef.current) return;
-
-									if (validationError) {
-										hasOwnValidationErrorRef.current = true;
-										setError(name, {
-											type: 'validate',
-											message: validationError,
-										});
-										return;
-									}
-
-									if (hasOwnValidationErrorRef.current) {
-										hasOwnValidationErrorRef.current = false;
-										clearErrors(name);
-									}
-								}, debounce ?? 0);
+								scheduleValidation(rawValue);
 							}}
 						/>
 
