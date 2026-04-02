@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { type AppErrorType } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 import type { FullPoem, SavedPoem } from '@root/core/api/poems/types';
 

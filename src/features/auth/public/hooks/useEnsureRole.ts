@@ -1,5 +1,5 @@
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
-import type { UserRole } from '@root/core/api/users/types';
+import type { UserRole } from '@root/features/users/api/types';
+import { useAuthClientStore } from '../../public/stores/useAuthClientStore';
 
 /**
  * Custom hook to check if the current user has one of the allowed roles.

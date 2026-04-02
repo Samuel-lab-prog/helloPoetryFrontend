@@ -1,5 +1,6 @@
 ﻿{
 	"compilerOptions": {
+		"ignoreDeprecations": "6.0",
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 		"target": "ES2022",
 		"useDefineForClassFields": true,
@@ -13,7 +14,10 @@
 			"@assets/*": ["assets/*"],
 			"@themes/*": ["themes/*"],
 			"@http-request": ["core/base/utils/createHttpRequest"],
-			"@utils/*": ["core/base/utils/*"]
+			"@utils/*": ["core/base/utils/*"],
+			"@core/base": ["core/base/index"],
+			"@core/*": ["core/*"],
+			"@BaseComponents": ["core/base/components"]
 		},
 
 		/* Bundler mode */

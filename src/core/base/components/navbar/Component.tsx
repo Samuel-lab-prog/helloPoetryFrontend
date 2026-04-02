@@ -2,7 +2,7 @@
 import { Avatar, Badge, Flex, Icon, Link, Text } from '@chakra-ui/react';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMyProfile } from '@root/features/users/hooks/useMyProfile';
 import { NavbarBottomNav } from './BottomNav';
 import { Logo } from './Logo';

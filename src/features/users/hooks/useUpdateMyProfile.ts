@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 import { uploadAvatarFile } from '../utils/avatarUpload';
-import type { UserPrivateProfile } from '@root/core/api/users/types';
+import type { UserPrivateProfile } from '@root/features/users/api/types';
 
 type UpdateMyProfileInput = {
 	name?: string;

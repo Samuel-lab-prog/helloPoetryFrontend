@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { AuthClient } from '../api/auth/types';
+import type { AuthClient } from '../../api/types';
 
 const AUTH_STORAGE_KEY = 'auth-client';
 

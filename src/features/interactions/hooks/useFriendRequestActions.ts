@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 
 export function useFriendRequestActions() {

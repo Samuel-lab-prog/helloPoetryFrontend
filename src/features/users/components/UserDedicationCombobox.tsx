@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 
 type UserOption = {
 	id: number;

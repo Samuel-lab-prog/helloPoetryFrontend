@@ -1,7 +1,7 @@
-﻿import { auth } from './auth/endpoints';
+﻿import { auth } from '../../features/auth/api/endpoints';
 
-import { users } from './users/endpoints';
-import { userKeys } from './users/keys';
+import { users } from '../../features/users/api/endpoints';
+import { userKeys } from '../../features/users/api/keys';
 
 import { poems } from './poems/endpoints';
 import { poemKeys } from './poems/keys';

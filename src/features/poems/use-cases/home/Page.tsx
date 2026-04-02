@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Footer } from '@root/core/base';
 import { api } from '@root/core/api';
-import { useIsAuthenticated } from '@root/core/hooks/useIsAuthenticated';
+import { useIsAuthenticated } from '@root/features/auth/public/hooks/useIsAuthenticated';
 import { HomeFeed } from './components/HomeFeed';
 import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './constants';
 import { useHomeFeed } from './hooks/useHomeFeed';

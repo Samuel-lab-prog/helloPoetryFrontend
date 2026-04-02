@@ -13,19 +13,24 @@ function PageHeader() {
 	);
 }
 
+function PageFooter() {
+	return (
+		<Text mt={4} variant='muted' textAlign='center'>
+			Don't have an account yet?{' '}
+			<Link asChild color='pink.300' textDecoration='underline'>
+				<NavLink to='/register'>Create account</NavLink>
+			</Link>
+		</Text>
+	);
+}
+
 export function LoginPage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column' pt={{ base: '2', md: '8' }}>
 			<Flex as='section' direction='column' align='center' justify='flex-start' mt='0'>
 				<PageHeader />
 				<LoginForm />
-
-				<Text mt={4} variant='muted' textAlign='center'>
-					Don't have an account yet?{' '}
-					<Link asChild color='pink.300' textDecoration='underline'>
-						<NavLink to='/register'>Create account</NavLink>
-					</Link>
-				</Text>
+				<PageFooter />
 			</Flex>
 		</Flex>
 	);

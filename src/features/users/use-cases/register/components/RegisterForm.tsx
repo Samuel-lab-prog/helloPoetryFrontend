@@ -1,8 +1,8 @@
-import { DynamicForm, type Field } from '@root/core/base';
+import { DynamicForm, type Field } from '@BaseComponents';
 import { useRegisterForm } from '../hooks/useRegisterForm';
 import { checkEmailAvailability } from '../hooks/checkEmail';
 import { checkNicknameAvailability } from '../hooks/checkNickname';
-import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '@features/users/utils/avatarUpload';
+import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '../../../utils/avatarUpload';
 
 import {
 	REGISTER_BIO_MAX_LENGTH,
@@ -13,8 +13,8 @@ import {
 	REGISTER_NICKNAME_MIN_LENGTH,
 	REGISTER_PASSWORD_MAX_LENGTH,
 	REGISTER_PASSWORD_MIN_LENGTH,
-} from '../constants';
-import type { RegisterDataType } from './registerSchema';
+} from '../schemas/constants';
+import type { RegisterDataType } from '../schemas/registerSchema';
 
 const registerFields: Field<RegisterDataType>[] = [
 	{

@@ -1,5 +1,5 @@
 ﻿import { createHTTPRequest } from '@utils/createHttpRequest';
-import { createMutationEndpoint, createQueryEndpoint } from '../utils';
+import { createMutationEndpoint, createQueryEndpoint } from '../../../core/api/utils';
 
 import { userKeys } from './keys';
 import type {

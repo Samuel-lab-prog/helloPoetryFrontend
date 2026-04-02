@@ -4,11 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import { registerSchema, type RegisterDataType } from '../components/registerSchema';
-import { api } from '@root/core/api';
+import { registerSchema, type RegisterDataType } from '../schemas/registerSchema';
 import { uploadAvatarFile } from '@features/users/utils/avatarUpload';
-import type { CreateUserBody } from '@root/core/api/users/types';
+import type { CreateUserBody } from '@root/features/users/api/types';
 import type { AppErrorType } from '@root/core/base';
+import { users } from '@root/features/users/api/endpoints';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
@@ -24,7 +24,7 @@ export function useRegisterForm() {
 	});
 
 	const registerMutation = useMutation({
-		mutationFn: (data: CreateUserBody) => api.users.createUser.mutate(data),
+		mutationFn: (data: CreateUserBody) => users.createUser.mutate(data),
 
 		onSuccess: () => {
 			navigate('/login');
@@ -72,9 +72,7 @@ export function useRegisterForm() {
 		clearErrors: form.clearErrors,
 	};
 }
-//------------------------------
-// HELPERS
-//------------------------------
+
 function handleRegisterError(
 	err: unknown,
 	setError: UseFormSetError<RegisterDataType>,

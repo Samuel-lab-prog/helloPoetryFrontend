@@ -1,5 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
 import { apiKeys } from '@root/core/api';
 

@@ -2,8 +2,8 @@
 import { Flex, Spinner } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { ErrorPage, Navbar, Toaster } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { ErrorPage, Navbar, Toaster } from '@core/base';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 
 function lazyPage<TModule extends object>(
 	load: () => Promise<TModule>,
@@ -57,7 +57,7 @@ const LoginPage = lazyPage(
 	(module) => module.LoginPage,
 );
 const RegisterPage = lazyPage(
-	() => import('./features/auth/use-cases/register/Page'),
+	() => import('./features/users/use-cases/register/Page'),
 	(module) => module.RegisterPage,
 );
 const PoetsPage = lazyPage(

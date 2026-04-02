@@ -1,5 +1,5 @@
-﻿import { createHTTPRequest } from '@utils/createHttpRequest';
-import { createMutationEndpoint } from '../utils';
+﻿import { createHTTPRequest } from '@core/base/utils/createHttpRequest';
+import { createMutationEndpoint } from '@core/api/utils';
 import type { AuthClient, LoginBody } from './types';
 
 const login = createMutationEndpoint<LoginBody, AuthClient>({

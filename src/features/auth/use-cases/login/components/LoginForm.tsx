@@ -1,6 +1,6 @@
+import { DynamicForm, type Field } from '@BaseComponents';
 import { useLoginForm } from '../hooks/useLoginForm';
-import type { LoginDataType } from './loginSchema';
-import { DynamicForm, type Field } from '@root/core/base';
+import type { LoginDataType } from '../schemas/loginSchema';
 
 const loginFields: Field<LoginDataType>[] = [
 	{ name: 'email', label: 'Email', required: true, autoFocus: true },
@@ -8,7 +8,14 @@ const loginFields: Field<LoginDataType>[] = [
 ];
 
 export function LoginForm() {
-	const { control, formState, onSubmit, isPending, generalError, handleSubmit } = useLoginForm();
+	const {
+		control,
+		formState,
+		onSubmit,
+		isPending,
+		generalError,
+		handleSubmit
+	} = useLoginForm();
 
 	return (
 		<DynamicForm<LoginDataType>

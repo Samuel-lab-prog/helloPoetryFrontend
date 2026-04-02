@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions';
 import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
 import { FriendRequestsSection } from '../components/my-profile/FriendRequestsSection';

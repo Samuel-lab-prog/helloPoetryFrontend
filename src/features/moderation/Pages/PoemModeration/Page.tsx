@@ -4,7 +4,7 @@ import { UnauthorizedPage } from './UnauthorizedModPage';
 import { AnalyzeTab } from './tabs/PendingPoemsTab';
 import { ActionsTab } from './tabs/ActionsTab';
 import { usePoemModerationData } from './hooks';
-import { useEnsureRole } from '@root/core/hooks/useEnsureRole';
+import { useEnsureRole } from '@root/features/auth/public/hooks/useEnsureRole';
 
 export function PoemModerationPage() {
 	const navigate = useNavigate();

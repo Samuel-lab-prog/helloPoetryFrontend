@@ -1,0 +1,11 @@
+{
+	"directory": [
+		"./src/core/base/components"
+	],
+	"delete": true,
+	"location": "top",
+	"name": "index",
+	"singleQuotes": true,
+	"structure": "flat",
+	"exclude": [".*\\.test\\.ts$"]
+}

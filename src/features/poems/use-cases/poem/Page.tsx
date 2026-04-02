@@ -4,7 +4,7 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
 import { ArrowLeftIcon } from 'lucide-react';
 import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
 import { usePoem } from './hooks/usePoem';

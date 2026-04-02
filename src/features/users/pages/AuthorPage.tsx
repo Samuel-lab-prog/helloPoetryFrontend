@@ -3,7 +3,7 @@ import { Clock3, LogIn, UserCheck, UserPlus, UserX } from 'lucide-react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AsyncState } from '@root/core/base';
-import { useAuthClientStore } from '@root/core/stores/useAuthClientStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useSendFriendRequest } from '@features/interactions';
 import { PoemCard } from '@root/features/poems/public/components/PoemCard';
 import { useAuthorProfile } from '../hooks/useAuthorProfile';
