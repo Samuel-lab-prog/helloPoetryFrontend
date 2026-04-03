@@ -16,3 +16,4 @@ export * from './rules/no-invalid-direrectory';
 export * from './rules/no-invalid-namespaces';
 export * from './rules/no-root-src-code';
 export * from './rules/no-untested-usecase';
+export * from './rules/usecase-structure';

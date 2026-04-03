@@ -5,15 +5,21 @@ import { printTable, type TableColumn } from '../../PrintTable';
 type Violation = {
 	domain: string;
 	path: string;
-	missingFolders: string[];
+	invalidFolders: string[];
 };
 
-const REQUIRED_FOLDERS = ['pages', 'components', 'hooks', 'use-cases'];
+const ALLOWED_FOLDERS = ['api', 'public', 'use-cases'];
 
 const DOMAIN_REGEX = /^src\/features\/([^/]+)\/(.+)/;
 
 function normalize(path: string): string {
 	return path.replace(/\\/g, '/');
+}
+
+function truncate(text: string, width: number): string {
+	if (text.length <= width) return text;
+	if (width <= 3) return text.slice(0, width);
+	return `${text.slice(0, width - 3)}...`;
 }
 
 export function checkPortsAndAdaptersStructure(cloc: ClocResult): Violation[] {
@@ -48,19 +54,19 @@ export function checkPortsAndAdaptersStructure(cloc: ClocResult): Violation[] {
 
 		if (firstFolder) entry.folders.add(firstFolder);
 
-		if (!entry) domains.set(domainPath, entry);
+		if (!domains.has(domainPath)) domains.set(domainPath, entry);
 	}
 
 	const violations: Violation[] = [];
 
 	for (const domain of domains.values()) {
-		const hasAny = REQUIRED_FOLDERS.some((f) => domain.folders.has(f));
+		const invalidFolders = [...domain.folders].filter((folder) => !ALLOWED_FOLDERS.includes(folder));
 
-		if (!hasAny) {
+		if (invalidFolders.length > 0) {
 			violations.push({
 				domain: domain.domain,
 				path: domain.path,
-				missingFolders: REQUIRED_FOLDERS,
+				invalidFolders,
 			});
 		}
 	}
@@ -89,14 +95,14 @@ export function printNoMissingDirectories(cloc: ClocResult): void {
 			header: 'FEATURE PATH',
 			width: 55,
 			render: (v) => ({
-				text: v.path,
+				text: truncate(v.path, 55),
 			}),
 		},
 		{
-			header: 'MISSING FOLDERS',
+			header: 'INVALID FOLDERS',
 			width: 35,
 			render: (v) => ({
-				text: v.missingFolders.join(', '),
+				text: truncate(v.invalidFolders.join(', '), 35),
 				color: yellow,
 			}),
 		},

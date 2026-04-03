@@ -16,6 +16,7 @@ import {
 	printNoRootSourceCode,
 	printNoInvalidDirectionalDependencies,
 	printNoMissingDirectories,
+	printUseCaseStructureViolations,
 } from './metrics/Index';
 
 function metrics(): void {
@@ -38,6 +39,7 @@ function metrics(): void {
 	printNoInvalidDirectionalDependencies(depcruise);
 	printNoUntestedUsecase(cloc);
 	printNoMissingDirectories(cloc);
+	printUseCaseStructureViolations(cloc);
 }
 
 metrics();

@@ -10,9 +10,9 @@ Inconsistent feature layouts make navigation and onboarding harder.
 
 ## Decision
 
-- Features should use a consistent internal structure:
-  - `pages/`, `components/`, `hooks/`, `use-cases/`, `index.ts`
-- A feature may omit a folder if not needed, but structure should be respected.
+- Features may only contain these first-level folders:
+  - `api/`, `public/`, `use-cases/`
+- Any other folders or files at the feature root are violations.
 
 ## Consequences
 
