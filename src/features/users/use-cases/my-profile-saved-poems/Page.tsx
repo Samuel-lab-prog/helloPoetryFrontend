@@ -5,8 +5,8 @@ import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedP
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
-import { SavedPoemsSection } from '../../components/my-profile/SavedPoemsSection';
+import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
+import { SavedPoemsSection } from '../../public/components/my-profile/SavedPoemsSection';
 
 export function MyProfileSavedPoemsPage() {
 	const authClient = useAuthClientStore((state) => state.authClient);

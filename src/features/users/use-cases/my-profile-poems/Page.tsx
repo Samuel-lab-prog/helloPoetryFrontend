@@ -5,8 +5,8 @@ import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
 import { useMemo, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-import { MyPoemsSection } from '../../components/my-profile/MyPoemsSection';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+import { MyPoemsSection } from '../../public/components/my-profile/MyPoemsSection';
+import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
 
 export function MyProfilePoemsPage() {
 	const navigate = useNavigate();

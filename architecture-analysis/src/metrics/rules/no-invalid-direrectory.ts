@@ -60,7 +60,9 @@ export function checkPortsAndAdaptersStructure(cloc: ClocResult): Violation[] {
 	const violations: Violation[] = [];
 
 	for (const domain of domains.values()) {
-		const invalidFolders = [...domain.folders].filter((folder) => !ALLOWED_FOLDERS.includes(folder));
+		const invalidFolders = [...domain.folders].filter(
+			(folder) => !ALLOWED_FOLDERS.includes(folder),
+		);
 
 		if (invalidFolders.length > 0) {
 			violations.push({

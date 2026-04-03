@@ -1,8 +1,8 @@
 import { DynamicForm, type Field, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { api } from '@root/core/api';
-import { UserDedicationCombobox } from '@root/features/users/components/UserDedicationCombobox';
-import { useUsersPreview } from '@root/features/users/hooks/useUsersPreview';
+import { UserDedicationCombobox } from '@root/features/users/public/components/UserDedicationCombobox';
+import { useUsersPreview } from '@root/features/users/public/hooks/useUsersPreview';
 import { useState } from 'react';
 
 import type { CreatePoemType } from '../../manage-poem/schemas/managePoemSchemas';

@@ -1,8 +1,8 @@
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useQuery } from '@tanstack/react-query';
 
-import { users } from '../api/endpoints';
-import { userKeys } from '../api/keys';
+import { users } from '../../api/endpoints';
+import { userKeys } from '../../api/keys';
 
 type MyProfileType = {
 	id: number;

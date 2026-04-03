@@ -4,9 +4,9 @@ import { usePoemCollections } from '@root/features/poems/public/hooks/useManageP
 import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedPoems';
 import { NavLink } from 'react-router-dom';
 
-import { CollectionsSection } from '../../components/my-profile/CollectionsSection';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
-import { useMyProfile } from '../../hooks/useMyProfile';
+import { CollectionsSection } from '../../public/components/my-profile/CollectionsSection';
+import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
+import { useMyProfile } from '../../public/hooks/useMyProfile';
 
 export function MyProfileCollectionsPage() {
 	const { profile, isMissingClient, isLoading: isProfileLoading } = useMyProfile();

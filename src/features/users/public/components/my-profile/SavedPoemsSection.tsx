@@ -1,9 +1,19 @@
 import { formatDate, Surface } from '@BaseComponents';
 import { Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import type { SavedPoemType } from '@root/features/poems/public/hooks/useManageSavedPoems';
 import { Bookmark, ExternalLink, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import type { SavedPoemsSectionProps } from './types';
+export type SavedPoemsSectionProps = {
+	savedPoems: SavedPoemType[];
+	totalSavedPoemsCount?: number;
+	viewAllHref?: string;
+	isLoadingSavedPoems: boolean;
+	isSavingPoem?: boolean;
+	saveError?: string;
+	isSearchingSavedPoems?: boolean;
+	onUnsavePoem?: (poemId: number) => Promise<void>;
+};
 
 export function SavedPoemsSection({
 	savedPoems,

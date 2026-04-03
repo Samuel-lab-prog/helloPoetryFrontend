@@ -1,6 +1,6 @@
 ﻿import { Avatar, Badge, Flex, Icon, Link, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useMyProfile } from '@root/features/users/hooks/useMyProfile';
+import { useMyProfile } from '@root/features/users/public/hooks/useMyProfile';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';

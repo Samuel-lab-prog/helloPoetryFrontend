@@ -5,10 +5,10 @@ import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthCli
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { PoetCard } from '../../../components/PoetCard';
 import { usePoetsSearch } from '../hooks/usePoetsSearch';
-import { type SearchPoetsForm,searchPoetsSchema } from '../schemas/searchPoetsSchema';
+import { type SearchPoetsForm, searchPoetsSchema } from '../schemas/searchPoetsSchema';
 import { LoadingUsersSkeletons } from './LoadingUsersSkeletons';
+import { PoetCard } from './PoetCard';
 
 const DEBOUNCE_DELAY_MS = 250;
 

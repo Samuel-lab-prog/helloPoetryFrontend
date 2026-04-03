@@ -5,9 +5,9 @@ import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthCli
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { FriendRequestsSection } from '../../components/my-profile/FriendRequestsSection';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
-import { useMyFriendRequests } from '../../hooks/useMyFriendRequests';
+import { FriendRequestsSection } from '../../public/components/my-profile/FriendRequestsSection';
+import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
+import { useMyFriendRequests } from '../../public/hooks/useMyFriendRequests';
 
 export function MyProfileFriendRequestsPage() {
 	const authClient = useAuthClientStore((state) => state.authClient);

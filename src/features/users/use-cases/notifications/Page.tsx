@@ -3,8 +3,8 @@ import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useState } from 'react';
 
-import { NotificationCard } from '../components/NotificationCard';
-import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
+import { NotificationCard } from './components/NotificationCard';
+import { useNotificationsPanel } from './hooks/useNotificationsPanel';
 
 export function NotificationsPage() {
 	const [onlyUnread, setOnlyUnread] = useState(false);

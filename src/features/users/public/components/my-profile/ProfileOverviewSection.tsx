@@ -2,10 +2,10 @@ import { Surface } from '@BaseComponents';
 import { Avatar, Button, Flex, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
+import { ProfileEditFields } from '../../../use-cases/my-profile/components/ProfileEditFields';
+import { ProfileStatsGrid } from '../../../use-cases/my-profile/components/ProfileStatsGrid';
 import { getAvatarFileError } from '../../utils/avatarUpload';
-import { ProfileEditFields } from './ProfileEditFields';
 import { ProfileReadOnly } from './ProfileReadOnly';
-import { ProfileStatsGrid } from './ProfileStatsGrid';
 import type { MyProfileViewModel } from './types';
 
 type ProfileOverviewSectionProps = {

@@ -69,7 +69,7 @@ const AuthorPage = lazyPage(
 	(module) => module.AuthorPage,
 );
 const MyProfilePage = lazyPage(
-	() => import('./features/users/pages/MyProfilePage'),
+	() => import('./features/users/use-cases/my-profile/Page'),
 	(module) => module.MyProfilePage,
 );
 const MyProfileCollectionsPage = lazyPage(
@@ -89,7 +89,7 @@ const MyProfileSavedPoemsPage = lazyPage(
 	(module) => module.MyProfileSavedPoemsPage,
 );
 const NotificationsPage = lazyPage(
-	() => import('./features/users/pages/NotificationsPage'),
+	() => import('./features/users/use-cases/notifications/Page'),
 	(module) => module.NotificationsPage,
 );
 

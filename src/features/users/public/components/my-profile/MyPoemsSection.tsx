@@ -10,10 +10,21 @@ import {
 	Portal,
 	Text,
 } from '@chakra-ui/react';
+import type { FullPoemType } from '@root/features/poems/types';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import type { MyPoemsSectionProps } from './types';
+export type MyPoemsSectionProps = {
+	myPoems: FullPoemType[];
+	totalPoemsCount?: number;
+	viewAllHref?: string;
+	isLoadingMyPoems: boolean;
+	isMyPoemsError: boolean;
+	isSearchingMyPoems?: boolean;
+	onOpenPoem: (slug: string, id: number) => void;
+	onUpdatePoem: (id: number) => void;
+	onDeletePoem: (id: number) => void;
+};
 
 /**
  * Renders the section for displaying the user's poems.

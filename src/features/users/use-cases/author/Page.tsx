@@ -9,11 +9,11 @@ import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthCli
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAuthorProfile } from '../../hooks/useAuthorProfile';
 import { AuthorPoemsSection } from './components/AuthorPoemsSection';
 import { AuthorProfileCard } from './components/AuthorProfileCard';
 import { LoadingAuthorProfileSkeleton } from './components/skeletons/LoadingAuthorProfileSkeleton';
 import { canSendFriendRequest, getRelationStatus } from './components/utils';
+import { useAuthorProfile } from './hooks/useAuthorProfile';
 
 export function AuthorPage() {
 	const { id } = useParams<{ id: string }>();

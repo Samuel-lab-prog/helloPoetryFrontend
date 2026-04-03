@@ -3,8 +3,20 @@ import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-u
 import { Check, UserPlus, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import type { FriendRequestsSectionProps } from './types';
+import type { MyFriendRequestsType } from '../../hooks/useMyFriendRequests';
 
+type FriendRequestsSectionProps = {
+	friendRequests: MyFriendRequestsType;
+	viewAllHref?: string;
+	isFriendRequestsLoading: boolean;
+	isFriendRequestsError: boolean;
+	isSearchingFriendRequests?: boolean;
+	isAccepting: boolean;
+	isRejecting: boolean;
+	errorMessage: string;
+	onAcceptRequest: (requesterId: number) => void;
+	onRejectRequest: (requesterId: number) => void;
+};
 /**
  * Renders the section for displaying the user's received friend requests.
  * @param friendRequests - The list of received friend requests to display. The type is **FriendRequests**

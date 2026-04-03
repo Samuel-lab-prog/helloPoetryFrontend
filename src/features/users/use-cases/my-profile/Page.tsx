@@ -9,16 +9,16 @@ import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedP
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { CollectionsSection } from '../components/my-profile/CollectionsSection';
-import { FriendRequestsSection } from '../components/my-profile/FriendRequestsSection';
-import { MyPoemsSection } from '../components/my-profile/MyPoemsSection';
-import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
-import { ProfileHeader } from '../components/my-profile/ProfileHeader';
-import { ProfileOverviewSection } from '../components/my-profile/ProfileOverviewSection';
-import { SavedPoemsSection } from '../components/my-profile/SavedPoemsSection';
-import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
-import { useMyProfile } from '../hooks/useMyProfile';
-import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
+import { CollectionsSection } from '../../public/components/my-profile/CollectionsSection';
+import { FriendRequestsSection } from '../../public/components/my-profile/FriendRequestsSection';
+import { MyPoemsSection } from '../../public/components/my-profile/MyPoemsSection';
+import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
+import { ProfileOverviewSection } from '../../public/components/my-profile/ProfileOverviewSection';
+import { SavedPoemsSection } from '../../public/components/my-profile/SavedPoemsSection';
+import { useMyFriendRequests } from '../../public/hooks/useMyFriendRequests';
+import { useMyProfile } from '../../public/hooks/useMyProfile';
+import { ProfileHeader } from './components/ProfileHeader';
+import { useUpdateMyProfile } from './hooks/useUpdateMyProfile';
 
 export function MyProfilePage() {
 	const navigate = useNavigate();

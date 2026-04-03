@@ -1,13 +1,39 @@
 import { Surface } from '@BaseComponents';
 import { Flex, Heading, HStack, Link, Text } from '@chakra-ui/react';
-import { type PoemMinimalDataType } from '@root/features/poems/types';
+import {
+	type FullPoemType,
+	type PoemCollectionType,
+	type PoemMinimalDataType,
+	type SavedPoemType,
+} from '@root/features/poems/types';
 import { Layers } from 'lucide-react';
 import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { CollectionCard } from './CollectionCard';
 import { CreateCollectionForm } from './CreateCollectionForm';
-import type { CollectionsSectionProps } from './types';
+import type { MyProfileViewModel } from './types';
+
+export type CollectionsSectionProps = {
+	profile: MyProfileViewModel;
+	collections: PoemCollectionType[];
+	totalCollectionsCount?: number;
+	viewAllHref?: string;
+	showManagementControls?: boolean;
+	myPoems: FullPoemType[];
+	savedPoems: SavedPoemType[];
+	isLoadingCollections: boolean;
+	isUpdatingCollections: boolean;
+	collectionsError: string;
+	onCreateCollection: (input: {
+		userId: number;
+		name: string;
+		description?: string;
+	}) => Promise<void>;
+	onDeleteCollection: (collectionId: number) => Promise<void>;
+	onAddPoemToCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
+	onRemovePoemFromCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
+};
 
 export function CollectionsSection({
 	profile,
