@@ -5,7 +5,7 @@ import {
 	type PoemCollectionType,
 	type PoemMinimalDataType,
 	type SavedPoemType,
-} from '@root/features/poems/types';
+} from '@root/features/poems/public/types';
 import { Layers } from 'lucide-react';
 import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';

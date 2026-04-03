@@ -5,7 +5,7 @@ import type { FeedPoemType } from '@root/features/feed/public/types';
 import { friends } from '@root/features/friends/api/endpoints';
 import { notifications } from '@root/features/notifications/api/endpoints';
 import { poems } from '@root/features/poems/api/endpoints';
-import type { PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/types';
+import type { PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/public/types';
 import { users } from '@root/features/users/api/endpoints';
 import { userKeys } from '@root/features/users/api/keys';
 import type { QueryClient } from '@tanstack/react-query';

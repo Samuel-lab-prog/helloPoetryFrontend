@@ -1,7 +1,7 @@
 import { type AppErrorType } from '@BaseComponents';
 import { friends } from '@root/features/friends/api/endpoints';
 import { friendsKeys } from '@root/features/friends/api/keys';
-import type { AuthorProfileType } from '@root/features/poems/types';
+import type { AuthorProfileType } from '@root/features/poems/public/types';
 import { userKeys } from '@root/features/users/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

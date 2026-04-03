@@ -1,10 +1,10 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Text } from '@chakra-ui/react';
 
+import { type DedicationUser, type Poem } from '../utils/types';
 import { PoemContent } from './PoemContent';
 import { PoemDedication } from './PoemDedication';
 import { PoemHeader } from './PoemHeader';
-import { type DedicationUser, type Poem } from './types';
 
 interface PoemContentCardProps {
 	poem: Poem | null | undefined;

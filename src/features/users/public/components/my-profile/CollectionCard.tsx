@@ -5,7 +5,7 @@ import type {
 	PoemCollectionType,
 	PoemMinimalDataType,
 	SavedPoemType,
-} from '@root/features/poems/types';
+} from '@root/features/poems/public/types';
 import { ExternalLink, Plus, Trash2, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';

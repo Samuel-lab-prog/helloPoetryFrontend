@@ -2,10 +2,10 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { usePoem } from '../hooks/usePoem';
-import { PoemBackLink } from './PoemBackLink';
-import { PoemContentCard } from './PoemContentCard';
-import { parsePoemId, useDedicationUsers } from './utils';
+import { usePoem } from '../poem/hooks/usePoem';
+import { PoemBackLink } from './components/PoemBackLink';
+import { PoemContentCard } from './components/PoemContentCard';
+import { parsePoemId, useDedicationUsers } from './utils/utils';
 
 export function PoemImmersivePage() {
 	const { id } = useParams<{ id: string }>();

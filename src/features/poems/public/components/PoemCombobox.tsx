@@ -8,7 +8,7 @@ import {
 	type Path,
 } from 'react-hook-form';
 
-import { type PoemMinimalDataType } from '../../types';
+import { type PoemMinimalDataType } from '../types';
 
 interface Props<T extends FieldValues> {
 	control: Control<T>;

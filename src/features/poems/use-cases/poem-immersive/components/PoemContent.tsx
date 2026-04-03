@@ -4,7 +4,7 @@ import { keyframes } from '@emotion/react';
 import { useReducedMotion } from 'framer-motion';
 import { useMemo } from 'react';
 
-import { useTextAnimator } from './useTextAnimator';
+import { useTextAnimator } from '../hooks/useTextAnimator';
 
 interface PoemContentProps {
 	content: string;

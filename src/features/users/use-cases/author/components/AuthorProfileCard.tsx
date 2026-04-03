@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Flex, Heading, Icon, Text } from '@chakra-ui/react';
-import type { AuthorProfileType } from '@root/features/poems/types';
+import type { AuthorProfileType } from '@root/features/poems/public/types';
 
 import type { RelationStatus } from './utils';
 

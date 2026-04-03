@@ -7,9 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { HomeFeed } from './components/HomeFeed';
-import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './constants';
 import { useHomeFeed } from './hooks/useHomeFeed';
 import { getFooterLinks } from './utils';
+import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './utils/constants';
 
 export function HomePage() {
 	const isAuthenticated = useIsAuthenticated();

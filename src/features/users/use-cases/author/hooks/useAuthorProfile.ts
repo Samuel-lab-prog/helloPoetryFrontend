@@ -1,4 +1,4 @@
-import type { AuthorProfileType } from '@root/features/poems/types';
+import type { AuthorProfileType } from '@root/features/poems/public/types';
 import { users } from '@root/features/users/api/endpoints';
 import { userKeys } from '@root/features/users/api/keys';
 import { useQuery } from '@tanstack/react-query';

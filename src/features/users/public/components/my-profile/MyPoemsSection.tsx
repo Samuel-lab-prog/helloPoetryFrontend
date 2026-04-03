@@ -10,7 +10,7 @@ import {
 	Portal,
 	Text,
 } from '@chakra-ui/react';
-import type { FullPoemType } from '@root/features/poems/types';
+import type { FullPoemType } from '@root/features/poems/public/types';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 

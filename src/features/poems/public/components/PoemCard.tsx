@@ -3,7 +3,7 @@ import { Avatar, Badge, Box, Card, Flex, Icon, Link, Text } from '@chakra-ui/rea
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import type { PoemPreviewType } from '../../types';
+import type { PoemPreviewType, TagType } from '../types';
 
 type PoemCardProps = {
 	poem: PoemPreviewType;
@@ -105,7 +105,7 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 
 					{poem.tags.length > 0 && (
 						<Flex gap={2} wrap='wrap'>
-							{poem.tags.slice(0, 4).map((tag) => (
+							{poem.tags.slice(0, 4).map((tag: TagType) => (
 								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
 									#{tag.name}
 								</Badge>

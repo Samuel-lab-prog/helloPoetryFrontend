@@ -2,7 +2,7 @@ import { Box, Link, Text } from '@chakra-ui/react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { type DedicationUser } from './types';
+import { type DedicationUser } from '../utils/types';
 
 interface PoemDedicationProps {
 	dedicationUsers: DedicationUser[];

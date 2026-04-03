@@ -37,7 +37,7 @@ const PoemPage = lazyPage(
 	(module) => module.PoemPage,
 );
 const PoemImmersivePage = lazyPage(
-	() => import('./features/poems/use-cases/poem/ImmersivePage'),
+	() => import('./features/poems/use-cases/poem-immersive/Page'),
 	(module) => module.PoemImmersivePage,
 );
 const CreatePoemPage = lazyPage(
