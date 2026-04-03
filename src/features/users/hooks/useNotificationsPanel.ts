@@ -1,7 +1,7 @@
+import { api, apiKeys } from '@root/core/api';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { api, apiKeys } from '@root/core/api';
 
 type NotificationPayload = {
 	avatarUrl?: string | null;

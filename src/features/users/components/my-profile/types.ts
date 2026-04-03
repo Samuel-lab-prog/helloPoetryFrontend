@@ -1,4 +1,5 @@
-import type { FullPoemType, SavedPoemType, PoemCollectionType } from '@root/features/poems/types';
+import type { FullPoemType, PoemCollectionType, SavedPoemType } from '@root/features/poems/types';
+
 import type { MyFriendRequestsType } from '../../hooks/useMyFriendRequests';
 
 export type MyProfileViewModel = {

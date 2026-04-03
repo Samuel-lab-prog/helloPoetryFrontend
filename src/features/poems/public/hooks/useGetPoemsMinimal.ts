@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { api } from '@root/core/api';
+import { useQuery } from '@tanstack/react-query';
 
 type UsePoemsMinimalOptions = {
 	limit?: number;

@@ -1,23 +1,24 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Flex, Text } from '@chakra-ui/react';
 import { AsyncState } from '@BaseComponents';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useMyProfile } from '../hooks/useMyProfile';
-import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
-import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useFriendRequestActions } from '@features/interactions';
+import { eventBus } from '@root/core/events/eventBus';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
 import { usePoemCollections } from '@root/features/poems/public/hooks/useManagePoemCollections';
 import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedPoems';
-import { eventBus } from '@root/core/events/eventBus';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { CollectionsSection } from '../components/my-profile/CollectionsSection';
+import { FriendRequestsSection } from '../components/my-profile/FriendRequestsSection';
+import { MyPoemsSection } from '../components/my-profile/MyPoemsSection';
 import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
 import { ProfileHeader } from '../components/my-profile/ProfileHeader';
 import { ProfileOverviewSection } from '../components/my-profile/ProfileOverviewSection';
-import { FriendRequestsSection } from '../components/my-profile/FriendRequestsSection';
-import { MyPoemsSection } from '../components/my-profile/MyPoemsSection';
-import { CollectionsSection } from '../components/my-profile/CollectionsSection';
 import { SavedPoemsSection } from '../components/my-profile/SavedPoemsSection';
+import { useMyFriendRequests } from '../hooks/useMyFriendRequests';
+import { useMyProfile } from '../hooks/useMyProfile';
+import { useUpdateMyProfile } from '../hooks/useUpdateMyProfile';
 
 export function MyProfilePage() {
 	const navigate = useNavigate();

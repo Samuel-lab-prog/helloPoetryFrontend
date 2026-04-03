@@ -1,5 +1,6 @@
 ﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FetchQueryOptions } from '@tanstack/react-query';
+
 import { queryClient } from '../queryClient';
 
 export function createQueryKeys<T extends Record<string, (...args: any[]) => readonly unknown[]>>(

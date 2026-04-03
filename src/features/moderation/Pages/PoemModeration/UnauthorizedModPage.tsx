@@ -1,5 +1,5 @@
-﻿import { Badge, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
-import { Surface } from '@BaseComponents';
+﻿import { Surface } from '@BaseComponents';
+import { Badge, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 
 export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
 	return (

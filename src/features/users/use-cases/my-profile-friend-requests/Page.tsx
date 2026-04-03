@@ -1,11 +1,12 @@
+import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { useFriendRequestActions } from '@features/interactions';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { SearchInput } from '@BaseComponents';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useFriendRequestActions } from '@features/interactions';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+
 import { FriendRequestsSection } from '../../components/my-profile/FriendRequestsSection';
+import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
 import { useMyFriendRequests } from '../../hooks/useMyFriendRequests';
 
 export function MyProfileFriendRequestsPage() {
@@ -31,29 +32,19 @@ export function MyProfileFriendRequestsPage() {
 			}),
 		};
 	}, [debouncedSearch, friendRequests, isSearching]);
-	const {
-		acceptRequest,
-		rejectRequest,
-		isAccepting,
-		isRejecting,
-		errorMessage
-	} = useFriendRequestActions();
+	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
+		useFriendRequestActions();
 
-	if (!authClient?.id) return <ProfileAccessGate />
+	if (!authClient?.id) return <ProfileAccessGate />;
 
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
-				<Flex
-					mb={8}
-					align='center'
-					justify='space-between'
-					direction='row'
-					gap={3}
-					wrap='wrap'
-				>
+				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Flex direction='column' gap={3} w='full' maxW={{ base: 'full', md: '360px' }}>
-						<Heading as='h1' textStyle='h2'>All my requests</Heading>
+						<Heading as='h1' textStyle='h2'>
+							All my requests
+						</Heading>
 						<SearchInput
 							label='Search requests'
 							value={searchName}

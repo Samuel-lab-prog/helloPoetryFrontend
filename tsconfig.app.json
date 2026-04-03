@@ -12,7 +12,7 @@
 			"@root/*": ["./*"],
 			"@features/*": ["features/*"],
 			"@assets/*": ["assets/*"],
-			"@themes/*": ["themes/*"],
+			"@themes/*": ["core/themes/*"],
 			"@core/*": ["core/*"],
 			"@BaseComponents": ["core/components"],
 			"@Events": ["core/events"],

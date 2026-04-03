@@ -1,14 +1,14 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
 
-import { registerSchema, type RegisterDataType } from '../schemas/registerSchema';
-import { uploadAvatarFile } from '../../../utils/avatarUpload';
 import type { CreateUserBody } from '../../..//api/types';
-import type { AppErrorType } from '@core/base';
 import { users } from '../../../api/endpoints';
+import { uploadAvatarFile } from '../../../utils/avatarUpload';
+import { type RegisterDataType, registerSchema } from '../schemas/registerSchema';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');

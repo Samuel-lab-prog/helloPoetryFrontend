@@ -1,7 +1,8 @@
-import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
 import { AsyncState, formatRelativeTime } from '@BaseComponents';
+import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
 import type { PoemPreviewType } from '@root/features/poems/types';
+import { NavLink } from 'react-router-dom';
+
 import { LoadingAuthorPoemsSkeletons } from './skeletons/LoadingAuthorPoemsSkeletons';
 
 type AuthorPoemsSectionProps = {

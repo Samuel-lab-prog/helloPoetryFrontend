@@ -1,7 +1,8 @@
+import { formatDate, Surface } from '@BaseComponents';
 import { Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
 import { Bookmark, ExternalLink, X } from 'lucide-react';
-import { Surface, formatDate } from '@BaseComponents';
+import { NavLink } from 'react-router-dom';
+
 import type { SavedPoemsSectionProps } from './types';
 
 export function SavedPoemsSection({
@@ -46,7 +47,9 @@ export function SavedPoemsSection({
 				{isLoadingSavedPoems && <Text textStyle='small'>Loading saved poems...</Text>}
 				{!isLoadingSavedPoems && savedPoems.length === 0 && (
 					<Text textStyle='small'>
-						{isSearchingSavedPoems ? 'No poems found for your search.' : 'You have not saved any poems yet.'}
+						{isSearchingSavedPoems
+							? 'No poems found for your search.'
+							: 'You have not saved any poems yet.'}
 					</Text>
 				)}
 				{!isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (

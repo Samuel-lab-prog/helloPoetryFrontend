@@ -1,6 +1,7 @@
 import { formatDate } from '@BaseComponents';
+import { Flex, Heading, Text, VStack } from '@chakra-ui/react';
+
 import { Tag } from './PoemTag';
-import { Heading, Text, Flex, VStack } from '@chakra-ui/react';
 
 type PoemHeaderProps = {
 	poem: {

@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { AsyncState } from '@BaseComponents';
+import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
+import { useState } from 'react';
+
 import { NotificationCard } from '../components/NotificationCard';
+import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
 
 export function NotificationsPage() {
 	const [onlyUnread, setOnlyUnread] = useState(false);

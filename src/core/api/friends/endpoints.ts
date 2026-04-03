@@ -1,6 +1,6 @@
 ﻿import { createHTTPRequest } from '@Utils';
-import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 
+import { createMutationEndpoint, createQueryEndpoint } from '../utils';
 import { friendsKeys } from './keys';
 import type {
 	BlockedUser,

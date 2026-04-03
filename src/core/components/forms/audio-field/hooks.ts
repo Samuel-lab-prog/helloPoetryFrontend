@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import type { PreviewSource } from './types';
 
 export function useAudioPreview(file?: File | null) {

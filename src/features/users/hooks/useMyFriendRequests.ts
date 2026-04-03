@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useQuery } from '@tanstack/react-query';
 
 export type MyFriendRequestsType = {
 	sent: {

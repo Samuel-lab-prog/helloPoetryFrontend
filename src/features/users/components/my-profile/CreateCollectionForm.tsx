@@ -1,7 +1,7 @@
+import { FormField } from '@BaseComponents';
 import { Flex, IconButton } from '@chakra-ui/react';
 import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { FormField } from '@BaseComponents';
 
 type CreateCollectionFormValues = {
 	name: string;

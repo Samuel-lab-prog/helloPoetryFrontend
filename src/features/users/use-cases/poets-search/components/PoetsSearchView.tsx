@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { AsyncState } from '@BaseComponents';
 import { Box, Field, Flex, Input, Text } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { AsyncState } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { PoetCard } from '../../../components/PoetCard';
 import { usePoetsSearch } from '../hooks/usePoetsSearch';
-import { searchPoetsSchema, type SearchPoetsForm } from '../schemas/searchPoetsSchema';
+import { type SearchPoetsForm,searchPoetsSchema } from '../schemas/searchPoetsSchema';
 import { LoadingUsersSkeletons } from './LoadingUsersSkeletons';
 
 const DEBOUNCE_DELAY_MS = 250;

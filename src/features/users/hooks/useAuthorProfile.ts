@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import type { AuthorProfileType } from '../../poems/types';
 import { api, apiKeys } from '@root/core/api';
+import { useQuery } from '@tanstack/react-query';
+
+import type { AuthorProfileType } from '../../poems/types';
 
 export function useAuthorProfile(authorId: number) {
 	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;

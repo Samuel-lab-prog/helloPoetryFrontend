@@ -1,3 +1,4 @@
+import { formatDate, Surface, translateModerationStatus } from '@BaseComponents';
 import {
 	Badge,
 	Flex,
@@ -11,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Surface, formatDate, translateModerationStatus } from '@BaseComponents';
+
 import type { MyPoemsSectionProps } from './types';
 
 /**
@@ -24,7 +25,7 @@ import type { MyPoemsSectionProps } from './types';
  * @param onOpenPoem - Callback function to open a poem when the "Open" action is selected.
  * @param onUpdatePoem - Callback function to update a poem when the "Edit" action is selected.
  * @param onDeletePoem - Callback function to delete a poem when the "Delete" action is selected.
- * @returns 
+ * @returns
  */
 export function MyPoemsSection({
 	myPoems,
@@ -69,7 +70,9 @@ export function MyPoemsSection({
 				{isLoadingMyPoems && <Text textStyle='small'>Loading your poems...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
 					<Text textStyle='small'>
-						{isSearchingMyPoems ? 'No poems found for your search.' : 'You have not published any poems yet.'}
+						{isSearchingMyPoems
+							? 'No poems found for your search.'
+							: 'You have not published any poems yet.'}
 					</Text>
 				)}
 				{isMyPoemsError && (

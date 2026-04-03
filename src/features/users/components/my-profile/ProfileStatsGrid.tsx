@@ -1,5 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { BookOpen, MessageSquare, Users } from 'lucide-react';
+
 import type { MyProfileViewModel } from './types';
 
 type ProfileStatsGridProps = {

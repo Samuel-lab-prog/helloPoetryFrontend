@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { api, apiKeys } from '@root/core/api';
 import type { ModeratePoemBody } from '@root/core/api/moderation/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
 
 export function usePoemModerationData(enabled: boolean) {
 	const pendingQuery = useQuery({

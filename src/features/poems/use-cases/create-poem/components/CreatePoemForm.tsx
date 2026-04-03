@@ -1,14 +1,14 @@
-import { Text, Heading, Box } from '@chakra-ui/react';
-
-import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
-import { useUsersPreview } from '@root/features/users/hooks/useUsersPreview';
-import { UserDedicationCombobox } from '@root/features/users/components/UserDedicationCombobox';
-import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@BaseComponents';
-import { PoemHeader } from '../../poem/components/PoemHeader';
-import { uploadPoemAudioFile } from '../utils/poemAudioUpload';
+import { DynamicForm, type Field, MarkdownRenderer, toaster } from '@BaseComponents';
+import { Box, Heading, Text } from '@chakra-ui/react';
 import { api } from '@root/core/api';
+import { UserDedicationCombobox } from '@root/features/users/components/UserDedicationCombobox';
+import { useUsersPreview } from '@root/features/users/hooks/useUsersPreview';
 import { useState } from 'react';
+
 import type { CreatePoemType } from '../../manage-poem/schemas/managePoemSchemas';
+import { PoemHeader } from '../../poem/components/PoemHeader';
+import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
+import { uploadPoemAudioFile } from '../utils/poemAudioUpload';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,
@@ -16,8 +16,8 @@ import {
 	POEM_EXCERPT_MIN_LENGTH,
 	POEM_TAG_MAX_LENGTH,
 	POEM_TAGS_MAX_AMOUNT,
-	POEM_TITLE_MIN_LENGTH,
 	POEM_TITLE_MAX_LENGTH,
+	POEM_TITLE_MIN_LENGTH,
 } from './constants';
 
 export function CreatePoemForm() {

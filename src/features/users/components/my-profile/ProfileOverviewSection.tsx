@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Avatar, Button, Flex, VStack } from '@chakra-ui/react';
 import { Surface } from '@BaseComponents';
-import type { MyProfileViewModel } from './types';
+import { Avatar, Button, Flex, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
 import { getAvatarFileError } from '../../utils/avatarUpload';
 import { ProfileEditFields } from './ProfileEditFields';
 import { ProfileReadOnly } from './ProfileReadOnly';
 import { ProfileStatsGrid } from './ProfileStatsGrid';
+import type { MyProfileViewModel } from './types';
 
 type ProfileOverviewSectionProps = {
 	profile: MyProfileViewModel;

@@ -1,6 +1,6 @@
-import React, { isValidElement, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
 import { type Keyframes } from '@emotion/react';
+import React, { isValidElement, useMemo } from 'react';
 
 interface UseTextAnimatorArgs {
 	prefersReducedMotion: boolean;

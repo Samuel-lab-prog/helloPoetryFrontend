@@ -1,8 +1,9 @@
-﻿import { Flex } from '@chakra-ui/react';
-import { AsyncState } from '@BaseComponents';
+﻿import { AsyncState } from '@BaseComponents';
+import { Flex } from '@chakra-ui/react';
+
+import type { PoemPreviewType } from '../../types';
 import { PoemCard } from './PoemCard';
 import { PoemGrid } from './PoemGrid';
-import type { PoemPreviewType } from '../../types';
 
 type PoemsGridProps = {
 	poems: PoemPreviewType[];

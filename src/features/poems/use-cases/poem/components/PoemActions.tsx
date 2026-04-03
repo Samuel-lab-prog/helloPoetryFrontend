@@ -1,7 +1,7 @@
-import { memo } from 'react';
-import { keyframes } from '@emotion/react';
 import { Button, Flex } from '@chakra-ui/react';
+import { keyframes } from '@emotion/react';
 import { Bookmark, BookmarkCheck, Heart } from 'lucide-react';
+import { memo } from 'react';
 
 const likePulse = keyframes`
 	0% { transform: scale(1); }

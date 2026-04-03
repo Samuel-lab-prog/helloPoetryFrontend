@@ -1,13 +1,14 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { AsyncState } from '@BaseComponents';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import {
 	useCancelFriendRequest,
 	useFriendRequestActions,
 	useSendFriendRequest,
 } from '@features/interactions';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { useAuthorProfile } from '../../hooks/useAuthorProfile';
 import { AuthorPoemsSection } from './components/AuthorPoemsSection';
 import { AuthorProfileCard } from './components/AuthorProfileCard';

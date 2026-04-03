@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { eventBus } from '@core/events/eventBus';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
+import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import type { AppErrorType } from '@core/base';
-import { eventBus } from '@core/events/eventBus';
 
-import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
-import { type AuthClient } from '../../../api/types';
 import { auth } from '../../../api/endpoints';
+import { type AuthClient } from '../../../api/types';
 import { useAuthClientStore } from '../../../public/stores/useAuthClientStore';
+import { type LoginDataType, loginSchema } from '../schemas/loginSchema';
 
 const FEED_ROUTE = '/';
 

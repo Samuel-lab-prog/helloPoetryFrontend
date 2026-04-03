@@ -1,5 +1,6 @@
-import type { QueryClient } from '@tanstack/react-query';
 import { apiKeys } from '@root/core/api';
+import type { QueryClient } from '@tanstack/react-query';
+
 import type { AppEvents } from '../eventBus';
 
 export async function onPoemLiked(

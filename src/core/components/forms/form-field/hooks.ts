@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { UseFormClearErrors, UseFormSetError, FieldValues, Path } from 'react-hook-form';
+import type { FieldValues, Path, UseFormClearErrors, UseFormSetError } from 'react-hook-form';
 
 type AsyncValidationConfig<T extends FieldValues> = {
 	name: Path<T>;

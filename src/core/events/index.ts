@@ -3,5 +3,5 @@
  */
 
 export * from './eventBus';
-export * from './registerEventListeners';
 export * from './reacters/index';
+export * from './registerEventListeners';

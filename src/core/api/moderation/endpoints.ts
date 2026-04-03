@@ -1,15 +1,16 @@
 ﻿import { createHTTPRequest } from '@Utils';
+
 import { createMutationEndpoint, createQueryEndpoint } from '../utils';
+import { moderationKeys } from './keys';
 import type {
-	BanUserBody,
 	BannedUserResponse,
-	SuspendUserBody,
-	SuspendedUserResponse,
-	ModerationPoem,
+	BanUserBody,
 	ModeratePoemBody,
 	ModeratePoemResult,
+	ModerationPoem,
+	SuspendedUserResponse,
+	SuspendUserBody,
 } from './types';
-import { moderationKeys } from './keys';
 
 const banUser = createMutationEndpoint<BanUserBody, BannedUserResponse>({
 	fn: (data) =>

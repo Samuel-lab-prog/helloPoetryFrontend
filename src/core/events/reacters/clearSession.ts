@@ -1,7 +1,7 @@
-import type { QueryClient } from '@tanstack/react-query';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
 import { apiKeys } from '@root/core/api';
+import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import type { QueryClient } from '@tanstack/react-query';
 
 export async function clearSessionQueries(queryClient: QueryClient): Promise<void> {
 	const keysToClear = [

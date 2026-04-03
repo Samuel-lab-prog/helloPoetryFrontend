@@ -1,4 +1,5 @@
 import { Text } from '@chakra-ui/react';
+
 import type { MyProfileViewModel } from './types';
 
 type ProfileReadOnlyProps = {

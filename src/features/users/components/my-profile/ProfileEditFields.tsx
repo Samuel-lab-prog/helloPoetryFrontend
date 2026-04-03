@@ -2,11 +2,12 @@ import {
 	Button,
 	Flex,
 	Input,
+	type SystemStyleObject,
 	Text,
 	Textarea,
 	VisuallyHidden,
-	type SystemStyleObject,
 } from '@chakra-ui/react';
+
 import { MAX_AVATAR_SIZE_MB } from '../../utils/avatarUpload';
 
 type ProfileEditFieldsProps = {

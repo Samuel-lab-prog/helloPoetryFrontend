@@ -1,20 +1,25 @@
-import { Flex, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { Footer, SearchInput } from '@BaseComponents';
+import { Flex, VStack } from '@chakra-ui/react';
+import { poems } from '@root/core/api';
+import type { PaginatedPoems } from '@root/core/api/poems/types';
 import { useIsAuthenticated } from '@root/features/auth/public/hooks/useIsAuthenticated';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+
 import { HomeFeed } from './components/HomeFeed';
 import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './constants';
 import { useHomeFeed } from './hooks/useHomeFeed';
 import { getFooterLinks } from './utils';
-import type { PaginatedPoems } from '@root/core/api/poems/types';
-import { poems } from '@root/core/api';
 
 export function HomePage() {
 	const isAuthenticated = useIsAuthenticated();
 	const [searchTitle, setSearchTitle] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
-	const { poems: feedPoems, isError, isLoading } = useHomeFeed({
+	const {
+		poems: feedPoems,
+		isError,
+		isLoading,
+	} = useHomeFeed({
 		isAuthenticated,
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
 	});
@@ -67,4 +72,3 @@ export function HomePage() {
 		</Flex>
 	);
 }
-

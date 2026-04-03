@@ -1,5 +1,6 @@
-import { z } from 'zod';
 import { findForbiddenWords } from '@BaseComponents';
+import { z } from 'zod';
+
 import {
 	REGISTER_BIO_MAX_LENGTH,
 	REGISTER_BIO_MIN_LENGTH,

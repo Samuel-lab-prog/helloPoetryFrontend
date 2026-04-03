@@ -1,6 +1,6 @@
+import { Avatar, Flex, Link, Text } from '@chakra-ui/react';
 import { memo, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Avatar, Flex, Link, Text } from '@chakra-ui/react';
 
 type PoemAuthorCardProps = {
 	author: {

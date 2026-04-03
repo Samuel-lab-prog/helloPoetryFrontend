@@ -3,12 +3,12 @@
 import {
 	ClientOnly,
 	IconButton,
+	type IconButtonProps,
 	Skeleton,
 	Span,
-	type IconButtonProps,
 	type SpanProps,
 } from '@chakra-ui/react';
-import { ThemeProvider, useTheme, type ThemeProviderProps } from 'next-themes';
+import { ThemeProvider, type ThemeProviderProps, useTheme } from 'next-themes';
 import * as React from 'react';
 import { LuMoon, LuSun } from 'react-icons/lu';
 

@@ -1,12 +1,13 @@
-import { Field, Combobox, Portal, useListCollection, useFilter } from '@chakra-ui/react';
+import { Combobox, Field, Portal, useFilter, useListCollection } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import {
-	Controller,
 	type Control,
-	type Path,
+	Controller,
 	type FieldErrors,
 	type FieldValues,
+	type Path,
 } from 'react-hook-form';
-import { useEffect } from 'react';
+
 import { type PoemMinimalDataType } from '../../types';
 
 interface Props<T extends FieldValues> {

@@ -1,5 +1,5 @@
-import { Clock3, LogIn, UserCheck, UserPlus, UserX, type LucideIcon } from 'lucide-react';
 import type { AuthorProfileType } from '@root/features/poems/types';
+import { Clock3, LogIn, type LucideIcon, UserCheck, UserPlus, UserX } from 'lucide-react';
 
 export type RelationStatus = {
 	icon: LucideIcon;

@@ -1,11 +1,11 @@
+import { Surface } from '@BaseComponents';
 import { Badge, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { Surface } from '@BaseComponents';
 
 /**
  * Renders a gate that restricts access to the user's profile if they are not signed in.
  * It encourages users to sign in or create an account to access their profile features.
- * @returns A React component that displays a message and buttons for signing in or creating an account. 
+ * @returns A React component that displays a message and buttons for signing in or creating an account.
  */
 export function ProfileAccessGate() {
 	return (

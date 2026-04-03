@@ -1,19 +1,19 @@
 /* eslint-disable max-lines-per-function */
+import { AsyncState, findForbiddenWords, MarkdownRenderer, toaster } from '@BaseComponents';
+import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
+import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
-import { ArrowLeftIcon } from 'lucide-react';
-import { AsyncState, MarkdownRenderer, findForbiddenWords, toaster } from '@BaseComponents';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 
-import { usePoem } from './hooks/usePoem';
 import { useSavedPoems } from '../../public/hooks/useManageSavedPoems';
-import { PoemHeader } from './components/PoemHeader';
-import { PoemAuthorCard } from './components/PoemAuthorCard';
-import { PoemActions } from './components/PoemActions';
 import { CommentsSection } from './components/CommentsSection';
+import { PoemActions } from './components/PoemActions';
 import { PoemAudioPlayer } from './components/PoemAudioPlayer';
+import { PoemAuthorCard } from './components/PoemAuthorCard';
+import { PoemHeader } from './components/PoemHeader';
+import { usePoem } from './hooks/usePoem';
 
 function parsePoemId(rawId: string | undefined) {
 	if (!rawId) return -1;

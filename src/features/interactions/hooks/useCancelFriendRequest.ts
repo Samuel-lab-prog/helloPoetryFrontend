@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { type AppErrorType } from '@BaseComponents';
 import { api, apiKeys } from '@root/core/api';
 import type { AuthorProfileType } from '@root/features/poems/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useCancelFriendRequest() {
 	const queryClient = useQueryClient();

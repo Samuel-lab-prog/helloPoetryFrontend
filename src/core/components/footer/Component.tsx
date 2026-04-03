@@ -1,4 +1,5 @@
 ﻿import { Box, Flex, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+
 import { FooterBrand } from './FooterBrand';
 import { FooterCommunity } from './FooterCommunity';
 import { FooterNav } from './FooterNav';

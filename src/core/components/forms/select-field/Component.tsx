@@ -2,8 +2,8 @@ import { Box, Field, Icon, NativeSelect } from '@chakra-ui/react';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import {
-	Controller,
 	type Control,
+	Controller,
 	type FieldErrors,
 	type FieldValues,
 	type Path,

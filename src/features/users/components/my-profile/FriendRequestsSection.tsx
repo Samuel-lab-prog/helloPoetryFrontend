@@ -1,7 +1,8 @@
-import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
-import { Check, UserPlus, X } from 'lucide-react';
 import { Surface } from '@BaseComponents';
+import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import { Check, UserPlus, X } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+
 import type { FriendRequestsSectionProps } from './types';
 
 /**
@@ -63,7 +64,9 @@ export function FriendRequestsSection({
 					!isFriendRequestsError &&
 					friendRequests.received.length === 0 && (
 						<Text textStyle='small'>
-							{isSearchingFriendRequests ? 'No requests found for your search.' : 'No pending requests.'}
+							{isSearchingFriendRequests
+								? 'No requests found for your search.'
+								: 'No pending requests.'}
 						</Text>
 					)}
 				{isFriendRequestsError && (

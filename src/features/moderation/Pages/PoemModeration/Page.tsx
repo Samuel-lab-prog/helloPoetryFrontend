@@ -1,10 +1,11 @@
 import { Flex, Heading, Tabs, Text } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
-import { UnauthorizedPage } from './UnauthorizedModPage';
-import { AnalyzeTab } from './tabs/PendingPoemsTab';
-import { ActionsTab } from './tabs/ActionsTab';
-import { usePoemModerationData } from './hooks';
 import { useEnsureRole } from '@root/features/auth/public/hooks/useEnsureRole';
+import { useNavigate } from 'react-router-dom';
+
+import { usePoemModerationData } from './hooks';
+import { ActionsTab } from './tabs/ActionsTab';
+import { AnalyzeTab } from './tabs/PendingPoemsTab';
+import { UnauthorizedPage } from './UnauthorizedModPage';
 
 export function PoemModerationPage() {
 	const navigate = useNavigate();

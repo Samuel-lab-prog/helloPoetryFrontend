@@ -1,9 +1,10 @@
-import { memo, useEffect, useMemo, useRef, type Dispatch, type SetStateAction } from 'react';
-import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
-import { SendHorizontal } from 'lucide-react';
 import { AsyncState } from '@BaseComponents';
-import { CommentThread } from './CommentThread';
+import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions';
+import { SendHorizontal } from 'lucide-react';
+import { type Dispatch, memo, type SetStateAction, useEffect, useMemo, useRef } from 'react';
+
+import { CommentThread } from './CommentThread';
 
 type CommentsSectionProps = {
 	poemIsCommentable: boolean;

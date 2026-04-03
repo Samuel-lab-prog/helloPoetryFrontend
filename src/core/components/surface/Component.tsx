@@ -1,5 +1,6 @@
-import { forwardRef } from 'react';
 import { Box, type BoxProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+
 import { surfaceVariants } from './variants';
 
 export type SurfaceVariant = keyof typeof surfaceVariants;

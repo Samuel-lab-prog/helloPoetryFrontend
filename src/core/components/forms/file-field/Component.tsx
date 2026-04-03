@@ -1,9 +1,10 @@
 import { Avatar, Box, Button, Field, Flex, Input, Text, VisuallyHidden } from '@chakra-ui/react';
 import { useMemo, useRef } from 'react';
-import { Controller, useWatch, type FieldValues } from 'react-hook-form';
+import { Controller, type FieldValues, useWatch } from 'react-hook-form';
+
+import { useFilePreview } from './hooks';
 import type { FileFieldProps } from './types';
 import { buildFileValidationRules } from './utils';
-import { useFilePreview } from './hooks';
 
 export function FileField<T extends FieldValues>({
 	control,

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ComponentProps, ReactNode } from 'react';
 import type { ButtonProps } from '@chakra-ui/react';
+import type { ComponentProps, ReactNode } from 'react';
 import type {
 	Control,
 	FieldValues,
@@ -9,6 +9,7 @@ import type {
 	UseFormClearErrors,
 	UseFormSetError,
 } from 'react-hook-form';
+
 import { FormCard } from '../styles/FormCardSurface';
 
 export type FieldType = 'text' | 'password' | 'textarea';

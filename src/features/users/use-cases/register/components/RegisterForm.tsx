@@ -1,9 +1,9 @@
 import { DynamicForm, type Field } from '@BaseComponents';
-import { useRegisterForm } from '../hooks/useRegisterForm';
+
+import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '../../../utils/avatarUpload';
 import { checkEmailAvailability } from '../hooks/checkEmail';
 import { checkNicknameAvailability } from '../hooks/checkNickname';
-import { getAvatarFileError, MAX_AVATAR_SIZE_MB } from '../../../utils/avatarUpload';
-
+import { useRegisterForm } from '../hooks/useRegisterForm';
 import {
 	REGISTER_BIO_MAX_LENGTH,
 	REGISTER_BIO_MIN_LENGTH,

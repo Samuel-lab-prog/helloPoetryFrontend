@@ -1,10 +1,11 @@
 import { Box, Button, Field, Flex, HStack, Text } from '@chakra-ui/react';
+import { Mic, Square, Trash2, Upload } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Mic, Square, Upload, Trash2 } from 'lucide-react';
-import { useController, type FieldValues } from 'react-hook-form';
+import { type FieldValues, useController } from 'react-hook-form';
+
+import { useAudioPreview } from './hooks';
 import type { AudioFieldProps } from './types';
 import { pickAudioMimeType, resolveAudioLabels } from './utils';
-import { useAudioPreview } from './hooks';
 
 export function AudioField<T extends FieldValues>({
 	control,

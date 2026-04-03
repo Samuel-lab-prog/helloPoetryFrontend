@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { PauseIcon, PlayIcon, Volume2Icon, VolumeXIcon } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type PoemAudioPlayerProps = {
 	src: string;

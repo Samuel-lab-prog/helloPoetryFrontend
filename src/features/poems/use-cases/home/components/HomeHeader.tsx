@@ -1,5 +1,5 @@
-﻿import { Heading, Text, VStack } from '@chakra-ui/react';
-import { Surface } from '@BaseComponents';
+﻿import { Surface } from '@BaseComponents';
+import { Heading, Text, VStack } from '@chakra-ui/react';
 
 type HomeHeaderProps = {
 	title?: string;

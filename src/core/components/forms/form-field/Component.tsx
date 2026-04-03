@@ -1,8 +1,9 @@
 import { Box, Field, Input, Text, Textarea } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { Controller, type FieldValues } from 'react-hook-form';
-import type { FormFieldProps } from './types';
+
 import { useAsyncValidation } from './hooks';
+import type { FormFieldProps } from './types';
 
 /**
  * Form-friendly input/textarea field with optional async validation,

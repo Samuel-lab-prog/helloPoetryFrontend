@@ -1,5 +1,6 @@
 import { Box, Field } from '@chakra-ui/react';
-import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
+import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
+
 import { TagsInputControl } from './TagsInputControl';
 import { resolveErrorMessage, sanitizeTags } from './utils';
 

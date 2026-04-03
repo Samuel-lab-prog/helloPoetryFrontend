@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { MarkdownRenderer } from '@BaseComponents';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 import { useReducedMotion } from 'framer-motion';
-import { MarkdownRenderer } from '@BaseComponents';
+import { useMemo } from 'react';
+
 import { useTextAnimator } from './useTextAnimator';
 
 interface PoemContentProps {

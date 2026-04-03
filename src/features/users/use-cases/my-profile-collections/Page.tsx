@@ -1,11 +1,12 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
-import { usePoemCollections } from '@root/features/poems/public/hooks/useManagePoemCollections';
 import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
+import { usePoemCollections } from '@root/features/poems/public/hooks/useManagePoemCollections';
 import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedPoems';
-import { useMyProfile } from '../../hooks/useMyProfile';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+import { NavLink } from 'react-router-dom';
+
 import { CollectionsSection } from '../../components/my-profile/CollectionsSection';
+import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+import { useMyProfile } from '../../hooks/useMyProfile';
 
 export function MyProfileCollectionsPage() {
 	const { profile, isMissingClient, isLoading: isProfileLoading } = useMyProfile();
@@ -41,14 +42,7 @@ export function MyProfileCollectionsPage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
-				<Flex
-					mb={8}
-					align='center'
-					justify='space-between'
-					direction='row'
-					gap={3}
-					wrap='wrap'
-				>
+				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Heading as='h1' textStyle='h2'>
 						All my collections
 					</Heading>

@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, Box, Button } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export function ErrorPage() {

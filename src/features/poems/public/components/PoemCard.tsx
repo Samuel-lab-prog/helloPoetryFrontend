@@ -1,7 +1,8 @@
-import { Card, Text, Badge, Flex, Link, Box, Avatar, Icon } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
-import { Heart, MessageCircle } from 'lucide-react';
 import { formatRelativeTime } from '@BaseComponents';
+import { Avatar, Badge, Box, Card, Flex, Icon, Link, Text } from '@chakra-ui/react';
+import { Heart, MessageCircle } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+
 import type { PoemPreviewType } from '../../types';
 
 type PoemCardProps = {

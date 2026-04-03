@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown';
 // eslint-disable-next-line no-duplicate-imports
 import { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+
 import { components } from './components';
 
 type MarkdownRendererProps = {

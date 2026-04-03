@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { api } from '@root/core/api';
+import { useQuery } from '@tanstack/react-query';
 
 export function usePoem(id: number) {
 	const stringId = String(id);

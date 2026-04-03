@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { SearchInput } from '@BaseComponents';
+import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
-import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+import { useMemo, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+
 import { MyPoemsSection } from '../../components/my-profile/MyPoemsSection';
+import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
 
 export function MyProfilePoemsPage() {
 	const navigate = useNavigate();
@@ -30,14 +31,7 @@ export function MyProfilePoemsPage() {
 	return (
 		<Flex as='main' layerStyle='main' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
-				<Flex
-					mb={8}
-					align='center'
-					justify='space-between'
-					direction='row'
-					gap={3}
-					wrap='wrap'
-				>
+				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Flex direction='column' gap={3} w='full' maxW={{ base: 'full', md: '360px' }}>
 						<Heading as='h1' textStyle='h2'>
 							All my poems

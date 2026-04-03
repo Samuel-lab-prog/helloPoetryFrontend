@@ -1,5 +1,6 @@
 import { Flex, Heading, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
+
 import { RegisterForm } from './components/RegisterForm';
 
 export function RegisterPage() {

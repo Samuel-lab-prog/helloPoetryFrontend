@@ -1,4 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
+
 import { eventBus } from './eventBus';
 import {
 	bootstrapUserDataOnLogin,
