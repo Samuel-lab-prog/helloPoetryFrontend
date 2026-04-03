@@ -1,6 +1,6 @@
 import { red, green, yellow } from 'kleur/colors';
 import type { DepcruiseResult } from '../../Types';
-import { printTable, type TableColumn } from '../../PrintTable';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 import { extractRootNamespace } from '../../Utils';
 
 type Violation = {
@@ -42,7 +42,7 @@ export function printNoInvalidRootNamespaces(cruiseResult: DepcruiseResult): voi
 	const violations = checkRootNamespaceRestriction(cruiseResult);
 
 	if (violations.length === 0) {
-		console.log(green('✔ All root namespaces are valid'));
+		console.log(green('✔ Rules: All root namespaces are valid'));
 		return;
 	}
 
@@ -65,5 +65,7 @@ export function printNoInvalidRootNamespaces(cruiseResult: DepcruiseResult): voi
 		},
 	];
 
-	printTable(`Invalid root namespaces (${violations.length})`, columns, violations);
+	printRulesTable(`Invalid root namespaces (${violations.length})`, columns, violations);
 }
+
+

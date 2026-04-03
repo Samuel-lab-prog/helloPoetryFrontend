@@ -1,6 +1,6 @@
 import { red, green, yellow } from 'kleur/colors';
 import type { ClocResult } from '../../Types';
-import { printTable, type TableColumn } from '../../PrintTable';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 
 type Violation = {
 	domain: string;
@@ -80,7 +80,7 @@ export function printNoMissingDirectories(cloc: ClocResult): void {
 	const violations = checkPortsAndAdaptersStructure(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? All features follow folder structure'));
+		console.log(green('? Rules: All features follow folder structure'));
 		return;
 	}
 
@@ -119,5 +119,8 @@ export function printNoMissingDirectories(cloc: ClocResult): void {
 		},
 	];
 
-	printTable(`Feature folder structure violations (${violations.length})`, columns, violations);
+	printRulesTable(`Feature folder structure violations (${violations.length})`, columns, violations);
 }
+
+
+

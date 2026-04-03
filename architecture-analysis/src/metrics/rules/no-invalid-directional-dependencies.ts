@@ -1,6 +1,6 @@
 import { red, green } from 'kleur/colors';
 import type { DepcruiseResult } from '../../Types';
-import { printTable, type TableColumn } from '../../PrintTable';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 
 type Layer = 'features' | 'core' | 'shared';
 
@@ -53,7 +53,7 @@ export function printNoInvalidDirectionalDependencies(cruiseResult: DepcruiseRes
 	const violations = detectDirectionalViolations(cruiseResult);
 
 	if (violations.length === 0) {
-		console.log(green('✔ No invalid directional dependencies found'));
+		console.log(green('✔ Rules: No invalid directional dependencies found'));
 		return;
 	}
 
@@ -86,5 +86,7 @@ export function printNoInvalidDirectionalDependencies(cruiseResult: DepcruiseRes
 		},
 	];
 
-	printTable(`Directional violations (${violations.length})`, columns, violations);
+	printRulesTable(`Directional violations (${violations.length})`, columns, violations);
 }
+
+

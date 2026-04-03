@@ -1,6 +1,6 @@
 import { red, green } from 'kleur/colors';
 import type { DepcruiseResult } from '../../Types';
-import { padRight, divider } from '../../ConsoleFormatUtils';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 import { isRootLevelSourceFile } from '../../Utils';
 
 type Violation = {
@@ -26,14 +26,23 @@ export function printNoRootSourceCode(cruiseResult: DepcruiseResult): void {
 	const violations = checkNoRootSourceCode(cruiseResult);
 
 	if (violations.length === 0) {
-		console.log(green('✔ No source files found at src root'));
+		console.log(green('✔ Rules: No source files found at src root'));
 		return;
 	}
 
-	console.log(red(`✖ ${violations.length} source file(s) found at src root\n`));
+	const columns: TableColumn<Violation>[] = [
+		{
+			header: 'MODULE',
+			width: 80,
+			render: (v) => ({ text: v.module, color: red }),
+		},
+		{
+			header: 'STATUS',
+			width: 12,
+			align: 'right',
+			render: () => ({ text: 'VIOLATION', color: red }),
+		},
+	];
 
-	console.log(padRight('MODULE', 60));
-	console.log(divider('·'));
-
-	for (const v of violations) console.log(red(padRight(v.module, 60)));
+	printRulesTable(`Root-level source files (${violations.length})`, columns, violations);
 }

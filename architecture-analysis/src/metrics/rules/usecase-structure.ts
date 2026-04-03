@@ -1,6 +1,6 @@
 import { green, red, yellow } from 'kleur/colors';
 import type { ClocResult } from '../../Types';
-import { printTable, type TableColumn } from '../../PrintTable';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 
 type UseCaseInfo = {
 	feature: string;
@@ -132,7 +132,7 @@ export function printUseCaseStructureViolations(cloc: ClocResult): void {
 	const violations = checkUseCaseStructure(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? All use-cases follow folder structure'));
+		console.log(green('? Rules: All use-cases follow folder structure'));
 		return;
 	}
 
@@ -165,5 +165,8 @@ export function printUseCaseStructureViolations(cloc: ClocResult): void {
 		},
 	];
 
-	printTable(`Use-case structure violations (${violations.length})`, columns, violations);
+	printRulesTable(`Use-case structure violations (${violations.length})`, columns, violations);
 }
+
+
+

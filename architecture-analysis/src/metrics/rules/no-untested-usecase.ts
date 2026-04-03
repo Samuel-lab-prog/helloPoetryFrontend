@@ -1,6 +1,6 @@
 import { red, green } from 'kleur/colors';
 import type { ClocResult } from '../../Types';
-import { printTable, type TableColumn } from '../../PrintTable';
+import { printRulesTable, type TableColumn } from '../../PrintTable';
 import { extractDomainFromPath } from '../../Utils';
 
 type Violation = {
@@ -71,7 +71,7 @@ export function printNoUntestedUsecase(cloc: ClocResult): void {
 	const violations = checkMissingExecuteTests(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? All use-cases have execute.test.ts'));
+		console.log(green('? Rules: All use-cases have execute.test.ts'));
 		return;
 	}
 
@@ -102,5 +102,8 @@ export function printNoUntestedUsecase(cloc: ClocResult): void {
 		},
 	];
 
-	printTable(`Missing execute.test.ts (${violations.length})`, columns, violations);
+	printRulesTable(`Missing execute.test.ts (${violations.length})`, columns, violations);
 }
+
+
+
