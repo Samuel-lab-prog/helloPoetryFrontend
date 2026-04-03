@@ -1,6 +1,6 @@
-﻿import { createHTTPRequest } from '@Utils';
+import { createQueryEndpoint } from '@core/api/utils';
+import { createHTTPRequest } from '@Utils';
 
-import { createQueryEndpoint } from '../utils';
 import { feedKeys } from './keys';
 import type { FeedPoem } from './types';
 

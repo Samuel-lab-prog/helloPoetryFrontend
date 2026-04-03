@@ -1,4 +1,4 @@
-﻿export type UsersSearchParams = {
+export type UsersSearchParams = {
 	limit?: number;
 	cursor?: string;
 	orderBy: 'nickname' | 'createdAt' | 'id';
@@ -103,4 +103,5 @@ export type AvatarUploadUrlResponse = {
 
 export type UserRole = 'user' | 'admin' | 'moderator';
 export type UserStatus = 'active' | 'banned' | 'suspended';
-import type { PoemPreview } from '@root/core/api/poems/types';
+import type { PoemPreview } from '@features/poems/public/types';
+

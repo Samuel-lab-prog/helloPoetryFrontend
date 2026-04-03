@@ -20,7 +20,7 @@
 		"metrics:analysis": "bun architecture-analysis/src/main.ts",
 		"metrics": "bun run metrics:cloc && bun run metrics:depcruise && bun run metrics:analysis",
 		"depcruise": "bunx depcruise src",
-		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run check-deps && bun run metrics",
+		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run check-deps && bun run metrics && bun run build",
 		"generate:api": "orval"
 	},
 	"dependencies": {

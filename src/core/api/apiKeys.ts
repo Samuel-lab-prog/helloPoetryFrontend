@@ -1,10 +1,10 @@
-import { userKeys } from '../../features/users/api/keys';
-import { feedKeys } from './feed/keys';
-import { friendsKeys } from './friends/keys';
-import { interactionsKeys } from './interactions/keys';
-import { moderationKeys } from './moderation/keys';
-import { notificationsKeys } from './notifications/keys';
-import { poemKeys } from './poems/keys';
+import { feedKeys } from '@features/feed/api/keys';
+import { friendsKeys } from '@features/friends/api/keys';
+import { interactionsKeys } from '@features/interactions/api/keys';
+import { moderationKeys } from '@features/moderation/api/keys';
+import { notificationsKeys } from '@features/notifications/api/keys';
+import { poemKeys } from '@features/poems/api/keys';
+import { userKeys } from '@features/users/api/keys';
 
 export const apiKeys = {
 	feed: feedKeys,

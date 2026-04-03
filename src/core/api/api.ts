@@ -1,10 +1,10 @@
-import { users } from '../../features/users/api/endpoints';
-import { feed } from './feed/endpoints';
-import { friends } from './friends/endpoints';
-import { interactions } from './interactions/endpoints';
-import { moderation } from './moderation/endpoints';
-import { notifications } from './notifications/endpoints';
-import { poems } from './poems/endpoints';
+import { feed } from '@features/feed/api/endpoints';
+import { friends } from '@features/friends/api/endpoints';
+import { interactions } from '@features/interactions/api/endpoints';
+import { moderation } from '@features/moderation/api/endpoints';
+import { notifications } from '@features/notifications/api/endpoints';
+import { poems } from '@features/poems/api/endpoints';
+import { users } from '@features/users/api/endpoints';
 
 export const api = {
 	feed,

@@ -1,7 +1,7 @@
 import { type AppErrorType, toaster } from '@BaseComponents';
+import type { CreatePoemResult } from '@features/poems/api/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '@root/core/api';
-import type { CreatePoemResult } from '@root/core/api/poems/types';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';

@@ -1,6 +1,6 @@
 import { type AppErrorType } from '@BaseComponents';
+import type { CollectionItemBody, CreateCollectionBody } from '@features/poems/api/types';
 import { api, apiKeys } from '@root/core/api';
-import type { CollectionItemBody, CreateCollectionBody } from '@root/core/api/poems/types';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 

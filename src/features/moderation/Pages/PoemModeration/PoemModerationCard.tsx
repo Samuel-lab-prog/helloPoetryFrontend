@@ -1,4 +1,4 @@
-﻿import {
+import {
 	formatDate,
 	MarkdownRenderer,
 	Surface,
@@ -16,7 +16,7 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
+import type { ModeratePoemBody, ModerationPoem } from '@features/moderation/api/types';
 import { PoemAudioPlayer } from '@root/features/poems/use-cases/poem/components/PoemAudioPlayer';
 import { Tag } from '@root/features/poems/use-cases/poem/components/PoemTag';
 import { useState } from 'react';

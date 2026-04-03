@@ -1,4 +1,4 @@
-﻿export type FeedPoem = {
+export type FeedPoem = {
 	id: number;
 	content: string;
 	title: string;

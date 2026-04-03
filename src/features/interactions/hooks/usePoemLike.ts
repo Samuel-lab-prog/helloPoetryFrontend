@@ -1,6 +1,6 @@
-﻿import { type AppErrorType } from '@BaseComponents';
+import { type AppErrorType } from '@BaseComponents';
+import type { FullPoem } from '@features/poems/public/types';
 import { api, apiKeys } from '@root/core/api';
-import type { FullPoem } from '@root/core/api/poems/types';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

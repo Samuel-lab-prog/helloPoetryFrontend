@@ -1,10 +1,10 @@
-﻿import type {
+import type {
 	PoemAuthor,
 	PoemDedicationUser,
 	PoemStatus,
 	PoemTag,
 	PoemVisibility,
-} from '../poems/types';
+} from '@features/poems/public/types';
 
 export type BanUserBody = {
 	userId: string;

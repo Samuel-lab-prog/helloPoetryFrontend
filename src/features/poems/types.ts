@@ -1,4 +1,4 @@
-import type { FullPoem as FullPoemType } from '@root/core/api/poems/types';
+import type { FullPoem as FullPoemType } from '@features/poems/api/types';
 
 export type {
 	FullPoem as FullPoemType,
@@ -10,7 +10,7 @@ export type {
 	PoemVisibility,
 	SavedPoem as SavedPoemType,
 	PoemTag as TagType,
-} from '@root/core/api/poems/types';
+} from '@features/poems/api/types';
 
 export type PoemMinimalDataType = Pick<FullPoemType, 'id' | 'title'>;
 
@@ -61,3 +61,4 @@ export type PaginatedMinimalPoemsType = {
 		title: string;
 	}[];
 };
+

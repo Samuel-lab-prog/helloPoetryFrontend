@@ -1,5 +1,5 @@
+import type { ModeratePoemBody } from '@features/moderation/api/types';
 import { api, apiKeys } from '@root/core/api';
-import type { ModeratePoemBody } from '@root/core/api/moderation/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
