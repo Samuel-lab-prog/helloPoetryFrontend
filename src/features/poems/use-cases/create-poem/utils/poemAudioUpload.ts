@@ -1,4 +1,4 @@
-﻿import { api } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
 
 const allowedAudioTypes = new Set([
 	'audio/mpeg',
@@ -62,7 +62,7 @@ export async function uploadPoemAudioFile(poemId: number, file: File): Promise<s
 	if (error) throw new Error(error);
 
 	const normalizedType = resolveAudioContentType(file);
-	const { uploadUrl, fileUrl, fields } = await api.poems.requestPoemAudioUploadUrl.mutate({
+	const { uploadUrl, fileUrl, fields } = await poems.requestPoemAudioUploadUrl.mutate({
 		poemId: String(poemId),
 		contentType: normalizedType,
 		contentLength: file.size,

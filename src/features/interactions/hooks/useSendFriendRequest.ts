@@ -1,6 +1,7 @@
 ﻿import { type AppErrorType } from '@BaseComponents';
-import { api, apiKeys } from '@root/core/api';
+import { friends } from '@root/features/friends/api/endpoints';
 import type { AuthorProfileType } from '@root/features/poems/types';
+import { userKeys } from '@root/features/users/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type FriendRequestResult = {
@@ -15,9 +16,9 @@ export function useSendFriendRequest() {
 
 	const mutation = useMutation({
 		mutationFn: (authorId: number) =>
-			api.friends.sendFriendRequest.mutate(String(authorId)) as Promise<FriendRequestResult>,
+			friends.sendFriendRequest.mutate(String(authorId)) as Promise<FriendRequestResult>,
 		onMutate: async (authorId) => {
-			const queryKey = apiKeys.users.profile(String(authorId));
+			const queryKey = userKeys.profile(String(authorId));
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 
@@ -37,7 +38,7 @@ export function useSendFriendRequest() {
 			}
 		},
 		onSuccess: (_, authorId) => {
-			queryClient.invalidateQueries({ queryKey: apiKeys.users.profile(String(authorId)) });
+			queryClient.invalidateQueries({ queryKey: userKeys.profile(String(authorId)) });
 		},
 		onSettled: (_data, _error, _authorId, context) => {
 			if (context?.queryKey) {

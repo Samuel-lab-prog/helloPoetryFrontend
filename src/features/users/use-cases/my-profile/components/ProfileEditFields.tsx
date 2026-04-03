@@ -8,7 +8,7 @@ import {
 	VisuallyHidden,
 } from '@chakra-ui/react';
 
-import { MAX_AVATAR_SIZE_MB } from '../../../public/utils/avatarUpload';
+import { MAX_AVATAR_SIZE_MB } from '../../../internal/utils/avatarUpload';
 
 type ProfileEditFieldsProps = {
 	profileInputStyles: SystemStyleObject;

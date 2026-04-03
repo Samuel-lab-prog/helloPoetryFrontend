@@ -1,7 +1,12 @@
 import { type AppErrorType } from '@BaseComponents';
-import { api, apiKeys } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { feed } from '@root/features/feed/api/endpoints';
+import { friends } from '@root/features/friends/api/endpoints';
+import { notifications } from '@root/features/notifications/api/endpoints';
+import { poems } from '@root/features/poems/api/endpoints';
 import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/types';
+import { users } from '@root/features/users/api/endpoints';
+import { userKeys } from '@root/features/users/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
 
 import type { UserPrivateProfile, UserRole, UserStatus } from '../../../features/users/api/types';
@@ -40,7 +45,7 @@ async function fetchInitialFeed(limit: number): Promise<{
 	poems: PoemPreviewType[];
 }> {
 	try {
-		const payload = (await api.feed.getFeed.query().queryFn()) as FeedPoemType[];
+		const payload = (await feed.getFeed.query().queryFn()) as FeedPoemType[];
 		return { source: 'feed', poems: payload.map(mapFeedPoem) };
 	} catch (error) {
 		const appError = error as AppErrorType;
@@ -49,7 +54,7 @@ async function fetchInitialFeed(limit: number): Promise<{
 		}
 	}
 
-	const payload = (await api.poems.getPoems
+	const payload = (await poems.getPoems
 		.query({
 			limit,
 			orderBy: 'createdAt',
@@ -73,11 +78,9 @@ export async function bootstrapUserDataOnLogin(
 
 	await clearSessionQueries(queryClient);
 
-	const profileKey = apiKeys.users.profile(String(payload.userId));
+	const profileKey = userKeys.profile(String(payload.userId));
 	try {
-		const myProfile = (await api.users.getProfile.fetch(
-			String(payload.userId),
-		)) as UserPrivateProfile;
+		const myProfile = (await users.getProfile.fetch(String(payload.userId))) as UserPrivateProfile;
 		authStore.setUnreadNotificationsCount(myProfile.unreadNotificationsCount);
 		queryClient.setQueryData(profileKey, myProfile);
 	} catch {
@@ -89,15 +92,15 @@ export async function bootstrapUserDataOnLogin(
 			queryKey: homeFeedKey(payload.userId, INITIAL_FEED_LIMIT),
 			queryFn: () => fetchInitialFeed(INITIAL_FEED_LIMIT),
 		}),
-		api.poems.getMyPoems.prefetch(),
-		api.friends.getMyFriendRequests.prefetch(),
-		api.poems.getSavedPoems.prefetch(),
-		api.poems.getCollections.prefetch(),
-		api.notifications.getNotifications.prefetch({
+		poems.getMyPoems.prefetch(),
+		friends.getMyFriendRequests.prefetch(),
+		poems.getSavedPoems.prefetch(),
+		poems.getCollections.prefetch(),
+		notifications.getNotifications.prefetch({
 			onlyUnread: false,
 			limit: NOTIFICATIONS_FETCH_LIMIT,
 		}),
-		api.users.getUsers.prefetch({
+		users.getUsers.prefetch({
 			searchNickname: undefined,
 			limit: POETS_SEARCH_LIMIT,
 			orderBy: 'nickname',

@@ -1,10 +1,11 @@
 import { type AppErrorType } from '@BaseComponents';
-import { api, apiKeys } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { users } from '@root/features/users/api/endpoints';
+import { userKeys } from '@root/features/users/api/keys';
 import type { UserPrivateProfile } from '@root/features/users/api/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { uploadAvatarFile } from '../../../public/utils/avatarUpload';
+import { uploadAvatarFile } from '../../../internal/utils/avatarUpload';
 
 type UpdateMyProfileInput = {
 	name?: string;
@@ -20,7 +21,7 @@ export function useUpdateMyProfile() {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const profileKey = clientId
-		? apiKeys.users.profile(String(clientId))
+		? userKeys.profile(String(clientId))
 		: (['users', 'profile'] as const);
 
 	const mutation = useMutation({
@@ -29,7 +30,7 @@ export function useUpdateMyProfile() {
 				? await uploadAvatarFile(data.avatarFile)
 				: data.avatarUrl;
 
-			await api.users.updateUser.mutate({
+			await users.updateUser.mutate({
 				id: String(clientId),
 				name: data.name,
 				nickname: data.nickname,

@@ -1,4 +1,5 @@
-import { apiKeys } from '@root/core/api';
+import { interactionsKeys } from '@root/features/interactions/api/keys';
+import { poemKeys } from '@root/features/poems/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
 
 import type { AppEvents } from '../eventBus';
@@ -7,11 +8,11 @@ export async function onCommentCreated(
 	queryClient: QueryClient,
 	payload: AppEvents['commentCreated'],
 ): Promise<void> {
-	const poemKey = apiKeys.poems.byId(String(payload.poemId));
-	const baseCommentsKey = apiKeys.interactions.commentsByPoem(String(payload.poemId));
+	const poemKey = poemKeys.byId(String(payload.poemId));
+	const baseCommentsKey = interactionsKeys.commentsByPoem(String(payload.poemId));
 	const parentCommentsKey =
 		payload.parentId !== undefined
-			? apiKeys.interactions.commentsByPoem(String(payload.poemId), String(payload.parentId))
+			? interactionsKeys.commentsByPoem(String(payload.poemId), String(payload.parentId))
 			: null;
 
 	const keysToInvalidate = [

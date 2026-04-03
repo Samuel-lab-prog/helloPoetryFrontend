@@ -1,5 +1,6 @@
-import { apiKeys, friends } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { friends } from '@root/features/friends/api/endpoints';
+import { friendsKeys } from '@root/features/friends/api/keys';
 import { useQuery } from '@tanstack/react-query';
 
 export type MyFriendRequestsType = {
@@ -21,7 +22,7 @@ export function useMyFriendRequests(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: apiKeys.friends.requests(),
+		queryKey: friendsKeys.requests(),
 		enabled: enabled && !!clientId,
 		staleTime: Infinity,
 		queryFn: () => friends.getMyFriendRequests.query().queryFn(),

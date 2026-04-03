@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import type { CreateUserBody } from '../../..//api/types';
 import { users } from '../../../api/endpoints';
-import { uploadAvatarFile } from '../../../public/utils/avatarUpload';
+import { uploadAvatarFile } from '../../../internal/utils/avatarUpload';
 import { type RegisterDataType, registerSchema } from '../schemas/registerSchema';
 
 export function useRegisterForm() {

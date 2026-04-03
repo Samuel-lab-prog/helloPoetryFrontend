@@ -42,7 +42,6 @@ export default defineConfig([
 
 			'array-callback-return': 'error',
 			'default-case': 'error',
-			curly: ['error', 'multi-line'],
 			eqeqeq: ['error', 'always'],
 
 			'max-classes-per-file': ['error', 1],

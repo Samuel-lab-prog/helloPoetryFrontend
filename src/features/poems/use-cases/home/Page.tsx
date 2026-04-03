@@ -1,8 +1,8 @@
 import { Footer, SearchInput } from '@BaseComponents';
 import { Flex, VStack } from '@chakra-ui/react';
 import type { PaginatedPoems } from '@features/poems/api/types';
-import { poems } from '@root/core/api';
 import { useIsAuthenticated } from '@root/features/auth/public/hooks/useIsAuthenticated';
+import { poems } from '@root/features/poems/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 

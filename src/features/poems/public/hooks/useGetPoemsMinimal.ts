@@ -1,4 +1,4 @@
-import { api } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 type UsePoemsMinimalOptions = {
@@ -7,17 +7,17 @@ type UsePoemsMinimalOptions = {
 
 export function usePoemsMinimal({ limit = 150 }: UsePoemsMinimalOptions = {}) {
 	const query = useQuery({
-		...api.poems.getMyPoems.query(),
+		...poems.getMyPoems.query(),
 		staleTime: 1000 * 60 * 30,
 	});
 
-	const poems = (query.data ?? []).slice(0, limit).map((poem) => ({
+	const minimalPoems = (query.data ?? []).slice(0, limit).map((poem) => ({
 		id: poem.id,
 		title: poem.title,
 	}));
 
 	return {
-		poems,
+		poems: minimalPoems,
 		isLoading: query.isLoading,
 		isError: query.isError,
 		error: query.error,

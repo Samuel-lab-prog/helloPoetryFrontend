@@ -1,6 +1,7 @@
 ﻿import { type AppErrorType } from '@BaseComponents';
-import { api } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { feed } from '@root/features/feed/api/endpoints';
+import { poems } from '@root/features/poems/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '../../../types';
@@ -46,12 +47,12 @@ function shouldFallbackToRecent(error: unknown) {
 }
 
 async function fetchPersonalizedFeed(): Promise<PoemPreviewType[]> {
-	const payload = (await api.feed.getFeed.query().queryFn()) as FeedPoemType[];
+	const payload = (await feed.getFeed.query().queryFn()) as FeedPoemType[];
 	return payload.map(toPoemPreviewType);
 }
 
 async function fetchRecentPoems(limit: number): Promise<PoemPreviewType[]> {
-	const payload = (await api.poems.getPoems
+	const payload = (await poems.getPoems
 		.query({
 			limit,
 			orderBy: 'createdAt',

@@ -1,12 +1,13 @@
 import { type AppErrorType } from '@BaseComponents';
 import type { FullPoem } from '@features/poems/public/types';
-import { api, apiKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
+import { interactions } from '@root/features/interactions/api/endpoints';
+import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function usePoemLike(poemId: number) {
 	const queryClient = useQueryClient();
-	const poemKey = apiKeys.poems.byId(String(poemId));
+	const poemKey = poemKeys.byId(String(poemId));
 
 	function optimisticUpdate(nextLiked: boolean) {
 		queryClient.setQueryData<FullPoem | undefined>(poemKey, (current) => {
@@ -29,7 +30,7 @@ export function usePoemLike(poemId: number) {
 	}
 
 	const likeMutation = useMutation({
-		mutationFn: () => api.interactions.likePoem.mutate(String(poemId)),
+		mutationFn: () => interactions.likePoem.mutate(String(poemId)),
 		onMutate: async () => {
 			await queryClient.cancelQueries({ queryKey: poemKey });
 			const previousPoem = queryClient.getQueryData<FullPoem>(poemKey);
@@ -52,7 +53,7 @@ export function usePoemLike(poemId: number) {
 	});
 
 	const unlikeMutation = useMutation({
-		mutationFn: () => api.interactions.unlikePoem.mutate(String(poemId)),
+		mutationFn: () => interactions.unlikePoem.mutate(String(poemId)),
 		onMutate: async () => {
 			await queryClient.cancelQueries({ queryKey: poemKey });
 			const previousPoem = queryClient.getQueryData<FullPoem>(poemKey);

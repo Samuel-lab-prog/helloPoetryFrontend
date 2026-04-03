@@ -49,6 +49,7 @@ Typical structure:
 ```
 features/
   poems/
+    internal/
     pages/
     components/
     hooks/
@@ -57,6 +58,12 @@ features/
 ```
 
 Not every folder is mandatory, but feature code must remain self-contained.
+
+### Internal
+
+`internal/` is for **shared code that is private to the feature**. It can be reused across
+use-cases, pages, and components inside the same feature, but must not be imported by other
+features.
 
 ---
 

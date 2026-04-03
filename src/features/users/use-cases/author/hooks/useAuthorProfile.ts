@@ -1,17 +1,17 @@
-import { api, apiKeys } from '@root/core/api';
 import type { AuthorProfileType } from '@root/features/poems/types';
+import { users } from '@root/features/users/api/endpoints';
+import { userKeys } from '@root/features/users/api/keys';
 import { useQuery } from '@tanstack/react-query';
 
 export function useAuthorProfile(authorId: number) {
 	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;
 
 	const query = useQuery({
-		queryKey: apiKeys.users.profile(String(authorId)),
+		queryKey: userKeys.profile(String(authorId)),
 		enabled: isValidAuthorId,
 		retry: 2,
 		staleTime: 1000 * 60 * 10,
-		queryFn: () =>
-			api.users.getProfile.query(String(authorId)).queryFn() as Promise<AuthorProfileType>,
+		queryFn: () => users.getProfile.query(String(authorId)).queryFn() as Promise<AuthorProfileType>,
 	});
 
 	return {

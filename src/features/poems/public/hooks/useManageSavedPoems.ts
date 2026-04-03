@@ -1,7 +1,8 @@
 import { type AppErrorType } from '@BaseComponents';
 import type { FullPoem, SavedPoem } from '@features/poems/api/types';
-import { api, apiKeys } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { poems } from '@root/features/poems/api/endpoints';
+import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -15,23 +16,23 @@ export type SavedPoemType = {
 export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
-	const savedKey = apiKeys.poems.saved();
+	const savedKey = poemKeys.saved();
 	const [updatingSavedPoemId, setUpdatingSavedPoemId] = useState<number | null>(null);
 
 	const query = useQuery({
-		...api.poems.getSavedPoems.query(),
+		...poems.getSavedPoems.query(),
 		enabled: enabled && !!clientId,
 		staleTime: 1000 * 60 * 5,
 	});
 
 	const saveMutation = useMutation({
-		mutationFn: (poemId: number) => api.poems.savePoem.mutate(String(poemId)),
+		mutationFn: (poemId: number) => poems.savePoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
 			setUpdatingSavedPoemId(poemId);
 			await queryClient.cancelQueries({ queryKey: savedKey });
 			const previous = queryClient.getQueryData<SavedPoem[]>(savedKey) ?? [];
 			if (previous.some((poem) => poem.id === poemId)) return { previous };
-			const poem = queryClient.getQueryData<FullPoem>(apiKeys.poems.byId(String(poemId)));
+			const poem = queryClient.getQueryData<FullPoem>(poemKeys.byId(String(poemId)));
 			const optimistic: SavedPoem = {
 				id: poemId,
 				title: poem?.title ?? 'Poem',
@@ -55,7 +56,7 @@ export function useSavedPoems(enabled = true) {
 	});
 
 	const unsaveMutation = useMutation({
-		mutationFn: (poemId: number) => api.poems.removeSavedPoem.mutate(String(poemId)),
+		mutationFn: (poemId: number) => poems.removeSavedPoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
 			setUpdatingSavedPoemId(poemId);
 			await queryClient.cancelQueries({ queryKey: savedKey });

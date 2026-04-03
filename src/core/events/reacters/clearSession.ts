@@ -1,19 +1,23 @@
-import { apiKeys } from '@root/core/api';
 import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { feedKeys } from '@root/features/feed/api/keys';
+import { friendsKeys } from '@root/features/friends/api/keys';
+import { notificationsKeys } from '@root/features/notifications/api/keys';
+import { poemKeys } from '@root/features/poems/api/keys';
+import { userKeys } from '@root/features/users/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
 
 export async function clearSessionQueries(queryClient: QueryClient): Promise<void> {
 	const keysToClear = [
-		apiKeys.poems.mine(),
-		apiKeys.poems.saved(),
-		apiKeys.poems.collections(),
-		apiKeys.friends.requests(),
-		apiKeys.notifications.all(),
-		apiKeys.feed.all(),
+		poemKeys.mine(),
+		poemKeys.saved(),
+		poemKeys.collections(),
+		friendsKeys.requests(),
+		notificationsKeys.all(),
+		feedKeys.all(),
 		['home-feed'] as const,
-		apiKeys.users.anyProfile(),
-		apiKeys.users.anySearch(),
+		userKeys.anyProfile(),
+		userKeys.anySearch(),
 	];
 
 	await Promise.all(

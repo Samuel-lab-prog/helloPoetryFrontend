@@ -1,6 +1,8 @@
 import { type AppErrorType } from '@BaseComponents';
-import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
+import { interactions } from '@root/features/interactions/api/endpoints';
+import { interactionsKeys } from '@root/features/interactions/api/keys';
+import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -42,7 +44,7 @@ function buildCommentsKey(poemId: number, parentId?: number) {
 }
 
 function buildPoemKey(poemId: number) {
-	return apiKeys.poems.byId(String(poemId));
+	return poemKeys.byId(String(poemId));
 }
 
 async function prepareCommentQueries(
@@ -141,12 +143,12 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	const query = useQuery({
 		queryKey: buildCommentsKey(poemId),
 		enabled: isEnabled && !!poemId,
-		queryFn: () => api.interactions.getPoemComments.query(String(poemId)).queryFn(),
+		queryFn: () => interactions.getPoemComments.query(String(poemId)).queryFn(),
 	});
 
 	const mutation = useMutation({
 		mutationFn: (params: CreateCommentParams) =>
-			api.interactions.commentPoem.mutate({
+			interactions.commentPoem.mutate({
 				poemId,
 				content: params.content,
 				parentId: params.parentId,
@@ -161,7 +163,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 
 	const deleteMutation = useMutation({
 		mutationFn: (params: CommentMutationParams) =>
-			api.interactions.deleteComment.mutate(String(params.id)),
+			interactions.deleteComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
 			if (context.previousBase) {
@@ -191,7 +193,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 
 	const likeCommentMutation = useMutation({
 		mutationFn: (params: CommentMutationParams) =>
-			api.interactions.likeComment.mutate(String(params.id)),
+			interactions.likeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
@@ -222,7 +224,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 
 	const unlikeCommentMutation = useMutation({
 		mutationFn: (params: CommentMutationParams) =>
-			api.interactions.unlikeComment.mutate(String(params.id)),
+			interactions.unlikeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
@@ -254,8 +256,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	function fetchReplies(parentId: number) {
 		return queryClient.fetchQuery({
 			queryKey: buildCommentsKey(poemId, parentId),
-			queryFn: () =>
-				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
+			queryFn: () => interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
 			staleTime: 1000 * 60 * 5,
 		});
 	}
@@ -263,8 +264,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	function prefetchReplies(parentId: number) {
 		return queryClient.prefetchQuery({
 			queryKey: buildCommentsKey(poemId, parentId),
-			queryFn: () =>
-				api.interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
+			queryFn: () => interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
 			staleTime: 1000 * 60 * 5,
 		});
 	}

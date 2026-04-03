@@ -1,8 +1,8 @@
 import { type AppErrorType, toaster } from '@BaseComponents';
 import type { CreatePoemResult } from '@features/poems/api/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { api } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
+import { poems } from '@root/features/poems/api/endpoints';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
@@ -80,7 +80,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 
 function useCreatePoem() {
 	return useMutation({
-		mutationFn: (newPoem: CreatePoemPayload) => api.poems.createPoem.mutate(newPoem),
+		mutationFn: (newPoem: CreatePoemPayload) => poems.createPoem.mutate(newPoem),
 	});
 }
 

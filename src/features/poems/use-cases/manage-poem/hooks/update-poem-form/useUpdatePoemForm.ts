@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { api, apiKeys } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
+import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,8 +24,8 @@ export function useUpdatePoemForm() {
 
 		try {
 			await mutateAsync(data);
-			queryClient.invalidateQueries({ queryKey: apiKeys.poems.minimal() });
-			queryClient.invalidateQueries({ queryKey: ['poem', data.id] });
+			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });
+			queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(data.id)) });
 			alert('Poem updated successfully!');
 		} catch (err) {
 			handleUpdatePoemError(err, form.setError, setGeneralError);
@@ -46,7 +47,7 @@ export function useUpdatePoemForm() {
 function useUpdatePoem() {
 	return useMutation({
 		mutationFn: (updatedPoem: UpdatePoemType) =>
-			api.poems.updatePoem.mutate({
+			poems.updatePoem.mutate({
 				id: String(updatedPoem.id),
 				title: updatedPoem.title,
 				excerpt: updatedPoem.excerpt,

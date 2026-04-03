@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { api, apiKeys } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
+import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,7 +25,7 @@ export function useDeletePoemForm() {
 		try {
 			await mutateAsync(data.id);
 			alert('Poem deleted successfully!');
-			queryClient.invalidateQueries({ queryKey: apiKeys.poems.minimal() });
+			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });
 			form.reset();
 		} catch (err) {
 			handleDeletePoemError(err, setGeneralError);
@@ -45,6 +46,6 @@ export function useDeletePoemForm() {
 
 function useDeletePoem() {
 	return useMutation({
-		mutationFn: (poemId: number) => api.poems.deletePoem.mutate(String(poemId)),
+		mutationFn: (poemId: number) => poems.deletePoem.mutate(String(poemId)),
 	});
 }

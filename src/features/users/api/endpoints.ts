@@ -1,6 +1,6 @@
-﻿import { createHTTPRequest } from '@Utils';
+import { createMutationEndpoint, createQueryEndpoint } from '@core/api/utils';
+import { createHTTPRequest } from '@Utils';
 
-import { createMutationEndpoint, createQueryEndpoint } from '../../../core/api/utils';
 import { userKeys } from './keys';
 import type {
 	AvatarUploadUrlRequest,

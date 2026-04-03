@@ -1,4 +1,4 @@
-import { api } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 type UseRecentPoemsOptions = {
@@ -7,7 +7,7 @@ type UseRecentPoemsOptions = {
 
 export function useRecentPoems({ limit = 4 }: UseRecentPoemsOptions) {
 	const query = useQuery({
-		...api.poems.getPoems.query({
+		...poems.getPoems.query({
 			limit,
 			orderBy: 'createdAt',
 			orderDirection: 'desc',

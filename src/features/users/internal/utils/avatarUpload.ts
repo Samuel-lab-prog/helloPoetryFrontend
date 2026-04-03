@@ -1,4 +1,4 @@
-﻿import { api } from '@root/core/api';
+import { users } from '@root/features/users/api/endpoints';
 
 const allowedImageTypes = new Set([
 	'image/jpeg',
@@ -12,13 +12,11 @@ export const MAX_AVATAR_SIZE_MB = 5;
 export const MAX_AVATAR_SIZE_BYTES = MAX_AVATAR_SIZE_MB * 1024 * 1024;
 
 export function getAvatarFileError(file: File): string | null {
-	if (!allowedImageTypes.has(file.type.toLowerCase())) {
-		return 'Formato de imagem inválido. Use JPG, PNG, WEBP ou GIF.';
-	}
+	if (!allowedImageTypes.has(file.type.toLowerCase()))
+		return 'Formato de imagem inv�lido. Use JPG, PNG, WEBP ou GIF.';
 
-	if (file.size > MAX_AVATAR_SIZE_BYTES) {
-		return `A imagem deve ter no máximo ${MAX_AVATAR_SIZE_MB}MB.`;
-	}
+	if (file.size > MAX_AVATAR_SIZE_BYTES)
+		return `A imagem deve ter no m�ximo ${MAX_AVATAR_SIZE_MB}MB.`;
 
 	return null;
 }
@@ -31,23 +29,19 @@ export async function uploadAvatarFile(file: File): Promise<string> {
 	const error = getAvatarFileError(file);
 	if (error) throw new Error(error);
 
-	const { uploadUrl, fileUrl, fields } = await api.users.requestAvatarUploadUrl.mutate({
+	const { uploadUrl, fileUrl, fields } = await users.requestAvatarUploadUrl.mutate({
 		contentType: file.type,
 		contentLength: file.size,
 	});
 
-	if (!uploadUrl || uploadUrl === 'SIGNED_URL_PLACEHOLDER') {
-		return fileUrl;
-	}
+	if (!uploadUrl || uploadUrl === 'SIGNED_URL_PLACEHOLDER') return fileUrl;
 
 	const hasPostFields = fields && Object.keys(fields).length > 0;
 	const response = hasPostFields
 		? await uploadViaPresignedPost(uploadUrl, fields, file)
 		: await uploadViaPresignedPut(uploadUrl, file);
 
-	if (!response.ok) {
-		throw new Error('Error uploading avatar.');
-	}
+	if (!response.ok) throw new Error('Error uploading avatar.');
 
 	return fileUrl;
 }

@@ -1,6 +1,6 @@
 import { DynamicForm, type Field, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Heading, Text } from '@chakra-ui/react';
-import { api } from '@root/core/api';
+import { poems } from '@root/features/poems/api/endpoints';
 import { UserDedicationCombobox } from '@root/features/users/public/components/UserDedicationCombobox';
 import { useUsersPreview } from '@root/features/users/public/hooks/useUsersPreview';
 import { useState } from 'react';
@@ -44,7 +44,7 @@ export function CreatePoemForm() {
 
 			try {
 				const audioUrl = await uploadPoemAudioFile(createdPoem.id, fileToUpload);
-				await api.poems.updatePoemAudio.mutate({
+				await poems.updatePoemAudio.mutate({
 					poemId: String(createdPoem.id),
 					audioUrl,
 				});

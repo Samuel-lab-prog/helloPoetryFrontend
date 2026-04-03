@@ -1,9 +1,9 @@
-import { api } from '@root/core/api';
+import { users } from '@root/features/users/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 export function useUsersPreview() {
 	const query = useQuery({
-		...api.users.getUsersPreview.query({
+		...users.getUsersPreview.query({
 			limit: 50,
 		}),
 		staleTime: 5 * 60 * 1000,

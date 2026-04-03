@@ -1,5 +1,6 @@
-import { api, apiKeys } from '@root/core/api';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { notifications } from '@root/features/notifications/api/endpoints';
+import { notificationsKeys } from '@root/features/notifications/api/keys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -55,21 +56,21 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	);
 
 	const query = useQuery({
-		queryKey: apiKeys.notifications.page({ onlyUnread, limit: 50 }),
+		queryKey: notificationsKeys.page({ onlyUnread, limit: 50 }),
 		enabled: !!clientId,
 		staleTime: 1000 * 60 * 5,
 		queryFn: () =>
-			api.notifications.getNotifications
+			notifications.getNotifications
 				.query({ onlyUnread, limit: 50 })
 				.queryFn() as Promise<NotificationsPageType>,
 	});
 
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
-			api.notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
+			notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (_, notificationId) => {
 			const cachedNotifications = queryClient.getQueriesData<NotificationsPageType>({
-				queryKey: apiKeys.notifications.all(),
+				queryKey: notificationsKeys.all(),
 			});
 			const wasUnread = cachedNotifications.some(([, cachedPage]) =>
 				cachedPage?.notifications.some(
@@ -80,27 +81,27 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			if (wasUnread) decrementUnreadNotificationsCount(1);
 
 			queryClient.invalidateQueries({
-				queryKey: apiKeys.notifications.all(),
+				queryKey: notificationsKeys.all(),
 			});
 		},
 	});
 
 	const markAllReadMutation = useMutation({
-		mutationFn: () => api.notifications.markAllAsRead.mutate(),
+		mutationFn: () => notifications.markAllAsRead.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
 			queryClient.invalidateQueries({
-				queryKey: apiKeys.notifications.all(),
+				queryKey: notificationsKeys.all(),
 			});
 		},
 	});
 
 	const deleteAllMutation = useMutation({
-		mutationFn: () => api.notifications.deleteAllNotifications.mutate(),
+		mutationFn: () => notifications.deleteAllNotifications.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
 			queryClient.setQueriesData<NotificationsPageType>(
-				{ queryKey: apiKeys.notifications.all() },
+				{ queryKey: notificationsKeys.all() },
 				(old) =>
 					old
 						? {
@@ -112,18 +113,18 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 						: old,
 			);
 			queryClient.invalidateQueries({
-				queryKey: apiKeys.notifications.all(),
+				queryKey: notificationsKeys.all(),
 			});
 		},
 	});
 
 	const deleteMutation = useMutation({
 		mutationFn: (id: number) =>
-			api.notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
+			notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (notification) => {
 			if (!notification.readAt) decrementUnreadNotificationsCount(1);
 			queryClient.invalidateQueries({
-				queryKey: apiKeys.notifications.all(),
+				queryKey: notificationsKeys.all(),
 			});
 		},
 	});
