@@ -10,7 +10,7 @@ export * from './public/hooks/useGetMyPoems';
 export * from './public/hooks/useGetPoemsMinimal';
 export * from './public/hooks/useGetRecentPoems';
 export * from './public/hooks/useManagePoemCollections';
-export * from './public/hooks/useManageSavedPoems';
+export { useSavedPoems } from './public/hooks/useManageSavedPoems';
 export * from './types';
 export * from './use-cases/admin/Page';
 export * from './use-cases/create-poem/components/constants';

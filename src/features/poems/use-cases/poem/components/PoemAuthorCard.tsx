@@ -14,7 +14,7 @@ type PoemAuthorCardProps = {
 		commentsCount: number;
 	};
 	embedded?: boolean;
-	children: ReactNode;
+	children?: ReactNode;
 };
 
 export const PoemAuthorCard = memo(function PoemAuthorCard({
@@ -70,15 +70,17 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 				</Flex>
 			</Flex>
 
-			<Flex
-				w='full'
-				gap={2}
-				direction={{ base: 'column', md: 'row' }}
-				align={{ base: 'stretch', md: 'center' }}
-				justify='space-between'
-			>
-				{children}
-			</Flex>
+			{children && (
+				<Flex
+					w='full'
+					gap={2}
+					direction={{ base: 'column', md: 'row' }}
+					align={{ base: 'stretch', md: 'center' }}
+					justify='space-between'
+				>
+					{children}
+				</Flex>
+			)}
 		</Flex>
 	);
 });

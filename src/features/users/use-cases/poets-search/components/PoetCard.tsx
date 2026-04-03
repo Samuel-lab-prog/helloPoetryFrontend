@@ -1,4 +1,4 @@
-import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Flex, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export type PoetCardData = {
@@ -14,9 +14,8 @@ type PoetCardProps = {
 
 export function PoetCard({ poet }: PoetCardProps) {
 	return (
-		<Box
-			as={NavLink}
-			to={`/authors/${poet.id}`}
+		<Link
+			asChild
 			display='block'
 			w='full'
 			pt={2}
@@ -27,20 +26,22 @@ export function PoetCard({ poet }: PoetCardProps) {
 				borderColor: 'purple.600',
 			}}
 		>
-			<Flex align='center' justify='space-between' gap={2}>
-				<Flex align='center' gap={3}>
-					<Avatar.Root size='lg'>
-						<Avatar.Image src={poet.avatarUrl ?? undefined} />
-						<Avatar.Fallback name={poet.nickname} />
-					</Avatar.Root>
-					<Flex direction='column'>
-						<Text textStyle='small'>{poet.name}</Text>
-						<Text textStyle='small' color='pink.200'>
-							@{poet.nickname}
-						</Text>
+			<NavLink to={`/authors/${poet.id}`}>
+				<Flex align='center' justify='space-between' gap={2}>
+					<Flex align='center' gap={3}>
+						<Avatar.Root size='lg'>
+							<Avatar.Image src={poet.avatarUrl ?? undefined} />
+							<Avatar.Fallback name={poet.nickname} />
+						</Avatar.Root>
+						<Flex direction='column'>
+							<Text textStyle='small'>{poet.name}</Text>
+							<Text textStyle='small' color='pink.200'>
+								@{poet.nickname}
+							</Text>
+						</Flex>
 					</Flex>
 				</Flex>
-			</Flex>
-		</Box>
+			</NavLink>
+		</Link>
 	);
 }

@@ -118,13 +118,13 @@ export function ModerationPoemCard({
 					</VStack>
 				</Surface>
 
-				{poem.AudioUrl ? (
+				{poem.audioUrl ? (
 					<Surface variant='panel'>
 						<VStack align='stretch' gap={3}>
 							<Text textStyle='small' color='pink.200' textTransform='uppercase'>
 								Audio
 							</Text>
-							<PoemAudioPlayer src={poem.AudioUrl} title='Poem Audio' />
+							<PoemAudioPlayer src={poem.audioUrl} title='Poem Audio' />
 						</VStack>
 					</Surface>
 				) : null}

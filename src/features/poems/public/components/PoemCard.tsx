@@ -58,7 +58,7 @@ export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
 					{poem.title}
 				</Card.Title>
 				{poem.excerpt && (
-					<Text textStyle='smaller' color='pink.100' opacity={0.9} noOfLines={3}>
+					<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
 						{poem.excerpt}
 					</Text>
 				)}

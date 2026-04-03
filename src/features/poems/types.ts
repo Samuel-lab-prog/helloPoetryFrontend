@@ -1,4 +1,7 @@
-import type { FullPoem as FullPoemType } from '@features/poems/api/types';
+import type {
+	FullPoem as FullPoemType,
+	PoemPreview as PoemPreviewType,
+} from '@features/poems/api/types';
 
 export type {
 	FullPoem as FullPoemType,

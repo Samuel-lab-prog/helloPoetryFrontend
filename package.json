@@ -11,7 +11,7 @@
 		"lint:fix": "eslint . --fix --cache",
 		"format": "prettier --check . --cache",
 		"format:fix": "prettier --write . --cache",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
 		"generate": "cd ./src/core/themes/ && npx @chakra-ui/cli typegen ./main.ts",
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",

@@ -1,15 +1,14 @@
 import { formatRelativeTime } from '@BaseComponents';
-import { Avatar, Badge, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Avatar, Badge, Box, Flex, HStack, Link, Text, VStack } from '@chakra-ui/react';
+import type { NotificationItem } from '@root/features/notifications/api/types';
 import { NavLink } from 'react-router-dom';
-
-import type { NotificationItem } from '../hooks/useNotificationsPanel';
 
 function getNotificationBody(item: NotificationItem): string {
 	const body = item.data?.body?.trim();
 	if (body) return body;
-	if (item.aggregatedCount > 1) {
+	if (item.aggregatedCount > 1)
 		return `You received ${item.aggregatedCount} notifications of this type.`;
-	}
+
 	return 'No additional details.';
 }
 
@@ -92,29 +91,33 @@ export function NotificationCard({ item, onMarkAsRead, hideTopBorder }: Notifica
 		</Box>
 	);
 
-	return (
-		<Box
-			as={link ? NavLink : 'div'}
-			to={link ?? undefined}
-			display='block'
-			borderTop={hideTopBorder ? 'none' : '1px solid'}
-			borderColor={hideTopBorder ? 'transparent' : 'purple.700'}
-			onClick={() => {
-				if (!link) return;
-				if (item.readAt) return;
-				void onMarkAsRead(item.id);
-			}}
-			_hover={
-				link
-					? {
-							bg: 'rgba(255, 255, 255, 0.03)',
-							borderColor: 'purple.600',
-						}
-					: undefined
-			}
-			transition={link ? 'background 0.2s ease, border-color 0.2s ease' : undefined}
-		>
-			{cardContent}
-		</Box>
-	);
+	const sharedProps = {
+		display: 'block',
+		borderTop: hideTopBorder ? 'none' : '1px solid',
+		borderColor: hideTopBorder ? 'transparent' : 'purple.700',
+		_hover: link
+			? {
+					bg: 'rgba(255, 255, 255, 0.03)',
+					borderColor: 'purple.600',
+				}
+			: undefined,
+		transition: link ? 'background 0.2s ease, border-color 0.2s ease' : undefined,
+	} as const;
+
+	if (link) {
+		return (
+			<Link
+				asChild
+				{...sharedProps}
+				onClick={() => {
+					if (item.readAt) return;
+					void onMarkAsRead(item.id);
+				}}
+			>
+				<NavLink to={link}>{cardContent}</NavLink>
+			</Link>
+		);
+	}
+
+	return <Box {...sharedProps}>{cardContent}</Box>;
 }

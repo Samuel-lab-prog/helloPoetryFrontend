@@ -23,8 +23,6 @@ type CommentsSectionProps = {
 	onPublishComment: () => Promise<void>;
 	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
 	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
-	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
 	fetchReplies: (parentId: number, options?: { force?: boolean }) => Promise<PoemCommentType[]>;
 	prefetchReplies: (parentId: number) => Promise<void>;
 };

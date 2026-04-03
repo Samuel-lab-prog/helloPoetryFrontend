@@ -1,4 +1,6 @@
 export type NotificationPayload = {
+	avatarUrl?: string | null;
+	actorAvatarUrl?: string | null;
 	title?: string;
 	body?: string;
 	poemId?: number;

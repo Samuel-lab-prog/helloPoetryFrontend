@@ -12,6 +12,6 @@ export function parsePoemId(rawId: string | undefined) {
 export function useDedicationUsers(poem?: Poem | null): DedicationUser[] {
 	return useMemo(() => {
 		if (!poem?.toUsers?.length) return [];
-		return poem.toUsers.filter((user): user is DedicationUser => Number.isInteger(user.id));
+		return poem.toUsers.filter((user) => Number.isInteger(user.id));
 	}, [poem?.toUsers]);
 }

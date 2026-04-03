@@ -44,7 +44,7 @@ export function usePoemLike(poemId: number) {
 				likedAt: new Date().toISOString(),
 			}),
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			if (context?.previousPoem) {
 				queryClient.setQueryData(poemKey, context.previousPoem);
@@ -67,7 +67,7 @@ export function usePoemLike(poemId: number) {
 				likedAt: new Date().toISOString(),
 			}),
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			if (context?.previousPoem) {
 				queryClient.setQueryData(poemKey, context.previousPoem);
@@ -76,7 +76,7 @@ export function usePoemLike(poemId: number) {
 	});
 
 	function getErrorMessage() {
-		const error = (likeMutation.error || unlikeMutation.error) as AppErrorType | null;
+		const error = (likeMutation.error || unlikeMutation.error) as unknown as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 404) return 'Poem not found.';
 		if (error.statusCode === 409) return '';

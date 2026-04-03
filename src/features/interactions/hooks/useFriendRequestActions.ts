@@ -79,7 +79,9 @@ export function useFriendRequestActions() {
 	});
 
 	function getErrorMessage() {
-		const err = (acceptMutation.error || rejectMutation.error) as AppErrorType | undefined;
+		const err = (acceptMutation.error || rejectMutation.error) as unknown as
+			| AppErrorType
+			| undefined;
 		if (!err) return '';
 		if (err.statusCode === 404) return 'Request not found.';
 		if (err.statusCode === 403) return 'You cannot perform this action.';

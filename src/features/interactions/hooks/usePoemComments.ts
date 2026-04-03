@@ -212,7 +212,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			return context;
 		},
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			restoreCommentQueries(queryClient, context);
 		},
@@ -243,7 +243,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			return context;
 		},
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			restoreCommentQueries(queryClient, context);
 		},
@@ -275,15 +275,19 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		isCommentsError: query.isError,
 		createComment: mutation.mutateAsync,
 		isCreatingComment: mutation.isPending,
-		createCommentError: getCreateCommentErrorMessage(mutation.error as AppErrorType | null),
+		createCommentError: getCreateCommentErrorMessage(
+			mutation.error as unknown as AppErrorType | null,
+		),
 		deleteComment: (args: CommentMutationParams) => deleteMutation.mutateAsync(args),
 		isDeletingComment: deleteMutation.isPending,
-		deleteCommentError: getDeleteCommentErrorMessage(deleteMutation.error as AppErrorType | null),
+		deleteCommentError: getDeleteCommentErrorMessage(
+			deleteMutation.error as unknown as AppErrorType | null,
+		),
 		likeComment: (args: CommentMutationParams) => likeCommentMutation.mutateAsync(args),
 		unlikeComment: (args: CommentMutationParams) => unlikeCommentMutation.mutateAsync(args),
 		updatingLikeCommentId,
 		likeCommentError: getToggleLikeErrorMessage(
-			(likeCommentMutation.error || unlikeCommentMutation.error) as AppErrorType | null,
+			(likeCommentMutation.error || unlikeCommentMutation.error) as unknown as AppErrorType | null,
 		),
 		fetchReplies,
 		prefetchReplies,

@@ -1,49 +1,9 @@
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { notifications } from '@root/features/notifications/api/endpoints';
 import { notificationsKeys } from '@root/features/notifications/api/keys';
+import type { NotificationItem, NotificationsPage } from '@root/features/notifications/api/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
-
-type NotificationPayload = {
-	avatarUrl?: string | null;
-	actorAvatarUrl?: string | null;
-	title?: string;
-	body?: string;
-	poemId?: number;
-	poemSlug?: string;
-	poemTitle?: string;
-	commentId?: number;
-	parentCommentId?: number;
-	commenterNickname?: string;
-	likerNickname?: string;
-	dedicatorNickname?: string;
-	requesterId?: number;
-	requesterNickname?: string;
-	newFriendId?: number;
-	newFriendNickname?: string;
-	replierId?: number;
-	replierNickname?: string;
-};
-
-export type NotificationItem = {
-	id: number;
-	userId: number;
-	type: string;
-	actorId: number | null;
-	entityId: number | null;
-	entityType: 'POEM' | 'COMMENT' | 'USER' | null;
-	aggregatedCount: number;
-	data: NotificationPayload | null;
-	createdAt: string;
-	updatedAt: string;
-	readAt: string | null;
-};
-
-export type NotificationsPageType = {
-	notifications: NotificationItem[];
-	hasMore: boolean;
-	nextCursor?: number;
-};
 
 export function useNotificationsPanel(onlyUnread: boolean) {
 	const queryClient = useQueryClient();
@@ -62,14 +22,14 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		queryFn: () =>
 			notifications.getNotifications
 				.query({ onlyUnread, limit: 50 })
-				.queryFn() as Promise<NotificationsPageType>,
+				.queryFn() as Promise<NotificationsPage>,
 	});
 
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
 			notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onSuccess: (_, notificationId) => {
-			const cachedNotifications = queryClient.getQueriesData<NotificationsPageType>({
+			const cachedNotifications = queryClient.getQueriesData<NotificationsPage>({
 				queryKey: notificationsKeys.all(),
 			});
 			const wasUnread = cachedNotifications.some(([, cachedPage]) =>
@@ -100,17 +60,15 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: () => notifications.deleteAllNotifications.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
-			queryClient.setQueriesData<NotificationsPageType>(
-				{ queryKey: notificationsKeys.all() },
-				(old) =>
-					old
-						? {
-								...old,
-								notifications: [],
-								hasMore: false,
-								nextCursor: undefined,
-							}
-						: old,
+			queryClient.setQueriesData<NotificationsPage>({ queryKey: notificationsKeys.all() }, (old) =>
+				old
+					? {
+							...old,
+							notifications: [],
+							hasMore: false,
+							nextCursor: undefined,
+						}
+					: old,
 			);
 			queryClient.invalidateQueries({
 				queryKey: notificationsKeys.all(),

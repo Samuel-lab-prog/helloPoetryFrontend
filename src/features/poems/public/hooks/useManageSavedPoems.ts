@@ -43,7 +43,7 @@ export function useSavedPoems(enabled = true) {
 			return { previous };
 		},
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			if (context?.previous) {
 				queryClient.setQueryData(savedKey, context.previous);
@@ -68,7 +68,7 @@ export function useSavedPoems(enabled = true) {
 			return { previous };
 		},
 		onError: (error, _variables, context) => {
-			const appError = error as AppErrorType;
+			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
 			if (context?.previous) {
 				queryClient.setQueryData(savedKey, context.previous);
@@ -81,7 +81,7 @@ export function useSavedPoems(enabled = true) {
 	});
 
 	function getErrorMessage() {
-		const error = (saveMutation.error || unsaveMutation.error) as AppErrorType | null;
+		const error = (saveMutation.error || unsaveMutation.error) as unknown as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Sign in to save poems.';
 		if (error.statusCode === 404) return 'Poem not found.';
@@ -95,6 +95,7 @@ export function useSavedPoems(enabled = true) {
 		savePoem: saveMutation.mutateAsync,
 		unsavePoem: unsaveMutation.mutateAsync,
 		updatingSavedPoemId,
+		isSavingPoem: updatingSavedPoemId !== null,
 		saveError: getErrorMessage(),
 	};
 }
