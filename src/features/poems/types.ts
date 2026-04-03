@@ -14,24 +14,6 @@ export type {
 
 export type PoemMinimalDataType = Pick<FullPoemType, 'id' | 'title'>;
 
-export type FeedPoemType = {
-	id: number;
-	content: string;
-	title: string;
-	slug: string;
-	excerpt?: string | null;
-	tags: string[];
-	createdAt: string | Date;
-	likesCount: number;
-	commentsCount: number;
-	author: {
-		id: number;
-		name: string;
-		nickname: string;
-		avatarUrl: string;
-	};
-};
-
 export type AuthorProfileType = {
 	id: number;
 	nickname: string;
@@ -61,4 +43,3 @@ export type PaginatedMinimalPoemsType = {
 		title: string;
 	}[];
 };
-

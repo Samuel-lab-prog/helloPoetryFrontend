@@ -18,8 +18,6 @@ export * from './use-cases/create-poem/components/CreatePoemForm';
 export * from './use-cases/create-poem/hooks/useCreatePoemForm';
 export * from './use-cases/create-poem/Page';
 export * from './use-cases/create-poem/utils/poemAudioUpload';
-export * from './use-cases/home/hooks/useHomeFeed';
-export * from './use-cases/home/Page';
 export * from './use-cases/manage-poem/components/DeletePoemForm';
 export * from './use-cases/manage-poem/components/UpdatePoemForm';
 export * from './use-cases/manage-poem/hooks/delete-poem-form/index';

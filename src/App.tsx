@@ -29,7 +29,7 @@ function renderLazyPage(Component: ComponentType) {
 }
 
 const HomePage = lazyPage(
-	() => import('./features/poems/use-cases/home/Page'),
+	() => import('./features/feed/use-cases/home/Page'),
 	(module) => module.HomePage,
 );
 const PoemPage = lazyPage(
