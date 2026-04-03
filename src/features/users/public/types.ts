@@ -1,3 +1,5 @@
+import type { PoemPreview } from '@features/poems/public/types';
+
 export type UsersSearchParams = {
 	limit?: number;
 	cursor?: string;
@@ -103,5 +105,3 @@ export type AvatarUploadUrlResponse = {
 
 export type UserRole = 'user' | 'admin' | 'moderator';
 export type UserStatus = 'active' | 'banned' | 'suspended';
-import type { PoemPreview } from '@features/poems/public/types';
-

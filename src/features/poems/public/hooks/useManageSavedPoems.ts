@@ -6,13 +6,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 
-export type SavedPoemType = {
-	id: number;
-	title: string;
-	slug: string;
-	savedAt: string;
-};
-
 export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);

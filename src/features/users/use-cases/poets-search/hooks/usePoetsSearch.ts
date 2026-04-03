@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { users } from '../../../api/endpoints';
-import type { UsersPage } from '../../../api/types';
+import type { UsersPage } from '../../../public/types';
 
 export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();

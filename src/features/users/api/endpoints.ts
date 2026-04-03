@@ -1,7 +1,7 @@
 import { createMutationEndpoint, createQueryEndpoint } from '@core/api/utils';
 import { createHTTPRequest } from '@Utils';
 
-import { userKeys } from './keys';
+import { userKeys } from '../api/keys';
 import type {
 	AvatarUploadUrlRequest,
 	AvatarUploadUrlResponse,
@@ -12,7 +12,7 @@ import type {
 	UsersPage,
 	UsersPreviewParams,
 	UsersSearchParams,
-} from './types';
+} from '../public/types';
 
 const checkNickname = createQueryEndpoint<[string], boolean>({
 	key: userKeys.checkNickname,

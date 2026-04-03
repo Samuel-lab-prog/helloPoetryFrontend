@@ -1,4 +1,4 @@
-import type { UserRole } from '@features/users/api/types';
+import type { UserRole } from '@features/users/public/types';
 
 import { useAuthClientStore } from '../../public/stores/useAuthClientStore';
 

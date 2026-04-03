@@ -7,7 +7,7 @@ import { poems } from '@features/poems/api/endpoints';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
 import { users } from '@features/users/api/endpoints';
 import { userKeys } from '@features/users/api/keys';
-import type { UserPrivateProfile, UserRole, UserStatus } from '@features/users/api/types';
+import type { UserPrivateProfile, UserRole, UserStatus } from '@features/users/public/types';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
