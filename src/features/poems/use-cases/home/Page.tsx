@@ -1,7 +1,7 @@
-﻿import { Field, Flex, Input, VStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Flex, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Footer } from '@root/core/base';
+import { Footer, SearchInput } from '@root/core/base';
 import { api } from '@root/core/api';
 import { useIsAuthenticated } from '@root/features/auth/public/hooks/useIsAuthenticated';
 import { HomeFeed } from './components/HomeFeed';
@@ -19,15 +19,6 @@ export function HomePage() {
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
 	});
 	const isSearching = debouncedSearch.trim().length > 0;
-
-	useEffect(() => {
-		const timeoutId = window.setTimeout(() => {
-			setDebouncedSearch(searchTitle);
-		}, 250);
-
-		return () => window.clearTimeout(timeoutId);
-	}, [searchTitle]);
-
 	const searchQuery = useQuery<PaginatedPoems>({
 		...api.poems.getPoems.query({
 			limit: POEMS_FEED_LIMIT,
@@ -55,33 +46,13 @@ export function HomePage() {
 				px={{ base: 4, md: 6 }}
 			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 6, md: 8 }}>
-					<Field.Root>
-						<Field.Label textStyle='small' fontWeight='medium' color='text'>
-							Search poems
-						</Field.Label>
-						<Input
-							value={searchTitle}
-							onChange={(event) => setSearchTitle(event.target.value)}
-							placeholder='Search by title'
-							textStyle='small'
-							transition='all 0.22s ease'
-							bg='rgba(255, 255, 255, 0.03)'
-							borderColor='border'
-							_hover={{
-								borderColor: 'borderHover',
-								bg: 'rgba(255, 255, 255, 0.05)',
-							}}
-							_focusVisible={{
-								borderColor: 'pink.300',
-								boxShadow: '0 0 0 3px rgba(255, 143, 189, 1)',
-								bg: 'rgba(255, 255, 255, 0.06)',
-							}}
-							_focus={{
-								borderColor: 'pink.300',
-								bg: 'rgba(255, 255, 255, 0.06)',
-							}}
-						/>
-					</Field.Root>
+					<SearchInput
+						label='Search poems'
+						value={searchTitle}
+						onValueChange={setSearchTitle}
+						onDebouncedChange={setDebouncedSearch}
+						placeholder='Search by title'
+					/>
 
 					<HomeFeed
 						poems={displayedPoems}
@@ -96,3 +67,4 @@ export function HomePage() {
 		</Flex>
 	);
 }
+

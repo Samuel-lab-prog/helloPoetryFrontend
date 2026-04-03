@@ -4,11 +4,25 @@ import { Check, UserPlus, X } from 'lucide-react';
 import { Surface } from '@root/core/base';
 import type { FriendRequestsSectionProps } from './types';
 
+/**
+ * Renders the section for displaying the user's received friend requests.
+ * @param friendRequests - The list of received friend requests to display. The type is **FriendRequests**
+ * @param viewAllHref - The URL to view all friend requests if there are more than the displayed ones.[optional]
+ * @param isFriendRequestsLoading - Indicates if the friend requests are currently being loaded.
+ * @param isFriendRequestsError - Indicates if there was an error loading the friend requests.
+ * @param isAccepting - Indicates if a friend request is currently being accepted.
+ * @param isRejecting - Indicates if a friend request is currently being rejected.
+ * @param errorMessage - An error message to display if there was an error accepting or rejecting a friend request.
+ * @param onAcceptRequest - Callback function to accept a friend request when the "Accept" action is selected.
+ * @param onRejectRequest - Callback function to reject a friend request when the "Reject" action is selected.
+ * @returns A React component that displays the list of received friend requests with options to accept or reject each request, along with loading and error states.
+ */
 export function FriendRequestsSection({
 	friendRequests,
 	viewAllHref,
 	isFriendRequestsLoading,
 	isFriendRequestsError,
+	isSearchingFriendRequests,
 	isAccepting,
 	isRejecting,
 	errorMessage,
@@ -48,7 +62,9 @@ export function FriendRequestsSection({
 				{!isFriendRequestsLoading &&
 					!isFriendRequestsError &&
 					friendRequests.received.length === 0 && (
-						<Text textStyle='small'>No pending requests.</Text>
+						<Text textStyle='small'>
+							{isSearchingFriendRequests ? 'No requests found for your search.' : 'No pending requests.'}
+						</Text>
 					)}
 				{isFriendRequestsError && (
 					<Text textStyle='small' color='red.400'>

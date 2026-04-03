@@ -73,19 +73,19 @@ const MyProfilePage = lazyPage(
 	(module) => module.MyProfilePage,
 );
 const MyProfileCollectionsPage = lazyPage(
-	() => import('./features/users/pages/MyProfileCollectionsPage'),
+	() => import('./features/users/use-cases/my-profile-collections/Page'),
 	(module) => module.MyProfileCollectionsPage,
 );
 const MyProfileFriendRequestsPage = lazyPage(
-	() => import('./features/users/pages/MyProfileFriendRequestsPage'),
+	() => import('./features/users/use-cases/my-profile-friend-requests/Page'),
 	(module) => module.MyProfileFriendRequestsPage,
 );
 const MyProfilePoemsPage = lazyPage(
-	() => import('./features/users/pages/MyProfilePoemsPage'),
+	() => import('./features/users/use-cases/my-profile-poems/Page'),
 	(module) => module.MyProfilePoemsPage,
 );
 const MyProfileSavedPoemsPage = lazyPage(
-	() => import('./features/users/pages/MyProfileSavedPoemsPage'),
+	() => import('./features/users/use-cases/my-profile-saved-poems/Page'),
 	(module) => module.MyProfileSavedPoemsPage,
 );
 const NotificationsPage = lazyPage(

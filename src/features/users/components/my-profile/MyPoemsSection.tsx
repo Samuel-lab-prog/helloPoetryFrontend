@@ -14,53 +14,25 @@ import { NavLink } from 'react-router-dom';
 import { Surface, formatDate, translateModerationStatus } from '@root/core/base';
 import type { MyPoemsSectionProps } from './types';
 
-function translateStatus(status: string) {
-	switch (status) {
-		case 'draft':
-			return 'Draft';
-		case 'published':
-			return 'Published';
-		default:
-			return status;
-	}
-}
-
-function translateVisibility(visibility: string) {
-	switch (visibility) {
-		case 'public':
-			return 'Public';
-		case 'friends':
-			return 'Friends';
-		case 'private':
-			return 'Private';
-		case 'unlisted':
-			return 'Unlisted';
-		default:
-			return visibility;
-	}
-}
-
-function getModerationTextColor(status: string) {
-	switch (status) {
-		case 'approved':
-			return 'green.300';
-		case 'pending':
-			return 'yellow.300';
-		case 'rejected':
-			return 'red.500';
-		case 'removed':
-			return 'red.300';
-		default:
-			return 'gray.300';
-	}
-}
-
+/**
+ * Renders the section for displaying the user's poems.
+ * @param myPoems - The list of the user's poems to display. The type is **FullPoem**
+ * @param totalPoemsCount - The total count of the user's poems (used for pagination).
+ * @param viewAllHref - The URL to view all poems if there are more than the displayed ones.[optional]
+ * @param isLoadingMyPoems - Indicates if the poems are currently being loaded.
+ * @param isMyPoemsError - Indicates if there was an error loading the poems.
+ * @param onOpenPoem - Callback function to open a poem when the "Open" action is selected.
+ * @param onUpdatePoem - Callback function to update a poem when the "Edit" action is selected.
+ * @param onDeletePoem - Callback function to delete a poem when the "Delete" action is selected.
+ * @returns 
+ */
 export function MyPoemsSection({
 	myPoems,
 	totalPoemsCount,
 	viewAllHref,
 	isLoadingMyPoems,
 	isMyPoemsError,
+	isSearchingMyPoems,
 	onOpenPoem,
 	onUpdatePoem,
 	onDeletePoem,
@@ -96,7 +68,9 @@ export function MyPoemsSection({
 			<Flex direction='column' gap={3}>
 				{isLoadingMyPoems && <Text textStyle='small'>Loading your poems...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
-					<Text textStyle='small'>You have not published any poems yet.</Text>
+					<Text textStyle='small'>
+						{isSearchingMyPoems ? 'No poems found for your search.' : 'You have not published any poems yet.'}
+					</Text>
 				)}
 				{isMyPoemsError && (
 					<Text textStyle='small' color='red.400'>
@@ -201,4 +175,45 @@ export function MyPoemsSection({
 			</Flex>
 		</Surface>
 	);
+}
+
+function translateStatus(status: string) {
+	switch (status) {
+		case 'draft':
+			return 'Draft';
+		case 'published':
+			return 'Published';
+		default:
+			return status;
+	}
+}
+
+function translateVisibility(visibility: string) {
+	switch (visibility) {
+		case 'public':
+			return 'Public';
+		case 'friends':
+			return 'Friends';
+		case 'private':
+			return 'Private';
+		case 'unlisted':
+			return 'Unlisted';
+		default:
+			return visibility;
+	}
+}
+
+function getModerationTextColor(status: string) {
+	switch (status) {
+		case 'approved':
+			return 'green.300';
+		case 'pending':
+			return 'yellow.300';
+		case 'rejected':
+			return 'red.500';
+		case 'removed':
+			return 'red.300';
+		default:
+			return 'gray.300';
+	}
 }

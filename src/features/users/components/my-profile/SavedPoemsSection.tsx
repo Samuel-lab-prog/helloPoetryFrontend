@@ -11,6 +11,7 @@ export function SavedPoemsSection({
 	isLoadingSavedPoems,
 	isSavingPoem = false,
 	saveError = '',
+	isSearchingSavedPoems,
 	onUnsavePoem,
 }: SavedPoemsSectionProps) {
 	return (
@@ -44,7 +45,9 @@ export function SavedPoemsSection({
 			<Flex direction='column' gap={3}>
 				{isLoadingSavedPoems && <Text textStyle='small'>Loading saved poems...</Text>}
 				{!isLoadingSavedPoems && savedPoems.length === 0 && (
-					<Text textStyle='small'>You have not saved any poems yet.</Text>
+					<Text textStyle='small'>
+						{isSearchingSavedPoems ? 'No poems found for your search.' : 'You have not saved any poems yet.'}
+					</Text>
 				)}
 				{!isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (
 					<Text textStyle='smaller' color='pink.200'>

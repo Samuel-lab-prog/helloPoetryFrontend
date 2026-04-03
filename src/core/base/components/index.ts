@@ -23,6 +23,7 @@ export * from './forms/form-button/Component';
 export * from './forms/form-field/Component';
 export * from './forms/form-field/hooks';
 export * from './forms/form-field/types';
+export * from './forms/search-input/Component';
 export * from './forms/select-field/Component';
 export * from './forms/styles/FieldContainerSurface';
 export * from './forms/styles/FormCardSurface';

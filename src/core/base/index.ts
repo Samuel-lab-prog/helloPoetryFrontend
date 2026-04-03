@@ -17,6 +17,7 @@ export * from './components/forms/form-field/Component';
 export * from './components/forms/file-field/Component';
 export * from './components/forms/audio-field/Component';
 export * from './components/forms/select-field/Component';
+export * from './components/forms/search-input/Component';
 export * from './components/ui/color-mode';
 export * from './components/ui/provider';
 export * from './components/ui/toaster';

@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { usePoemCollections } from '@root/features/poems/public/hooks/useManagePoemCollections';
 import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
 import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedPoems';
-import { useMyProfile } from '../hooks/useMyProfile';
-import { ProfileAccessGate } from '../components/my-profile/ProfileAccessGate';
-import { CollectionsSection } from '../components/my-profile/CollectionsSection';
+import { useMyProfile } from '../../hooks/useMyProfile';
+import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';
+import { CollectionsSection } from '../../components/my-profile/CollectionsSection';
 
 export function MyProfileCollectionsPage() {
 	const { profile, isMissingClient, isLoading: isProfileLoading } = useMyProfile();
@@ -43,10 +43,11 @@ export function MyProfileCollectionsPage() {
 			<Box as='section' w='full' maxW='5xl'>
 				<Flex
 					mb={8}
-					align={{ base: 'start', md: 'center' }}
+					align='center'
 					justify='space-between'
-					direction={{ base: 'column', md: 'row' }}
+					direction='row'
 					gap={3}
+					wrap='wrap'
 				>
 					<Heading as='h1' textStyle='h2'>
 						All my collections

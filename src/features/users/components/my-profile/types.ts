@@ -20,6 +20,7 @@ export type FriendRequestsSectionProps = {
 	viewAllHref?: string;
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;
+	isSearchingFriendRequests?: boolean;
 	isAccepting: boolean;
 	isRejecting: boolean;
 	errorMessage: string;
@@ -33,6 +34,7 @@ export type MyPoemsSectionProps = {
 	viewAllHref?: string;
 	isLoadingMyPoems: boolean;
 	isMyPoemsError: boolean;
+	isSearchingMyPoems?: boolean;
 	onOpenPoem: (slug: string, id: number) => void;
 	onUpdatePoem: (id: number) => void;
 	onDeletePoem: (id: number) => void;
@@ -66,5 +68,6 @@ export type SavedPoemsSectionProps = {
 	isLoadingSavedPoems: boolean;
 	isSavingPoem?: boolean;
 	saveError?: string;
+	isSearchingSavedPoems?: boolean;
 	onUnsavePoem?: (poemId: number) => Promise<void>;
 };
