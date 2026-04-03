@@ -3,6 +3,16 @@ import type { FetchQueryOptions } from '@tanstack/react-query';
 
 import { queryClient } from '../queryClient';
 
+/**
+ * Helper for defining query keys with type safety and autocompletion.
+ * @param keys An object where each value is a function that generates a query key array.
+ * @returns The same object, typed for better inference when used in query endpoint definitions.
+ * @example
+ * const queryKeys = createQueryKeys({
+ *   user: (id: string) => ['user', id] as const,
+ *   posts: () => ['posts'] as const,
+ * });
+ */
 export function createQueryKeys<T extends Record<string, (...args: any[]) => readonly unknown[]>>(
 	keys: T,
 ) {
@@ -24,6 +34,16 @@ type QueryFactoryConfig<TArgs extends unknown[], TResult> = {
  * - cache invalidation,
  * - cache reads/writes,
  * - optimistic updates.
+ * @param config The configuration for the query endpoint, including key generation and fetch function.
+ * @returns An object with methods for working with the query endpoint.
+ * @example
+ * const userEndpoint = createQueryEndpoint({
+ *   key: (id: string) => ['user', id] as const,
+ *   fn: async (id: string) => {
+ * 	 const response = await fetch(`/api/user/${id}`);
+ * 	 return response.json();
+ *   },
+ * });
  */
 export function createQueryEndpoint<TArgs extends unknown[], TResult>(
 	config: QueryFactoryConfig<TArgs, TResult>,
@@ -125,6 +145,22 @@ type MutationFactoryConfig<TInput, TResult> = {
 
 /**
  * Builds a mutation endpoint wrapper with optional post-mutation invalidation.
+ * Provides helpers for:
+ * - executing mutations,
+ * - invalidating related queries after mutation.
+ * 
+ * @param config The configuration for the mutation endpoint, including the mutation function and optional invalidation keys.
+ * @returns An object with a mutate method for executing the mutation and handling cache invalidation.
+ * @example
+ * const updateUserEndpoint = createMutationEndpoint({
+ *   fn: async (user: User) => {
+ *     const response = await fetch(`/api/user/${user.id}`, {
+ * 		 method: 'PUT',
+ * 	 body: JSON.stringify(user),
+ * 	 });
+ * 	 return response.json();
+ *  },
+ *
  */
 export function createMutationEndpoint<TInput, TResult>(
 	config: MutationFactoryConfig<TInput, TResult>,
@@ -153,6 +189,12 @@ export function createMutationEndpoint<TInput, TResult>(
 
 /**
  * Invalidates multiple query keys in parallel.
+ * Useful for scenarios where a mutation affects multiple queries and you want to ensure all related caches are updated.
+ * @param keys An array of query key arrays to invalidate.
+ * @returns A promise that resolves when all invalidations are complete.
+ * @example
+ * await invalidateMany(['user', userId], ['posts']);
+
  */
 export async function invalidateMany(...keys: Array<readonly unknown[]>) {
 	await Promise.all(keys.map((key) => queryClient.invalidateQueries({ queryKey: key })));
