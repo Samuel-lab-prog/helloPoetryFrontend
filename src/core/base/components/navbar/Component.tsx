@@ -202,6 +202,7 @@ export function Navbar({ links }: NavbarProps) {
 					w='full'
 					pb={{ base: '84px', lg: 0 }}
 					overflowY='auto'
+					scrollbarGutter='stable'
 					ref={contentRef}
 				>
 					<Outlet />

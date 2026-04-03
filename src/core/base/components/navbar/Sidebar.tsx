@@ -22,6 +22,7 @@ export function NavbarSidebar({ links, currentPath, onSameRouteClick }: NavbarSi
 			borderRight='1px solid'
 			borderColor='border'
 			overflowY='auto'
+			scrollbarGutter='stable'
 			bg='rgba(18, 0, 17, 0.86)'
 			backdropFilter='blur(6px)'
 		>

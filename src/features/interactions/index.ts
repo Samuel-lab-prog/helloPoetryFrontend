@@ -3,6 +3,7 @@
  */
 
 export * from './hooks/useFriendRequestActions';
+export * from './hooks/useCancelFriendRequest';
 export * from './hooks/usePoemComments';
 export * from './hooks/usePoemLike';
 export * from './hooks/useSendFriendRequest';

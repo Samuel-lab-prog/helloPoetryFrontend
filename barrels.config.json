@@ -1,7 +1,5 @@
 {
-	"directory": [
-		"./src/core/base/components"
-	],
+	"directory": ["./src/core/base/components"],
 	"delete": true,
 	"location": "top",
 	"name": "index",

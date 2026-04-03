@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
 import { registerSchema, type RegisterDataType } from '../schemas/registerSchema';
-import { uploadAvatarFile } from '@features/users/utils/avatarUpload';
-import type { CreateUserBody } from '@root/features/users/api/types';
-import type { AppErrorType } from '@root/core/base';
-import { users } from '@root/features/users/api/endpoints';
+import { uploadAvatarFile } from '../../../utils/avatarUpload';
+import type { CreateUserBody } from '../../..//api/types';
+import type { AppErrorType } from '@core/base';
+import { users } from '../../../api/endpoints';
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');

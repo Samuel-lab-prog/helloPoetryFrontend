@@ -7,7 +7,7 @@ import type { AppErrorType } from '@core/base';
 import { eventBus } from '@core/events/eventBus';
 
 import { loginSchema, type LoginDataType } from '../schemas/loginSchema';
-import { type AuthClient} from '../../../api/types';
+import { type AuthClient } from '../../../api/types';
 import { auth } from '../../../api/endpoints';
 import { useAuthClientStore } from '../../../public/stores/useAuthClientStore';
 

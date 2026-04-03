@@ -1,24 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@root/core/api';
-
-export type PoetPreview = {
-	id: number;
-	nickname: string;
-	avatarUrl: string | null;
-	role: string;
-};
-
-export type UsersPage = {
-	users: PoetPreview[];
-	nextCursor?: number;
-	hasMore: boolean;
-};
+import type { UsersPage } from '../../../api/types';
+import { users } from '../../../api/endpoints';
 
 export function usePoetsSearch(searchNickname: string, limit = 10) {
 	const normalizedSearch = searchNickname.trim();
 
 	const query = useQuery<UsersPage>({
-		...api.users.getPublicUsers.query({
+		...users.getPublicUsers.query({
 			limit,
 			searchNickname: normalizedSearch || undefined,
 		}),

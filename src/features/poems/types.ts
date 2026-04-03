@@ -40,6 +40,7 @@ export type AuthorProfileType = {
 	avatarUrl: string | null;
 	role: string;
 	status: string;
+	poems: PoemPreviewType[];
 	stats: {
 		poemsCount: number;
 		commentsCount: number;

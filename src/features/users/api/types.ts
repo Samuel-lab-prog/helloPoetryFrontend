@@ -18,6 +18,7 @@ export type UsersPreviewParams = {
 
 export type UserPreview = {
 	id: number;
+	name: string;
 	nickname: string;
 	avatarUrl: string | null;
 	role: string;
@@ -37,6 +38,7 @@ export type UserPublicProfile = {
 	avatarUrl: string | null;
 	role: string;
 	status: string;
+	poems: PoemPreview[];
 	stats: {
 		poemsCount: number;
 		commentsCount: number;
@@ -60,6 +62,7 @@ export type UserPrivateProfile = {
 	email: string;
 	emailVerifiedAt: string | null;
 	unreadNotificationsCount: number;
+	poems: PoemPreview[];
 	stats: {
 		poems: { id: number; title: string }[];
 		commentsIds: number[];
@@ -100,3 +103,4 @@ export type AvatarUploadUrlResponse = {
 
 export type UserRole = 'user' | 'admin' | 'moderator';
 export type UserStatus = 'active' | 'banned' | 'suspended';
+import type { PoemPreview } from '@root/core/api/poems/types';

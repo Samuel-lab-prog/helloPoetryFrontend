@@ -61,11 +61,11 @@ const RegisterPage = lazyPage(
 	(module) => module.RegisterPage,
 );
 const PoetsPage = lazyPage(
-	() => import('./features/users/pages/PoetsPage'),
+	() => import('./features/users/use-cases/poets-search/Page'),
 	(module) => module.PoetsPage,
 );
 const AuthorPage = lazyPage(
-	() => import('./features/users/pages/AuthorPage'),
+	() => import('./features/users/use-cases/author/Page'),
 	(module) => module.AuthorPage,
 );
 const MyProfilePage = lazyPage(

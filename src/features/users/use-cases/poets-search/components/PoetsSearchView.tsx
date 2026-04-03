@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Box, Field, Flex, Input, Skeleton, Text } from '@chakra-ui/react';
+import { Box, Field, Flex, Input, Text } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { AsyncState } from '@root/core/base';
-import { useMyProfile } from '../hooks/useMyProfile';
-import { usePoetsSearch } from '../../poems/public/hooks/useGetPoetsSearch';
-import { PoetCard } from '../components/PoetCard';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { PoetCard } from '../../../components/PoetCard';
+import { usePoetsSearch } from '../hooks/usePoetsSearch';
+import { searchPoetsSchema, type SearchPoetsForm } from '../schemas/searchPoetsSchema';
+import { LoadingUsersSkeletons } from './LoadingUsersSkeletons';
 
-type SearchForm = {
-	searchNickname: string;
-};
+const DEBOUNCE_DELAY_MS = 250;
 
-export function PoetsPage() {
-	const form = useForm<SearchForm>({
+export function PoetsSearchView() {
+	const form = useForm<SearchPoetsForm>({
 		defaultValues: {
 			searchNickname: '',
 		},
 		mode: 'onChange',
+		resolver: zodResolver(searchPoetsSchema),
 	});
 
 	const searchNickname = form.watch('searchNickname');
@@ -24,42 +26,15 @@ export function PoetsPage() {
 	useEffect(() => {
 		const timeoutId = window.setTimeout(() => {
 			setDebouncedSearch(searchNickname);
-		}, 250);
+		}, DEBOUNCE_DELAY_MS);
 
 		return () => window.clearTimeout(timeoutId);
 	}, [searchNickname]);
 
 	const { poets, isLoading, isFetching, isError } = usePoetsSearch(debouncedSearch);
-	const { profile } = useMyProfile();
+	const authClient = useAuthClientStore((state) => state.authClient);
 	const showSkeletons = isLoading && poets.length === 0;
-	const visiblePoets = profile ? poets.filter((poet) => poet.id !== profile.id) : poets;
-
-	const loadingSkeletons = (
-		<Flex direction='column' gap={3}>
-			{Array.from({ length: 4 }).map((_, index) => (
-				<Box
-					key={`poet-skeleton-${index}`}
-					borderTop='1px solid'
-					borderColor='purple.700'
-					w='full'
-					pt={2}
-					pb={1}
-					_first={{ borderTop: 'none' }}
-				>
-					<Flex align='center' justify='space-between' gap={2}>
-						<Flex align='center' gap={3}>
-							<Skeleton boxSize='12' borderRadius='full' />
-							<Flex direction='column' gap={2}>
-								<Skeleton height='12px' width='140px' />
-								<Skeleton height='10px' width='90px' />
-							</Flex>
-						</Flex>
-						<Skeleton height='28px' width='96px' borderRadius='md' />
-					</Flex>
-				</Box>
-			))}
-		</Flex>
-	);
+	const visiblePoets = authClient ? poets.filter((poet) => poet.id !== authClient.id) : poets;
 
 	return (
 		<Flex
@@ -110,7 +85,7 @@ export function PoetsPage() {
 				isLoading={showSkeletons}
 				isError={isError}
 				isEmpty={visiblePoets.length === 0}
-				loadingElement={loadingSkeletons}
+				loadingElement={LoadingUsersSkeletons}
 				errorElement={<Text textStyle='body'>Error searching poets.</Text>}
 				emptyElement={<Text textStyle='body'>No poets found.</Text>}
 			>

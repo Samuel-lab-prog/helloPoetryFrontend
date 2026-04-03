@@ -23,7 +23,6 @@ export * from './public/hooks/useGetMyPoems';
 export * from './use-cases/poem/hooks/usePoem';
 export * from './public/hooks/useManagePoemCollections';
 export * from './public/hooks/useGetPoemsMinimal';
-export * from './public/hooks/useGetPoetsSearch';
 export * from './public/hooks/useGetRecentPoems';
 export * from './public/hooks/useManageSavedPoems';
 export * from './use-cases/create-poem/hooks/useCreatePoemForm';
