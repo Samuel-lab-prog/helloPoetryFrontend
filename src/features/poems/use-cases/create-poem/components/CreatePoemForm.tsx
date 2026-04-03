@@ -3,7 +3,7 @@ import { Text, Heading, Box } from '@chakra-ui/react';
 import { useCreatePoemForm } from '../hooks/useCreatePoemForm';
 import { useUsersPreview } from '@root/features/users/hooks/useUsersPreview';
 import { UserDedicationCombobox } from '@root/features/users/components/UserDedicationCombobox';
-import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@root/core/base';
+import { DynamicForm, MarkdownRenderer, toaster, type Field } from '@BaseComponents';
 import { PoemHeader } from '../../poem/components/PoemHeader';
 import { uploadPoemAudioFile } from '../utils/poemAudioUpload';
 import { api } from '@root/core/api';

@@ -13,11 +13,14 @@
 			"@features/*": ["features/*"],
 			"@assets/*": ["assets/*"],
 			"@themes/*": ["themes/*"],
-			"@http-request": ["core/base/utils/createHttpRequest"],
-			"@utils/*": ["core/base/utils/*"],
-			"@core/base": ["core/base/index"],
 			"@core/*": ["core/*"],
-			"@BaseComponents": ["core/base/components"]
+			"@BaseComponents": ["core/components"],
+			"@Events": ["core/events"],
+			"@Utils": ["core/utils"],
+			"@Stores": ["core/stores"],
+			"@Api": ["core/api"],
+			"@BasePages": ["core/pages"],
+			"@QueryClient": ["core/queryClient"]
 		},
 
 		/* Bundler mode */

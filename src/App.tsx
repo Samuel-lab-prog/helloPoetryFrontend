@@ -1,9 +1,9 @@
 ﻿import { lazy, Suspense, type ComponentType } from 'react';
-import { Flex, Spinner } from '@chakra-ui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-import { ErrorPage, Navbar, Toaster } from '@core/base';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { Flex, Spinner } from '@chakra-ui/react';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { Navbar, Toaster } from '@BaseComponents';
+import { ErrorPage } from '@BasePages';
 
 function lazyPage<TModule extends object>(
 	load: () => Promise<TModule>,

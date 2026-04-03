@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { type AppErrorType } from '@root/core/base';
+import { type AppErrorType } from '@BaseComponents';
 import { api, apiKeys, interactionsKeys } from '@root/core/api';
 import { eventBus } from '@root/core/events/eventBus';
 

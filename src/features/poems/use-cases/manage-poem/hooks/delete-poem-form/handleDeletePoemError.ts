@@ -1,4 +1,4 @@
-import type { AppErrorType } from '@root/core/base';
+import type { AppErrorType } from '@BaseComponents';
 
 export function handleDeletePoemError(err: unknown, setGeneralError: (msg: string) => void) {
 	const error = err as AppErrorType;

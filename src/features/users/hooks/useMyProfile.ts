@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { api, apiKeys } from '@root/core/api';
+import { users } from '../api/endpoints';
+import { userKeys } from '../api/keys';
 
 type MyProfileType = {
 	id: number;
@@ -30,10 +31,10 @@ export function useMyProfile() {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 
 	const query = useQuery({
-		queryKey: apiKeys.users.profile(String(clientId)),
+		queryKey: userKeys.profile(String(clientId)),
 		enabled: !!clientId,
 		staleTime: Infinity,
-		queryFn: () => api.users.getProfile.query(String(clientId)).queryFn() as Promise<MyProfileType>,
+		queryFn: () => users.getProfile.query(String(clientId)).queryFn() as Promise<MyProfileType>,
 	});
 
 	return {

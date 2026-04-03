@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useMyProfile } from '../hooks/useMyProfile';
 import { useMyFriendRequests } from '../hooks/useMyFriendRequests';

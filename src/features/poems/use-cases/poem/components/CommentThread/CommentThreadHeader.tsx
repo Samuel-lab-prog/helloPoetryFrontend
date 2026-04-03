@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, IconButton, Link, Text } from '@chakra-ui/react';
 import { Trash2 } from 'lucide-react';
 import { type PoemCommentType } from '@features/interactions';
-import { formatRelativeTime } from '@root/core/base';
+import { formatRelativeTime } from '@BaseComponents';
 import { NavLink } from 'react-router-dom';
 
 interface CommentThreadHeaderProps {

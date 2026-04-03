@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useNotificationsPanel } from '../hooks/useNotificationsPanel';
 import { NotificationCard } from '../components/NotificationCard';

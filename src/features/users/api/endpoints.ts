@@ -1,4 +1,4 @@
-﻿import { createHTTPRequest } from '@utils/createHttpRequest';
+﻿import { createHTTPRequest } from '@Utils';
 import { createMutationEndpoint, createQueryEndpoint } from '../../../core/api/utils';
 
 import { userKeys } from './keys';

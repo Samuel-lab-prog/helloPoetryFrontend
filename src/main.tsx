@@ -1,13 +1,14 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider } from '@root/core/base';
-import { QueryClientProvider } from '@tanstack/react-query';
-import App from './App.tsx';
-import { system } from '@themes/main';
 import { ChakraProvider } from '@chakra-ui/react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { system } from '@themes/main';
+import { Provider } from '@BaseComponents';
+import { registerEventListeners } from '@Events';
+import { queryClient } from '@QueryClient';
 import { ColorModeProvider } from './components/ui/color-mode.tsx';
-import { registerEventListeners } from '@root/core/events/registerEventListeners';
-import { queryClient } from '@root/core/queryClient';
+import App from './App.tsx';
+
 registerEventListeners(queryClient);
 
 createRoot(document.getElementById('root')!).render(

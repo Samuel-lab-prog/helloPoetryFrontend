@@ -1,4 +1,4 @@
-﻿import { createHTTPRequest } from '@utils/createHttpRequest';
+﻿import { createHTTPRequest } from '@Utils';
 import { createQueryEndpoint } from '../utils';
 
 import { feedKeys } from './keys';

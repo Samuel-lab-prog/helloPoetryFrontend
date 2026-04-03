@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo, useRef, type Dispatch, type SetStateAction } from 'react';
 import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import { SendHorizontal } from 'lucide-react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { CommentThread } from './CommentThread';
 import type { PoemCommentType } from '@features/interactions';
 

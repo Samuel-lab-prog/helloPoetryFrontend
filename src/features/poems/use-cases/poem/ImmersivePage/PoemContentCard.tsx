@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { PoemContent } from './PoemContent';
 import { PoemDedication } from './PoemDedication';
 import { PoemHeader } from './PoemHeader';

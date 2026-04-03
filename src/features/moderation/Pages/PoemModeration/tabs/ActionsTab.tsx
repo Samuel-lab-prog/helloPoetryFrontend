@@ -1,5 +1,5 @@
 ﻿import { Badge, Heading, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import { Surface } from '@root/core/base';
+import { Surface } from '@BaseComponents';
 
 export function ActionsTab() {
 	return (

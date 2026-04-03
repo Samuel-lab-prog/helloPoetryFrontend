@@ -17,7 +17,7 @@ import {
 	Surface,
 	translateModerationStatus,
 	translateVisibility,
-} from '@root/core/base';
+} from '@BaseComponents';
 import type { ModeratePoemBody, ModerationPoem } from '@root/core/api/moderation/types';
 import { Tag } from '@root/features/poems/use-cases/poem/components/PoemTag';
 import { PoemAudioPlayer } from '@root/features/poems/use-cases/poem/components/PoemAudioPlayer';

@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { Avatar, Badge, Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
-import { formatRelativeTime } from '@root/core/base';
+import { formatRelativeTime } from '@BaseComponents';
 import type { NotificationItem } from '../hooks/useNotificationsPanel';
 
 function getNotificationBody(item: NotificationItem): string {

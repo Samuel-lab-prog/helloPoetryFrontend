@@ -1,5 +1,12 @@
 {
-	"directory": ["./src/core/base/components"],
+	"directory": [
+		"./src/core/components",
+		"./src/core/events",
+		"./src/core/utils",
+		"./src/core/stores",
+		"./src/core/api",
+		"./src/core/pages"
+	],
 	"delete": true,
 	"location": "top",
 	"name": "index",

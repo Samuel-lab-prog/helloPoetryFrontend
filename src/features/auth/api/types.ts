@@ -1,4 +1,4 @@
-﻿import type { UserRole, UserStatus } from '@root/features/users/api/types';
+﻿import type { UserRole, UserStatus } from '@features/users/api/types';
 
 export type AuthClient = {
 	id: number;

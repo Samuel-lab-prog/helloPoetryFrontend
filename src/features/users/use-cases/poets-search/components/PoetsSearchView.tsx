@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Field, Flex, Input, Text } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { PoetCard } from '../../../components/PoetCard';
 import { usePoetsSearch } from '../hooks/usePoetsSearch';

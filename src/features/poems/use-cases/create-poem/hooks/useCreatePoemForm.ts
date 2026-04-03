@@ -5,7 +5,7 @@ import { createPoemSchema, type CreatePoemType } from '../../manage-poem/schemas
 import { useMutation } from '@tanstack/react-query';
 import { api } from '@root/core/api';
 import type { CreatePoemResult } from '@root/core/api/poems/types';
-import { toaster, type AppErrorType } from '@root/core/base';
+import { toaster, type AppErrorType } from '@BaseComponents';
 import { eventBus } from '@root/core/events/eventBus';
 
 type CreatePoemPayload = Omit<CreatePoemType, 'audio'>;

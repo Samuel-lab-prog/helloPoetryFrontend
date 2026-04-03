@@ -1,5 +1,5 @@
 ﻿import { Flex } from '@chakra-ui/react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { PoemCard } from './PoemCard';
 import { PoemGrid } from './PoemGrid';
 import type { PoemPreviewType } from '../../types';

@@ -1,5 +1,5 @@
 ﻿import { Box } from '@chakra-ui/react';
-import { AsyncState } from '@root/core/base';
+import { AsyncState } from '@BaseComponents';
 import { PoemCard } from '../../../public/components/PoemCard';
 import { PoemGrid } from '../../../public/components/PoemGrid';
 import type { PoemPreview } from '@root/core/api/poems/types';

@@ -1,5 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@root/core/base';
+import { type AppErrorType } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { api, apiKeys } from '@root/core/api';
 import type { FeedPoemType, PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/types';

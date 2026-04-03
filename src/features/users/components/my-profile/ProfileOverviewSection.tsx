@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Avatar, Button, Flex, VStack } from '@chakra-ui/react';
-import { Surface } from '@root/core/base';
+import { Surface } from '@BaseComponents';
 import type { MyProfileViewModel } from './types';
 import { getAvatarFileError } from '../../utils/avatarUpload';
 import { ProfileEditFields } from './ProfileEditFields';

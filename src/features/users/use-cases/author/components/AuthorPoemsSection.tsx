@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { AsyncState, formatRelativeTime } from '@root/core/base';
+import { AsyncState, formatRelativeTime } from '@BaseComponents';
 import type { PoemPreviewType } from '@root/features/poems/types';
 import { LoadingAuthorPoemsSkeletons } from './skeletons/LoadingAuthorPoemsSkeletons';
 

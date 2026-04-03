@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { type AppErrorType } from '@root/core/base';
+import { type AppErrorType } from '@BaseComponents';
 import { api, apiKeys } from '@root/core/api';
 import type { AuthorProfileType } from '@root/features/poems/types';
 

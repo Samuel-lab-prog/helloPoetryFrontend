@@ -1,26 +1,26 @@
 import { Flex, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Footer, SearchInput } from '@root/core/base';
-import { api } from '@root/core/api';
+import { Footer, SearchInput } from '@BaseComponents';
 import { useIsAuthenticated } from '@root/features/auth/public/hooks/useIsAuthenticated';
 import { HomeFeed } from './components/HomeFeed';
 import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './constants';
 import { useHomeFeed } from './hooks/useHomeFeed';
 import { getFooterLinks } from './utils';
 import type { PaginatedPoems } from '@root/core/api/poems/types';
+import { poems } from '@root/core/api';
 
 export function HomePage() {
 	const isAuthenticated = useIsAuthenticated();
 	const [searchTitle, setSearchTitle] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
-	const { poems, isError, isLoading } = useHomeFeed({
+	const { poems: feedPoems, isError, isLoading } = useHomeFeed({
 		isAuthenticated,
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
 	});
 	const isSearching = debouncedSearch.trim().length > 0;
 	const searchQuery = useQuery<PaginatedPoems>({
-		...api.poems.getPoems.query({
+		...poems.getPoems.query({
 			limit: POEMS_FEED_LIMIT,
 			searchTitle: debouncedSearch.trim() || undefined,
 			orderBy: 'createdAt',
@@ -29,7 +29,7 @@ export function HomePage() {
 		enabled: isSearching,
 	});
 
-	const displayedPoems = isSearching ? (searchQuery.data?.poems ?? []) : poems;
+	const displayedPoems = isSearching ? (searchQuery.data?.poems ?? []) : feedPoems;
 	const isFeedLoading = isSearching ? searchQuery.isLoading : isLoading;
 	const isFeedError = isSearching ? searchQuery.isError : isError;
 

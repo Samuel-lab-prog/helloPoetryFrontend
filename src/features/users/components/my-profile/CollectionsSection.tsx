@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Flex, Heading, HStack, Link, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { Layers } from 'lucide-react';
-import { Surface } from '@root/core/base';
+import { Surface } from '@BaseComponents';
 import { type PoemMinimalDataType } from '@root/features/poems/types';
 import type { CollectionsSectionProps } from './types';
 import { CreateCollectionForm } from './CreateCollectionForm';

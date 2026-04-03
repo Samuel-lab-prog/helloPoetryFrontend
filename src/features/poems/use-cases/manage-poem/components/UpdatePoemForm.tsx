@@ -4,7 +4,7 @@ import { useUpdatePoemForm } from '../hooks/update-poem-form';
 import { usePoemsMinimal } from '../../../public/hooks/useGetPoemsMinimal';
 import { usePoem } from '../../poem/hooks/usePoem';
 import { PoemCombobox } from '../../../public/components/PoemCombobox';
-import { FormField, SelectField, TagsField } from '@root/core/base';
+import { FormField, SelectField, TagsField } from '@BaseComponents';
 import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../create-poem/components/constants';
 
 export function UpdatePoemForm() {

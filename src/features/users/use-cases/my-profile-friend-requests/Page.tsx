@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { SearchInput } from '@root/core/base';
+import { SearchInput } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions';
 import { ProfileAccessGate } from '../../components/my-profile/ProfileAccessGate';

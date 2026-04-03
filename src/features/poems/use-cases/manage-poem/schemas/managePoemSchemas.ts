@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { findForbiddenWords } from '@root/core/base';
+import { findForbiddenWords } from '@BaseComponents';
 import {
 	POEM_CONTENT_MAX_LENGTH,
 	POEM_CONTENT_MIN_LENGTH,

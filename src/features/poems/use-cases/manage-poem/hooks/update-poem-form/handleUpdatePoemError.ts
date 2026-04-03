@@ -1,5 +1,5 @@
 import type { UseFormSetError } from 'react-hook-form';
-import type { AppErrorType } from '@root/core/base';
+import type { AppErrorType } from '@BaseComponents';
 import type { UpdatePoemType } from '../../schemas/managePoemSchemas';
 
 export function handleUpdatePoemError(

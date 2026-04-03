@@ -1,4 +1,4 @@
-import { formatDate } from '@root/core/base';
+import { formatDate } from '@BaseComponents';
 import { Tag } from './PoemTag';
 import { Heading, Text, Flex, VStack } from '@chakra-ui/react';
 
