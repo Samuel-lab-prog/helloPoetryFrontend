@@ -8,7 +8,7 @@ type Violation = {
 	invalidFolders: string[];
 };
 
-const ALLOWED_FOLDERS = ['api', 'public', 'use-cases', 'internal'];
+const ALLOWED_FOLDERS = ['api', 'public', 'use-cases', 'internal', 'listeners'];
 
 const DOMAIN_REGEX = /^src\/features\/([^/]+)\/(.+)/;
 
