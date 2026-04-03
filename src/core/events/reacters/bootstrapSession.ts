@@ -44,8 +44,9 @@ async function fetchInitialFeed(limit: number): Promise<{
 		return { source: 'feed', poems: payload.map(mapFeedPoem) };
 	} catch (error) {
 		const appError = error as AppErrorType;
-		if (appError.statusCode !== 401 && appError.statusCode !== 403 && appError.statusCode !== 404)
+		if (appError.statusCode !== 401 && appError.statusCode !== 403 && appError.statusCode !== 404) {
 			throw error;
+		}
 	}
 
 	const payload = (await api.poems.getPoems

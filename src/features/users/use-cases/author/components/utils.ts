@@ -25,17 +25,21 @@ export function getRelationStatus(
 	flags: RelationFlags,
 ): RelationStatus | null {
 	if (!author) return null;
-	if (!flags.isAuthenticated)
+	if (!flags.isAuthenticated) {
 		return { icon: LogIn, color: 'pink.200', text: 'Sign in to send a request.' };
+	}
 	if (flags.isSelf) return null;
-	if (author.hasBlockedRequester)
+	if (author.hasBlockedRequester) {
 		return { icon: UserX, color: 'red.300', text: 'You were blocked by this user.' };
-	if (author.isBlockedByRequester)
+	}
+	if (author.isBlockedByRequester) {
 		return { icon: UserX, color: 'red.300', text: 'You blocked this user.' };
+	}
 	if (author.isFriend) return { icon: UserCheck, color: 'green.300', text: 'You are friends.' };
 	if (flags.hasOutgoingRequest) return { icon: Clock3, color: 'yellow.300', text: 'Request sent.' };
-	if (flags.hasIncomingRequest)
+	if (flags.hasIncomingRequest) {
 		return { icon: UserPlus, color: 'yellow.300', text: 'Request received.' };
+	}
 	return null;
 }
 
