@@ -1,4 +1,3 @@
-import { type AppErrorType } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { feed } from '@root/features/feed/api/endpoints';
 import type { FeedPoemType } from '@root/features/feed/public/types';
@@ -9,6 +8,7 @@ import type { PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/p
 import { users } from '@root/features/users/api/endpoints';
 import { userKeys } from '@root/features/users/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 
 import type { UserPrivateProfile, UserRole, UserStatus } from '../../../features/users/api/types';
 import type { AppEvents } from '../eventBus';

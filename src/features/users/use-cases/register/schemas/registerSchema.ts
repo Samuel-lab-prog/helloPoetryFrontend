@@ -1,4 +1,4 @@
-import { findForbiddenWords } from '@BaseComponents';
+import { findForbiddenWords } from '@Utils';
 import { z } from 'zod';
 
 import {

@@ -1,9 +1,9 @@
-import { type AppErrorType } from '@BaseComponents';
 import { eventBus } from '@root/core/events/eventBus';
 import { interactions } from '@root/features/interactions/api/endpoints';
 import { interactionsKeys } from '@root/features/interactions/api/keys';
 import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 
 export type PoemCommentType = {

@@ -1,4 +1,4 @@
-import { formatDate, Surface, translateModerationStatus } from '@BaseComponents';
+import { Surface } from '@BaseComponents';
 import {
 	Badge,
 	Flex,
@@ -11,6 +11,7 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import type { FullPoemType } from '@root/features/poems/public/types';
+import { formatDate, translateModerationStatus } from '@Utils';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 

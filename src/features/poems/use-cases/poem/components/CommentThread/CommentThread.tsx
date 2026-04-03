@@ -1,6 +1,6 @@
-import { findForbiddenWords } from '@BaseComponents';
 import { Box } from '@chakra-ui/react';
-import { type PoemCommentType } from '@features/interactions';
+import { type PoemCommentType } from '@root/features/interactions/public';
+import { findForbiddenWords } from '@Utils';
 import { memo, useCallback, useState } from 'react';
 
 import { CommentThreadActions } from './CommentThreadActions';

@@ -1,22 +1,15 @@
-import { type AppErrorType } from '@BaseComponents';
 import { friends } from '@root/features/friends/api/endpoints';
+import { friendsKeys } from '@root/features/friends/api/keys';
 import type { AuthorProfileType } from '@root/features/poems/public/types';
 import { userKeys } from '@root/features/users/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 
-type FriendRequestResult = {
-	id: number;
-	requesterId: number;
-	addresseeId: number;
-	createdAt: string;
-};
-
-export function useSendFriendRequest() {
+export function useCancelFriendRequest() {
 	const queryClient = useQueryClient();
 
 	const mutation = useMutation({
-		mutationFn: (authorId: number) =>
-			friends.sendFriendRequest.mutate(String(authorId)) as Promise<FriendRequestResult>,
+		mutationFn: (authorId: number) => friends.cancelFriendRequest.mutate(String(authorId)),
 		onMutate: async (authorId) => {
 			const queryKey = userKeys.profile(String(authorId));
 			await queryClient.cancelQueries({ queryKey });
@@ -25,8 +18,7 @@ export function useSendFriendRequest() {
 			if (previousProfile) {
 				queryClient.setQueryData<AuthorProfileType>(queryKey, {
 					...previousProfile,
-					isFriendRequester: true,
-					hasIncomingFriendRequest: false,
+					isFriendRequester: false,
 				});
 			}
 
@@ -39,6 +31,7 @@ export function useSendFriendRequest() {
 		},
 		onSuccess: (_, authorId) => {
 			queryClient.invalidateQueries({ queryKey: userKeys.profile(String(authorId)) });
+			queryClient.invalidateQueries({ queryKey: friendsKeys.requests() });
 		},
 		onSettled: (_data, _error, _authorId, context) => {
 			if (context?.queryKey) {
@@ -50,17 +43,14 @@ export function useSendFriendRequest() {
 	function getErrorMessage() {
 		const err = mutation.error as AppErrorType | null;
 		if (!err) return '';
-
-		if (err.statusCode === 409) return 'Request already sent or relationship already exists.';
-		if (err.statusCode === 403) return 'You cannot send a request to this user.';
-		if (err.statusCode === 404) return 'Author not found.';
-		return 'Error sending friend request.';
+		if (err.statusCode === 404) return 'Request not found.';
+		if (err.statusCode === 403) return 'You cannot cancel this request.';
+		return 'Error cancelling request.';
 	}
 
 	return {
-		sendFriendRequest: mutation.mutateAsync,
-		isSending: mutation.isPending,
+		cancelFriendRequest: mutation.mutateAsync,
+		isCancelling: mutation.isPending,
 		errorMessage: getErrorMessage(),
-		reset: mutation.reset,
 	};
 }

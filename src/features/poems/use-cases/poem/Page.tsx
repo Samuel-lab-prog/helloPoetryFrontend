@@ -1,8 +1,13 @@
 /* eslint-disable max-lines-per-function */
-import { AsyncState, findForbiddenWords, MarkdownRenderer, toaster } from '@BaseComponents';
+import { AsyncState, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
-import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import {
+	type PoemCommentType,
+	usePoemComments,
+	usePoemLike,
+} from '@root/features/interactions/public';
+import { findForbiddenWords } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';

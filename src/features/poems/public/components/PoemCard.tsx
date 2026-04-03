@@ -1,5 +1,5 @@
-import { formatRelativeTime } from '@BaseComponents';
 import { Avatar, Badge, Box, Card, Flex, Icon, Link, Text } from '@chakra-ui/react';
+import { formatRelativeTime } from '@Utils';
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 

@@ -1,10 +1,10 @@
-import { type AppErrorType } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { feed } from '@root/features/feed/api/endpoints';
 import type { FeedPoemType } from '@root/features/feed/public/types';
 import { poems } from '@root/features/poems/api/endpoints';
 import type { PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/public/types';
 import { useQuery } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 
 type FeedSource = 'feed' | 'recent';
 

@@ -1,6 +1,6 @@
-import { formatRelativeTime } from '@BaseComponents';
 import { Avatar, Box, Flex, IconButton, Link, Text } from '@chakra-ui/react';
-import { type PoemCommentType } from '@features/interactions';
+import { type PoemCommentType } from '@root/features/interactions/public';
+import { formatRelativeTime } from '@Utils';
 import { Trash2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 

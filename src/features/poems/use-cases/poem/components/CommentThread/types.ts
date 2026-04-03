@@ -1,4 +1,4 @@
-import { type PoemCommentType } from '@features/interactions';
+import { type PoemCommentType } from '@root/features/interactions/public';
 import { type Dispatch, type SetStateAction } from 'react';
 
 export interface CommentThreadProps {

@@ -1,11 +1,11 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import {
 	useCancelFriendRequest,
 	useFriendRequestActions,
 	useSendFriendRequest,
-} from '@features/interactions';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+} from '@root/features/interactions/public';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 

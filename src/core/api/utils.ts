@@ -148,7 +148,7 @@ type MutationFactoryConfig<TInput, TResult> = {
  * Provides helpers for:
  * - executing mutations,
  * - invalidating related queries after mutation.
- * 
+ *
  * @param config The configuration for the mutation endpoint, including the mutation function and optional invalidation keys.
  * @returns An object with a mutate method for executing the mutation and handling cache invalidation.
  * @example

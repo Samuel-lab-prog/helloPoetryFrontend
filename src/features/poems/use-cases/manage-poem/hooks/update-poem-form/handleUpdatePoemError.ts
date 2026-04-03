@@ -1,4 +1,4 @@
-import type { AppErrorType } from '@BaseComponents';
+import type { AppErrorType } from '@Utils';
 import type { UseFormSetError } from 'react-hook-form';
 
 import type { UpdatePoemType } from '../../schemas/managePoemSchemas';

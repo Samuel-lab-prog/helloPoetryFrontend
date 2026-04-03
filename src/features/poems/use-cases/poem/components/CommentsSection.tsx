@@ -1,6 +1,6 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
-import type { PoemCommentType } from '@features/interactions';
+import type { PoemCommentType } from '@root/features/interactions/public';
 import { SendHorizontal } from 'lucide-react';
 import { type Dispatch, memo, type SetStateAction, useEffect, useMemo, useRef } from 'react';
 

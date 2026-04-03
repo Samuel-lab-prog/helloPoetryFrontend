@@ -1,9 +1,9 @@
-import { type AppErrorType } from '@BaseComponents';
 import type { FullPoem, SavedPoem } from '@features/poems/api/types';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { poems } from '@root/features/poems/api/endpoints';
 import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 
 export type SavedPoemType = {

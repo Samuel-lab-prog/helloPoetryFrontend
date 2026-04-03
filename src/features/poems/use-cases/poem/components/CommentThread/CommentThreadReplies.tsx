@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { type PoemCommentType } from '@features/interactions';
+import { type PoemCommentType } from '@root/features/interactions/public';
 import { type ReactNode } from 'react';
 
 interface CommentThreadRepliesProps {

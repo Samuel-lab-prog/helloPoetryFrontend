@@ -1,9 +1,9 @@
-import { type AppErrorType } from '@BaseComponents';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { users } from '@root/features/users/api/endpoints';
 import { userKeys } from '@root/features/users/api/keys';
 import type { UserPrivateProfile } from '@root/features/users/api/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 
 import { uploadAvatarFile } from '../../../internal/utils/avatarUpload';
 

@@ -1,6 +1,7 @@
-import { formatDate, Surface } from '@BaseComponents';
+import { Surface } from '@BaseComponents';
 import { Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import type { SavedPoemType } from '@root/features/poems/public/hooks/useManageSavedPoems';
+import { formatDate } from '@Utils';
 import { Bookmark, ExternalLink, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
