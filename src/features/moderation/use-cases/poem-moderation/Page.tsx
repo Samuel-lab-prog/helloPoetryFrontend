@@ -2,10 +2,10 @@ import { Flex, Heading, Tabs, Text } from '@chakra-ui/react';
 import { useEnsureRole } from '@root/features/auth/public/hooks/useEnsureRole';
 import { useNavigate } from 'react-router-dom';
 
-import { usePoemModerationData } from './hooks';
-import { ActionsTab } from './tabs/ActionsTab';
-import { AnalyzeTab } from './tabs/PendingPoemsTab';
-import { UnauthorizedPage } from './UnauthorizedModPage';
+import { ActionsTab } from './components/ActionsTab';
+import { AnalyzeTab } from './components/PendingPoemsTab';
+import { UnauthorizedPage } from './components/UnauthorizedPage';
+import { usePoemModerationData } from './hooks/usePoemModerationData';
 
 export function PoemModerationPage() {
 	const navigate = useNavigate();

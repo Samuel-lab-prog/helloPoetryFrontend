@@ -3,7 +3,7 @@ import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
 import type { ModeratePoemBody, ModerationPoem } from '@features/moderation/api/types';
 import type { AppErrorType } from '@Utils';
 
-import { ModerationPoemCard } from '../PoemModerationCard';
+import { ModerationPoemCard } from './PoemModerationCard';
 
 type Props = {
 	pendingQuery: {

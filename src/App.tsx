@@ -49,7 +49,7 @@ const AdminPage = lazyPage(
 	(module) => module.AdminPage,
 );
 const PoemModerationPage = lazyPage(
-	() => import('./features/moderation/Pages/PoemModeration/Page'),
+	() => import('./features/moderation/use-cases/poem-moderation/Page'),
 	(module) => module.PoemModerationPage,
 );
 const LoginPage = lazyPage(
