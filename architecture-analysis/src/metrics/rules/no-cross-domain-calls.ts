@@ -11,7 +11,7 @@ type Violation = {
 	toDomain: string;
 };
 
-const ALLOWED_CROSS_DOMAIN_REGEX = /\/public\//;
+const ALLOWED_CROSS_DOMAIN_REGEX = /\/public(\/|$)/;
 
 function checkDomainNamespaceIntegrity(cruiseResult: DepcruiseResult): Violation[] {
 	const violations: Violation[] = [];

@@ -8,10 +8,10 @@ import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public
 import { users } from '@features/users/api/endpoints';
 import { userKeys } from '@features/users/api/keys';
 import type { UserPrivateProfile, UserRole, UserStatus } from '@features/users/public/types';
+import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
-import type { AppEvents } from '../eventBus';
 import { clearSessionQueries } from './clearSession';
 
 const INITIAL_FEED_LIMIT = 8;

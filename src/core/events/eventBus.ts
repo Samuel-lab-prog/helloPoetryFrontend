@@ -24,6 +24,14 @@ export interface AppEvents {
 		liked: boolean;
 		likedAt: string;
 	};
+	friendRequestCanceled: {
+		authorId: number;
+		occurredAt: string;
+	};
+	friendRequestCancelSettled: {
+		authorId: number;
+		occurredAt: string;
+	};
 }
 
 type EventMap = object;

@@ -1,7 +1,7 @@
 import { friends } from '@features/friends/api/endpoints';
-import { friendsKeys } from '@features/friends/api/keys';
 import type { AuthorProfileType } from '@features/poems/public/types';
 import { userKeys } from '@features/users/api/keys';
+import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
@@ -15,28 +15,32 @@ export function useCancelFriendRequest() {
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 
-			if (previousProfile) {
+			if (previousProfile)
 				queryClient.setQueryData<AuthorProfileType>(queryKey, {
 					...previousProfile,
 					isFriendRequester: false,
 				});
-			}
 
 			return { previousProfile, queryKey };
 		},
 		onError: (_error, _authorId, context) => {
-			if (context?.previousProfile) {
+			if (context?.previousProfile)
 				queryClient.setQueryData(context.queryKey, context.previousProfile);
-			}
 		},
 		onSuccess: (_, authorId) => {
-			queryClient.invalidateQueries({ queryKey: userKeys.profile(String(authorId)) });
-			queryClient.invalidateQueries({ queryKey: friendsKeys.requests() });
+			void eventBus.publish('friendRequestCanceled', {
+				authorId,
+				occurredAt: new Date().toISOString(),
+			});
 		},
 		onSettled: (_data, _error, _authorId, context) => {
-			if (context?.queryKey) {
-				queryClient.invalidateQueries({ queryKey: context.queryKey });
-			}
+			if (!context?.queryKey) return;
+			const authorId = Number(context.queryKey.at(-1));
+			if (!Number.isFinite(authorId)) return;
+			void eventBus.publish('friendRequestCancelSettled', {
+				authorId,
+				occurredAt: new Date().toISOString(),
+			});
 		},
 	});
 

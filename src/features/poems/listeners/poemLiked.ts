@@ -1,8 +1,7 @@
 import { feedKeys } from '@features/feed/api/keys';
 import { poemKeys } from '@features/poems/api/keys';
+import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
-
-import type { AppEvents } from '../eventBus';
 
 export async function onPoemLiked(
 	queryClient: QueryClient,
