@@ -1,7 +1,7 @@
+import { interactions } from '@features/interactions/api/endpoints';
+import { poemKeys } from '@features/poems/api/keys';
 import type { FullPoem } from '@features/poems/public/types';
 import { eventBus } from '@root/core/events/eventBus';
-import { interactions } from '@root/features/interactions/api/endpoints';
-import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 

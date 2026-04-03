@@ -1,7 +1,7 @@
 import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { useMemo, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 

@@ -8,7 +8,6 @@ export * from './domain-isolation';
 export * from './domain-statistics';
 export * from './endpoint-usecase-count';
 export * from './loc-metrics';
-export * from './main-seq-dist';
 export * from './overall-view';
 export * from './rules/no-cross-domain-calls';
 export * from './rules/no-invalid-directional-dependencies';

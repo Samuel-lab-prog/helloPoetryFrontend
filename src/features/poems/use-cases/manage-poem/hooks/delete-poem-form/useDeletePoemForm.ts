@@ -1,6 +1,6 @@
+import { poems } from '@features/poems/api/endpoints';
+import { poemKeys } from '@features/poems/api/keys';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { poems } from '@root/features/poems/api/endpoints';
-import { poemKeys } from '@root/features/poems/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';

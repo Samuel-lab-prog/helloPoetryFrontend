@@ -1,5 +1,5 @@
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { poems } from '@root/features/poems/api/endpoints';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { poems } from '@features/poems/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 export function useMyPoems(enabled = true) {

@@ -67,5 +67,3 @@ export function printNoInvalidRootNamespaces(cruiseResult: DepcruiseResult): voi
 
 	printRulesTable(`Invalid root namespaces (${violations.length})`, columns, violations);
 }
-
-

@@ -21,14 +21,15 @@ export function isAbstractFile(path: string, content?: string): boolean {
  * @returns The domain name
  */
 export function extractDomainFromPath(path: string): string | null {
-	const normalized = path.replace(/\\/g, '/');
+	const normalized = path.replace(/\\/g, '/').replace(/^\.\//, '');
 
-	const featureMatch = normalized.match(/(?:^|\/)src\/features\/([^/]+)\//);
+	const featureMatch = normalized.match(/(?:^|\/)(?:src\/)?features\/([^/]+)\//);
 	if (featureMatch) return featureMatch[1]!;
 
-	if (normalized.includes('/src/core/')) return 'core';
-	if (normalized.includes('/src/components/')) return 'components';
-	if (normalized.includes('/src/themes/')) return 'themes';
+	if (normalized.includes('/src/core/') || normalized.startsWith('core/')) return 'core';
+	if (normalized.includes('/src/components/') || normalized.startsWith('components/'))
+		return 'components';
+	if (normalized.includes('/src/themes/') || normalized.startsWith('themes/')) return 'themes';
 
 	return null;
 }
@@ -78,11 +79,14 @@ export function classifyDomainKind(domain: string): DomainKind {
  * @returns True if the path is within a generic subdomain, false otherwise
  */
 export function isGenericSubdomain(path: string): boolean {
-	const normalized = path.replace(/\\/g, '/');
+	const normalized = path.replace(/\\/g, '/').replace(/^\.\//, '');
 	return (
 		normalized.startsWith('src/core/') ||
 		normalized.startsWith('src/components/') ||
-		normalized.startsWith('src/themes/')
+		normalized.startsWith('src/themes/') ||
+		normalized.startsWith('core/') ||
+		normalized.startsWith('components/') ||
+		normalized.startsWith('themes/')
 	);
 }
 

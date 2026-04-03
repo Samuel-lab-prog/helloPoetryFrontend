@@ -167,6 +167,3 @@ export function printUseCaseStructureViolations(cloc: ClocResult): void {
 
 	printRulesTable(`Use-case structure violations (${violations.length})`, columns, violations);
 }
-
-
-

@@ -1,10 +1,10 @@
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { feedKeys } from '@features/feed/api/keys';
+import { friendsKeys } from '@features/friends/api/keys';
+import { notificationsKeys } from '@features/notifications/api/keys';
+import { poemKeys } from '@features/poems/api/keys';
+import { userKeys } from '@features/users/api/keys';
 import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { feedKeys } from '@root/features/feed/api/keys';
-import { friendsKeys } from '@root/features/friends/api/keys';
-import { notificationsKeys } from '@root/features/notifications/api/keys';
-import { poemKeys } from '@root/features/poems/api/keys';
-import { userKeys } from '@root/features/users/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
 
 export async function clearSessionQueries(queryClient: QueryClient): Promise<void> {

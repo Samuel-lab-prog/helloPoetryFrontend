@@ -1,5 +1,5 @@
-import { interactionsKeys } from '@root/features/interactions/api/keys';
-import { poemKeys } from '@root/features/poems/api/keys';
+import { interactionsKeys } from '@features/interactions/api/keys';
+import { poemKeys } from '@features/poems/api/keys';
 import type { QueryClient } from '@tanstack/react-query';
 
 import type { AppEvents } from '../eventBus';

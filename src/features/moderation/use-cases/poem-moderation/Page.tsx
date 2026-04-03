@@ -1,5 +1,5 @@
 import { Flex, Heading, Tabs, Text } from '@chakra-ui/react';
-import { useEnsureRole } from '@root/features/auth/public/hooks/useEnsureRole';
+import { useEnsureRole } from '@features/auth/public/hooks/useEnsureRole';
 import { useNavigate } from 'react-router-dom';
 
 import { ActionsTab } from './components/ActionsTab';

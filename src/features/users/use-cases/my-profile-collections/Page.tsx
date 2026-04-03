@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { useMyPoems } from '@root/features/poems/public/hooks/useGetMyPoems';
-import { usePoemCollections } from '@root/features/poems/public/hooks/useManagePoemCollections';
-import { useSavedPoems } from '@root/features/poems/public/hooks/useManageSavedPoems';
+import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
+import { usePoemCollections } from '@features/poems/public/hooks/useManagePoemCollections';
+import { useSavedPoems } from '@features/poems/public/hooks/useManageSavedPoems';
 import { NavLink } from 'react-router-dom';
 
 import { CollectionsSection } from '../../public/components/my-profile/CollectionsSection';

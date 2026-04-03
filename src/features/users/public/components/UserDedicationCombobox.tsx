@@ -9,7 +9,7 @@ import {
 	useFilter,
 	useListCollection,
 } from '@chakra-ui/react';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useEffect, useState } from 'react';
 import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
 

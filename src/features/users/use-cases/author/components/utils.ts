@@ -1,4 +1,4 @@
-import type { AuthorProfileType } from '@root/features/poems/public/types';
+import type { AuthorProfileType } from '@features/poems/public/types';
 import { Clock3, LogIn, type LucideIcon, UserCheck, UserPlus, UserX } from 'lucide-react';
 
 export type RelationStatus = {

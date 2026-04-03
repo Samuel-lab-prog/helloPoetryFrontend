@@ -1,5 +1,5 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react';
-import { type PoemCommentType } from '@root/features/interactions/public';
+import { type PoemCommentType } from '@features/interactions/public';
 import { ChevronDown, ChevronUp, MessageCircleReply } from 'lucide-react';
 
 interface CommentThreadActionsProps {

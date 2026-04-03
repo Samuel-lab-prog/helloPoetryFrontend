@@ -11,8 +11,8 @@ import {
 	WrapItem,
 } from '@chakra-ui/react';
 import type { ModeratePoemBody, ModerationPoem } from '@features/moderation/api/types';
-import { PoemAudioPlayer } from '@root/features/poems/use-cases/poem/components/PoemAudioPlayer';
-import { Tag } from '@root/features/poems/use-cases/poem/components/PoemTag';
+import { PoemAudioPlayer } from '@features/poems/use-cases/poem/components/PoemAudioPlayer';
+import { Tag } from '@features/poems/use-cases/poem/components/PoemTag';
 import { formatDate, translateModerationStatus, translateVisibility } from '@Utils';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import { Avatar, Badge, Box, Flex, HStack, Link, Text, VStack } from '@chakra-ui/react';
-import type { NotificationItem } from '@root/features/notifications/api/types';
+import type { NotificationItem } from '@features/notifications/api/types';
 import { formatRelativeTime } from '@Utils';
 import { NavLink } from 'react-router-dom';
 

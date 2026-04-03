@@ -4,7 +4,6 @@ import {
 	printChangeAmplification,
 	printDomainIsolation,
 	printDomainCodeStats,
-	printMainSeqDist,
 	printDomainStatistics,
 	printEndpointAndUseCaseTotals,
 	printTopFanIn,
@@ -29,7 +28,6 @@ function metrics(): void {
 	printDomainStatistics(cloc);
 	printDomainIsolation(depcruise);
 	printChangeAmplification();
-	printMainSeqDist(cloc, depcruise);
 	printDomainCodeStats(cloc);
 	printEndpointAndUseCaseTotals(cloc);
 

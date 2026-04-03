@@ -1,16 +1,16 @@
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { feed } from '@root/features/feed/api/endpoints';
-import type { FeedPoemType } from '@root/features/feed/public/types';
-import { friends } from '@root/features/friends/api/endpoints';
-import { notifications } from '@root/features/notifications/api/endpoints';
-import { poems } from '@root/features/poems/api/endpoints';
-import type { PaginatedPoemsType, PoemPreviewType } from '@root/features/poems/public/types';
-import { users } from '@root/features/users/api/endpoints';
-import { userKeys } from '@root/features/users/api/keys';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { feed } from '@features/feed/api/endpoints';
+import type { FeedPoemType } from '@features/feed/public/types';
+import { friends } from '@features/friends/api/endpoints';
+import { notifications } from '@features/notifications/api/endpoints';
+import { poems } from '@features/poems/api/endpoints';
+import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
+import { users } from '@features/users/api/endpoints';
+import { userKeys } from '@features/users/api/keys';
+import type { UserPrivateProfile, UserRole, UserStatus } from '@features/users/api/types';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
-import type { UserPrivateProfile, UserRole, UserStatus } from '../../../features/users/api/types';
 import type { AppEvents } from '../eventBus';
 import { clearSessionQueries } from './clearSession';
 

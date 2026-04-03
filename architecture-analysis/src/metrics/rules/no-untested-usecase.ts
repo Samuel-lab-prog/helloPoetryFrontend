@@ -104,6 +104,3 @@ export function printNoUntestedUsecase(cloc: ClocResult): void {
 
 	printRulesTable(`Missing execute.test.ts (${violations.length})`, columns, violations);
 }
-
-
-

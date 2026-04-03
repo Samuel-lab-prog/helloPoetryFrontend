@@ -83,7 +83,11 @@ export function printTable<Row>(title: string, columns: TableColumn<Row>[], rows
 	});
 }
 
-export function printRulesTable<Row>(title: string, columns: TableColumn<Row>[], rows: Row[]): void {
+export function printRulesTable<Row>(
+	title: string,
+	columns: TableColumn<Row>[],
+	rows: Row[],
+): void {
 	const rulesTitle = `Rules • ${title}`;
 	printTable(rulesTitle, columns, rows);
 }

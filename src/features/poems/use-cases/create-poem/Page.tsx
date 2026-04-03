@@ -1,6 +1,6 @@
 import { Surface } from '@BaseComponents';
 import { Badge, Button, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { NavLink } from 'react-router-dom';
 
 import { CreatePoemForm } from './components/CreatePoemForm';

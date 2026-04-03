@@ -1,4 +1,4 @@
-import { users } from '@root/features/users/api/endpoints';
+import { users } from '@features/users/api/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 export function useUsersPreview() {

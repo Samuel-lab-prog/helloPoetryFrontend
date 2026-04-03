@@ -119,8 +119,9 @@ export function printNoMissingDirectories(cloc: ClocResult): void {
 		},
 	];
 
-	printRulesTable(`Feature folder structure violations (${violations.length})`, columns, violations);
+	printRulesTable(
+		`Feature folder structure violations (${violations.length})`,
+		columns,
+		violations,
+	);
 }
-
-
-

@@ -1,7 +1,7 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Field, Flex, Input, Text } from '@chakra-ui/react';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 

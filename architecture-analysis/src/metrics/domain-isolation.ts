@@ -1,4 +1,5 @@
 import { red, green, yellow } from 'kleur/colors';
+import path from 'path';
 import { printTable, type TableColumn } from '../PrintTable';
 import type { DepcruiseResult } from '../Types';
 import { classifyIsolation } from '../Classify';
@@ -24,7 +25,7 @@ export function calculateDomainIsolation(cruiseResult: DepcruiseResult): DomainI
 		if (!acc.has(fromDomain)) acc.set(fromDomain, { internal: 0, external: 0 });
 
 		module.dependencies.forEach((dep) => {
-			const toDomain = extractDomainFromPath(dep.resolved);
+			const toDomain = extractDomainFromPath(normalizeResolved(module.source, dep.resolved));
 
 			if (!toDomain || IGNORED_DOMAINS_IMPORTS_FROM.includes(toDomain)) return;
 
@@ -44,6 +45,24 @@ export function calculateDomainIsolation(cruiseResult: DepcruiseResult): DomainI
 			externalPercent: counts.external / total,
 		};
 	});
+}
+
+function normalizeResolved(moduleSource: string, resolved: string): string {
+	const normalized = resolved.replace(/\\/g, '/');
+
+	if (normalized.startsWith('@root/')) return `src/${normalized.slice('@root/'.length)}`;
+	if (normalized.startsWith('@features/'))
+		return `src/features/${normalized.slice('@features/'.length)}`;
+	if (normalized.startsWith('@core/')) return `src/core/${normalized.slice('@core/'.length)}`;
+	if (normalized.startsWith('@BaseComponents')) return 'src/core/components/index.ts';
+	if (normalized.startsWith('@Utils')) return 'src/core/utils/index.ts';
+
+	if (normalized.startsWith('.') || normalized.startsWith('..')) {
+		const baseDir = path.posix.dirname(moduleSource.replace(/\\/g, '/'));
+		return path.posix.normalize(path.posix.join(baseDir, normalized));
+	}
+
+	return normalized;
 }
 
 function classifyMetric(externalPercent: number) {

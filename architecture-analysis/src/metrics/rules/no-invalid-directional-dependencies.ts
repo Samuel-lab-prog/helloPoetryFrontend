@@ -88,5 +88,3 @@ export function printNoInvalidDirectionalDependencies(cruiseResult: DepcruiseRes
 
 	printRulesTable(`Directional violations (${violations.length})`, columns, violations);
 }
-
-

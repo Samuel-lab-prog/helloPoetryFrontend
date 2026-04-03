@@ -16,10 +16,10 @@
 		"barrels": "barrelsby --config barrels.config.json",
 		"check-deps": "npx dependency-cruiser src",
 		"metrics:cloc": "cloc src --by-file --exclude-dir=node_modules,dist,build,coverage --json --out cloc.json",
-		"metrics:depcruise": "depcruise src --exclude \"node_modules|dist|coverage\" --output-type json --output-to depcruise.json",
+		"metrics:depcruise": "depcruise \"src/**/*.{ts,tsx}\" --exclude \"node_modules|dist|coverage\" --output-type json --output-to depcruise.json",
 		"metrics:analysis": "bun architecture-analysis/src/main.ts",
 		"metrics": "bun run metrics:cloc && bun run metrics:depcruise && bun run metrics:analysis",
-		"depcruise": "bunx depcruise src",
+		"depcruise": "bunx depcruise \"src/**/*.{ts,tsx}\"",
 		"check": "bun run lint:fix && bun run format:fix && bun run typecheck && bun run check-deps && bun run metrics && bun run build",
 		"generate:api": "orval"
 	},

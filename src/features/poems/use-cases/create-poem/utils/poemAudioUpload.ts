@@ -1,4 +1,4 @@
-import { poems } from '@root/features/poems/api/endpoints';
+import { poems } from '@features/poems/api/endpoints';
 
 const allowedAudioTypes = new Set([
 	'audio/mpeg',

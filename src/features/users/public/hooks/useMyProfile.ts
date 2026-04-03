@@ -1,4 +1,4 @@
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useQuery } from '@tanstack/react-query';
 
 import { users } from '../../api/endpoints';

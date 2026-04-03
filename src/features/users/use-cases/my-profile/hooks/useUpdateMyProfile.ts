@@ -1,7 +1,7 @@
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { users } from '@root/features/users/api/endpoints';
-import { userKeys } from '@root/features/users/api/keys';
-import type { UserPrivateProfile } from '@root/features/users/api/types';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { users } from '@features/users/api/endpoints';
+import { userKeys } from '@features/users/api/keys';
+import type { UserPrivateProfile } from '@features/users/api/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
