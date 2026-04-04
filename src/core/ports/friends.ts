@@ -45,10 +45,8 @@ export function registerFriendsRequestsPort(port: FriendsRequestsPort) {
 }
 
 export function getFriendsRequestsPort(): FriendsRequestsPort {
-	if (!friendsRequestsPort) {
+	if (!friendsRequestsPort)
 		throw new Error('FriendsRequestsPort not registered. Register it in main.tsx.');
-	}
-
 	return friendsRequestsPort;
 }
 
@@ -57,9 +55,7 @@ export function registerFriendsActionsPort(port: FriendsActionsPort) {
 }
 
 export function getFriendsActionsPort(): FriendsActionsPort {
-	if (!friendsActionsPort) {
+	if (!friendsActionsPort)
 		throw new Error('FriendsActionsPort not registered. Register it in main.tsx.');
-	}
-
 	return friendsActionsPort;
 }

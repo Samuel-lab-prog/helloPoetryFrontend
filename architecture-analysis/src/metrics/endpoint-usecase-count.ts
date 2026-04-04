@@ -6,19 +6,28 @@ type TotalMetric = {
 	value: number;
 };
 
-const USE_CASE_PATTERN = /(?:^|[\\/])src[\\/]features[\\/][^\\/]+[\\/]use-cases[\\/].+\\.(ts|tsx)$/;
+const USE_CASE_FOLDER_PATTERN = /(?:^|\/)src\/features\/[^/]+\/use-cases\/([^/]+)\//;
+const USE_CASE_PAGE_PATTERN = /(?:^|\/)src\/features\/[^/]+\/use-cases\/[^/]+\/Page\.tsx$/;
 
-const PAGE_PATTERN = /(?:^|[\\/])src[\\/]features[\\/][^\\/]+[\\/]pages[\\/].+\\.tsx$/;
+function normalizePath(file: string): string {
+	return file.replace(/\\/g, '/');
+}
 
 function countUseCases(cloc: ClocResult): number {
-	let total = 0;
+	const useCases = new Set<string>();
 
 	for (const file of Object.keys(cloc)) {
 		if (file === 'SUM' || file === 'header') continue;
-		if (USE_CASE_PATTERN.test(file)) total += 1;
+		const normalized = normalizePath(file);
+		const match = normalized.match(USE_CASE_FOLDER_PATTERN);
+		if (!match) continue;
+		const parts = normalized.split('/');
+		const feature = parts[2];
+		const useCase = match[1];
+		useCases.add(`src/features/${feature}/use-cases/${useCase}`);
 	}
 
-	return total;
+	return useCases.size;
 }
 
 function countPages(cloc: ClocResult): number {
@@ -26,7 +35,8 @@ function countPages(cloc: ClocResult): number {
 
 	for (const file of Object.keys(cloc)) {
 		if (file === 'SUM' || file === 'header') continue;
-		if (PAGE_PATTERN.test(file)) total += 1;
+		const normalized = normalizePath(file);
+		if (USE_CASE_PAGE_PATTERN.test(normalized)) total += 1;
 	}
 
 	return total;
