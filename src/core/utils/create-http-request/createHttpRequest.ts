@@ -1,4 +1,4 @@
-﻿import type { AppErrorType } from './appError';
+﻿import type { AppErrorType } from '../appError';
 
 type QueryPrimitive = string | number | boolean;
 type QueryValue = QueryPrimitive | QueryPrimitive[] | undefined;
