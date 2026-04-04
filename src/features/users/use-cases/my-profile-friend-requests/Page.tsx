@@ -1,8 +1,8 @@
 import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { useMyFriendRequests } from '@features/friends/public/hooks/useMyFriendRequests';
 import { useFriendRequestActions } from '@features/interactions/public';
+import { useMyFriendRequests } from '@features/users/public/hooks/useMyFriendRequests';
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 

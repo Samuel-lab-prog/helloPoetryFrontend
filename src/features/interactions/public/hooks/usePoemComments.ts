@@ -1,6 +1,6 @@
+import { getPoemsCachePort } from '@core/ports/poems';
 import { interactions } from '@features/interactions/api/endpoints';
 import { interactionsKeys } from '@features/interactions/api/keys';
-import { poemKeys } from '@features/poems/api/keys';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -41,10 +41,6 @@ function buildCommentsKey(poemId: number, parentId?: number) {
 	return parentId
 		? interactionsKeys.commentsByPoem(String(poemId), String(parentId))
 		: interactionsKeys.commentsByPoem(String(poemId));
-}
-
-function buildPoemKey(poemId: number) {
-	return poemKeys.byId(String(poemId));
 }
 
 async function prepareCommentQueries(
@@ -136,8 +132,9 @@ function getToggleLikeErrorMessage(error: AppErrorType | null) {
 
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {
 	const queryClient = useQueryClient();
+	const poemsCachePort = getPoemsCachePort();
 	const isEnabled = options.enabled ?? true;
-	const poemKey = buildPoemKey(poemId);
+	const poemKey = poemsCachePort.getPoemKey(poemId);
 	const [updatingLikeCommentId, setUpdatingLikeCommentId] = useState<number | null>(null);
 
 	const query = useQuery({

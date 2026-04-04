@@ -1,24 +1,18 @@
-import { friends } from '@features/friends/api/endpoints';
+import { getFriendsActionsPort } from '@core/ports/friends';
+import { getUsersCachePort } from '@core/ports/users';
 import type { AuthorProfileType } from '@features/poems/public/types';
-import { userKeys } from '@features/users/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
-type FriendRequestResult = {
-	id: number;
-	requesterId: number;
-	addresseeId: number;
-	createdAt: string;
-};
-
 export function useSendFriendRequest() {
 	const queryClient = useQueryClient();
+	const friendsActionsPort = getFriendsActionsPort();
+	const usersCachePort = getUsersCachePort();
 
 	const mutation = useMutation({
-		mutationFn: (authorId: number) =>
-			friends.sendFriendRequest.mutate(String(authorId)) as Promise<FriendRequestResult>,
+		mutationFn: (authorId: number) => friendsActionsPort.sendFriendRequest(authorId),
 		onMutate: async (authorId) => {
-			const queryKey = userKeys.profile(String(authorId));
+			const queryKey = usersCachePort.getProfileKey(authorId);
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 
@@ -38,7 +32,7 @@ export function useSendFriendRequest() {
 			}
 		},
 		onSuccess: (_, authorId) => {
-			queryClient.invalidateQueries({ queryKey: userKeys.profile(String(authorId)) });
+			queryClient.invalidateQueries({ queryKey: usersCachePort.getProfileKey(authorId) });
 		},
 		onSettled: (_data, _error, _authorId, context) => {
 			if (context?.queryKey) {

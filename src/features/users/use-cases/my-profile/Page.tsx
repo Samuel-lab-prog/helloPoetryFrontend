@@ -1,11 +1,11 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { useMyFriendRequests } from '@features/friends/public/hooks/useMyFriendRequests';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { usePoemCollections } from '@features/poems/public/hooks/useManagePoemCollections';
 import { useSavedPoems } from '@features/poems/public/hooks/useManageSavedPoems';
+import { useMyFriendRequests } from '@features/users/public/hooks/useMyFriendRequests';
 import { eventBus } from '@root/core/events/eventBus';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

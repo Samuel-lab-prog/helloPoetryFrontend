@@ -1,5 +1,5 @@
+import { getPoemsCachePort } from '@core/ports/poems';
 import { interactions } from '@features/interactions/api/endpoints';
-import { poemKeys } from '@features/poems/api/keys';
 import type { FullPoem } from '@features/poems/public/types';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,8 @@ import type { AppErrorType } from '@Utils';
 
 export function usePoemLike(poemId: number) {
 	const queryClient = useQueryClient();
-	const poemKey = poemKeys.byId(String(poemId));
+	const poemsCachePort = getPoemsCachePort();
+	const poemKey = poemsCachePort.getPoemKey(poemId);
 
 	function optimisticUpdate(nextLiked: boolean) {
 		queryClient.setQueryData<FullPoem | undefined>(poemKey, (current) => {

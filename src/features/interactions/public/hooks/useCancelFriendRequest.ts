@@ -1,17 +1,19 @@
-import { friends } from '@features/friends/api/endpoints';
+import { getFriendsActionsPort } from '@core/ports/friends';
+import { getUsersCachePort } from '@core/ports/users';
 import type { AuthorProfileType } from '@features/poems/public/types';
-import { userKeys } from '@features/users/api/keys';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
 export function useCancelFriendRequest() {
 	const queryClient = useQueryClient();
+	const friendsActionsPort = getFriendsActionsPort();
+	const usersCachePort = getUsersCachePort();
 
 	const mutation = useMutation({
-		mutationFn: (authorId: number) => friends.cancelFriendRequest.mutate(String(authorId)),
+		mutationFn: (authorId: number) => friendsActionsPort.cancelFriendRequest(authorId),
 		onMutate: async (authorId) => {
-			const queryKey = userKeys.profile(String(authorId));
+			const queryKey = usersCachePort.getProfileKey(authorId);
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 

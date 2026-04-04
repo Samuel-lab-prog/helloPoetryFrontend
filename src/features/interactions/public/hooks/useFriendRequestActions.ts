@@ -1,22 +1,23 @@
+import { getFriendsActionsPort } from '@core/ports/friends';
+import { getUsersCachePort } from '@core/ports/users';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { friends } from '@features/friends/api/endpoints';
-import { friendsKeys } from '@features/friends/api/keys';
 import type { AuthorProfileType } from '@features/poems/public/types';
-import { userKeys } from '@features/users/api/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
 export function useFriendRequestActions() {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const friendsActionsPort = getFriendsActionsPort();
+	const usersCachePort = getUsersCachePort();
 	const profileKey = clientId
-		? userKeys.profile(String(clientId))
+		? usersCachePort.getProfileKey(clientId)
 		: (['users', 'profile'] as const);
 
 	const acceptMutation = useMutation({
-		mutationFn: (requesterId: number) => friends.acceptFriendRequest.mutate(String(requesterId)),
+		mutationFn: (requesterId: number) => friendsActionsPort.acceptFriendRequest(requesterId),
 		onMutate: async (requesterId) => {
-			const queryKey = userKeys.profile(String(requesterId));
+			const queryKey = usersCachePort.getProfileKey(requesterId);
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 
@@ -37,7 +38,7 @@ export function useFriendRequestActions() {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: profileKey });
-			queryClient.invalidateQueries({ queryKey: friendsKeys.requests() });
+			queryClient.invalidateQueries({ queryKey: friendsActionsPort.getRequestsKey() });
 		},
 		onSettled: (_data, _error, _requesterId, context) => {
 			if (context?.queryKey) {
@@ -47,9 +48,9 @@ export function useFriendRequestActions() {
 	});
 
 	const rejectMutation = useMutation({
-		mutationFn: (requesterId: number) => friends.rejectFriendRequest.mutate(String(requesterId)),
+		mutationFn: (requesterId: number) => friendsActionsPort.rejectFriendRequest(requesterId),
 		onMutate: async (requesterId) => {
-			const queryKey = userKeys.profile(String(requesterId));
+			const queryKey = usersCachePort.getProfileKey(requesterId);
 			await queryClient.cancelQueries({ queryKey });
 			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
 
@@ -69,7 +70,7 @@ export function useFriendRequestActions() {
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: profileKey });
-			queryClient.invalidateQueries({ queryKey: friendsKeys.requests() });
+			queryClient.invalidateQueries({ queryKey: friendsActionsPort.getRequestsKey() });
 		},
 		onSettled: (_data, _error, _requesterId, context) => {
 			if (context?.queryKey) {
