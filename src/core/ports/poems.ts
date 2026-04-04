@@ -1,6 +1,6 @@
 import type { PaginatedPoemsType, SearchPoemsParams } from '@features/poems/public/types';
 
-export type QueryOptions<TData> = {
+type QueryOptions<TData> = {
 	queryKey: readonly unknown[];
 	queryFn: () => Promise<TData>;
 };

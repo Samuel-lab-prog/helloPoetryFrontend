@@ -71,7 +71,7 @@ export function printNoUntestedUsecase(cloc: ClocResult): void {
 	const violations = checkMissingExecuteTests(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? Rules: All use-cases have execute.test.ts'));
+		console.log(green('✔ Rules: All use-cases have execute.test.ts'));
 		return;
 	}
 

@@ -132,7 +132,7 @@ export function printUseCaseStructureViolations(cloc: ClocResult): void {
 	const violations = checkUseCaseStructure(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? Rules: All use-cases follow folder structure'));
+		console.log(green('✔ Rules: All use-cases follow folder structure'));
 		return;
 	}
 

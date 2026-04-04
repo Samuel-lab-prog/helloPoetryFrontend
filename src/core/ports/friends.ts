@@ -13,7 +13,7 @@ export type MyFriendRequestsType = {
 	}[];
 };
 
-export type QueryOptions<TData> = {
+type QueryOptions<TData> = {
 	queryKey: readonly unknown[];
 	queryFn: () => Promise<TData>;
 };

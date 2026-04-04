@@ -1,4 +1,5 @@
 import { loadClocData, loadDepcruiseData } from './Loaders';
+import { section } from './ConsoleFormatUtils';
 
 import {
 	printChangeAmplification,
@@ -31,6 +32,7 @@ function metrics(): void {
 	printDomainCodeStats(cloc);
 	printEndpointAndUseCaseTotals(cloc);
 
+	section('Rules');
 	printNoCrossDomainCalls(depcruise);
 	printNoInvalidRootNamespaces(depcruise);
 	printNoRootSourceCode(depcruise);

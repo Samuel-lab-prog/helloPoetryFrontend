@@ -9,9 +9,7 @@ export function registerUsersCachePort(port: UsersCachePort) {
 }
 
 export function getUsersCachePort(): UsersCachePort {
-	if (!usersCachePort) {
-		throw new Error('UsersCachePort not registered. Register it in main.tsx.');
-	}
+	if (!usersCachePort) throw new Error('UsersCachePort not registered. Register it in main.tsx.');
 
 	return usersCachePort;
 }

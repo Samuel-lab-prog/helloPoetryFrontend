@@ -80,7 +80,7 @@ export function printNoMissingDirectories(cloc: ClocResult): void {
 	const violations = checkPortsAndAdaptersStructure(cloc);
 
 	if (violations.length === 0) {
-		console.log(green('? Rules: All features follow folder structure'));
+		console.log(green('✔ Rules: All features follow folder structure'));
 		return;
 	}
 
