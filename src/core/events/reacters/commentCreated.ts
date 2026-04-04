@@ -1,4 +1,5 @@
 import { interactionsKeys } from '@features/interactions/api/keys';
+import { poemKeys } from '@features/poems/api/keys';
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 
@@ -12,10 +13,11 @@ export async function onCommentCreated(
 			? interactionsKeys.commentsByPoem(String(payload.poemId), String(payload.parentId))
 			: null;
 
-	const keysToInvalidate = [
+	const keysToRefetch = [
 		baseCommentsKey as readonly unknown[],
 		parentCommentsKey as readonly unknown[] | null,
+		poemKeys.byId(String(payload.poemId)),
 	].filter(Boolean) as ReadonlyArray<readonly unknown[]>;
 
-	await Promise.all(keysToInvalidate.map((queryKey) => queryClient.refetchQueries({ queryKey })));
+	await Promise.all(keysToRefetch.map((queryKey) => queryClient.refetchQueries({ queryKey })));
 }
