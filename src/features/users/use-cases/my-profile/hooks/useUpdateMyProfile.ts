@@ -70,9 +70,7 @@ export function useUpdateMyProfile() {
 		const error = mutation.error as AppErrorType | null;
 		if (!error || error.statusCode !== 409) return null;
 		const message = error.message?.toLowerCase() ?? '';
-		if (message.includes('nickname') || message.includes('apelido')) {
-			return 'nickname';
-		}
+		if (message.includes('nickname')) return 'nickname';
 		return null;
 	}
 

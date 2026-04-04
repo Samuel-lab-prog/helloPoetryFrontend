@@ -2,8 +2,6 @@ import { getFriendsRequestsPort, type MyFriendRequestsType } from '@core/ports/f
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useQuery } from '@tanstack/react-query';
 
-export type { MyFriendRequestsType };
-
 export function useMyFriendRequests(enabled = true) {
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const friendsRequestsPort = getFriendsRequestsPort();
@@ -15,10 +13,12 @@ export function useMyFriendRequests(enabled = true) {
 	});
 
 	return {
-		requests: query.data ?? { sent: [], received: [] },
+		requests: (query.data ?? { sent: [], received: [] }) as MyFriendRequestsType,
 		isLoading: query.isLoading,
 		isError: query.isError,
 		error: query.error,
 		refetch: query.refetch,
 	};
 }
+
+export type { MyFriendRequestsType };
