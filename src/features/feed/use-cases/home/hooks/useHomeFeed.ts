@@ -1,7 +1,7 @@
+import { getPoemsQueryPort } from '@core/ports/poems';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { feed } from '@features/feed/api/endpoints';
 import type { FeedPoemType } from '@features/feed/public/types';
-import { poems } from '@features/poems/api/endpoints';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
 import { useQuery } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -52,13 +52,8 @@ async function fetchPersonalizedFeed(): Promise<PoemPreviewType[]> {
 }
 
 async function fetchRecentPoems(limit: number): Promise<PoemPreviewType[]> {
-	const payload = (await poems.getPoems
-		.query({
-			limit,
-			orderBy: 'createdAt',
-			orderDirection: 'desc',
-		})
-		.queryFn()) as PaginatedPoemsType;
+	const poemsQueryPort = getPoemsQueryPort();
+	const payload = (await poemsQueryPort.getRecentPoems({ limit })) as PaginatedPoemsType;
 	return payload.poems ?? [];
 }
 

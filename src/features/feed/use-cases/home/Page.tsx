@@ -1,8 +1,8 @@
 import { Footer, SearchInput } from '@BaseComponents';
 import { Flex, VStack } from '@chakra-ui/react';
+import { getPoemsQueryPort } from '@core/ports/poems';
 import { useIsAuthenticated } from '@features/auth/public/hooks/useIsAuthenticated';
-import { poems } from '@features/poems/api/endpoints';
-import type { PaginatedPoems } from '@features/poems/api/types';
+import type { PaginatedPoemsType } from '@features/poems/public/types';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -23,9 +23,10 @@ export function HomePage() {
 		isAuthenticated,
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
 	});
+	const poemsQueryPort = getPoemsQueryPort();
 	const isSearching = debouncedSearch.trim().length > 0;
-	const searchQuery = useQuery<PaginatedPoems>({
-		...poems.getPoems.query({
+	const searchQuery = useQuery<PaginatedPoemsType>({
+		...poemsQueryPort.getSearchQueryOptions({
 			limit: POEMS_FEED_LIMIT,
 			searchTitle: debouncedSearch.trim() || undefined,
 			orderBy: 'createdAt',
