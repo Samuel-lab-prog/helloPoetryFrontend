@@ -3,5 +3,4 @@
  */
 
 export * from './eventBus';
-export * from './reacters/index';
 export * from './registerEventListeners';
