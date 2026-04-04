@@ -1,7 +1,6 @@
+import { friends } from '@Api/friends/endpoints';
+import { friendsKeys } from '@Api/friends/keys';
 import type { FriendsRequestsPort, MyFriendRequestsType } from '@core/ports/friends';
-
-import { friends } from '../api/endpoints';
-import { friendsKeys } from '../api/keys';
 
 export const friendsRequestsPort: FriendsRequestsPort = {
 	getMyFriendRequestsQueryOptions() {

@@ -1,6 +1,6 @@
+import { poems } from '@Api/poems/endpoints';
+import type { CreatePoemResult } from '@Api/poems/types';
 import { toaster } from '@BaseComponents';
-import { poems } from '@features/poems/api/endpoints';
-import type { CreatePoemResult } from '@features/poems/api/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation } from '@tanstack/react-query';

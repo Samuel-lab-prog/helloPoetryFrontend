@@ -1,7 +1,7 @@
+import { poems } from '@Api/poems/endpoints';
+import { poemKeys } from '@Api/poems/keys';
+import type { FullPoem, SavedPoem } from '@Api/poems/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { poems } from '@features/poems/api/endpoints';
-import { poemKeys } from '@features/poems/api/keys';
-import type { FullPoem, SavedPoem } from '@features/poems/api/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';

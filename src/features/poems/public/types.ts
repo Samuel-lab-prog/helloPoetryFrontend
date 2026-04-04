@@ -1,4 +1,4 @@
-import type { FullPoem, PoemPreview } from '../api/types';
+import type { FullPoem, PoemPreview } from '@Api/poems/types';
 
 export type {
 	CollectionItemBody,
@@ -29,7 +29,7 @@ export type {
 	UpdatePoemAudioResponse,
 	UpdatePoemBody,
 	UpdatePoemResult,
-} from '../api/types';
+} from '@Api/poems/types';
 
 export type PoemMinimalDataType = Pick<FullPoem, 'id' | 'title'>;
 

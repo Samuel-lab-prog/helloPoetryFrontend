@@ -1,5 +1,5 @@
+import { interactions } from '@Api/interactions/endpoints';
 import { getPoemsCachePort } from '@core/ports/poems';
-import { interactions } from '@features/interactions/api/endpoints';
 import type { FullPoem } from '@features/poems/public/types';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

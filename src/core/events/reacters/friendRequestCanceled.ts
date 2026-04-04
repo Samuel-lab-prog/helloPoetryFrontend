@@ -1,5 +1,5 @@
-import { friendsKeys } from '@features/friends/api/keys';
-import { userKeys } from '@features/users/api/keys';
+import { friendsKeys } from '@Api/friends/keys';
+import { userKeys } from '@Api/users/keys';
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 

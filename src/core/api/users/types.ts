@@ -1,4 +1,4 @@
-import type { PoemPreview } from '@features/poems/public/types';
+import type { PoemPreview } from '@Api/poems/types';
 
 export type UsersSearchParams = {
 	limit?: number;

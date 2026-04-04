@@ -1,6 +1,6 @@
+import { feed } from '@Api/feed/endpoints';
 import { getPoemsQueryPort } from '@core/ports/poems';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { feed } from '@features/feed/api/endpoints';
 import type { FeedPoemType } from '@features/feed/public/types';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
 import { useQuery } from '@tanstack/react-query';

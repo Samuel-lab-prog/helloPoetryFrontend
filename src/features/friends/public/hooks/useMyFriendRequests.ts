@@ -1,6 +1,6 @@
+import { friends } from '@Api/friends/endpoints';
+import { friendsKeys } from '@Api/friends/keys';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { friends } from '@features/friends/api/endpoints';
-import { friendsKeys } from '@features/friends/api/keys';
 import { useQuery } from '@tanstack/react-query';
 
 export type MyFriendRequestsType = {

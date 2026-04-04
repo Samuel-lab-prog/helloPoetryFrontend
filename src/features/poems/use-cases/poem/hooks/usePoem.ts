@@ -1,4 +1,4 @@
-import { poems } from '@features/poems/api/endpoints';
+import { poems } from '@Api/poems/endpoints';
 import { useQuery } from '@tanstack/react-query';
 
 export function usePoem(id: number) {

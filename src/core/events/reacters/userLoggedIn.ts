@@ -1,11 +1,11 @@
+import { feedKeys } from '@Api/feed/keys';
+import { friends } from '@Api/friends/endpoints';
+import { notifications } from '@Api/notifications/endpoints';
+import { poems } from '@Api/poems/endpoints';
+import { users } from '@Api/users/endpoints';
+import { userKeys } from '@Api/users/keys';
+import type { UserPrivateProfile, UserRole, UserStatus } from '@Api/users/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { feedKeys } from '@features/feed/api/keys';
-import { friends } from '@features/friends/api/endpoints';
-import { notifications } from '@features/notifications/api/endpoints';
-import { poems } from '@features/poems/api/endpoints';
-import { users } from '@features/users/api/endpoints';
-import { userKeys } from '@features/users/api/keys';
-import type { UserPrivateProfile, UserRole, UserStatus } from '@features/users/public/types';
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 

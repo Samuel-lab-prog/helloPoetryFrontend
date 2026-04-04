@@ -3,4 +3,11 @@
  */
 
 export * from './eventBus';
+export * from './reacters/commentCreated';
+export * from './reacters/friendRequestCanceled';
+export * from './reacters/friendRequestCancelSettled';
+export * from './reacters/poemCreated';
+export * from './reacters/poemLiked';
+export * from './reacters/userLoggedIn';
+export * from './reacters/userLoggedOut';
 export * from './registerEventListeners';

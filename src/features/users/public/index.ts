@@ -16,4 +16,3 @@ export * from './components/UserDedicationCombobox';
 export * from './hooks/useMyFriendRequests';
 export * from './hooks/useMyProfile';
 export * from './hooks/useUsersPreview';
-export * from './types';

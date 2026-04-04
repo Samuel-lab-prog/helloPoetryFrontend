@@ -1,7 +1,7 @@
+import { poems } from '@Api/poems/endpoints';
+import { poemKeys } from '@Api/poems/keys';
 import type { PoemsQueryPort } from '@core/ports/poems';
 
-import { poems } from '../api/endpoints';
-import { poemKeys } from '../api/keys';
 import type { PaginatedPoemsType, SearchPoemsParams } from '../public/types';
 
 export const poemsQueryPort: PoemsQueryPort = {

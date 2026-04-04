@@ -1,7 +1,6 @@
+import { friends } from '@Api/friends/endpoints';
+import { friendsKeys } from '@Api/friends/keys';
 import type { FriendRequestResult, FriendsActionsPort } from '@core/ports/friends';
-
-import { friends } from '../api/endpoints';
-import { friendsKeys } from '../api/keys';
 
 export const friendsActionsPort: FriendsActionsPort = {
 	sendFriendRequest: (authorId) =>

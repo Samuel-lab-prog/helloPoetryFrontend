@@ -1,4 +1,4 @@
-import { createMutationEndpoint, createQueryEndpoint } from '@core/api/utils';
+import { createMutationEndpoint, createQueryEndpoint } from '@Api/utils';
 import { createHTTPRequest } from '@Utils';
 
 import { notificationsKeys } from './keys';

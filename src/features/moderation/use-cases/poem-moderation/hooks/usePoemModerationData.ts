@@ -1,6 +1,6 @@
-import { moderation } from '@features/moderation/api/endpoints';
-import { moderationKeys } from '@features/moderation/api/keys';
-import type { ModeratePoemBody } from '@features/moderation/api/types';
+import { moderation } from '@Api/moderation/endpoints';
+import { moderationKeys } from '@Api/moderation/keys';
+import type { ModeratePoemBody } from '@Api/moderation/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 

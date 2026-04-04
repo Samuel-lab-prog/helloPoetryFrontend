@@ -1,9 +1,9 @@
+import { feedKeys } from '@Api/feed/keys';
+import { friendsKeys } from '@Api/friends/keys';
+import { notificationsKeys } from '@Api/notifications/keys';
+import { poemKeys } from '@Api/poems/keys';
+import { userKeys } from '@Api/users/keys';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { feedKeys } from '@features/feed/api/keys';
-import { friendsKeys } from '@features/friends/api/keys';
-import { notificationsKeys } from '@features/notifications/api/keys';
-import { poemKeys } from '@features/poems/api/keys';
-import { userKeys } from '@features/users/api/keys';
 import type { AppEvents } from '@root/core/events/eventBus';
 import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
 import type { QueryClient } from '@tanstack/react-query';

@@ -1,4 +1,4 @@
-import { users } from '@features/users/api/endpoints';
+import { users } from '@Api/users/endpoints';
 
 const allowedImageTypes = new Set([
 	'image/jpeg',

@@ -1,7 +1,7 @@
+import { poems } from '@Api/poems/endpoints';
+import { poemKeys } from '@Api/poems/keys';
+import type { CollectionItemBody, CreateCollectionBody } from '@Api/poems/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { poems } from '@features/poems/api/endpoints';
-import { poemKeys } from '@features/poems/api/keys';
-import type { CollectionItemBody, CreateCollectionBody } from '@features/poems/api/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 

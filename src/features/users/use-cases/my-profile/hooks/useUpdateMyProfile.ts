@@ -1,7 +1,7 @@
+import { users } from '@Api/users/endpoints';
+import { userKeys } from '@Api/users/keys';
+import type { UserPrivateProfile } from '@Api/users/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { users } from '@features/users/api/endpoints';
-import { userKeys } from '@features/users/api/keys';
-import type { UserPrivateProfile } from '@features/users/public/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 

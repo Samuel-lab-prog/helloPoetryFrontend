@@ -1,4 +1,4 @@
-import { createQueryKeys } from '@core/api/utils';
+import { createQueryKeys } from '@Api/utils';
 
 export const userKeys = createQueryKeys({
 	all: () => ['users'] as const,

@@ -1,3 +1,4 @@
+import type { ModeratePoemBody, ModerationPoem } from '@Api/moderation/types';
 import { MarkdownRenderer, Surface } from '@BaseComponents';
 import {
 	Badge,
@@ -10,7 +11,6 @@ import {
 	Wrap,
 	WrapItem,
 } from '@chakra-ui/react';
-import type { ModeratePoemBody, ModerationPoem } from '@features/moderation/api/types';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
 import { Tag } from '@features/poems/public/components/PoemTag';
 import { formatDate, translateModerationStatus, translateVisibility } from '@Utils';

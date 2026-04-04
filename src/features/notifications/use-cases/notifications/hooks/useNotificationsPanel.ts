@@ -1,7 +1,7 @@
+import { notifications } from '@Api/notifications/endpoints';
+import { notificationsKeys } from '@Api/notifications/keys';
+import type { NotificationItem, NotificationsPage } from '@Api/notifications/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { notifications } from '@features/notifications/api/endpoints';
-import { notificationsKeys } from '@features/notifications/api/keys';
-import type { NotificationItem, NotificationsPage } from '@features/notifications/api/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

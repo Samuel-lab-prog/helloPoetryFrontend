@@ -1,3 +1,5 @@
+import { auth } from '@Api/auth/endpoints';
+import { type AuthClient } from '@Api/auth/types';
 import { eventBus } from '@core/events/eventBus';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -6,8 +8,6 @@ import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { auth } from '../../../api/endpoints';
-import { type AuthClient } from '../../../api/types';
 import { useAuthClientStore } from '../../../public/stores/useAuthClientStore';
 import { type LoginDataType, loginSchema } from '../schemas/loginSchema';
 
@@ -107,3 +107,6 @@ function handleLoginError(
 
 	setGeneralError('Network error, please try again.');
 }
+
+
+

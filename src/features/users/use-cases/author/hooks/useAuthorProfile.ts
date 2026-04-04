@@ -1,6 +1,6 @@
+import { users } from '@Api/users/endpoints';
+import { userKeys } from '@Api/users/keys';
 import type { AuthorProfileType } from '@features/poems/public/types';
-import { users } from '@features/users/api/endpoints';
-import { userKeys } from '@features/users/api/keys';
 import { useQuery } from '@tanstack/react-query';
 
 export function useAuthorProfile(authorId: number) {

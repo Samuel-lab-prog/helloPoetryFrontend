@@ -1,6 +1,7 @@
 {
 	"directory": [
 		"./src/core/components",
+		"./src/core/api",
 		"./src/core/events",
 		"./src/core/utils",
 		"./src/core/stores",

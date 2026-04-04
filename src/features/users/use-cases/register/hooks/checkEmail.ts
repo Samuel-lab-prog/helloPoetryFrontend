@@ -1,4 +1,4 @@
-import { users } from '../../../api/endpoints';
+import { users } from '@Api/users/endpoints';
 
 export async function checkEmailAvailability(email: string): Promise<string | null> {
 	if (!email || email.length < 5) return null;

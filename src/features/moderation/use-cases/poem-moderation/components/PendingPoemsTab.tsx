@@ -1,6 +1,6 @@
+import type { ModeratePoemBody, ModerationPoem } from '@Api/moderation/types';
 import { AsyncState } from '@BaseComponents';
 import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
-import type { ModeratePoemBody, ModerationPoem } from '@features/moderation/api/types';
 import type { AppErrorType } from '@Utils';
 
 import { ModerationPoemCard } from './PoemModerationCard';

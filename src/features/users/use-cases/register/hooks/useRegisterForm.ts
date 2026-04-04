@@ -1,3 +1,5 @@
+import { users } from '@Api/users/endpoints';
+import type { CreateUserBody } from '@Api/users/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -5,9 +7,7 @@ import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { users } from '../../../api/endpoints';
 import { uploadAvatarFile } from '../../../internal/utils/avatarUpload';
-import type { CreateUserBody } from '../../../public/types';
 import { type RegisterDataType, registerSchema } from '../schemas/registerSchema';
 
 export function useRegisterForm() {

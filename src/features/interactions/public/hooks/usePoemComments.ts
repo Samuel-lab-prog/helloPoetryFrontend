@@ -1,6 +1,6 @@
+import { interactions } from '@Api/interactions/endpoints';
+import { interactionsKeys } from '@Api/interactions/keys';
 import { getPoemsCachePort } from '@core/ports/poems';
-import { interactions } from '@features/interactions/api/endpoints';
-import { interactionsKeys } from '@features/interactions/api/keys';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';

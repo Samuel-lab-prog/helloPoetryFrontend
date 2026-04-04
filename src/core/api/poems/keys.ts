@@ -1,4 +1,4 @@
-import { createQueryKeys } from '@core/api/utils';
+import { createQueryKeys } from '@Api/utils';
 
 export const poemKeys = createQueryKeys({
 	all: () => ['poems'] as const,

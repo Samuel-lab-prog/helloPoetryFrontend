@@ -1,5 +1,5 @@
-import { poems } from '@features/poems/api/endpoints';
-import { poemKeys } from '@features/poems/api/keys';
+import { poems } from '@Api/poems/endpoints';
+import { poemKeys } from '@Api/poems/keys';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';

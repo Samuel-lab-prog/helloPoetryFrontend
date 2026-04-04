@@ -1,4 +1,4 @@
-import { createQueryKeys } from '@core/api/utils';
+import { createQueryKeys } from '@Api/utils';
 
 export const interactionsKeys = createQueryKeys({
 	commentsByPoem: (poemId: string, parentId?: string) =>

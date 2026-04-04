@@ -1,4 +1,4 @@
-import { type PoemDedicationUser } from '@features/poems/api/types';
+import { type PoemDedicationUser } from '@Api/poems/types';
 
 import { type usePoem } from '../../poem/hooks/usePoem';
 

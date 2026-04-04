@@ -1,4 +1,4 @@
-import type { ModerationPoem } from '@features/moderation/api/types';
+import type { ModerationPoem } from '@Api/moderation/types';
 
 /**
  * Maps internal visibility values to user-facing labels.
