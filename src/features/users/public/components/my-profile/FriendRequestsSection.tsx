@@ -1,9 +1,8 @@
 import { Surface } from '@BaseComponents';
 import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import type { MyFriendRequestsType } from '@features/friends/public/hooks/useMyFriendRequests';
 import { Check, UserPlus, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-
-import type { MyFriendRequestsType } from '../../hooks/useMyFriendRequests';
 
 type FriendRequestsSectionProps = {
 	friendRequests: MyFriendRequestsType;

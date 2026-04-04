@@ -1,8 +1,8 @@
 import { AsyncState } from '@BaseComponents';
 import { Box } from '@chakra-ui/react';
-import type { PoemPreview } from '@features/poems/api/types';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
 import { PoemGrid } from '@features/poems/public/components/PoemGrid';
+import type { PoemPreview } from '@features/poems/public/types';
 
 type HomeFeedProps = {
 	poems: PoemPreview[];

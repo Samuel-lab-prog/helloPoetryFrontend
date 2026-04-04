@@ -1,13 +1,13 @@
 import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { useMyFriendRequests } from '@features/friends/public/hooks/useMyFriendRequests';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { FriendRequestsSection } from '../../public/components/my-profile/FriendRequestsSection';
 import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
-import { useMyFriendRequests } from '../../public/hooks/useMyFriendRequests';
 
 export function MyProfileFriendRequestsPage() {
 	const authClient = useAuthClientStore((state) => state.authClient);

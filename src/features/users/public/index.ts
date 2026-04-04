@@ -13,7 +13,6 @@ export * from './components/my-profile/ProfileReadOnly';
 export * from './components/my-profile/SavedPoemsSection';
 export * from './components/my-profile/types';
 export * from './components/UserDedicationCombobox';
-export * from './hooks/useMyFriendRequests';
 export * from './hooks/useMyProfile';
 export * from './hooks/useUsersPreview';
 export * from './types';

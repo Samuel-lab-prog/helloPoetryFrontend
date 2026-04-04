@@ -1,6 +1,7 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { useMyFriendRequests } from '@features/friends/public/hooks/useMyFriendRequests';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { usePoemCollections } from '@features/poems/public/hooks/useManagePoemCollections';
@@ -15,7 +16,6 @@ import { MyPoemsSection } from '../../public/components/my-profile/MyPoemsSectio
 import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
 import { ProfileOverviewSection } from '../../public/components/my-profile/ProfileOverviewSection';
 import { SavedPoemsSection } from '../../public/components/my-profile/SavedPoemsSection';
-import { useMyFriendRequests } from '../../public/hooks/useMyFriendRequests';
 import { useMyProfile } from '../../public/hooks/useMyProfile';
 import { ProfileHeader } from './components/ProfileHeader';
 import { useUpdateMyProfile } from './hooks/useUpdateMyProfile';
