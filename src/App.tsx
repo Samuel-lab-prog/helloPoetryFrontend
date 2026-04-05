@@ -15,7 +15,7 @@ function lazyPage<TModule extends object>(
 
 function PageLoader() {
 	return (
-		<Flex as='main' layerStyle='main' minH='40vh' align='center' justify='center'>
+		<Flex as='main' layerStyle='mainPadded' minH='40vh' align='center' justify='center'>
 			<Spinner size='lg' color='pink.300' />
 		</Flex>
 	);

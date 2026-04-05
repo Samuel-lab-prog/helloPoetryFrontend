@@ -27,7 +27,7 @@ function PageFooter() {
 
 export function LoginPage() {
 	return (
-		<Flex as='main' layerStyle='main' direction='column' pt={{ base: '2', md: '8' }}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' pt={{ base: '2', md: '8' }}>
 			<Flex as='section' direction='column' align='center' justify='flex-start' mt='0'>
 				<PageHeader />
 				<LoginForm />

@@ -25,7 +25,7 @@ export function MyProfileCollectionsPage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center'>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -33,14 +33,14 @@ export function MyProfileCollectionsPage() {
 
 	if (isProfileLoading || !profile) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center'>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<Text textStyle='body'>Loading profile...</Text>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center'>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
 				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Heading as='h1' textStyle='h2'>

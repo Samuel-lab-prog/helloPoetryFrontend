@@ -1,5 +1,5 @@
 import { Footer, SearchInput } from '@BaseComponents';
-import { Flex, VStack } from '@chakra-ui/react';
+import { Box, Flex, VStack } from '@chakra-ui/react';
 import { getPoemsQueryPort } from '@core/ports/poems';
 import { useIsAuthenticated } from '@features/auth/public/hooks/useIsAuthenticated';
 import type { PaginatedPoemsType } from '@features/poems/public/types';
@@ -41,30 +41,19 @@ export function HomePage() {
 
 	return (
 		<Flex direction='column' minH='100%'>
-			<Flex
-				as='main'
-				layerStyle='main'
-				direction='column'
-				flex='1'
-				w='full'
-				maxW='4xl'
-				mx='auto'
-				px={{ base: 4, md: 6 }}
-			>
-				<VStack as='section' w='full' align='stretch' gap={{ base: 6, md: 8 }}>
-					<SearchInput
-						label='Search poems'
-						value={searchTitle}
-						onValueChange={setSearchTitle}
-						onDebouncedChange={setDebouncedSearch}
-						placeholder='Search by title'
-					/>
+			<Flex as='main' layerStyle='main' direction='column' flex='1' w='full' maxW='2xl' mx='auto'>
+				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
+					<Box p={4}>
+						<SearchInput
+							label='Search poems'
+							value={searchTitle}
+							onValueChange={setSearchTitle}
+							onDebouncedChange={setDebouncedSearch}
+							placeholder='Search by title'
+						/>
+					</Box>
 
-					<HomeFeed
-						poems={displayedPoems}
-						isLoading={isFeedLoading}
-						isError={isFeedError}
-					/>
+					<HomeFeed poems={displayedPoems} isLoading={isFeedLoading} isError={isFeedError} />
 				</VStack>
 			</Flex>
 

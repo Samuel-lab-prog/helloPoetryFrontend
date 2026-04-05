@@ -224,7 +224,7 @@ export function PoemPage() {
 
 	if (!isPoemIdValid) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+			<Flex as='main' layerStyle='mainPadded' direction='column' alignItems='center'>
 				<Box as='section' maxW='4xl' w='full'>
 					<Box textStyle='body'>Invalid poem ID.</Box>
 				</Box>
@@ -233,7 +233,7 @@ export function PoemPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' alignItems='center'>
+		<Flex as='main' layerStyle='mainPadded' direction='column' alignItems='center'>
 			<Box as='section' maxW='4xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}

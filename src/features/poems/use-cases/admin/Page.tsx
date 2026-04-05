@@ -27,7 +27,7 @@ export function AdminPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' gap={8}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' gap={8}>
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
 				<Heading as='h1' textStyle='h2' mb={6}>
 					Admin Panel

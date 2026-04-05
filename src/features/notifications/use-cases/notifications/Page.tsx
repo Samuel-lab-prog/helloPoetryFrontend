@@ -14,7 +14,7 @@ export function NotificationsPage() {
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center'>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Box as='section' w='full' maxW='4xl'>
 				<Flex
 					align={{ base: 'start', md: 'center' }}

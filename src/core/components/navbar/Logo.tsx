@@ -11,7 +11,7 @@ export function Logo() {
 			transition='opacity 0.2s ease'
 			_hover={{ opacity: 0.8 }}
 		>
-			<Text textStyle='small' color='pink.100' fontWeight='700' lineHeight='short'>
+			<Text textStyle='body' color='pink.100' fontWeight='700' lineHeight='short'>
 				HelloPoetry
 			</Text>
 		</Box>

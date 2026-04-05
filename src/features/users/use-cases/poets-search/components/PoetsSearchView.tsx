@@ -40,7 +40,7 @@ export function PoetsSearchView() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			direction='column'
 			w='full'
 			maxW='4xl'

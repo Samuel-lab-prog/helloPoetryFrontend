@@ -91,7 +91,7 @@ export function AuthorPage() {
 	const actionErrorMessage = errorMessage || rejectErrorMessage || cancelErrorMessage;
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' gap={8}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' gap={8}>
 			<Box w='full' maxW='4xl'>
 				{!isValidAuthorId ? (
 					<Text textStyle='body'>Invalid author.</Text>

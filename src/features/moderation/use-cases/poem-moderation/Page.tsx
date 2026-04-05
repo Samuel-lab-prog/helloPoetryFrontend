@@ -42,7 +42,7 @@ export function PoemModerationPage() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			direction='column'
 			gap={8}
 			w={{ base: 'full', md: '4xl' }}

@@ -1,4 +1,15 @@
-import { Avatar, Badge, Box, Card, Flex, Icon, Link, Text } from '@chakra-ui/react';
+import {
+	Avatar,
+	Badge,
+	Box,
+	Card,
+	Flex,
+	Icon,
+	Link,
+	LinkBox,
+	LinkOverlay,
+	Text,
+} from '@chakra-ui/react';
 import { formatRelativeTime } from '@Utils';
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -18,11 +29,10 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 
 	if (variant === 'flat') {
 		return (
-			<Box
+			<LinkBox
 				py={5}
-				px={{ base: 4, md: 8 }}
+				px={4}
 				borderRadius='lg'
-				bg='rgba(255, 255, 255, 0.01)'
 				transition='background-color 0.22s ease'
 				_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
 			>
@@ -30,7 +40,11 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 						Poem
 					</Badge>
-					<Text textStyle='h3'>{poem.title}</Text>
+					<LinkOverlay asChild>
+						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+							<Text textStyle='h3'>{poem.title}</Text>
+						</NavLink>
+					</LinkOverlay>
 					{poem.excerpt && (
 						<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
 							{poem.excerpt}
@@ -83,26 +97,14 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 							))}
 						</Flex>
 					)}
-
-					<Flex justify='flex-end'>
-						<Link
-							asChild
-							textStyle='small'
-							color='pink.200'
-							_hover={{
-								color: 'pink.50',
-							}}
-						>
-							<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Read poem</NavLink>
-						</Link>
-					</Flex>
 				</Flex>
-			</Box>
+			</LinkBox>
 		);
 	}
 
 	return (
 		<Card.Root
+			as={LinkBox}
 			p={6}
 			h='full'
 			border='1px solid'
@@ -140,9 +142,13 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poem
 				</Badge>
-				<Card.Title as='h3' textStyle='h3'>
-					{poem.title}
-				</Card.Title>
+				<LinkOverlay asChild>
+					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+						<Card.Title as='h3' textStyle='h3'>
+							{poem.title}
+						</Card.Title>
+					</NavLink>
+				</LinkOverlay>
 				{poem.excerpt && (
 					<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
 						{poem.excerpt}
@@ -200,27 +206,6 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					)}
 				</Flex>
 			</Card.Body>
-
-			<Card.Footer p={0} justifyContent='flex-end' mt={6}>
-				<Link
-					asChild
-					textStyle='small'
-					px={3}
-					py={2}
-					borderRadius='md'
-					color='pink.100'
-					border='1px solid'
-					borderColor='purple.500'
-					transition='all 0.2s ease'
-					_hover={{
-						color: 'pink.50',
-						borderColor: 'pink.400',
-						bg: 'rgba(255, 255, 255, 0.06)',
-					}}
-				>
-					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Read poem</NavLink>
-				</Link>
-			</Card.Footer>
 		</Card.Root>
 	);
 }
