@@ -79,8 +79,53 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	const deleteMutation = useMutation({
 		mutationFn: (id: number) =>
 			notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
-		onSuccess: (notification) => {
-			if (!notification.readAt) decrementUnreadNotificationsCount(1);
+		onMutate: async (id) => {
+			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
+
+			const previousPages = queryClient.getQueriesData<NotificationsPage>({
+				queryKey: notificationsKeys.all(),
+			});
+
+			let removedWasUnread = false;
+			queryClient.setQueriesData<NotificationsPage>(
+				{ queryKey: notificationsKeys.all() },
+				(old) => {
+					if (!old) return old;
+					const existsUnread = old.notifications.some(
+						(notification) => notification.id === id && !notification.readAt,
+					);
+					if (existsUnread) removedWasUnread = true;
+					return {
+						...old,
+						notifications: old.notifications.filter((notification) => notification.id !== id),
+						hasMore: old.hasMore,
+						nextCursor: old.nextCursor,
+					};
+				},
+			);
+
+			if (removedWasUnread) decrementUnreadNotificationsCount(1);
+
+			return { previousPages, removedWasUnread };
+		},
+		onError: (_error, _id, context) => {
+			if (!context) return;
+			context.previousPages.forEach(([key, data]) => {
+				if (!data) return;
+				queryClient.setQueryData(key, data);
+			});
+			if (context.removedWasUnread) {
+				const unreadCount =
+					context.previousPages
+						.flatMap(([, page]) => page?.notifications ?? [])
+						.filter((item) => !item.readAt).length ?? 0;
+				setUnreadNotificationsCount(unreadCount);
+			}
+		},
+		onSuccess: (notification, _id, context) => {
+			if (!context?.removedWasUnread && !notification.readAt) {
+				decrementUnreadNotificationsCount(1);
+			}
 			queryClient.invalidateQueries({
 				queryKey: notificationsKeys.all(),
 			});

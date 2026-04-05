@@ -7,15 +7,36 @@ import { NotificationCard } from './components/NotificationCard';
 import { useNotificationsPanel } from './hooks/useNotificationsPanel';
 
 export function NotificationsPage() {
-	const [onlyUnread, setOnlyUnread] = useState(false);
-	const { notifications, isLoading, isError, markAsRead, markAllAsRead, isMarkingAllAsRead } =
-		useNotificationsPanel(onlyUnread);
+	const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
+	const {
+		notifications,
+		isLoading,
+		isError,
+		markAsRead,
+		markAllAsRead,
+		isMarkingAllAsRead,
+		deleteNotification,
+	} = useNotificationsPanel(false);
 
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
+	const isRemoving = (id: number) => removingIds.has(id);
+	const scheduleRemove = async (id: number): Promise<void> => {
+		if (removingIds.has(id)) return;
+		setRemovingIds((prev) => new Set(prev).add(id));
+		await new Promise<void>((resolve) => {
+			window.setTimeout(resolve, 220);
+		});
+		await deleteNotification(id);
+		setRemovingIds((prev) => {
+			const next = new Set(prev);
+			next.delete(id);
+			return next;
+		});
+	};
 
 	return (
 		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-			<Box as='section' w='full' maxW='4xl'>
+			<Box as='section' w='full' maxW='2xl'>
 				<Flex
 					align={{ base: 'start', md: 'center' }}
 					justify='space-between'
@@ -32,15 +53,6 @@ export function NotificationsPage() {
 				</Flex>
 
 				<Flex mb={6} gap={2} wrap='wrap'>
-					<Button
-						size={{ base: 'xs', md: 'sm' }}
-						w='auto'
-						variant='solidPink'
-						onClick={() => setOnlyUnread((v) => !v)}
-						colorPalette='gray'
-					>
-						{onlyUnread ? 'Show all' : 'Unread only'}
-					</Button>
 					<Button
 						size={{ base: 'xs', md: 'sm' }}
 						w='auto'
@@ -67,6 +79,12 @@ export function NotificationsPage() {
 						{notifications.map((item, index) => (
 							<Box
 								key={item.id}
+								overflow='hidden'
+								maxH={isRemoving(item.id) ? '0px' : '320px'}
+								opacity={isRemoving(item.id) ? 0 : 1}
+								transform={isRemoving(item.id) ? 'translateY(-6px)' : 'translateY(0)'}
+								transition='max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease'
+								pointerEvents={isRemoving(item.id) ? 'none' : 'auto'}
 								animationName='slide-from-bottom, fade-in'
 								animationDuration='320ms'
 								animationTimingFunction='ease-out'
@@ -76,6 +94,7 @@ export function NotificationsPage() {
 								<NotificationCard
 									item={item}
 									onMarkAsRead={(id) => markAsRead(id).then(() => {})}
+									onDelete={(id) => scheduleRemove(id)}
 									hideTopBorder={index === 0}
 								/>
 							</Box>
