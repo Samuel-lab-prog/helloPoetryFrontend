@@ -1,16 +1,16 @@
 import { FormField } from '@BaseComponents';
-import { Flex, IconButton } from '@chakra-ui/react';
-import { Plus } from 'lucide-react';
+import { Button, Flex } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-type CreateCollectionFormValues = {
-	name: string;
-	description: string;
-};
+import {
+	type CreateCollectionFormValues,
+	createCollectionSchema,
+} from './schemas/createCollectionSchema';
 
 type CreateCollectionFormProps = {
 	userId: number;
-	isUpdatingCollections: boolean;
+	isCreatingCollection: boolean;
 	onCreateCollection: (input: {
 		userId: number;
 		name: string;
@@ -20,7 +20,7 @@ type CreateCollectionFormProps = {
 
 export function CreateCollectionForm({
 	userId,
-	isUpdatingCollections,
+	isCreatingCollection,
 	onCreateCollection,
 }: CreateCollectionFormProps) {
 	const form = useForm<CreateCollectionFormValues>({
@@ -29,6 +29,7 @@ export function CreateCollectionForm({
 			description: '',
 		},
 		mode: 'onChange',
+		resolver: zodResolver(createCollectionSchema),
 	});
 	const collectionName = form.watch('name');
 
@@ -38,14 +39,12 @@ export function CreateCollectionForm({
 			direction='column'
 			gap={3}
 			mb={5}
+			w='full'
 			onSubmit={form.handleSubmit(async (values) => {
-				const name = values.name.trim();
-				if (!name) return;
-
 				await onCreateCollection({
 					userId,
-					name,
-					description: values.description.trim() || undefined,
+					name: values.name.trim(),
+					description: values.description.trim(),
 				});
 
 				form.reset({
@@ -54,25 +53,34 @@ export function CreateCollectionForm({
 				});
 			})}
 		>
-			<FormField control={form.control} name='name' label='Collection name' required />
+			<FormField
+				control={form.control}
+				name='name'
+				label='Collection name'
+				required
+				minLength={3}
+				maxLength={60}
+				showCharacterCount
+			/>
 			<FormField
 				control={form.control}
 				name='description'
 				label='Collection description'
 				as='textarea'
 				rows={3}
+				maxLength={200}
+				showCharacterCount
 			/>
-			<IconButton
+			<Button
 				type='submit'
-				aria-label='Create collection'
 				size={{ base: 'xs', md: 'sm' }}
 				variant='solidPink'
-				loading={isUpdatingCollections}
-				disabled={!collectionName?.trim() || isUpdatingCollections}
-				alignSelf='start'
+				loading={isCreatingCollection}
+				disabled={!collectionName?.trim() || isCreatingCollection}
+				alignSelf='end'
 			>
-				<Plus />
-			</IconButton>
+				Create collection
+			</Button>
 		</Flex>
 	);
 }

@@ -17,7 +17,10 @@ export function MyProfileCollectionsPage() {
 		deleteCollection,
 		addPoemToCollection,
 		removePoemFromCollection,
-		isUpdatingCollections,
+		isCreatingCollection,
+		isDeletingCollection,
+		isAddingCollectionItem,
+		isRemovingCollectionItem,
 		collectionsError,
 	} = usePoemCollections(!isMissingClient);
 	const { poems: myPoems } = useMyPoems(!isMissingClient);
@@ -41,7 +44,7 @@ export function MyProfileCollectionsPage() {
 
 	return (
 		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-			<Box as='section' w='full' maxW='5xl'>
+			<Box as='section' w='full' maxW='2xl'>
 				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Heading as='h1' textStyle='h2'>
 						All my collections
@@ -57,7 +60,10 @@ export function MyProfileCollectionsPage() {
 					myPoems={myPoems}
 					savedPoems={savedPoems}
 					isLoadingCollections={isLoadingCollections}
-					isUpdatingCollections={isUpdatingCollections}
+					isCreatingCollection={isCreatingCollection}
+					isDeletingCollection={isDeletingCollection}
+					isAddingCollectionItem={isAddingCollectionItem}
+					isRemovingCollectionItem={isRemovingCollectionItem}
 					collectionsError={collectionsError}
 					onCreateCollection={createCollection}
 					onDeleteCollection={deleteCollection}

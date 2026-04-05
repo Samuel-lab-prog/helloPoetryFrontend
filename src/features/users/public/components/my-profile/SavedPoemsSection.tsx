@@ -1,8 +1,8 @@
 import { Surface } from '@BaseComponents';
-import { Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import { Flex, Heading, HStack, Link, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import type { SavedPoemType } from '@features/poems/public/types';
 import { formatDate } from '@Utils';
-import { Bookmark, ExternalLink, X } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 export type SavedPoemsSectionProps = {
@@ -21,10 +21,8 @@ export function SavedPoemsSection({
 	totalSavedPoemsCount,
 	viewAllHref,
 	isLoadingSavedPoems,
-	isSavingPoem = false,
 	saveError = '',
 	isSearchingSavedPoems,
-	onUnsavePoem,
 }: SavedPoemsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
@@ -80,44 +78,34 @@ export function SavedPoemsSection({
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='md'
+						transition='background-color 0.2s ease, border-color 0.2s ease'
+						_hover={{
+							bg: 'rgba(255, 255, 255, 0.04)',
+							borderColor: 'purple.500',
+						}}
 						animationName='slide-from-bottom, fade-in'
 						animationDuration='320ms'
 						animationTimingFunction='ease-out'
 						animationFillMode='backwards'
 						animationDelay={`${30 + index * 30}ms`}
 					>
-						<Flex direction='column' gap={1}>
-							<Text textStyle='small'>{poem.title}</Text>
-							<Text textStyle='smaller' color='pink.200'>
-								Saved on {formatDate(poem.savedAt)}
-							</Text>
-						</Flex>
-						<Flex gap={2}>
-							<IconButton
-								aria-label='Open saved poem'
-								size={{ base: 'xs', md: 'sm' }}
-								variant='solidPink'
-								asChild
-							>
+						<LinkBox w='full'>
+							<LinkOverlay asChild>
 								<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-									<ExternalLink />
+									<Flex direction='column' gap={1}>
+										<Text textStyle='small'>{poem.title}</Text>
+										{poem.author?.name && poem.author?.nickname && (
+											<Text textStyle='smaller' color='pink.200'>
+												{poem.author.name} · @{poem.author.nickname}
+											</Text>
+										)}
+										<Text textStyle='smaller' color='pink.200'>
+											Saved on {formatDate(poem.savedAt)}
+										</Text>
+									</Flex>
 								</NavLink>
-							</IconButton>
-							{onUnsavePoem && (
-								<IconButton
-									aria-label='Remove from saved'
-									size={{ base: 'xs', md: 'sm' }}
-									variant='solidPink'
-									colorPalette='gray'
-									loading={isSavingPoem}
-									onClick={() => {
-										void onUnsavePoem(poem.id);
-									}}
-								>
-									<X />
-								</IconButton>
-							)}
-						</Flex>
+							</LinkOverlay>
+						</LinkBox>
 					</Flex>
 				))}
 			</Flex>

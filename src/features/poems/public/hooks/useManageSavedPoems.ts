@@ -31,6 +31,12 @@ export function useSavedPoems(enabled = true) {
 				title: poem?.title ?? 'Poem',
 				slug: poem?.slug ?? '',
 				savedAt: new Date().toISOString(),
+				author: poem?.author ?? {
+					id: -1,
+					name: 'Author',
+					nickname: 'author',
+					avatarUrl: null,
+				},
 			};
 			queryClient.setQueryData<SavedPoem[]>(savedKey, [...previous, optimistic]);
 			return { previous };

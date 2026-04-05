@@ -110,7 +110,7 @@ export function MyPoemsSection({
 						animationFillMode='backwards'
 						animationDelay={`${30 + index * 30}ms`}
 					>
-						<Flex direction='column' gap={1} flex='1'>
+						<Flex direction='column' gap={1} flex='1' w='full'>
 							<Text textStyle='small'>{poem.title}</Text>
 							<Text textStyle='smaller' color='pink.200'>
 								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}

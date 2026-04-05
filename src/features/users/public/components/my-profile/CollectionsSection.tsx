@@ -23,7 +23,10 @@ export type CollectionsSectionProps = {
 	myPoems: FullPoemType[];
 	savedPoems: SavedPoemType[];
 	isLoadingCollections: boolean;
-	isUpdatingCollections: boolean;
+	isCreatingCollection: boolean;
+	isDeletingCollection: (collectionId: number) => boolean;
+	isAddingCollectionItem: (collectionId: number, poemId: number) => boolean;
+	isRemovingCollectionItem: (collectionId: number, poemId: number) => boolean;
 	collectionsError: string;
 	onCreateCollection: (input: {
 		userId: number;
@@ -44,7 +47,10 @@ export function CollectionsSection({
 	myPoems,
 	savedPoems,
 	isLoadingCollections,
-	isUpdatingCollections,
+	isCreatingCollection,
+	isDeletingCollection,
+	isAddingCollectionItem,
+	isRemovingCollectionItem,
 	collectionsError,
 	onCreateCollection,
 	onDeleteCollection,
@@ -96,7 +102,7 @@ export function CollectionsSection({
 			{showManagementControls && (
 				<CreateCollectionForm
 					userId={profile.id}
-					isUpdatingCollections={isUpdatingCollections}
+					isCreatingCollection={isCreatingCollection}
 					onCreateCollection={onCreateCollection}
 				/>
 			)}
@@ -113,18 +119,27 @@ export function CollectionsSection({
 				)}
 
 				{collections.map((collection) => (
-					<CollectionCard
+					<Flex
 						key={collection.id}
-						collection={collection}
-						showManagementControls={showManagementControls}
-						myPoems={myPoems}
-						savedPoems={savedPoems}
-						availablePoems={availablePoems}
-						isUpdatingCollections={isUpdatingCollections}
-						onDeleteCollection={onDeleteCollection}
-						onAddPoemToCollection={onAddPoemToCollection}
-						onRemovePoemFromCollection={onRemovePoemFromCollection}
-					/>
+						direction='column'
+						borderTop='2px solid'
+						borderColor='purple.700'
+						pt={4}
+					>
+						<CollectionCard
+							collection={collection}
+							showManagementControls={showManagementControls}
+							myPoems={myPoems}
+							savedPoems={savedPoems}
+							availablePoems={availablePoems}
+							isDeletingCollection={isDeletingCollection}
+							isAddingCollectionItem={isAddingCollectionItem}
+							isRemovingCollectionItem={isRemovingCollectionItem}
+							onDeleteCollection={onDeleteCollection}
+							onAddPoemToCollection={onAddPoemToCollection}
+							onRemovePoemFromCollection={onRemovePoemFromCollection}
+						/>
+					</Flex>
 				))}
 			</Flex>
 

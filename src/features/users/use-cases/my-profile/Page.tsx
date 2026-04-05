@@ -49,7 +49,10 @@ export function MyProfilePage() {
 		deleteCollection,
 		addPoemToCollection,
 		removePoemFromCollection,
-		isUpdatingCollections,
+		isCreatingCollection,
+		isDeletingCollection,
+		isAddingCollectionItem,
+		isRemovingCollectionItem,
 		collectionsError,
 	} = usePoemCollections(!isMissingClient);
 
@@ -88,7 +91,7 @@ export function MyProfilePage() {
 			layerStyle='mainPadded'
 			direction='column'
 			w='full'
-			maxW='4xl'
+			maxW='2xl'
 			mx='auto'
 			px={{ base: 4, md: 6 }}
 		>
@@ -185,7 +188,10 @@ export function MyProfilePage() {
 									myPoems={myPoems}
 									savedPoems={savedPoems}
 									isLoadingCollections={isLoadingCollections}
-									isUpdatingCollections={isUpdatingCollections}
+									isCreatingCollection={isCreatingCollection}
+									isDeletingCollection={isDeletingCollection}
+									isAddingCollectionItem={isAddingCollectionItem}
+									isRemovingCollectionItem={isRemovingCollectionItem}
 									collectionsError={collectionsError}
 									onCreateCollection={createCollection}
 									onDeleteCollection={deleteCollection}

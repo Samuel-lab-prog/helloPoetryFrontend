@@ -73,6 +73,7 @@ export type SavedPoem = {
 	title: string;
 	slug: string;
 	savedAt: string;
+	author: PoemAuthor;
 };
 
 export type PoemCollection = {
