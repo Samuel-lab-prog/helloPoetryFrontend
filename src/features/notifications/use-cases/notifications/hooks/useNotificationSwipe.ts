@@ -16,6 +16,7 @@ type SwipeHandlers = {
 export function useNotificationSwipe(): SwipeHandlers {
 	const [offsetX, setOffsetX] = useState(0);
 	const [isDragging, setIsDragging] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const startRef = useRef({ x: 0, y: 0, offset: 0 });
 	const swipingRef = useRef(false);
 
@@ -45,10 +46,12 @@ export function useNotificationSwipe(): SwipeHandlers {
 		if (!swipingRef.current) return;
 		swipingRef.current = false;
 		const shouldOpen = offsetX <= -OPEN_THRESHOLD;
+		setIsOpen(shouldOpen);
 		setOffsetX(shouldOpen ? -MAX_SWIPE_PX : 0);
 	}
 
 	function close() {
+		setIsOpen(false);
 		setOffsetX(0);
 	}
 
@@ -59,6 +62,6 @@ export function useNotificationSwipe(): SwipeHandlers {
 		handleTouchMove,
 		handleTouchEnd,
 		close,
-		isOpen: offsetX < 0,
+		isOpen,
 	};
 }

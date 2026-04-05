@@ -132,6 +132,9 @@ export function NotificationCard({
 				bg='rgba(145, 26, 58, 0.85)'
 				borderLeft='1px solid'
 				borderColor='purple.700'
+				opacity={swipe.isOpen ? 1 : 0}
+				pointerEvents={swipe.isOpen ? 'auto' : 'none'}
+				transition='opacity 0.2s ease'
 			>
 				<IconButton
 					aria-label='Delete notification'
