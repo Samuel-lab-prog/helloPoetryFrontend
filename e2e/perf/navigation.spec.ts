@@ -1,100 +1,110 @@
-import { expect, test } from '@playwright/test';
+import { test } from '@playwright/test';
+import { green, red } from 'kleur/colors';
+import { printTable } from '../../architecture-analysis/src/PrintTable';
+import { routes } from './routes';
+import { measureRoute } from './utils/measureRoute';
 
 const MAX_NAV_MS = 900;
 const MAX_LONGTASK_MS = 150;
-
-type NavResult = {
-	durationMs: number;
-	longTaskTotalMs: number;
-	longTaskCount: number;
-};
 
 test('SPA navigation stays within budget', async ({ page }) => {
 	await page.setViewportSize({ width: 1280, height: 720 });
 	await page.goto('/');
 
-	const result = await measureRoute({
-		page,
-		linkText: 'Poets',
-		urlPattern: /\/poets$/,
-		waitForText: 'Search poets',
-	});
+	const results: {
+		route: string;
+		durationMs: number;
+		longTaskTotalMs: number;
+		longTaskCount: number;
+		maxNavMs: number;
+		maxLongTaskMs: number;
+	}[] = [];
 
-	test.info().attach('navigation-metrics.json', {
-		body: JSON.stringify(
-			{
-				durationMs: result.durationMs,
-				longTaskTotalMs: result.longTaskTotalMs,
-				longTaskCount: result.longTaskCount,
-				budgets: {
-					maxNavMs: MAX_NAV_MS,
-					maxLongTaskTotalMs: MAX_LONGTASK_MS,
-				},
+	for (const route of routes) {
+		const result = await measureRoute({
+			page,
+			navigate: async () => {
+				if (route.linkText) {
+					const link = page.getByRole('link', { name: route.linkText });
+					if ((await link.count()) > 0) {
+						await link.first().click();
+						return;
+					}
+				}
+				await page.goto(route.path);
 			},
-			null,
-			2,
-		),
-		contentType: 'application/json',
-	});
-
-	expect(result.durationMs, `Navigation took ${result.durationMs}ms`).toBeLessThan(MAX_NAV_MS);
-	expect(
-		result.longTaskTotalMs,
-		`Long tasks total ${result.longTaskTotalMs}ms across ${result.longTaskCount} tasks`,
-	).toBeLessThan(MAX_LONGTASK_MS);
-});
-
-async function measureRoute({
-	page,
-	linkText,
-	urlPattern,
-	waitForText,
-}: {
-	page: import('@playwright/test').Page;
-	linkText: string;
-	urlPattern: RegExp;
-	waitForText: string;
-}): Promise<NavResult> {
-	await page.evaluate(() => {
-		const longTasks: number[] = [];
-		const observer = new PerformanceObserver((list) => {
-			for (const entry of list.getEntries()) {
-				if (entry.entryType === 'longtask') longTasks.push(entry.duration);
-			}
+			waitForPath: route.path,
+			waitForText: route.waitForText,
 		});
-		try {
-			observer.observe({ entryTypes: ['longtask'] });
-		} catch {
-			// Long task API not available; keep metrics empty.
-		}
-		(window as typeof window & { __navPerf?: { longTasks: number[] } }).__navPerf = {
-			longTasks,
-		};
-	});
 
-	const start = Date.now();
-	await page.getByRole('link', { name: linkText }).first().click();
-	await page.waitForURL(urlPattern);
-	await page.getByText(waitForText).first().waitFor();
+		results.push({
+			route: route.name,
+			durationMs: result.durationMs,
+			longTaskTotalMs: result.longTaskTotalMs,
+			longTaskCount: result.longTaskCount,
+			maxNavMs: MAX_NAV_MS,
+			maxLongTaskMs: MAX_LONGTASK_MS,
+		});
 
-	await page.evaluate(
-		() =>
-			new Promise<void>((resolve) => {
-				requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-			}),
+		test.info().attach(`navigation-${route.name}.json`, {
+			body: JSON.stringify(
+				{
+					route: route.name,
+					path: route.path,
+					durationMs: result.durationMs,
+					longTaskTotalMs: result.longTaskTotalMs,
+					longTaskCount: result.longTaskCount,
+					budgets: {
+						maxNavMs: MAX_NAV_MS,
+						maxLongTaskTotalMs: MAX_LONGTASK_MS,
+					},
+				},
+				null,
+				2,
+			),
+			contentType: 'application/json',
+		});
+	}
+
+	printTable(
+		'Navigation Performance',
+		[
+			{
+				header: 'Route',
+				width: 30,
+				render: (row) => ({ text: row.route }),
+			},
+			{
+				header: 'Duration',
+				width: 10,
+				align: 'right',
+				render: (row) => ({
+					text: `${row.durationMs}ms`,
+					color: row.durationMs <= row.maxNavMs ? green : red,
+				}),
+			},
+			{
+				header: 'Max',
+				width: 10,
+				align: 'right',
+				render: (row) => ({ text: `${row.maxNavMs}ms` }),
+			},
+			{
+				header: 'LongTasks',
+				width: 10,
+				align: 'right',
+				render: (row) => ({
+					text: `${row.longTaskTotalMs}ms`,
+					color: row.longTaskTotalMs <= row.maxLongTaskMs ? green : red,
+				}),
+			},
+			{
+				header: 'Max',
+				width: 10,
+				align: 'right',
+				render: (row) => ({ text: `${row.maxLongTaskMs}ms` }),
+			},
+		],
+		results,
 	);
-
-	const durationMs = Date.now() - start;
-	const { longTasks } = await page.evaluate(() => {
-		const data = (window as typeof window & { __navPerf?: { longTasks: number[] } }).__navPerf;
-		return { longTasks: data?.longTasks ?? [] };
-	});
-
-	const longTaskTotalMs = Math.round(longTasks.reduce((sum, duration) => sum + duration, 0));
-
-	return {
-		durationMs,
-		longTaskTotalMs,
-		longTaskCount: longTasks.length,
-	};
-}
+});

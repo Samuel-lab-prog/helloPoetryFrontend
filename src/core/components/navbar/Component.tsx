@@ -12,9 +12,10 @@ import type { NavbarLink } from './utils';
 
 type NavbarProps = {
 	links: NavbarLink[];
+	onPrefetchRoute?: (to: string) => void;
 };
 
-export function Navbar({ links }: NavbarProps) {
+export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const { profile } = useMyProfile();
@@ -67,7 +68,12 @@ export function Navbar({ links }: NavbarProps) {
 										bg: 'rgba(255, 255, 255, 0.06)',
 									}}
 								>
-									<NavLink to='/poems/new' aria-label='Criar poema'>
+									<NavLink
+										to='/poems/new'
+										aria-label='Criar poema'
+										onMouseEnter={() => onPrefetchRoute?.('/poems/new')}
+										onFocus={() => onPrefetchRoute?.('/poems/new')}
+									>
 										<Icon as={PenSquare} boxSize={{ base: 3.5, md: 4 }} />
 										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
 											Create
@@ -92,7 +98,12 @@ export function Navbar({ links }: NavbarProps) {
 										bg: 'rgba(255, 255, 255, 0.06)',
 									}}
 								>
-									<NavLink to='/notifications' aria-label='Notificações'>
+									<NavLink
+										to='/notifications'
+										aria-label='Notificações'
+										onMouseEnter={() => onPrefetchRoute?.('/notifications')}
+										onFocus={() => onPrefetchRoute?.('/notifications')}
+									>
 										<Icon as={Bell} boxSize={4.5} strokeWidth={2.2} />
 										{unreadCount > 0 && (
 											<Badge
@@ -116,7 +127,12 @@ export function Navbar({ links }: NavbarProps) {
 									</NavLink>
 								</Link>
 								<Link asChild>
-									<NavLink to='/my-profile' aria-label='Perfil'>
+									<NavLink
+										to='/my-profile'
+										aria-label='Perfil'
+										onMouseEnter={() => onPrefetchRoute?.('/my-profile')}
+										onFocus={() => onPrefetchRoute?.('/my-profile')}
+									>
 										<Avatar.Root
 											size='sm'
 											bg='purple.700'
@@ -150,7 +166,12 @@ export function Navbar({ links }: NavbarProps) {
 										bg: 'rgba(255, 255, 255, 0.06)',
 									}}
 								>
-									<NavLink to='/login' aria-label='Entrar'>
+									<NavLink
+										to='/login'
+										aria-label='Entrar'
+										onMouseEnter={() => onPrefetchRoute?.('/login')}
+										onFocus={() => onPrefetchRoute?.('/login')}
+									>
 										<Icon as={LogIn} boxSize={{ base: 3.5, md: 4 }} />
 										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
 											Sign in
@@ -176,7 +197,12 @@ export function Navbar({ links }: NavbarProps) {
 										bg: 'rgba(255, 143, 189, 0.22)',
 									}}
 								>
-									<NavLink to='/register' aria-label='Criar conta'>
+									<NavLink
+										to='/register'
+										aria-label='Criar conta'
+										onMouseEnter={() => onPrefetchRoute?.('/register')}
+										onFocus={() => onPrefetchRoute?.('/register')}
+									>
 										<Icon as={UserPlus} boxSize={{ base: 3.5, md: 4 }} />
 										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
 											Sign up
@@ -194,6 +220,7 @@ export function Navbar({ links }: NavbarProps) {
 					links={links}
 					currentPath={location.pathname}
 					onSameRouteClick={scrollToTop}
+					onPrefetchRoute={onPrefetchRoute}
 				/>
 
 				<Flex
@@ -214,6 +241,7 @@ export function Navbar({ links }: NavbarProps) {
 					currentPath={location.pathname}
 					unreadCount={unreadCount}
 					onSameRouteClick={scrollToTop}
+					onPrefetchRoute={onPrefetchRoute}
 				/>
 			</Flex>
 		</Flex>

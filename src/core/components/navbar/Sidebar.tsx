@@ -7,9 +7,15 @@ type NavbarSidebarProps = {
 	links: NavbarLink[];
 	currentPath: string;
 	onSameRouteClick: () => void;
+	onPrefetchRoute?: (to: string) => void;
 };
 
-export function NavbarSidebar({ links, currentPath, onSameRouteClick }: NavbarSidebarProps) {
+export function NavbarSidebar({
+	links,
+	currentPath,
+	onSameRouteClick,
+	onPrefetchRoute,
+}: NavbarSidebarProps) {
 	return (
 		<Flex
 			as='aside'
@@ -38,6 +44,8 @@ export function NavbarSidebar({ links, currentPath, onSameRouteClick }: NavbarSi
 									onClick={() => {
 										if (currentPath === link.to) onSameRouteClick();
 									}}
+									onMouseEnter={() => onPrefetchRoute?.(link.to)}
+									onFocus={() => onPrefetchRoute?.(link.to)}
 								>
 									<HStack gap={2} justify='space-between' w='full'>
 										<HStack gap={2}>

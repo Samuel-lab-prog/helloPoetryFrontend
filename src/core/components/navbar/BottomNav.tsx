@@ -8,6 +8,7 @@ type NavbarBottomNavProps = {
 	currentPath: string;
 	unreadCount: number;
 	onSameRouteClick: () => void;
+	onPrefetchRoute?: (to: string) => void;
 };
 
 export function NavbarBottomNav({
@@ -15,6 +16,7 @@ export function NavbarBottomNav({
 	currentPath,
 	unreadCount,
 	onSameRouteClick,
+	onPrefetchRoute,
 }: NavbarBottomNavProps) {
 	return (
 		<Box
@@ -44,6 +46,8 @@ export function NavbarBottomNav({
 										onSameRouteClick();
 									}
 								}}
+								onMouseEnter={() => onPrefetchRoute?.(link.to)}
+								onFocus={() => onPrefetchRoute?.(link.to)}
 							>
 								<Flex
 									direction='column'
