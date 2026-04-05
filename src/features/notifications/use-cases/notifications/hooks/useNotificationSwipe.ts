@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 const MAX_SWIPE_PX = 72;
-const OPEN_THRESHOLD = MAX_SWIPE_PX * 0.3;
+const OPEN_THRESHOLD = MAX_SWIPE_PX * 0.2;
 
 type SwipeHandlers = {
 	offsetX: number;
@@ -35,7 +35,7 @@ export function useNotificationSwipe(): SwipeHandlers {
 		const touch = event.touches[0];
 		const dx = touch.clientX - startRef.current.x;
 		const dy = touch.clientY - startRef.current.y;
-		if (Math.abs(dx) < 3 || Math.abs(dx) < Math.abs(dy) * 0.8) return;
+		if (Math.abs(dx) < 2 || Math.abs(dx) < Math.abs(dy) * 0.5) return;
 		swipingRef.current = true;
 		const nextOffset = clamp(startRef.current.offset + dx, -MAX_SWIPE_PX, 0);
 		setOffsetX(nextOffset);
