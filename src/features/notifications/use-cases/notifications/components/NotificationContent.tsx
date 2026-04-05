@@ -41,14 +41,18 @@ export function NotificationContent({
 									{relativeCreatedAt}
 								</Text>
 							)}
-						</Flex>
-						<HStack gap={2} wrap='wrap'>
 							{item.aggregatedCount > 1 && (
-								<Badge size='sm' colorPalette='pink' variant='subtle' opacity={isRead ? 0.7 : 1}>
+								<Badge
+									size='sm'
+									colorPalette='pink'
+									variant='subtle'
+									opacity={isRead ? 0.7 : 1}
+									mr={2}
+								>
 									{item.aggregatedCount} notifications
 								</Badge>
 							)}
-						</HStack>
+						</Flex>
 					</VStack>
 				</HStack>
 			</Flex>

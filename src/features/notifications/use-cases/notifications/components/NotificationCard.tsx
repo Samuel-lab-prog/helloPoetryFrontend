@@ -178,12 +178,12 @@ export function NotificationCard({
 		</LinkBox>
 	);
 
-	if (link) 
+	if (link)
 		return (
 			<Box onClick={() => swipe.isOpen && swipe.close()} role='group'>
 				{content}
 			</Box>
 		);
-	
+
 	return content;
 }

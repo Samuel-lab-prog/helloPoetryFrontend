@@ -41,7 +41,7 @@ export function NotificationsPage() {
 					align={{ base: 'start', md: 'center' }}
 					justify='space-between'
 					gap={3}
-					mb={6}
+					mb={3}
 					flexWrap='wrap'
 				>
 					<Heading as='h1' textStyle='h2'>
