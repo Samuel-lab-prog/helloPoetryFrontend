@@ -5,8 +5,8 @@ export function FormCard(props: FlexProps) {
 		<Flex
 			direction='column'
 			align='center'
-			gap={3}
-			p={3}
+			gap={1}
+			p={2}
 			w='full'
 			maxW='md'
 			border='1px solid'

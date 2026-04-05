@@ -127,7 +127,6 @@ export function FormField<T extends FieldValues>({
 								transform={hasError ? 'translateY(0)' : 'translateY(-3px)'}
 								overflow='hidden'
 								minH={0}
-								mt={hasError ? 1 : 0}
 								transition='opacity 0.2s ease, transform 0.2s ease, margin-top 0.2s ease'
 							>
 								{errorMessage}
@@ -136,11 +135,10 @@ export function FormField<T extends FieldValues>({
 
 						{shouldShowCharacterCount && (
 							<Text
-								textStyle='small'
+								textStyle='xs'
 								color={isBelowMinLength ? 'error' : 'pink.300'}
 								w='full'
 								textAlign='right'
-								mt={1}
 							>
 								{currentLength}/{maxLength} characters
 							</Text>
