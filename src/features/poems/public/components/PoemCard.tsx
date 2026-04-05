@@ -8,12 +8,98 @@ import type { PoemPreviewType, TagType } from '../types';
 type PoemCardProps = {
 	poem: PoemPreviewType;
 	hideAuthorMeta?: boolean;
+	variant?: 'card' | 'flat';
 };
 
-export function PoemCard({ poem, hideAuthorMeta = false }: PoemCardProps) {
+export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: PoemCardProps) {
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
 	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
 	const commentsCount = poem.stats?.commentsCount ?? poem.commentsCount;
+
+	if (variant === 'flat') {
+		return (
+			<Box
+				py={5}
+				px={{ base: 4, md: 8 }}
+				borderRadius='lg'
+				bg='rgba(255, 255, 255, 0.01)'
+				transition='background-color 0.22s ease'
+				_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
+			>
+				<Flex direction='column' gap={3}>
+					<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
+						Poem
+					</Badge>
+					<Text textStyle='h3'>{poem.title}</Text>
+					{poem.excerpt && (
+						<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
+							{poem.excerpt}
+						</Text>
+					)}
+
+					{!hideAuthorMeta && (
+						<Flex align='center' gap={2}>
+							<Avatar.Root size='md'>
+								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+								<Avatar.Fallback name={poem.author.nickname} />
+							</Avatar.Root>
+							<Flex direction='column' minW={0} gap={0}>
+								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+									{poem.author.name}
+								</Text>
+								<Link asChild textStyle='smaller' color='pink.200' opacity={0.9}>
+									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
+								</Link>
+							</Flex>
+						</Flex>
+					)}
+
+					<Flex align='center' gap={4} wrap='wrap'>
+						{typeof likesCount === 'number' && (
+							<Flex align='center' gap={2} color='pink.200'>
+								<Icon as={Heart} boxSize={4} />
+								<Text textStyle='smaller'>{likesCount}</Text>
+							</Flex>
+						)}
+						{typeof commentsCount === 'number' && (
+							<Flex align='center' gap={2} color='pink.200'>
+								<Icon as={MessageCircle} boxSize={4} />
+								<Text textStyle='smaller'>{commentsCount}</Text>
+							</Flex>
+						)}
+						{relativeCreatedAt && (
+							<Text textStyle='smaller' color='pink.300'>
+								{relativeCreatedAt}
+							</Text>
+						)}
+					</Flex>
+
+					{poem.tags.length > 0 && (
+						<Flex gap={2} wrap='wrap'>
+							{poem.tags.slice(0, 4).map((tag: TagType) => (
+								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
+									#{tag.name}
+								</Badge>
+							))}
+						</Flex>
+					)}
+
+					<Flex justify='flex-end'>
+						<Link
+							asChild
+							textStyle='small'
+							color='pink.200'
+							_hover={{
+								color: 'pink.50',
+							}}
+						>
+							<NavLink to={`/poems/${poem.slug}/${poem.id}`}>Read poem</NavLink>
+						</Link>
+					</Flex>
+				</Flex>
+			</Box>
+		);
+	}
 
 	return (
 		<Card.Root

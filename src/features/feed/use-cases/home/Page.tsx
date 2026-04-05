@@ -64,7 +64,6 @@ export function HomePage() {
 						poems={displayedPoems}
 						isLoading={isFeedLoading}
 						isError={isFeedError}
-						templateColumns='1fr'
 					/>
 				</VStack>
 			</Flex>

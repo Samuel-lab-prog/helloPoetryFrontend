@@ -1,25 +1,32 @@
 import { AsyncState } from '@BaseComponents';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
-import { PoemGrid } from '@features/poems/public/components/PoemGrid';
 import type { PoemPreview } from '@features/poems/public/types';
 
 type HomeFeedProps = {
 	poems: PoemPreview[];
 	isLoading: boolean;
 	isError: boolean;
-	templateColumns?: string | string[];
 };
 
-export function HomeFeed({ poems, isLoading, isError, templateColumns }: HomeFeedProps) {
+export function HomeFeed({ poems, isLoading, isError }: HomeFeedProps) {
 	return (
 		<Box>
 			<AsyncState isLoading={isLoading} isError={isError} isEmpty={poems.length === 0}>
-				<PoemGrid templateColumns={templateColumns}>
+				<Flex direction='column' gap={2}>
 					{poems.map((poem) => (
-						<PoemCard key={poem.id} poem={poem} />
+						<Box
+							key={poem.id}
+							mx={{ base: 2, md: 3 }}
+							borderTop='1px solid'
+							borderColor='purple.700'
+							_first={{ borderTop: 'none' }}
+							pt={3}
+						>
+							<PoemCard poem={poem} variant='flat' />
+						</Box>
 					))}
-				</PoemGrid>
+				</Flex>
 			</AsyncState>
 		</Box>
 	);
