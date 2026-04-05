@@ -1,7 +1,7 @@
 import { Box, Flex, Skeleton } from '@chakra-ui/react';
 
 export const LoadingUsersSkeletons = (
-	<Flex direction='column' gap={3}>
+	<Flex direction='column' gap={3} w='full' px={4}>
 		{Array.from({ length: 4 }).map((_, index) => (
 			<Box
 				key={`poet-skeleton-${index}`}

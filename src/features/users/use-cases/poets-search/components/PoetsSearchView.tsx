@@ -32,23 +32,15 @@ export function PoetsSearchView() {
 		return () => window.clearTimeout(timeoutId);
 	}, [searchNickname]);
 
-	const { poets, isLoading, isFetching, isError } = usePoetsSearch(debouncedSearch);
+	const { poets, isLoading, isError } = usePoetsSearch(debouncedSearch);
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const showSkeletons = isLoading && poets.length === 0;
 	const visiblePoets = authClient ? poets.filter((poet) => poet.id !== authClient.id) : poets;
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='mainPadded'
-			direction='column'
-			w='full'
-			maxW='4xl'
-			mx='auto'
-			px={{ base: 4, md: 6 }}
-		>
-			<Flex as='section' gap={4} direction='column' w='full' mb={6}>
-				<Field.Root>
+		<Flex as='main' layerStyle='main' direction='column' w='full' maxW='2xl' mx='auto'>
+			<Flex as='section' direction='column' w='full' mb={3} p={4}>
+				<Field.Root p={0}>
 					<Field.Label textStyle='small' fontWeight='medium' color='text'>
 						Search poets
 					</Field.Label>
@@ -75,11 +67,6 @@ export function PoetsSearchView() {
 						}}
 					/>
 				</Field.Root>
-				{isFetching && (
-					<Text textStyle='smaller' color='pink.200'>
-						Searching poets...
-					</Text>
-				)}
 			</Flex>
 
 			<AsyncState
@@ -88,9 +75,13 @@ export function PoetsSearchView() {
 				isEmpty={visiblePoets.length === 0}
 				loadingElement={LoadingUsersSkeletons}
 				errorElement={<Text textStyle='body'>Error searching poets.</Text>}
-				emptyElement={<Text textStyle='body'>No poets found.</Text>}
+				emptyElement={
+					<Text textStyle='body' px={4}>
+						No poets found.
+					</Text>
+				}
 			>
-				<Flex direction='column' gap={3}>
+				<Flex direction='column' gap={3} w='full' px={4} mb={6}>
 					{visiblePoets.map((poet, index) => (
 						<Box
 							key={poet.id}
