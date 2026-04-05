@@ -112,42 +112,46 @@ function generateNavLinks(isAuthenticated: boolean, role?: string) {
 	return links;
 }
 
-export default function App() {
+function AppLayout() {
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const isAuthenticated = Boolean(authClient);
 	const navLinks = generateNavLinks(isAuthenticated, authClient?.role);
 
-	const router = createBrowserRouter([
-		{
-			path: '/',
-			element: <Navbar links={navLinks} />,
-			errorElement: <ErrorPage />,
-			children: [
-				{ index: true, element: renderLazyPage(HomePage) },
-				{ path: 'poets', element: renderLazyPage(PoetsPage) },
-				{ path: 'poems/:id', element: renderLazyPage(PoemPage) },
-				{ path: 'poems/:slug/:id', element: renderLazyPage(PoemPage) },
-				{ path: 'poems/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
-				{ path: 'poems/:slug/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
-				{ path: 'authors/:id', element: renderLazyPage(AuthorPage) },
-				{ path: '/login', element: renderLazyPage(LoginPage) },
-				{ path: '/register', element: renderLazyPage(RegisterPage) },
-				{ path: 'poems/new', element: renderLazyPage(CreatePoemPage) },
-				{ path: 'admin', element: renderLazyPage(AdminPage) },
-				{ path: 'admin/moderation', element: renderLazyPage(PoemModerationPage) },
-				{ path: 'my-profile', element: renderLazyPage(MyProfilePage) },
-				{ path: 'my-profile/collections', element: renderLazyPage(MyProfileCollectionsPage) },
-				{
-					path: 'my-profile/friend-requests',
-					element: renderLazyPage(MyProfileFriendRequestsPage),
-				},
-				{ path: 'my-profile/poems', element: renderLazyPage(MyProfilePoemsPage) },
-				{ path: 'my-profile/saved-poems', element: renderLazyPage(MyProfileSavedPoemsPage) },
-				{ path: 'notifications', element: renderLazyPage(NotificationsPage) },
-			],
-		},
-	]);
+	return <Navbar links={navLinks} />;
+}
 
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <AppLayout />,
+		errorElement: <ErrorPage />,
+		children: [
+			{ index: true, element: renderLazyPage(HomePage) },
+			{ path: 'poets', element: renderLazyPage(PoetsPage) },
+			{ path: 'poems/:id', element: renderLazyPage(PoemPage) },
+			{ path: 'poems/:slug/:id', element: renderLazyPage(PoemPage) },
+			{ path: 'poems/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
+			{ path: 'poems/:slug/:id/immersive', element: renderLazyPage(PoemImmersivePage) },
+			{ path: 'authors/:id', element: renderLazyPage(AuthorPage) },
+			{ path: '/login', element: renderLazyPage(LoginPage) },
+			{ path: '/register', element: renderLazyPage(RegisterPage) },
+			{ path: 'poems/new', element: renderLazyPage(CreatePoemPage) },
+			{ path: 'admin', element: renderLazyPage(AdminPage) },
+			{ path: 'admin/moderation', element: renderLazyPage(PoemModerationPage) },
+			{ path: 'my-profile', element: renderLazyPage(MyProfilePage) },
+			{ path: 'my-profile/collections', element: renderLazyPage(MyProfileCollectionsPage) },
+			{
+				path: 'my-profile/friend-requests',
+				element: renderLazyPage(MyProfileFriendRequestsPage),
+			},
+			{ path: 'my-profile/poems', element: renderLazyPage(MyProfilePoemsPage) },
+			{ path: 'my-profile/saved-poems', element: renderLazyPage(MyProfileSavedPoemsPage) },
+			{ path: 'notifications', element: renderLazyPage(NotificationsPage) },
+		],
+	},
+]);
+
+export default function App() {
 	return (
 		<>
 			<RouterProvider router={router} />
