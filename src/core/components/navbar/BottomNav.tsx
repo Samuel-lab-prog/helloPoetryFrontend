@@ -9,6 +9,7 @@ type NavbarBottomNavProps = {
 	unreadCount: number;
 	onSameRouteClick: () => void;
 	onPrefetchRoute?: (to: string) => void;
+	isHidden?: boolean;
 };
 
 export function NavbarBottomNav({
@@ -17,6 +18,7 @@ export function NavbarBottomNav({
 	unreadCount,
 	onSameRouteClick,
 	onPrefetchRoute,
+	isHidden,
 }: NavbarBottomNavProps) {
 	return (
 		<Box
@@ -32,6 +34,9 @@ export function NavbarBottomNav({
 			bg='rgba(18, 0, 17, 0.95)'
 			backdropFilter='blur(8px)'
 			pb='calc(env(safe-area-inset-bottom, 0px))'
+			transition='transform 0.2s ease, opacity 0.2s ease'
+			transform={isHidden ? 'translateY(100%)' : 'translateY(0)'}
+			opacity={isHidden ? 0 : 1}
 		>
 			<HStack px={2} py={2} gap={1} overflowX='auto' scrollbar='hidden' justify='center'>
 				{links

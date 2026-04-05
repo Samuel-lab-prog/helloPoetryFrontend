@@ -1,8 +1,8 @@
-﻿import { Avatar, Badge, Flex, Icon, Link, Text } from '@chakra-ui/react';
+import { Avatar, Badge, Flex, Icon, Link, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMyProfile } from '@features/users/public/hooks/useMyProfile';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
 import { NavbarBottomNav } from './BottomNav';
@@ -21,6 +21,12 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const { profile } = useMyProfile();
 	const location = useLocation();
 	const contentRef = useRef<HTMLDivElement | null>(null);
+	const [navHidden, setNavHidden] = useState(false);
+	const lastScrollRef = useRef({ top: 0, time: 0 });
+	const rafRef = useRef<number | null>(null);
+	const lastToggleRef = useRef(0);
+	const isMobile = useBreakpointValue({ base: true, lg: false }) ?? true;
+	const shouldHideNav = isMobile && navHidden;
 	const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	const isAuthenticated = Boolean(authClient);
 
@@ -29,21 +35,82 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 		contentRef.current?.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 	}, [location.pathname]);
 
+	useEffect(() => {
+		const target = contentRef.current;
+		if (!target) return;
+
+		const onScroll = () => {
+			if (!isMobile) {
+				if (navHidden) setNavHidden(false);
+				return;
+			}
+			if (rafRef.current !== null) return;
+			rafRef.current = window.requestAnimationFrame(() => {
+				rafRef.current = null;
+				const top = target.scrollTop;
+				const now = performance.now();
+				const last = lastScrollRef.current;
+				const dt = Math.max(1, now - last.time);
+				const dy = top - last.top;
+				const velocity = (dy / dt) * 1000;
+				const nowToggle = performance.now();
+				const canToggle = nowToggle - lastToggleRef.current > 180;
+
+				lastScrollRef.current = { top, time: now };
+
+				if (top <= 24) {
+					setNavHidden(false);
+					return;
+				}
+
+				if (dy > 0 && canToggle && (velocity > 900 || dy > 120)) {
+					lastToggleRef.current = nowToggle;
+					setNavHidden(true);
+					return;
+				}
+
+				if (dy < 0 && canToggle && (velocity < -500 || dy < -60)) {
+					lastToggleRef.current = nowToggle;
+					setNavHidden(false);
+				}
+			});
+		};
+
+		lastScrollRef.current = { top: target.scrollTop, time: performance.now() };
+		target.addEventListener('scroll', onScroll, { passive: true });
+
+		return () => {
+			target.removeEventListener('scroll', onScroll);
+			if (rafRef.current !== null) {
+				window.cancelAnimationFrame(rafRef.current);
+				rafRef.current = null;
+			}
+		};
+	}, [isMobile, navHidden]);
+
+	useEffect(() => {
+		if (!isMobile && navHidden) setNavHidden(false);
+	}, [isMobile, navHidden]);
+
 	return (
 		<Flex h='100vh' w='full' direction='column' overflow='hidden'>
 			<Flex
 				as='header'
 				w='full'
-				h='72px'
+				h={shouldHideNav ? '0px' : '72px'}
 				px={{ base: 4, md: 8 }}
-				py={3}
-				borderBottom='1px solid'
+				py={shouldHideNav ? 0 : 3}
+				borderBottom={shouldHideNav ? '0' : '1px solid'}
 				borderColor='border'
 				bg='rgba(18, 0, 17, 0.9)'
 				backdropFilter='blur(6px)'
 				position='sticky'
 				top={0}
 				zIndex={10}
+				transition='all 0.2s ease'
+				transform={shouldHideNav ? 'translateY(-100%)' : 'translateY(0)'}
+				opacity={shouldHideNav ? 0 : 1}
+				overflow='hidden'
 			>
 				<Flex align='center' gap={6} w='full'>
 					<Logo />
@@ -242,6 +309,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					unreadCount={unreadCount}
 					onSameRouteClick={scrollToTop}
 					onPrefetchRoute={onPrefetchRoute}
+					isHidden={shouldHideNav}
 				/>
 			</Flex>
 		</Flex>
