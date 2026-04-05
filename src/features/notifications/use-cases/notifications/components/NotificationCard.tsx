@@ -1,5 +1,5 @@
 import type { NotificationItem } from '@Api/notifications/types';
-import { Box, IconButton, LinkBox, LinkOverlay, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Button, IconButton, LinkBox, LinkOverlay, useBreakpointValue } from '@chakra-ui/react';
 import { formatRelativeTime } from '@Utils';
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -136,11 +136,14 @@ export function NotificationCard({
 				pointerEvents={swipe.isOpen ? 'auto' : 'none'}
 				transition='opacity 0.2s ease'
 			>
-				<IconButton
+				<Button
 					aria-label='Delete notification'
 					variant='solid'
 					size='sm'
 					colorPalette='pink'
+					w='full'
+					h='full'
+					borderRadius='none'
 					onClick={(event) => {
 						event.stopPropagation();
 						event.preventDefault();
@@ -149,7 +152,7 @@ export function NotificationCard({
 					}}
 				>
 					<Trash2 size={16} />
-				</IconButton>
+				</Button>
 			</Box>
 
 			<Box
