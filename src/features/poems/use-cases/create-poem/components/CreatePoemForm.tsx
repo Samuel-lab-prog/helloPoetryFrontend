@@ -1,5 +1,5 @@
 import { poems } from '@Api/poems/endpoints';
-import { DynamicForm, type Field, MarkdownRenderer, toaster } from '@BaseComponents';
+import { DynamicForm, type Field, MarkdownRenderer } from '@BaseComponents';
 import { Box, Heading, Text } from '@chakra-ui/react';
 import { UserDedicationCombobox } from '@features/users/public/components/UserDedicationCombobox';
 import { useUsersPreview } from '@features/users/public/hooks/useUsersPreview';
@@ -50,12 +50,6 @@ export function CreatePoemForm() {
 				});
 
 				setValue('audio', null);
-
-				toaster.create({
-					type: 'success',
-					title: 'Audio saved',
-					closable: true,
-				});
 			} catch (error) {
 				const message = error instanceof Error ? error.message : 'Error uploading audio.';
 				setError('audio', { type: 'manual', message });

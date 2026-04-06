@@ -234,7 +234,7 @@ export function PoemPage() {
 
 	return (
 		<Flex as='main' layerStyle='mainPadded' direction='column' alignItems='center'>
-			<Box as='section' maxW='4xl' w='full'>
+			<Box as='section' maxW='2xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}
 					isError={!!isError}
