@@ -300,7 +300,9 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					scrollbarGutter='stable'
 					ref={contentRef}
 				>
-					<Outlet />
+					<Flex w='full' maxW='2xl' mx='auto' direction='column' minH='full'>
+						<Outlet />
+					</Flex>
 				</Flex>
 
 				<NavbarBottomNav
