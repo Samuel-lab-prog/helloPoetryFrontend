@@ -31,7 +31,7 @@ export function PoemImmersivePage() {
 			px={{ base: 4, md: 8 }}
 		>
 			<Flex direction='column' align='center'>
-				<Box w='full' maxW='4xl'>
+				<Box w='full' maxW='2xl'>
 					<PoemBackLink poemId={poemId} poemSlug={poem?.slug} />
 					<PoemContentCard
 						poem={poem}

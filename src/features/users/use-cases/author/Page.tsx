@@ -92,7 +92,7 @@ export function AuthorPage() {
 
 	return (
 		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' gap={8}>
-			<Box w='full' maxW='4xl'>
+			<Box w='full' maxW='2xl'>
 				{!isValidAuthorId ? (
 					<Text textStyle='body'>Invalid author.</Text>
 				) : (
@@ -116,7 +116,7 @@ export function AuthorPage() {
 				)}
 			</Box>
 
-			<Box w='full' maxW='4xl'>
+			<Box w='full' maxW='2xl'>
 				<AuthorPoemsSection
 					poems={author?.poems ?? []}
 					isLoading={isAuthorLoading}
