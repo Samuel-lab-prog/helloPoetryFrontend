@@ -34,7 +34,7 @@ export interface CommentThreadProps {
 	/**
 	 * Loading state for deleting a comment.
 	 */
-	isDeletingComment: boolean;
+	isDeletingComment: (commentId: number) => boolean;
 	/**
 	 * Creates a new comment or reply.
 	 */

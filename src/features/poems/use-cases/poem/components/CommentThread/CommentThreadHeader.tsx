@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, IconButton, Link, Text } from '@chakra-ui/react';
 import { type PoemCommentType } from '@features/interactions/public';
 import { formatRelativeTime } from '@Utils';
-import { Trash2 } from 'lucide-react';
+import { MessageCircleReply, Trash2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 interface CommentThreadHeaderProps {
@@ -10,7 +10,10 @@ interface CommentThreadHeaderProps {
 	parentAuthorNickname?: string;
 	authClientId: number;
 	isDeletingComment: boolean;
+	isAuthenticated: boolean;
+	isReplyComposerOpen: boolean;
 	onDelete: () => Promise<void>;
+	onToggleReplyComposer: () => void;
 }
 
 export function CommentThreadHeader({
@@ -19,16 +22,13 @@ export function CommentThreadHeader({
 	parentAuthorNickname,
 	authClientId,
 	isDeletingComment,
+	isAuthenticated,
+	isReplyComposerOpen,
 	onDelete,
+	onToggleReplyComposer,
 }: CommentThreadHeaderProps) {
 	return (
-		<Flex
-			align='start'
-			gap={3}
-			w='full'
-			position='relative'
-			pr={comment.author.id === authClientId ? 8 : 0}
-		>
+		<Flex align='stretch' gap={3} w='full'>
 			<Box flex='1' minW={0}>
 				<Flex align='center' gap={2} mb={2}>
 					<Avatar.Root size='xs'>
@@ -67,22 +67,33 @@ export function CommentThreadHeader({
 					{comment.content}
 				</Text>
 			</Box>
-			{comment.author.id === authClientId && (
+			<Flex direction='column' align='center' alignSelf='stretch'>
+				{comment.author.id === authClientId && (
+					<IconButton
+						size='xs'
+						variant='ghost'
+						colorPalette='red'
+						aria-label='Delete comment'
+						title='Delete comment'
+						loading={isDeletingComment}
+						onClick={onDelete}
+					>
+						<Trash2 />
+					</IconButton>
+				)}
 				<IconButton
-					position='absolute'
-					top='0'
-					right='0'
+					mt='auto'
 					size='xs'
 					variant='ghost'
-					colorPalette='red'
-					aria-label='Delete comment'
-					title='Delete comment'
-					loading={isDeletingComment}
-					onClick={onDelete}
+					colorPalette='pink'
+					aria-label={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
+					title={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
+					disabled={!isAuthenticated}
+					onClick={onToggleReplyComposer}
 				>
-					<Trash2 />
+					<MessageCircleReply />
 				</IconButton>
-			)}
+			</Flex>
 		</Flex>
 	);
 }

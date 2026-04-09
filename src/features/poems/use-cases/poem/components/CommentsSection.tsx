@@ -16,7 +16,7 @@ type CommentsSectionProps = {
 	isLoadingComments: boolean;
 	isCommentsError: boolean;
 	isCreatingComment: boolean;
-	isDeletingComment: boolean;
+	isDeletingComment: (commentId: number) => boolean;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
 	setRepliesByCommentId: Dispatch<SetStateAction<Record<number, PoemCommentType[]>>>;
 	onCommentInputChange: (value: string) => void;

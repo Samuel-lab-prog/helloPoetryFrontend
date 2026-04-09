@@ -276,7 +276,8 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			mutation.error as unknown as AppErrorType | null,
 		),
 		deleteComment: (args: CommentMutationParams) => deleteMutation.mutateAsync(args),
-		isDeletingComment: deleteMutation.isPending,
+		isDeletingComment: (commentId: number) =>
+			deleteMutation.isPending && deleteMutation.variables?.id === commentId,
 		deleteCommentError: getDeleteCommentErrorMessage(
 			deleteMutation.error as unknown as AppErrorType | null,
 		),

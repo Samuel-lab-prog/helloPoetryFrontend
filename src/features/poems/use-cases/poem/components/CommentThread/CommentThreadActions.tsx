@@ -1,28 +1,22 @@
 import { Flex, IconButton, Text } from '@chakra-ui/react';
 import { type PoemCommentType } from '@features/interactions/public';
-import { ChevronDown, ChevronUp, MessageCircleReply } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface CommentThreadActionsProps {
 	comment: PoemCommentType;
-	isReplyComposerOpen: boolean;
 	areRepliesOpen: boolean;
-	isAuthenticated: boolean;
 	hasReplies: boolean;
 	hasLoadedReplies: boolean;
 	onToggleReplies: () => Promise<void>;
-	onToggleReplyComposer: () => void;
 	onPrefetchReplies?: () => void;
 }
 
 export function CommentThreadActions({
 	comment,
-	isReplyComposerOpen,
 	areRepliesOpen,
-	isAuthenticated,
 	hasReplies,
 	hasLoadedReplies,
 	onToggleReplies,
-	onToggleReplyComposer,
 	onPrefetchReplies,
 }: CommentThreadActionsProps) {
 	return (
@@ -51,20 +45,7 @@ export function CommentThreadActions({
 					)}
 				</Flex>
 			)}
-			<Flex align='center' gap={2} ml='auto'>
-				<IconButton
-					size={{ base: '2xs', md: 'xs' }}
-					variant='ghost'
-					colorPalette='pink'
-					aria-label={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
-					title={isReplyComposerOpen ? 'Close reply' : 'Reply to comment'}
-					disabled={!isAuthenticated}
-					onClick={onToggleReplyComposer}
-				>
-					<MessageCircleReply />
-				</IconButton>
-				{/* TODO: Re-enable comment likes once backend returns like state consistently. */}
-			</Flex>
+			{/* TODO: Re-enable comment likes once backend returns like state consistently. */}
 		</Flex>
 	);
 }

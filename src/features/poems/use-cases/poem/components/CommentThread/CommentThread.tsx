@@ -133,19 +133,19 @@ export const CommentThread = memo(function CommentThread({
 					parentAuthorId={parentAuthorId}
 					parentAuthorNickname={parentAuthorNickname}
 					authClientId={authClientId}
-					isDeletingComment={isDeletingComment}
+					isDeletingComment={isDeletingComment(comment.id)}
+					isAuthenticated={isAuthenticated}
+					isReplyComposerOpen={isReplyComposerOpen}
 					onDelete={handleDelete}
+					onToggleReplyComposer={handleToggleReplyComposer}
 				/>
 
 				<CommentThreadActions
 					comment={comment}
-					isReplyComposerOpen={isReplyComposerOpen}
 					areRepliesOpen={areRepliesOpen}
-					isAuthenticated={isAuthenticated}
 					hasReplies={hasReplies}
 					hasLoadedReplies={hasLoadedReplies}
 					onToggleReplies={handleToggleRepliesView}
-					onToggleReplyComposer={handleToggleReplyComposer}
 					onPrefetchReplies={handlePrefetchReplies}
 				/>
 
