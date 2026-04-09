@@ -1,4 +1,4 @@
-import { Flex, Heading, Tabs, Text } from '@chakra-ui/react';
+import { Flex, Heading, Tabs } from '@chakra-ui/react';
 import { useEnsureRole } from '@features/auth/public/hooks/useEnsureRole';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,27 +32,16 @@ export function PoemModerationPage() {
 				<Heading as='h1' textStyle='h2' mb={2}>
 					Poem moderation
 				</Heading>
-				<Text textStyle='body' color='pink.100'>
-					Review pending poems and keep the community healthy and welcoming.
-				</Text>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='mainPadded'
-			direction='column'
-			gap={8}
-			w={{ base: 'full', md: '4xl' }}
-			mx='auto'
-			px={{ base: 4, md: 0 }}
-		>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='stretch' gap={8} w='full'>
 			<PageHeader />
 
 			<Tabs.Root variant='enclosed' colorPalette='pink' defaultValue='pending'>
-				<Tabs.List colorPalette={'pink'}>
+				<Tabs.List colorPalette='pink' flexWrap='wrap' gap={2}>
 					{tabs.map((tab) => (
 						<Tabs.Trigger key={tab.value} value={tab.value}>
 							{tab.label}
@@ -60,13 +49,15 @@ export function PoemModerationPage() {
 					))}
 				</Tabs.List>
 
-				<AnalyzeTab
-					pendingQuery={pendingQuery}
-					pendingPoems={pendingPoems}
-					isModerating={isModerating}
-					onModerate={handleModeration}
-				/>
-				<ActionsTab />
+				<Flex direction='column' gap={6} mt={6}>
+					<AnalyzeTab
+						pendingQuery={pendingQuery}
+						pendingPoems={pendingPoems}
+						isModerating={isModerating}
+						onModerate={handleModeration}
+					/>
+					<ActionsTab />
+				</Flex>
 			</Tabs.Root>
 		</Flex>
 	);

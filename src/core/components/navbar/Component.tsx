@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { Avatar, Badge, Flex, Icon, Link, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMyProfile } from '@features/users/public/hooks/useMyProfile';
