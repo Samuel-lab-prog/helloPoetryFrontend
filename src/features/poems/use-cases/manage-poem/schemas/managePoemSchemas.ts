@@ -1,4 +1,3 @@
-import { findForbiddenWords } from '@Utils';
 import { z } from 'zod';
 
 import {
@@ -46,35 +45,6 @@ const createOrUpdatePoemSchemaBase = z.object({
 export const createPoemSchema = createOrUpdatePoemSchemaBase
 	.extend({
 		audio: z.any().optional().nullable(),
-	})
-	.superRefine((data, ctx) => {
-		const fields: Array<{ key: 'title' | 'excerpt' | 'content'; value: string }> = [
-			{ key: 'title', value: data.title },
-			{ key: 'excerpt', value: data.excerpt },
-			{ key: 'content', value: data.content },
-		];
-
-		for (const field of fields) {
-			const forbiddenWordsFound = findForbiddenWords(field.value);
-			if (forbiddenWordsFound.length === 0) continue;
-
-			ctx.addIssue({
-				code: 'custom',
-				path: [field.key],
-				message: `Remove forbidden words: ${forbiddenWordsFound.join(', ')}`,
-			});
-		}
-
-		for (const tag of data.tags ?? []) {
-			const forbiddenWordsFound = findForbiddenWords(tag);
-			if (forbiddenWordsFound.length === 0) continue;
-
-			ctx.addIssue({
-				code: 'custom',
-				path: ['tags'],
-				message: `Tag contains forbidden words: ${forbiddenWordsFound.join(', ')}`,
-			});
-		}
 	});
 
 export const deletePoemSchema = z.object({

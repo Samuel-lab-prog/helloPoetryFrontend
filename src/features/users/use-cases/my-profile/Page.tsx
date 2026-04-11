@@ -86,7 +86,15 @@ export function MyProfilePage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' w='full' maxW='2xl' mx='auto' my={12}>
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			w='full'
+			maxW='2xl'
+			mx='auto'
+			my={12}
+		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
 

@@ -24,9 +24,9 @@ export const Toaster = () => (
 					<Toast.Root
 						width={{ md: 'sm' }}
 						colorPalette={colorPalette}
-						bg={colorPalette ? 'purple.600' : undefined}
-						borderColor={colorPalette ? 'purple.400' : undefined}
-						color={colorPalette ? 'purple.50' : undefined}
+						bg={colorPalette ? `${colorPalette}.600` : undefined}
+						borderColor={colorPalette ? `${colorPalette}.400` : undefined}
+						color={colorPalette ? `${colorPalette}.50` : undefined}
 					>
 						{toast.type === 'loading' ? (
 							<Spinner size='sm' color='blue.solid' />

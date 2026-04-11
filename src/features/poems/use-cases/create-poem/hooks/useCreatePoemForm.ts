@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
+import { findForbiddenWords } from '@Utils';
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 
@@ -35,10 +36,11 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 
 	const { mutateAsync, isPending } = useCreatePoem();
 
-	async function onSubmit(data: CreatePoemType) {
+async function onSubmit(data: CreatePoemType) {
 		setGeneralError('');
 
 		try {
+			if (applyForbiddenWordsValidation(data, form.setError)) return;
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { audio, ...rest } = data;
 			const createdPoem = await mutateAsync(rest as CreatePoemPayload);
@@ -201,4 +203,39 @@ function mapCreatePoemValidationError(
 	}
 
 	return false;
+}
+
+function applyForbiddenWordsValidation(
+	data: CreatePoemType,
+	setError: UseFormSetError<CreatePoemType>,
+) {
+	let hasError = false;
+	const fields: Array<{ key: 'title' | 'excerpt' | 'content'; value: string }> = [
+		{ key: 'title', value: data.title },
+		{ key: 'excerpt', value: data.excerpt },
+		{ key: 'content', value: data.content },
+	];
+
+	for (const field of fields) {
+		const forbiddenWordsFound = findForbiddenWords(field.value);
+		if (forbiddenWordsFound.length === 0) continue;
+		hasError = true;
+		setError(field.key, {
+			type: 'manual',
+			message: `Remove forbidden words: ${forbiddenWordsFound.join(', ')}`,
+		});
+	}
+
+	for (const tag of data.tags ?? []) {
+		const forbiddenWordsFound = findForbiddenWords(tag);
+		if (forbiddenWordsFound.length === 0) continue;
+		hasError = true;
+		setError('tags', {
+			type: 'manual',
+			message: `Tag contains forbidden words: ${forbiddenWordsFound.join(', ')}`,
+		});
+		break;
+	}
+
+	return hasError;
 }
