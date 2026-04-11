@@ -34,9 +34,14 @@ export function HomeFeed({ poems, isLoading, isError }: HomeFeedProps) {
 				}
 			>
 				<Flex direction='column' gap={2}>
-					{poems.map((poem) => (
+					{poems.map((poem, index) => (
 						<Box
 							key={poem.id}
+							animationName='slide-from-bottom, fade-in'
+							animationDuration='320ms'
+							animationTimingFunction='ease-out'
+							animationFillMode='backwards'
+							animationDelay={`${60 + index * 70}ms`}
 							borderTop='1px solid'
 							borderColor='purple.700'
 							_first={{ borderTop: 'none' }}

@@ -12,7 +12,7 @@ export function FooterCommunity() {
 	return (
 		<VStack align='start' gap={2}>
 			<Text textStyle='small' color='pink.200'>
-				Community
+				Development
 			</Text>
 			{links.map((link) => (
 				<Link
@@ -21,7 +21,7 @@ export function FooterCommunity() {
 					target='_blank'
 					rel='noopener noreferrer'
 					variant='muted'
-					size='sm'
+					textStyle='smaller'
 				>
 					{link.label}
 				</Link>

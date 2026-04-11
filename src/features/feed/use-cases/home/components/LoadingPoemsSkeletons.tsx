@@ -8,19 +8,29 @@ export const LoadingPoemsSkeletons = (
 				borderTop='1px solid'
 				borderColor='purple.700'
 				_first={{ borderTop: 'none' }}
-				p={4}
+				pt={3}
 			>
-				<Flex direction='column' gap={3}>
-					<Skeleton height='14px' width='40px' borderRadius='full' />
-					<Skeleton height='20px' width='70%' />
-					<Skeleton height='12px' width='90%' />
-					<Skeleton height='12px' width='80%' />
-					<Flex align='center' gap={3}>
-						<Skeleton height='12px' width='80px' />
-						<Skeleton height='12px' width='60px' />
-						<Skeleton height='12px' width='90px' />
+				<Box px={4} py={5} borderRadius='lg'>
+					<Flex direction='column' gap={3}>
+						<Skeleton height='22px' width='75%' />
+						<Flex direction='column' gap={2}>
+							<Skeleton height='12px' width='92%' />
+							<Skeleton height='12px' width='88%' />
+						</Flex>
+						<Flex align='center' gap={2}>
+							<Skeleton height='40px' width='40px' borderRadius='full' />
+							<Flex direction='column' gap={2} flex='1'>
+								<Skeleton height='12px' width='45%' />
+								<Skeleton height='10px' width='35%' />
+							</Flex>
+						</Flex>
+						<Flex gap={2} wrap='wrap'>
+							<Skeleton height='18px' width='64px' borderRadius='full' />
+							<Skeleton height='18px' width='72px' borderRadius='full' />
+							<Skeleton height='18px' width='56px' borderRadius='full' />
+						</Flex>
 					</Flex>
-				</Flex>
+				</Box>
 			</Box>
 		))}
 	</Flex>

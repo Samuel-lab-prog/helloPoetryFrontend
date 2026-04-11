@@ -1,10 +1,7 @@
 type FooterLink = { label: string; to: string };
 
 export function getFooterLinks(isAuthenticated: boolean): FooterLink[] {
-	const links: FooterLink[] = [
-		{ label: 'Home', to: '/' },
-		{ label: 'Poems', to: '/poems' },
-	];
+	const links: FooterLink[] = [{ label: 'Home', to: '/' }];
 
 	if (isAuthenticated) {
 		links.push({ label: 'Create poem', to: '/poems/new' });

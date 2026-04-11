@@ -1,4 +1,4 @@
-﻿import { Box, Flex, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+﻿import { Box, Flex, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 
 import { FooterBrand } from './FooterBrand';
 import { FooterCommunity } from './FooterCommunity';
@@ -14,21 +14,27 @@ export function Footer({ links }: FooterProps) {
 		<Box
 			as='footer'
 			mt={{ base: 10, md: 14 }}
-			px={{ base: 4, md: 8 }}
+			px={{ base: 4, md: 4 }}
 			pb={{ base: 'calc(92px + env(safe-area-inset-bottom, 0px))', md: 8 }}
-			pt={10}
+			pt={0}
 			borderColor='purple.700'
 			bg='linear-gradient(180deg, rgba(18,0,17,0.75) 0%, rgba(18,0,17,0.92) 100%)'
 		>
-			<SimpleGrid columns={{ base: 1, md: 3 }} gap={8}>
-				<VStack align='start' gap={3}>
-					<FooterBrand />
-				</VStack>
-				<FooterNav links={links} />
-				<VStack align='start' gap={3}>
-					<FooterCommunity />
-				</VStack>
-			</SimpleGrid>
+			<Grid templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }} gap={8}>
+				<GridItem colSpan={{ base: 2, md: 1 }}>
+					<VStack align='center' gap={3}>
+						<FooterBrand />
+					</VStack>
+				</GridItem>
+				<GridItem>
+					<FooterNav links={links} />
+				</GridItem>
+				<GridItem>
+					<VStack align='start' gap={3}>
+						<FooterCommunity />
+					</VStack>
+				</GridItem>
+			</Grid>
 
 			<Flex
 				mt={8}

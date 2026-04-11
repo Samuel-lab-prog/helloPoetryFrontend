@@ -25,7 +25,7 @@ export function NavbarSidebar({
 			w='320px'
 			h='full'
 			alignSelf='flex-start'
-			p={6}
+			p={5}
 			borderRight='1px solid'
 			borderColor='border'
 			overflowY='auto'

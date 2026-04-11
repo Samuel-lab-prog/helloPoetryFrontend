@@ -1,15 +1,4 @@
-import {
-	Avatar,
-	Badge,
-	Box,
-	Card,
-	Flex,
-	Icon,
-	Link,
-	LinkBox,
-	LinkOverlay,
-	Text,
-} from '@chakra-ui/react';
+import { Avatar, Badge, Box, Card, Flex, Icon, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import { formatRelativeTime } from '@Utils';
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -37,35 +26,38 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
 			>
 				<Flex direction='column' gap={3}>
-					<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
-						Poem
-					</Badge>
 					<LinkOverlay asChild>
 						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 							<Text textStyle='h3'>{poem.title}</Text>
 						</NavLink>
 					</LinkOverlay>
 					{poem.excerpt && (
-						<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
+						<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mt={-3} mb={1}>
 							{poem.excerpt}
 						</Text>
 					)}
 
 					{!hideAuthorMeta && (
-						<Flex align='center' gap={2}>
-							<Avatar.Root size='md'>
-								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-								<Avatar.Fallback name={poem.author.nickname} />
-							</Avatar.Root>
-							<Flex direction='column' minW={0} gap={0}>
-								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-									{poem.author.name}
-								</Text>
-								<Link asChild textStyle='smaller' color='pink.200' opacity={0.9}>
-									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-								</Link>
+						<LinkBox>
+							<Flex align='center' gap={2}>
+								<Avatar.Root size='md'>
+									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+									<Avatar.Fallback name={poem.author.nickname} />
+								</Avatar.Root>
+								<Flex direction='column' minW={0} gap={0}>
+									<LinkOverlay asChild>
+										<NavLink to={`/authors/${poem.author.id}`}>
+											<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+												{poem.author.name}
+											</Text>
+										</NavLink>
+									</LinkOverlay>
+									<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+										@{poem.author.nickname}
+									</Text>
+								</Flex>
 							</Flex>
-						</Flex>
+						</LinkBox>
 					)}
 
 					<Flex align='center' gap={4} wrap='wrap'>
@@ -150,7 +142,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					</NavLink>
 				</LinkOverlay>
 				{poem.excerpt && (
-					<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3}>
+					<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mt={-1}>
 						{poem.excerpt}
 					</Text>
 				)}
@@ -159,20 +151,26 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 			<Card.Body p={0} flex='1'>
 				<Flex direction='column' gap={3}>
 					{!hideAuthorMeta && (
-						<Flex align='center' gap={2}>
-							<Avatar.Root size='md'>
-								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-								<Avatar.Fallback name={poem.author.nickname} />
-							</Avatar.Root>
-							<Flex direction='column' minW={0} gap={0}>
-								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-									{poem.author.name}
-								</Text>
-								<Link asChild textStyle='smaller' color='pink.200' opacity={0.9}>
-									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-								</Link>
+						<LinkBox>
+							<Flex align='center' gap={2}>
+								<Avatar.Root size='md'>
+									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+									<Avatar.Fallback name={poem.author.nickname} />
+								</Avatar.Root>
+								<Flex direction='column' minW={0} gap={0}>
+									<LinkOverlay asChild>
+										<NavLink to={`/authors/${poem.author.id}`}>
+											<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+												{poem.author.name}
+											</Text>
+										</NavLink>
+									</LinkOverlay>
+									<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+										@{poem.author.nickname}
+									</Text>
+								</Flex>
 							</Flex>
-						</Flex>
+						</LinkBox>
 					)}
 
 					<Flex align='center' gap={4} wrap='wrap'>

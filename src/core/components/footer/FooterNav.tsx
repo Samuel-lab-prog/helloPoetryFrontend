@@ -14,7 +14,7 @@ export function FooterNav({ links }: { links: FooterLink[] }) {
 					asChild
 					key={link.label}
 					variant='muted'
-					size='sm'
+					textStyle='smaller'
 					_currentPage={{ color: 'pink.50', fontWeight: '600' }}
 				>
 					<NavLink to={link.to}>{link.label}</NavLink>

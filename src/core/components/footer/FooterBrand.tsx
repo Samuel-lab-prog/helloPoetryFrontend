@@ -27,7 +27,7 @@ export function FooterBrand() {
 				</VStack>
 			</HStack>
 
-			<Text textStyle='small' color='pink.200' maxW='sm'>
+			<Text textStyle='smaller' color='pink.200' maxW='sm'>
 				Publish poems, save favorites, comment, and build connections with other authors.
 			</Text>
 		</VStack>
