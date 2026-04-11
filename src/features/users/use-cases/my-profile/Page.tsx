@@ -93,7 +93,7 @@ export function MyProfilePage() {
 			w='full'
 			maxW='2xl'
 			mx='auto'
-			my={12}
+			mb={12}
 		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
