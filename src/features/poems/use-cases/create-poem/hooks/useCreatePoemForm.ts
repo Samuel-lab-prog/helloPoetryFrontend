@@ -55,7 +55,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 				description: 'Your poem has been created and will be reviewed for moderation.',
 				duration: 6000,
 				meta: {
-					colorPalette: 'purple',
+					colorPalette: 'green',
 				},
 				closable: true,
 			});

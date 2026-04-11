@@ -48,8 +48,44 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 
 	const markAllReadMutation = useMutation({
 		mutationFn: () => notifications.markAllAsRead.mutate(),
-		onSuccess: () => {
+		onMutate: async () => {
+			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
+
+			const previousPages = queryClient.getQueriesData<NotificationsPage>({
+				queryKey: notificationsKeys.all(),
+			});
+
+			queryClient.setQueriesData<NotificationsPage>(
+				{ queryKey: notificationsKeys.all() },
+				(old) => {
+					if (!old) return old;
+					const nowIso = new Date().toISOString();
+					return {
+						...old,
+						notifications: old.notifications.map((notification) =>
+							notification.readAt ? notification : { ...notification, readAt: nowIso },
+						),
+					};
+				},
+			);
+
 			setUnreadNotificationsCount(0);
+
+			return { previousPages };
+		},
+		onError: (_error, _variables, context) => {
+			if (!context) return;
+			context.previousPages.forEach(([key, data]) => {
+				if (!data) return;
+				queryClient.setQueryData(key, data);
+			});
+			const unreadCount =
+				context.previousPages
+					.flatMap(([, page]) => page?.notifications ?? [])
+					.filter((item) => !item.readAt).length ?? 0;
+			setUnreadNotificationsCount(unreadCount);
+		},
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: notificationsKeys.all(),
 			});

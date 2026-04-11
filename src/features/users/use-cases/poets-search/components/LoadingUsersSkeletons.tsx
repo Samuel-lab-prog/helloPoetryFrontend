@@ -12,15 +12,12 @@ export const LoadingUsersSkeletons = (
 				pb={1}
 				_first={{ borderTop: 'none' }}
 			>
-				<Flex align='center' justify='space-between' gap={2}>
-					<Flex align='center' gap={3}>
-						<Skeleton boxSize='12' borderRadius='full' />
-						<Flex direction='column' gap={2}>
-							<Skeleton height='12px' width='140px' />
-							<Skeleton height='10px' width='90px' />
-						</Flex>
+				<Flex align='center' gap={3}>
+					<Skeleton boxSize='12' borderRadius='full' />
+					<Flex direction='column' gap={2}>
+						<Skeleton height='12px' width='160px' />
+						<Skeleton height='12px' width='110px' />
 					</Flex>
-					<Skeleton height='28px' width='96px' borderRadius='md' />
 				</Flex>
 			</Box>
 		))}
