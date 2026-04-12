@@ -1,4 +1,4 @@
-import { Button, Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading, Tabs } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -27,52 +27,91 @@ export function AdminPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' gap={8}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' gap={8} w='full'>
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Heading as='h1' textStyle='h2' mb={6}>
+				<Heading as='h1' textStyle='h2' mb={2}>
 					Admin Panel
 				</Heading>
-				<Flex gap={2} mb={8} direction={['column', undefined, 'row']}>
-					<Button variant='solidPink' onClick={() => changeForm('create')}>
-						Create Poem
-					</Button>
-					<Button variant='solidPink' onClick={() => changeForm('update')}>
-						Update Poem
-					</Button>
-					<Button variant='solidPink' onClick={() => changeForm('delete')}>
-						Delete Poem
-					</Button>
-				</Flex>
 			</Flex>
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Flex direction='column' w='full' maxW='4xl'>
-					{activeForm === 'create' && (
-						<>
-							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Create Poem
-							</Heading>
-							<CreatePoemForm />
-						</>
-					)}
+				<Tabs.Root
+					variant='enclosed'
+					colorPalette='pink'
+					value={activeForm}
+					onValueChange={(details) => changeForm(details.value as ActiveForm)}
+					w='full'
+					maxW='4xl'
+				>
+					<Tabs.List
+						flexWrap='wrap'
+						gap={2}
+						w='fit-content'
+						minW='280px'
+						mx='auto'
+						justifyContent='center'
+						bg='rgba(255, 143, 189, 0.12)'
+						border='1px solid'
+						borderColor='purple.700'
+						borderRadius='xl'
+						p={1}
+						backdropFilter='blur(6px)'
+					>
+						<Tabs.Trigger
+							value='create'
+							textStyle='small'
+							px={4}
+							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
+							_selected={{ bg: 'pink.500', color: 'white' }}
+						>
+							Create Poem
+						</Tabs.Trigger>
+						<Tabs.Trigger
+							value='update'
+							textStyle='small'
+							px={4}
+							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
+							_selected={{ bg: 'pink.500', color: 'white' }}
+						>
+							Update Poem
+						</Tabs.Trigger>
+						<Tabs.Trigger
+							value='delete'
+							textStyle='small'
+							px={4}
+							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
+							_selected={{ bg: 'pink.500', color: 'white' }}
+						>
+							Delete Poem
+						</Tabs.Trigger>
+					</Tabs.List>
 
-					{activeForm === 'update' && (
-						<>
-							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Update Poem
-							</Heading>
-							<UpdatePoemForm />
-						</>
-					)}
-
-					{activeForm === 'delete' && (
-						<>
-							<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
-								Delete Poem
-							</Heading>
-							<DeletePoemForm />
-						</>
-					)}
-				</Flex>
+					<Flex direction='column' w='full' mt={6}>
+						<Tabs.Content value='create'>
+							<>
+								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+									Create Poem
+								</Heading>
+								<CreatePoemForm />
+							</>
+						</Tabs.Content>
+						<Tabs.Content value='update'>
+							<>
+								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+									Update Poem
+								</Heading>
+								<UpdatePoemForm />
+							</>
+						</Tabs.Content>
+						<Tabs.Content value='delete'>
+							<>
+								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+									Delete Poem
+								</Heading>
+								<DeletePoemForm />
+							</>
+						</Tabs.Content>
+					</Flex>
+				</Tabs.Root>
 			</Flex>
 		</Flex>
 	);

@@ -1,6 +1,7 @@
 import { FormField, SelectField, TagsField } from '@BaseComponents';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { PoemCombobox } from '../../../public/components/PoemCombobox';
 import { usePoemsMinimal } from '../../../public/hooks/useGetPoemsMinimal';
@@ -16,6 +17,7 @@ export function UpdatePoemForm() {
 		handleSubmit,
 		watch,
 		reset,
+		setValue,
 		formState: { errors, isValid },
 		onSubmit,
 		isPending,
@@ -24,6 +26,14 @@ export function UpdatePoemForm() {
 
 	const poemId = watch('id');
 	const { poem, isLoading } = usePoem(poemId);
+	const [searchParams] = useSearchParams();
+	const initialPoemId = Number(searchParams.get('poemId') ?? '');
+
+	useEffect(() => {
+		if (!initialPoemId || Number.isNaN(initialPoemId)) return;
+		if (poemId) return;
+		setValue('id', initialPoemId, { shouldValidate: true });
+	}, [initialPoemId, poemId, setValue]);
 
 	useEffect(() => {
 		if (!poem) return;

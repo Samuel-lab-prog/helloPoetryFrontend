@@ -4,8 +4,7 @@ import { toaster } from '@BaseComponents';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation } from '@tanstack/react-query';
-import type { AppErrorType } from '@Utils';
-import { findForbiddenWords } from '@Utils';
+import { type AppErrorType, findForbiddenWords } from '@Utils';
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
 
@@ -36,7 +35,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 
 	const { mutateAsync, isPending } = useCreatePoem();
 
-async function onSubmit(data: CreatePoemType) {
+	async function onSubmit(data: CreatePoemType) {
 		setGeneralError('');
 
 		try {
@@ -51,10 +50,13 @@ async function onSubmit(data: CreatePoemType) {
 				poemId: createdPoem.id,
 				createdAt: new Date().toISOString(),
 			});
+			const isPublished = data.status === 'published';
 			toaster.create({
 				type: 'success',
 				title: 'Poem created',
-				description: 'Your poem has been created and will be reviewed for moderation.',
+				description: isPublished
+					? 'Your poem has been created and will be reviewed for moderation.'
+					: 'Your poem has been saved as a draft.',
 				duration: 6000,
 				meta: {
 					colorPalette: 'green',

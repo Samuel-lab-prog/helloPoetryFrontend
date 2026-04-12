@@ -93,100 +93,118 @@ export function MyPoemsSection({
 					</Text>
 				)}
 
-				{myPoems.map((poem, index) => (
-					<Flex
-						key={poem.id}
-						align={{ base: 'start', md: 'center' }}
-						justify='space-between'
-						direction={{ base: 'column', md: 'row' }}
-						gap={3}
-						p={3}
-						border='1px solid'
-						borderColor='purple.700'
-						borderRadius='md'
-						animationName='slide-from-bottom, fade-in'
-						animationDuration='320ms'
-						animationTimingFunction='ease-out'
-						animationFillMode='backwards'
-						animationDelay={`${30 + index * 30}ms`}
-					>
-						<Flex direction='column' gap={1} flex='1' w='full'>
-							<Text textStyle='small'>{poem.title}</Text>
-							<Text textStyle='smaller' color='pink.200'>
-								{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
-								{translateVisibility(poem.visibility)}
-							</Text>
-							<Text
-								textStyle='smaller'
-								color={getModerationTextColor(poem.moderationStatus)}
-								fontWeight='semibold'
-							>
-								{translateModerationStatus(poem.moderationStatus)}
-							</Text>
-							{poem.stats && (
-								<Text textStyle='smaller' color='pink.200'>
-									{poem.stats.likesCount} likes | {poem.stats.commentsCount} comments
-								</Text>
-							)}
-							{poem.tags?.length > 0 && (
-								<HStack gap={1} wrap='wrap'>
-									{poem.tags.slice(0, 4).map((tag) => (
-										<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
-											#{tag.name}
-										</Badge>
-									))}
-								</HStack>
-							)}
-						</Flex>
+				{myPoems.map((poem, index) => {
+					const canEdit = poem.status !== 'published' && poem.moderationStatus !== 'removed';
+					const canDelete = poem.moderationStatus !== 'removed';
 
-						<Menu.Root positioning={{ placement: 'bottom-end' }}>
-							<Menu.Trigger asChild>
-								<IconButton
-									aria-label='Open actions menu'
-									variant='solidPink'
-									size={{ base: 'xs', md: 'sm' }}
-									alignSelf={{ base: 'end', md: 'auto' }}
-								>
-									<EllipsisVertical />
-								</IconButton>
-							</Menu.Trigger>
-							<Portal>
-								<Menu.Positioner>
-									<Menu.Content
-										bg='rgba(27, 0, 25, 0.98)'
-										border='1px solid'
-										borderColor='purple.700'
+					return (
+						<Flex
+							key={poem.id}
+							align={{ base: 'start', md: 'center' }}
+							justify='space-between'
+							direction={{ base: 'column', md: 'row' }}
+							gap={3}
+							p={3}
+							border='1px solid'
+							borderColor='purple.700'
+							borderRadius='md'
+							animationName='slide-from-bottom, fade-in'
+							animationDuration='320ms'
+							animationTimingFunction='ease-out'
+							animationFillMode='backwards'
+							animationDelay={`${30 + index * 30}ms`}
+						>
+							<Flex direction='column' gap={1} flex='1' w='full'>
+								<Flex align='center' gap={2} wrap='wrap'>
+									<Text textStyle='small'>{poem.title}</Text>
+									{poem.status === 'draft' && (
+										<Badge size='sm' colorPalette='purple' variant='subtle'>
+											Draft
+										</Badge>
+									)}
+								</Flex>
+								<Text textStyle='smaller' color='pink.200'>
+									{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
+									{translateVisibility(poem.visibility)}
+								</Text>
+								{poem.status === 'published' && (
+									<Text
+										textStyle='smaller'
+										color={getModerationTextColor(poem.moderationStatus)}
+										fontWeight='semibold'
 									>
-										<Menu.Item
-											value={`open-${poem.id}`}
-											color='pink.100'
-											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-											onClick={() => onOpenPoem(poem.slug, poem.id)}
+										{translateModerationStatus(poem.moderationStatus)}
+									</Text>
+								)}
+								{poem.stats && (
+									<Text textStyle='smaller' color='pink.200'>
+										{poem.stats.likesCount} likes | {poem.stats.commentsCount} comments
+									</Text>
+								)}
+								{poem.tags?.length > 0 && (
+									<HStack gap={1} wrap='wrap'>
+										{poem.tags.slice(0, 4).map((tag) => (
+											<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
+												#{tag.name}
+											</Badge>
+										))}
+									</HStack>
+								)}
+							</Flex>
+
+							<Menu.Root positioning={{ placement: 'bottom-end' }}>
+								<Menu.Trigger asChild>
+									<IconButton
+										aria-label='Open actions menu'
+										variant='solidPink'
+										size={{ base: 'xs', md: 'sm' }}
+										alignSelf={{ base: 'end', md: 'auto' }}
+									>
+										<EllipsisVertical />
+									</IconButton>
+								</Menu.Trigger>
+								<Portal>
+									<Menu.Positioner>
+										<Menu.Content
+											bg='rgba(27, 0, 25, 0.98)'
+											border='1px solid'
+											borderColor='purple.700'
 										>
-											Open
-										</Menu.Item>
-										<Menu.Item
-											value={`update-${poem.id}`}
-											color='pink.100'
-											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-											onClick={() => onUpdatePoem(poem.id)}
-										>
-											Edit
-										</Menu.Item>
-										<Menu.Item
-											value={`delete-${poem.id}`}
-											color='pink.100'
-											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-											onClick={() => onDeletePoem(poem.id)}
-										>
-											Delete
-										</Menu.Item>
-									</Menu.Content>
-								</Menu.Positioner>
-							</Portal>
-						</Menu.Root>
-					</Flex>
-				))}
+											<Menu.Item
+												value={`open-${poem.id}`}
+												color='pink.100'
+												_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+												onClick={() => onOpenPoem(poem.slug, poem.id)}
+											>
+												Open
+											</Menu.Item>
+											{canEdit && (
+												<Menu.Item
+													value={`update-${poem.id}`}
+													color='pink.100'
+													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+													onClick={() => onUpdatePoem(poem.id)}
+												>
+													Edit
+												</Menu.Item>
+											)}
+											{canDelete && (
+												<Menu.Item
+													value={`delete-${poem.id}`}
+													color='pink.100'
+													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+													onClick={() => onDeletePoem(poem.id)}
+												>
+													Delete
+												</Menu.Item>
+											)}
+										</Menu.Content>
+									</Menu.Positioner>
+								</Portal>
+							</Menu.Root>
+						</Flex>
+					);
+				})}
 			</Flex>
 		</Surface>
 	);

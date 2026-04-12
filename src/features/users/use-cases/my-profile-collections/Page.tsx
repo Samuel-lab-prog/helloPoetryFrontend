@@ -28,7 +28,14 @@ export function MyProfileCollectionsPage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				align='center'
+				py={12}
+				px={[4, 4, 4, 0, 0]}
+			>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -36,14 +43,28 @@ export function MyProfileCollectionsPage() {
 
 	if (isProfileLoading || !profile) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				align='center'
+				py={12}
+				px={[4, 4, 4, 0, 0]}
+			>
 				<Text textStyle='body'>Loading profile...</Text>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 4, 0, 0]}
+		>
 			<Box as='section' w='full' maxW='2xl'>
 				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Heading as='h1' textStyle='h2'>

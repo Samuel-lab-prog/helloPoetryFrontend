@@ -1,5 +1,6 @@
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
+import { toaster } from '@BaseComponents';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { findForbiddenWords } from '@Utils';
@@ -28,7 +29,16 @@ export function useUpdatePoemForm() {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });
 			queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(data.id)) });
-			alert('Poem updated successfully!');
+			toaster.create({
+				type: 'success',
+				title: 'Poem updated',
+				description: 'Your poem was updated successfully.',
+				duration: 5000,
+				meta: {
+					colorPalette: 'green',
+				},
+				closable: true,
+			});
 		} catch (err) {
 			handleUpdatePoemError(err, form.setError, setGeneralError);
 		}
@@ -40,6 +50,7 @@ export function useUpdatePoemForm() {
 		formState: form.formState,
 		control: form.control,
 		watch: form.watch,
+		setValue: form.setValue,
 		onSubmit,
 		isPending,
 		generalError,

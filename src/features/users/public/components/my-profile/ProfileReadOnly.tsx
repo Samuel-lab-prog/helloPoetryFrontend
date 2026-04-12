@@ -13,9 +13,6 @@ export function ProfileReadOnly({ profile }: ProfileReadOnlyProps) {
 			<Text textStyle='small' color='pink.200'>
 				@{profile.nickname}
 			</Text>
-			<Text textStyle='small' color='pink.100'>
-				{profile.email}
-			</Text>
 			<Text textStyle='body'>{profile.bio || 'No bio.'}</Text>
 		</>
 	);

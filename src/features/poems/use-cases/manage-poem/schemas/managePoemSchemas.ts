@@ -42,10 +42,9 @@ const createOrUpdatePoemSchemaBase = z.object({
 		.optional(),
 });
 
-export const createPoemSchema = createOrUpdatePoemSchemaBase
-	.extend({
-		audio: z.any().optional().nullable(),
-	});
+export const createPoemSchema = createOrUpdatePoemSchemaBase.extend({
+	audio: z.any().optional().nullable(),
+});
 
 export const deletePoemSchema = z.object({
 	id: z.number('Invalid ID').min(1, 'ID must be a positive number'),
