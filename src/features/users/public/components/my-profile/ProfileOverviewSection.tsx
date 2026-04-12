@@ -121,6 +121,7 @@ export function ProfileOverviewSection({
 				p={{ base: 5, md: 6 }}
 				variant='gradient'
 				bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
+				position='relative'
 			>
 				<Flex
 					justify='space-between'
@@ -158,7 +159,15 @@ export function ProfileOverviewSection({
 						)}
 					</VStack>
 
-					<Flex direction='column' gap={2} w={{ base: 'full', md: 'auto' }}>
+					<Flex
+						direction='column'
+						gap={2}
+						w={{ base: 'full', md: 'auto' }}
+						position={{ base: 'static', md: 'absolute' }}
+						top={{ md: 5 }}
+						right={{ md: 5 }}
+						mt={{ base: 3, md: 0 }}
+					>
 						{isEditingProfile ? (
 							<>
 								<Button
