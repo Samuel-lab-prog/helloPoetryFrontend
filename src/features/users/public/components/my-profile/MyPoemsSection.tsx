@@ -13,7 +13,6 @@ import {
 import type { FullPoemType } from '@features/poems/public/types';
 import { formatDate, translateModerationStatus } from '@Utils';
 import { EllipsisVertical, Feather } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 export type MyPoemsSectionProps = {
@@ -54,15 +53,6 @@ export function MyPoemsSection({
 	showHeader = true,
 	withSurface = true,
 }: MyPoemsSectionProps) {
-	const [removingId, setRemovingId] = useState<number | null>(null);
-
-	useEffect(() => {
-		if (removingId === null) return;
-		if (!myPoems.some((poem) => poem.id === removingId)) {
-			setRemovingId(null);
-		}
-	}, [myPoems, removingId]);
-
 	const content = (
 		<>
 			{showHeader && (
@@ -111,8 +101,6 @@ export function MyPoemsSection({
 				{myPoems.map((poem, index) => {
 					const canEdit = poem.status !== 'published' && poem.moderationStatus !== 'removed';
 					const canDelete = poem.moderationStatus !== 'removed';
-					const isRemoving = removingId === poem.id;
-
 					return (
 						<Flex
 							key={poem.id}
@@ -129,9 +117,6 @@ export function MyPoemsSection({
 							animationTimingFunction='ease-out'
 							animationFillMode='backwards'
 							animationDelay={`${30 + index * 30}ms`}
-							opacity={isRemoving ? 0.4 : 1}
-							transform={isRemoving ? 'scale(0.98)' : undefined}
-							transition='opacity 0.18s ease, transform 0.18s ease'
 						>
 							<Flex direction='column' gap={1} flex='1' w='full'>
 								<Flex align='center' gap={2} wrap='wrap'>
@@ -212,13 +197,7 @@ export function MyPoemsSection({
 													value={`delete-${poem.id}`}
 													color='pink.100'
 													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-													onClick={() => {
-														if (isRemoving) return;
-														setRemovingId(poem.id);
-														window.setTimeout(() => {
-															onDeletePoem(poem.id);
-														}, 180);
-													}}
+													onClick={() => onDeletePoem(poem.id)}
 												>
 													Delete
 												</Menu.Item>

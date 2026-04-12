@@ -31,6 +31,7 @@ export function PoemContent({ content }: PoemContentProps) {
 			letterSpacing='0.01em'
 			whiteSpace='pre-wrap'
 			textAlign='left'
+			w='full'
 			pb={{ base: 12, md: 14 }}
 		>
 			{prefersReducedMotion || !textAnimator ? (

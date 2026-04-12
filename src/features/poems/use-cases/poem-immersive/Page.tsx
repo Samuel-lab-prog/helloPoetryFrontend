@@ -24,6 +24,7 @@ export function PoemImmersivePage() {
 				py={12}
 				px={[4, 4, 0]}
 				minH='100vh'
+				w='full'
 			>
 				<Text textStyle='body'>Invalid poem ID.</Text>
 			</Flex>
@@ -42,7 +43,7 @@ export function PoemImmersivePage() {
 			py={12}
 			px={[4, 4, 0]}
 		>
-			<Box w='full' maxW='2xl'>
+			<Box w='full'>
 				<PoemBackLink poemId={poemId} poemSlug={poem?.slug} />
 				<PoemContentCard
 					poem={poem}

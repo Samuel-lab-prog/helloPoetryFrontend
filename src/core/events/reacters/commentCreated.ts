@@ -10,7 +10,9 @@ export async function onCommentCreated(
 	const baseCommentsKey = interactionsKeys.commentsByPoem(String(payload.poemId));
 	const parentCommentsKey =
 		payload.parentId !== undefined
-			? interactionsKeys.commentsByPoem(String(payload.poemId), String(payload.parentId))
+			? interactionsKeys.commentsByPoem(String(payload.poemId), {
+					parentId: String(payload.parentId),
+				})
 			: null;
 
 	const keysToRefetch = [

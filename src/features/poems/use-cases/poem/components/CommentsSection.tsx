@@ -1,5 +1,5 @@
 import { AsyncState } from '@BaseComponents';
-import { Box, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions/public';
 import { SendHorizontal } from 'lucide-react';
 import { type Dispatch, memo, type SetStateAction, useEffect, useMemo, useRef } from 'react';
@@ -19,6 +19,9 @@ type CommentsSectionProps = {
 	isDeletingComment: (commentId: number) => boolean;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
 	setRepliesByCommentId: Dispatch<SetStateAction<Record<number, PoemCommentType[]>>>;
+	hasMoreComments: boolean;
+	isLoadingMoreComments: boolean;
+	onLoadMoreComments: () => Promise<unknown>;
 	onCommentInputChange: (value: string) => void;
 	onPublishComment: () => Promise<void>;
 	createComment: (args: { content: string; parentId?: number }) => Promise<void>;
@@ -40,6 +43,9 @@ export const CommentsSection = memo(function CommentsSection({
 	isDeletingComment,
 	repliesByCommentId,
 	setRepliesByCommentId,
+	hasMoreComments,
+	isLoadingMoreComments,
+	onLoadMoreComments,
 	onCommentInputChange,
 	onPublishComment,
 	createComment,
@@ -172,6 +178,20 @@ export const CommentsSection = memo(function CommentsSection({
 						{renderedThreads}
 					</Flex>
 				</AsyncState>
+				{hasMoreComments && (
+					<Flex justify='center' mt={4}>
+						<Button
+							variant='outlinePurple'
+							size='sm'
+							onClick={() => {
+								void onLoadMoreComments();
+							}}
+							loading={isLoadingMoreComments}
+						>
+							Load more comments
+						</Button>
+					</Flex>
+				)}
 			</Box>
 		</Box>
 	);

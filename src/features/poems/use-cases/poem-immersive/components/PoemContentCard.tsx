@@ -29,7 +29,7 @@ export function PoemContentCard({
 			loadingElement={<Text textStyle='body'>Loading poem...</Text>}
 		>
 			{poem && (
-				<Box>
+				<Box w='full'>
 					<PoemHeader title={poem.title} authorName={poem.author.name} />
 					<Box
 						bg='rgba(255,255,255,0.04)'
@@ -41,6 +41,7 @@ export function PoemContentCard({
 						display='flex'
 						justifyContent='center'
 						position='relative'
+						w='full'
 					>
 						<PoemContent content={poem.content} />
 						<PoemDedication dedicationUsers={dedicationUsers} />

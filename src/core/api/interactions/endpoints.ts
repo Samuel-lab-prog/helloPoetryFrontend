@@ -2,16 +2,21 @@ import { createMutationEndpoint, createQueryEndpoint } from '@Api/utils';
 import { createHTTPRequest } from '@Utils';
 
 import { interactionsKeys } from './keys';
-import type { CommentPoemBody, PoemComment, UpdateCommentBody } from './types';
+import type {
+	CommentPoemBody,
+	GetPoemCommentsParams,
+	PoemCommentsPage,
+	UpdateCommentBody,
+} from './types';
 
-const getPoemComments = createQueryEndpoint<[string, string?], PoemComment[]>({
+const getPoemComments = createQueryEndpoint<[string, GetPoemCommentsParams?], PoemCommentsPage>({
 	key: interactionsKeys.commentsByPoem,
 
-	fn: (poemId, parentId) =>
-		createHTTPRequest<PoemComment[]>({
+	fn: (poemId, params) =>
+		createHTTPRequest<PoemCommentsPage>({
 			method: 'GET',
 			path: `/interactions/poems/${poemId}/comments`,
-			query: { parentId },
+			query: params,
 		}),
 });
 

@@ -2,7 +2,7 @@ import { interactions } from '@Api/interactions/endpoints';
 import { interactionsKeys } from '@Api/interactions/keys';
 import { getPoemsCachePort } from '@core/ports/poems';
 import { eventBus } from '@root/core/events/eventBus';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 
@@ -37,10 +37,39 @@ type CreateCommentParams = {
 	parentId?: number;
 };
 
+const COMMENTS_PAGE_LIMIT = 30;
+const REPLIES_PAGE_LIMIT = 30;
+const REPLIES_STALE_TIME = 1000 * 60 * 5;
+
 function buildCommentsKey(poemId: number, parentId?: number) {
 	return parentId
-		? interactionsKeys.commentsByPoem(String(poemId), String(parentId))
+		? interactionsKeys.commentsByPoem(String(poemId), { parentId: String(parentId) })
 		: interactionsKeys.commentsByPoem(String(poemId));
+}
+
+type CommentPage = {
+	comments: PoemCommentType[];
+	hasMore: boolean;
+	nextCursor?: number;
+};
+
+type InfiniteComments = {
+	pages: CommentPage[];
+	pageParams: unknown[];
+};
+
+function updatePages(
+	data: InfiniteComments | undefined,
+	updater: (list: PoemCommentType[]) => PoemCommentType[],
+) {
+	if (!data) return data;
+	return {
+		...data,
+		pages: data.pages.map((page) => ({
+			...page,
+			comments: updater(page.comments),
+		})),
+	};
 }
 
 async function prepareCommentQueries(
@@ -54,9 +83,9 @@ async function prepareCommentQueries(
 	await queryClient.cancelQueries({ queryKey: baseKey });
 	if (repliesKey) await queryClient.cancelQueries({ queryKey: repliesKey });
 
-	const previousBase = queryClient.getQueryData<PoemCommentType[]>(baseKey);
+	const previousBase = queryClient.getQueryData<InfiniteComments>(baseKey);
 	const previousReplies = repliesKey
-		? queryClient.getQueryData<PoemCommentType[]>(repliesKey)
+		? queryClient.getQueryData<CommentPage>(repliesKey)
 		: undefined;
 
 	return { previousBase, previousReplies, baseKey, repliesKey };
@@ -65,8 +94,8 @@ async function prepareCommentQueries(
 function restoreCommentQueries(
 	queryClient: ReturnType<typeof useQueryClient>,
 	context?: {
-		previousBase?: PoemCommentType[];
-		previousReplies?: PoemCommentType[];
+		previousBase?: InfiniteComments;
+		previousReplies?: CommentPage;
 		baseKey: ReturnType<typeof buildCommentsKey>;
 		repliesKey: ReturnType<typeof buildCommentsKey> | null;
 	},
@@ -137,10 +166,18 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	const poemKey = poemsCachePort.getPoemKey(poemId);
 	const [updatingLikeCommentId, setUpdatingLikeCommentId] = useState<number | null>(null);
 
-	const query = useQuery({
+	const query = useInfiniteQuery({
 		queryKey: buildCommentsKey(poemId),
 		enabled: isEnabled && !!poemId,
-		queryFn: () => interactions.getPoemComments.query(String(poemId)).queryFn(),
+		queryFn: ({ pageParam }) =>
+			interactions.getPoemComments
+				.query(String(poemId), {
+					limit: COMMENTS_PAGE_LIMIT,
+					cursor: typeof pageParam === 'number' ? pageParam : undefined,
+				})
+				.queryFn(),
+		initialPageParam: undefined as number | undefined,
+		getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
 	});
 
 	const mutation = useMutation({
@@ -164,16 +201,16 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		onMutate: async (params) => {
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
 			if (context.previousBase) {
-				queryClient.setQueryData<PoemCommentType[]>(
+				queryClient.setQueryData<InfiniteComments>(
 					context.baseKey,
-					removeCommentFromList(context.previousBase, params),
+					updatePages(context.previousBase, (list) => removeCommentFromList(list, params)),
 				);
 			}
 			if (context.repliesKey && context.previousReplies) {
-				queryClient.setQueryData<PoemCommentType[]>(
-					context.repliesKey,
-					context.previousReplies.filter((comment) => comment.id !== params.id),
-				);
+				queryClient.setQueryData<CommentPage>(context.repliesKey, {
+					...context.previousReplies,
+					comments: context.previousReplies.comments.filter((comment) => comment.id !== params.id),
+				});
 			}
 			return context;
 		},
@@ -197,14 +234,14 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (context.previousBase) {
 				queryClient.setQueryData(
 					context.baseKey,
-					updateLikeState(context.previousBase, params, 1, true),
+					updatePages(context.previousBase, (list) => updateLikeState(list, params, 1, true)),
 				);
 			}
 			if (context.repliesKey && context.previousReplies) {
-				queryClient.setQueryData(
-					context.repliesKey,
-					updateLikeState(context.previousReplies, params, 1, true),
-				);
+				queryClient.setQueryData(context.repliesKey, {
+					...context.previousReplies,
+					comments: updateLikeState(context.previousReplies.comments, params, 1, true),
+				});
 			}
 			return context;
 		},
@@ -228,14 +265,14 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (context.previousBase) {
 				queryClient.setQueryData(
 					context.baseKey,
-					updateLikeState(context.previousBase, params, -1, false),
+					updatePages(context.previousBase, (list) => updateLikeState(list, params, -1, false)),
 				);
 			}
 			if (context.repliesKey && context.previousReplies) {
-				queryClient.setQueryData(
-					context.repliesKey,
-					updateLikeState(context.previousReplies, params, -1, false),
-				);
+				queryClient.setQueryData(context.repliesKey, {
+					...context.previousReplies,
+					comments: updateLikeState(context.previousReplies.comments, params, -1, false),
+				});
 			}
 			return context;
 		},
@@ -250,26 +287,43 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		},
 	});
 
-	function fetchReplies(parentId: number) {
-		return queryClient.fetchQuery({
-			queryKey: buildCommentsKey(poemId, parentId),
-			queryFn: () => interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
-			staleTime: 1000 * 60 * 5,
-		});
+	function fetchReplies(parentId: number, options?: { force?: boolean }) {
+		return queryClient
+			.fetchQuery({
+				queryKey: buildCommentsKey(poemId, parentId),
+				queryFn: () =>
+					interactions.getPoemComments
+						.query(String(poemId), {
+							parentId: String(parentId),
+							limit: REPLIES_PAGE_LIMIT,
+						})
+						.queryFn(),
+				staleTime: options?.force ? 0 : REPLIES_STALE_TIME,
+			})
+			.then((page) => page.comments);
 	}
 
 	function prefetchReplies(parentId: number) {
 		return queryClient.prefetchQuery({
 			queryKey: buildCommentsKey(poemId, parentId),
-			queryFn: () => interactions.getPoemComments.query(String(poemId), String(parentId)).queryFn(),
-			staleTime: 1000 * 60 * 5,
+			queryFn: () =>
+				interactions.getPoemComments
+					.query(String(poemId), {
+						parentId: String(parentId),
+						limit: REPLIES_PAGE_LIMIT,
+					})
+					.queryFn(),
+			staleTime: REPLIES_STALE_TIME,
 		});
 	}
 
 	return {
-		comments: query.data ?? [],
+		comments: query.data?.pages.flatMap((page) => page.comments) ?? [],
 		isLoadingComments: query.isLoading,
 		isCommentsError: query.isError,
+		hasMoreComments: query.hasNextPage ?? false,
+		isLoadingMoreComments: query.isFetchingNextPage,
+		loadMoreComments: () => query.fetchNextPage(),
 		createComment: mutation.mutateAsync,
 		isCreatingComment: mutation.isPending,
 		createCommentError: getCreateCommentErrorMessage(

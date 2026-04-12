@@ -17,6 +17,7 @@ export type NotificationPayload = {
 	newFriendNickname?: string;
 	replierId?: number;
 	replierNickname?: string;
+	removalReason?: string | null;
 };
 
 export type NotificationItem = {

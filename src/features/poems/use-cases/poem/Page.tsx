@@ -41,6 +41,9 @@ export function PoemPage() {
 		comments,
 		isLoadingComments,
 		isCommentsError,
+		hasMoreComments,
+		isLoadingMoreComments,
+		loadMoreComments,
 		createComment,
 		isCreatingComment,
 		createCommentError,
@@ -345,6 +348,9 @@ export function PoemPage() {
 								isDeletingComment={isDeletingComment}
 								repliesByCommentId={repliesByCommentId}
 								setRepliesByCommentId={setRepliesByCommentId}
+								hasMoreComments={hasMoreComments}
+								isLoadingMoreComments={isLoadingMoreComments}
+								onLoadMoreComments={loadMoreComments}
 								onCommentInputChange={handleCommentInputChange}
 								onPublishComment={handlePublishComment}
 								createComment={createComment}

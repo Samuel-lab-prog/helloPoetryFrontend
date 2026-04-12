@@ -46,10 +46,13 @@ export function PoemModerationPage() {
 			px={[4, 4, 0]}
 			gap={8}
 			w='full'
+			maxW='4xl'
+			mx='auto'
+			flex='1'
 		>
 			<PageHeader />
 
-			<Tabs.Root variant='enclosed' colorPalette='pink' defaultValue='pending'>
+			<Tabs.Root variant='enclosed' colorPalette='pink' defaultValue='pending' w='full'>
 				<Tabs.List colorPalette='pink' flexWrap='wrap' gap={2}>
 					{tabs.map((tab) => (
 						<Tabs.Trigger key={tab.value} value={tab.value}>

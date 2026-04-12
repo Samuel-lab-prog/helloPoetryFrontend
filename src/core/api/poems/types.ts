@@ -52,6 +52,7 @@ export type PoemPreview = {
 	excerpt?: string | null;
 	id: number;
 	createdAt?: string | Date;
+	status?: PoemStatus;
 	likesCount?: number;
 	commentsCount?: number;
 	stats?: {

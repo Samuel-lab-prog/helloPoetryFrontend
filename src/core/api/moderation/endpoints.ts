@@ -50,7 +50,7 @@ const moderatePoem = createMutationEndpoint<ModeratePoemBody, ModeratePoemResult
 			{ moderationStatus: ModeratePoemBody['moderationStatus'] }
 		>({
 			method: 'PATCH',
-			path: `/poems/${data.poemId}/moderation`,
+			path: `/moderation/poems/${data.poemId}`,
 			body: {
 				moderationStatus: data.moderationStatus,
 			},

@@ -15,6 +15,18 @@ export type PoemComment = {
 	};
 };
 
+export type PoemCommentsPage = {
+	comments: PoemComment[];
+	hasMore: boolean;
+	nextCursor?: number;
+};
+
+export type GetPoemCommentsParams = {
+	parentId?: string;
+	cursor?: number;
+	limit?: number;
+};
+
 export type CommentPoemBody = {
 	poemId: number;
 	content: string;

@@ -57,7 +57,8 @@ export type ModerationPoem = {
 
 export type ModeratePoemBody = {
 	poemId: string;
-	moderationStatus: 'approved' | 'rejected';
+	moderationStatus: 'approved' | 'rejected' | 'removed';
+	reason?: string;
 };
 
 export type ModeratePoemResult = {
