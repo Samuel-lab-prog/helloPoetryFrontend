@@ -36,6 +36,8 @@ export type CollectionsSectionProps = {
 	onDeleteCollection: (collectionId: number) => Promise<void>;
 	onAddPoemToCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
 	onRemovePoemFromCollection: (input: { collectionId: number; poemId: number }) => Promise<void>;
+	showHeader?: boolean;
+	withSurface?: boolean;
 };
 
 export function CollectionsSection({
@@ -56,6 +58,8 @@ export function CollectionsSection({
 	onDeleteCollection,
 	onAddPoemToCollection,
 	onRemovePoemFromCollection,
+	showHeader = true,
+	withSurface = true,
 }: CollectionsSectionProps) {
 	const availablePoems = useMemo<PoemMinimalDataType[]>(() => {
 		const items = [...myPoems, ...savedPoems];
@@ -71,33 +75,35 @@ export function CollectionsSection({
 		return Array.from(uniqueById.values());
 	}, [myPoems, savedPoems]);
 
-	return (
-		<Surface p={5} variant='panel'>
-			<Flex
-				align={{ base: 'start', md: 'center' }}
-				justify='space-between'
-				direction={{ base: 'column', md: 'row' }}
-				gap={3}
-				mb={4}
-			>
-				<HStack gap={2}>
-					<Layers size={18} color='var(--chakra-colors-pink-300)' />
-					<Heading as='h2' textStyle='h4' color='pink.300'>
-						Poem collections
-					</Heading>
-				</HStack>
-				{viewAllHref && (
-					<Link
-						asChild
-						textStyle='small'
-						color='pink.200'
-						textDecoration='underline'
-						textUnderlineOffset='3px'
-					>
-						<NavLink to={viewAllHref}>View all</NavLink>
-					</Link>
-				)}
-			</Flex>
+	const content = (
+		<>
+			{showHeader && (
+				<Flex
+					align={{ base: 'start', md: 'center' }}
+					justify='space-between'
+					direction={{ base: 'column', md: 'row' }}
+					gap={3}
+					mb={4}
+				>
+					<HStack gap={2}>
+						<Layers size={18} color='var(--chakra-colors-pink-300)' />
+						<Heading as='h2' textStyle='h4' color='pink.300'>
+							Poem collections
+						</Heading>
+					</HStack>
+					{viewAllHref && (
+						<Link
+							asChild
+							textStyle='small'
+							color='pink.200'
+							textDecoration='underline'
+							textUnderlineOffset='3px'
+						>
+							<NavLink to={viewAllHref}>View all</NavLink>
+						</Link>
+					)}
+				</Flex>
+			)}
 
 			{showManagementControls && (
 				<CreateCollectionForm
@@ -148,6 +154,14 @@ export function CollectionsSection({
 					{collectionsError}
 				</Text>
 			)}
+		</>
+	);
+
+	if (!withSurface) return content;
+
+	return (
+		<Surface p={5} variant='panel'>
+			{content}
 		</Surface>
 	);
 }

@@ -1,7 +1,8 @@
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { usePoemCollections } from '@features/poems/public/hooks/useManagePoemCollections';
 import { useSavedPoems } from '@features/poems/public/hooks/useManageSavedPoems';
+import { ArrowLeft } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 import { CollectionsSection } from '../../public/components/my-profile/CollectionsSection';
@@ -71,7 +72,12 @@ export function MyProfileCollectionsPage() {
 						All my collections
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/my-profile'>Back to profile</NavLink>
+						<NavLink to='/my-profile'>
+							<HStack gap={2}>
+								<ArrowLeft size={16} />
+								<span>Back to profile</span>
+							</HStack>
+						</NavLink>
 					</Button>
 				</Flex>
 
@@ -90,6 +96,8 @@ export function MyProfileCollectionsPage() {
 					onDeleteCollection={deleteCollection}
 					onAddPoemToCollection={addPoemToCollection}
 					onRemovePoemFromCollection={removePoemFromCollection}
+					showHeader={false}
+					withSurface={false}
 				/>
 			</Box>
 		</Flex>

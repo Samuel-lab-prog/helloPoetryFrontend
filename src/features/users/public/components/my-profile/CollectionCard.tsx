@@ -7,6 +7,7 @@ import type {
 	SavedPoemType,
 } from '@features/poems/public/types';
 import { Plus, Trash2, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 
@@ -94,9 +95,40 @@ export function CollectionCard({
 }: CollectionCardProps) {
 	const resolvePoem = (poemId: number) =>
 		myPoems.find((item) => item.id === poemId) ?? savedPoems.find((item) => item.id === poemId);
+	const [removingCollection, setRemovingCollection] = useState(false);
+	const [removingPoemIds, setRemovingPoemIds] = useState<Set<number>>(new Set());
+
+	const removingPoems = useMemo(() => new Set(removingPoemIds), [removingPoemIds]);
+
+	useEffect(() => {
+		if (!removingCollection) return;
+		if (isDeletingCollection(collection.id)) return;
+		setRemovingCollection(false);
+	}, [collection.id, isDeletingCollection, removingCollection]);
+
+	useEffect(() => {
+		if (removingPoemIds.size === 0) return;
+		const stillPresent = new Set(collection.poemIds);
+		setRemovingPoemIds((prev) => {
+			const next = new Set(prev);
+			prev.forEach((poemId) => {
+				if (!stillPresent.has(poemId)) {
+					next.delete(poemId);
+				}
+			});
+			return next;
+		});
+	}, [collection.poemIds, removingPoemIds.size]);
 
 	return (
-		<Box borderColor='purple.700' borderRadius='md' position='relative'>
+		<Box
+			borderColor='purple.700'
+			borderRadius='md'
+			position='relative'
+			opacity={removingCollection ? 0.4 : 1}
+			transform={removingCollection ? 'scale(0.98)' : undefined}
+			transition='opacity 0.18s ease, transform 0.18s ease'
+		>
 			<Flex
 				align={{ base: 'start', md: 'center' }}
 				justify='space-between'
@@ -125,7 +157,11 @@ export function CollectionCard({
 						top={0}
 						right={0}
 						onClick={() => {
-							void onDeleteCollection(collection.id);
+							if (removingCollection) return;
+							setRemovingCollection(true);
+							window.setTimeout(() => {
+								void onDeleteCollection(collection.id);
+							}, 180);
 						}}
 					>
 						<Trash2 />
@@ -136,6 +172,8 @@ export function CollectionCard({
 			<Flex direction='column' gap={2} mb={3}>
 				{collection.poemIds.map((poemId) => {
 					const poem = resolvePoem(poemId);
+					const isRemoving =
+						isRemovingCollectionItem(collection.id, poemId) || removingPoems.has(poemId);
 					return (
 						<LinkBox
 							key={`${collection.id}-${poemId}`}
@@ -154,6 +192,8 @@ export function CollectionCard({
 								bg: 'rgba(255, 255, 255, 0.03)',
 								borderColor: 'purple.600',
 							}}
+							opacity={isRemoving ? 0.45 : 1}
+							transform={isRemoving ? 'scale(0.99)' : undefined}
 						>
 							<LinkOverlay asChild position='absolute' inset={0} zIndex={1}>
 								<NavLink to={poem?.slug ? `/poems/${poem.slug}/${poem.id}` : `/poems/${poemId}`} />
@@ -170,12 +210,17 @@ export function CollectionCard({
 										size={{ base: 'xs', md: 'sm' }}
 										variant='solidPink'
 										colorPalette='gray'
-										loading={isRemovingCollectionItem(collection.id, poemId)}
+										loading={isRemoving}
+										disabled={isRemoving}
 										onClick={() => {
-											void onRemovePoemFromCollection({
-												collectionId: collection.id,
-												poemId,
-											});
+											if (isRemoving) return;
+											setRemovingPoemIds((prev) => new Set(prev).add(poemId));
+											window.setTimeout(() => {
+												void onRemovePoemFromCollection({
+													collectionId: collection.id,
+													poemId,
+												});
+											}, 180);
 										}}
 									>
 										<X />

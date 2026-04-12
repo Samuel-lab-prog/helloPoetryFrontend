@@ -9,6 +9,11 @@ export function handleDeletePoemError(err: unknown, setGeneralError: (msg: strin
 		return;
 	}
 
+	if (status === 403) {
+		setGeneralError('You can only delete your own poems.');
+		return;
+	}
+
 	if (status === 404) {
 		setGeneralError('Poem not found.');
 		return;

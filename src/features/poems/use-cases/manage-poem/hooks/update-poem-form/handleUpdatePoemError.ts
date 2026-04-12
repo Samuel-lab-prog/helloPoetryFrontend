@@ -17,6 +17,32 @@ export function handleUpdatePoemError(
 		return;
 	}
 
+	if (status === 403) {
+		if (message.includes('not active')) {
+			setGeneralError('Your user must be active to update poems.');
+			return;
+		}
+		if (message.includes('not the author')) {
+			setGeneralError('You can only update your own poems.');
+			return;
+		}
+		if (message.includes('published')) {
+			setGeneralError('Published poems cannot be updated.');
+			return;
+		}
+		if (message.includes('removed')) {
+			setGeneralError('Removed poems cannot be updated.');
+			return;
+		}
+		setGeneralError('You do not have permission to update this poem.');
+		return;
+	}
+
+	if (status === 404) {
+		setGeneralError('Poem not found.');
+		return;
+	}
+
 	if (status === 409 && (message.includes('slug') || message.includes('title'))) {
 		setError('title', {
 			type: 'manual',

@@ -1,7 +1,8 @@
 import { SearchInput } from '@BaseComponents';
-import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
+import { ArrowLeft } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -52,14 +53,13 @@ export function MyProfilePoemsPage() {
 							debounceMs={150}
 						/>
 					</Flex>
-					<Button
-						size={{ base: 'sm', md: 'md' }}
-						variant='solidPink'
-						colorPalette='gray'
-						ms={{ base: 'auto', md: 0 }}
-						asChild
-					>
-						<NavLink to='/my-profile'>Back to profile</NavLink>
+					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
+						<NavLink to='/my-profile'>
+							<HStack gap={2}>
+								<ArrowLeft size={16} />
+								<span>Back to profile</span>
+							</HStack>
+						</NavLink>
 					</Button>
 				</Flex>
 
@@ -71,6 +71,8 @@ export function MyProfilePoemsPage() {
 					onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
 					onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}
 					onDeletePoem={(id) => navigate(`/admin?mode=delete&poemId=${id}`)}
+					showHeader={false}
+					withSurface={false}
 				/>
 			</Box>
 		</Flex>
