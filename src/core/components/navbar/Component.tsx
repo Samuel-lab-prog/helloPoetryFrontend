@@ -28,6 +28,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const lastToggleRef = useRef(0);
 	const isMobile = useBreakpointValue({ base: true, lg: false }) ?? true;
 	const shouldHideNav = isMobile && navHidden;
+	const isImmersiveRoute = location.pathname.includes('/immersive');
 	const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	const isAuthenticated = Boolean(authClient);
 
@@ -301,9 +302,15 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					scrollbarGutter='stable'
 					ref={contentRef}
 				>
-					<Flex w='full' maxW='2xl' mx='auto' direction='column' minH='full'>
-						<Outlet />
-					</Flex>
+				<Flex
+					w='full'
+					maxW={isImmersiveRoute ? 'full' : '2xl'}
+					mx={isImmersiveRoute ? 0 : 'auto'}
+					direction='column'
+					minH='full'
+				>
+					<Outlet />
+				</Flex>
 				</Flex>
 
 				<NavbarBottomNav

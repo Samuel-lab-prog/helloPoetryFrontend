@@ -23,8 +23,10 @@ export function PoemImmersivePage() {
 				justify='center'
 				py={12}
 				px={[4, 4, 0]}
-				minH='100vh'
+				minH='100dvh'
 				w='full'
+				bg='radial-gradient(circle at top, rgba(255,255,255,0.08) 0%, rgba(16,10,20,0.95) 55%, rgba(6,4,8,1) 100%)'
+				color='pink.50'
 			>
 				<Text textStyle='body'>Invalid poem ID.</Text>
 			</Flex>
@@ -37,13 +39,14 @@ export function PoemImmersivePage() {
 			layerStyle='main'
 			direction='column'
 			align='center'
-			minH='100vh'
+			minH='100dvh'
+			w='full'
 			bg='radial-gradient(circle at top, rgba(255,255,255,0.08) 0%, rgba(16,10,20,0.95) 55%, rgba(6,4,8,1) 100%)'
 			color='pink.50'
 			py={12}
 			px={[4, 4, 0]}
 		>
-			<Box w='full'>
+			<Box w='full' maxW='2xl' mx='auto'>
 				<PoemBackLink poemId={poemId} poemSlug={poem?.slug} />
 				<PoemContentCard
 					poem={poem}
