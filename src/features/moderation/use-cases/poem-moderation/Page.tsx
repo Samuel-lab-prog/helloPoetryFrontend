@@ -37,7 +37,16 @@ export function PoemModerationPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='stretch' gap={8} w='full'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 0]}
+			gap={8}
+			w='full'
+		>
 			<PageHeader />
 
 			<Tabs.Root variant='enclosed' colorPalette='pink' defaultValue='pending'>

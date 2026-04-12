@@ -48,14 +48,22 @@ export function CreatePoemPage() {
 
 	if (!isAuthenticated) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 				<CreatePoemAccessGate />
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' gap={8}>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 0]}
+			gap={8}
+		>
 			<PageHeader />
 
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>

@@ -9,7 +9,7 @@ import { NavLink } from 'react-router-dom';
  */
 export function ProfileAccessGate() {
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 			<Surface
 				w='full'
 				maxW='2xl'

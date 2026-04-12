@@ -38,7 +38,17 @@ export function PoetsSearchView() {
 	const visiblePoets = authClient ? poets.filter((poet) => poet.id !== authClient.id) : poets;
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' w='full' maxW='2xl' mx='auto'>
+		<Flex
+			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 0]}
+			w='full'
+			maxW='2xl'
+			mx='auto'
+		>
 			<Flex as='section' direction='column' w='full' mb={3} p={4}>
 				<Field.Root p={0}>
 					<Field.Label textStyle='small' fontWeight='medium' color='text'>

@@ -31,7 +31,7 @@ export function MyProfileSavedPoemsPage() {
 
 	if (!authClient?.id) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 				<ProfileAccessGate />
 			</Flex>
 		);

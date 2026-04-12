@@ -3,6 +3,7 @@ import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useState } from 'react';
 
+import { LoadingNotificationsSkeletons } from './components/LoadingNotificationsSkeletons';
 import { NotificationCard } from './components/NotificationCard';
 import { useNotificationsPanel } from './hooks/useNotificationsPanel';
 
@@ -35,7 +36,7 @@ export function NotificationsPage() {
 	};
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 			<Box as='section' w='full' maxW='2xl'>
 				<Flex
 					align={{ base: 'start', md: 'center' }}
@@ -71,7 +72,7 @@ export function NotificationsPage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={notifications.length === 0}
-					loadingElement={<Text textStyle='body'>Loading notifications...</Text>}
+					loadingElement={LoadingNotificationsSkeletons}
 					errorElement={<Text textStyle='body'>Error loading notifications.</Text>}
 					emptyElement={<Text textStyle='body'>No notifications found.</Text>}
 				>

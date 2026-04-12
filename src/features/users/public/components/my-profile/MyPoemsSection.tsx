@@ -80,7 +80,7 @@ export function MyPoemsSection({
 							My poems
 						</Heading>
 					</HStack>
-					{viewAllHref && (totalPoemsCount ?? myPoems.length) > myPoems.length && (
+					{viewAllHref && (
 						<Link
 							asChild
 							textStyle='small'

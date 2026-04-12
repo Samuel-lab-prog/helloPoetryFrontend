@@ -35,7 +35,7 @@ export function MyProfileCollectionsPage() {
 				direction='column'
 				align='center'
 				py={12}
-				px={[4, 4, 4, 0, 0]}
+				px={[4, 4, 0]}
 			>
 				<ProfileAccessGate />
 			</Flex>
@@ -50,7 +50,7 @@ export function MyProfileCollectionsPage() {
 				direction='column'
 				align='center'
 				py={12}
-				px={[4, 4, 4, 0, 0]}
+				px={[4, 4, 0]}
 			>
 				<Text textStyle='body'>Loading profile...</Text>
 			</Flex>
@@ -64,7 +64,7 @@ export function MyProfileCollectionsPage() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 4, 0, 0]}
+			px={[4, 4, 0]}
 		>
 			<Box as='section' w='full' maxW='2xl'>
 				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>

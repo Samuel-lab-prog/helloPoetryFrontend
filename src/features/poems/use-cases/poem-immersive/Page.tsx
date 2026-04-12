@@ -15,32 +15,42 @@ export function PoemImmersivePage() {
 
 	if (poemId <= 0) {
 		return (
-			<Flex as='main' minH='100vh' align='center' justify='center' p={6}>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				align='center'
+				justify='center'
+				py={12}
+				px={[4, 4, 0]}
+				minH='100vh'
+			>
 				<Text textStyle='body'>Invalid poem ID.</Text>
 			</Flex>
 		);
 	}
 
 	return (
-		<Box
+		<Flex
 			as='main'
+			layerStyle='main'
+			direction='column'
+			align='center'
 			minH='100vh'
 			bg='radial-gradient(circle at top, rgba(255,255,255,0.08) 0%, rgba(16,10,20,0.95) 55%, rgba(6,4,8,1) 100%)'
 			color='pink.50'
-			py={{ base: 12, md: 16 }}
-			px={{ base: 4, md: 8 }}
+			py={12}
+			px={[4, 4, 0]}
 		>
-			<Flex direction='column' align='center'>
-				<Box w='full' maxW='2xl'>
-					<PoemBackLink poemId={poemId} poemSlug={poem?.slug} />
-					<PoemContentCard
-						poem={poem}
-						isLoading={isLoading}
-						isError={!!isError}
-						dedicationUsers={dedicationUsers}
-					/>
-				</Box>
-			</Flex>
-		</Box>
+			<Box w='full' maxW='2xl'>
+				<PoemBackLink poemId={poemId} poemSlug={poem?.slug} />
+				<PoemContentCard
+					poem={poem}
+					isLoading={isLoading}
+					isError={!!isError}
+					dedicationUsers={dedicationUsers}
+				/>
+			</Box>
+		</Flex>
 	);
 }

@@ -18,6 +18,7 @@ import { ProfileOverviewSection } from '../../public/components/my-profile/Profi
 import { SavedPoemsSection } from '../../public/components/my-profile/SavedPoemsSection';
 import { useMyProfile } from '../../public/hooks/useMyProfile';
 import { ProfileHeader } from './components/ProfileHeader';
+import { LoadingMyProfileSkeleton } from './components/skeletons/LoadingMyProfileSkeleton';
 import { useUpdateMyProfile } from './hooks/useUpdateMyProfile';
 
 export function MyProfilePage() {
@@ -64,7 +65,7 @@ export function MyProfilePage() {
 
 	if (isLoggingOut) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 				<Text textStyle='body'>Signing out...</Text>
 			</Flex>
 		);
@@ -72,7 +73,7 @@ export function MyProfilePage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -96,12 +97,12 @@ export function MyProfilePage() {
 			as='main'
 			layerStyle='main'
 			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 0]}
 			w='full'
 			maxW='2xl'
 			mx='auto'
-			mt={12}
-			pb={12}
-			px={[4, 4, 4, 0, 0]}
 		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
@@ -110,7 +111,7 @@ export function MyProfilePage() {
 					isLoading={isLoading}
 					isError={isError}
 					isEmpty={!profile}
-					loadingElement={<Text textStyle='body'>Loading profile...</Text>}
+					loadingElement={LoadingMyProfileSkeleton}
 					errorElement={<Text textStyle='body'>Error loading profile.</Text>}
 					emptyElement={<Text textStyle='body'>Profile not found.</Text>}
 				>

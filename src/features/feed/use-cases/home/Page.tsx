@@ -41,7 +41,18 @@ export function HomePage() {
 
 	return (
 		<Flex direction='column' minH='100%'>
-			<Flex as='main' layerStyle='main' direction='column' flex='1' w='full' maxW='2xl' mx='auto'>
+			<Flex
+				as='main'
+				layerStyle='main'
+				direction='column'
+				align='center'
+				py={12}
+				px={[4, 4, 0]}
+				flex='1'
+				w='full'
+				maxW='2xl'
+				mx='auto'
+			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
 					<Box p={4}>
 						<SearchInput
