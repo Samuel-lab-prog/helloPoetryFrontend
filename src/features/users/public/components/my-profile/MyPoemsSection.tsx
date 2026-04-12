@@ -44,7 +44,6 @@ export type MyPoemsSectionProps = {
  */
 export function MyPoemsSection({
 	myPoems,
-	totalPoemsCount,
 	viewAllHref,
 	isLoadingMyPoems,
 	isMyPoemsError,

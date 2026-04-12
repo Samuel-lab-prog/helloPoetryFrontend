@@ -39,14 +39,7 @@ export function MyProfileFriendRequestsPage() {
 	if (!authClient?.id) return <ProfileAccessGate />;
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			align='center'
-			py={12}
-			px={[4, 4, 0]}
-		>
+		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
 			<Box as='section' w='full' maxW='5xl'>
 				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Flex direction='column' gap={3} w='full' maxW={{ base: 'full', md: '360px' }}>

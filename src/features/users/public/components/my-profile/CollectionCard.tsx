@@ -28,6 +28,8 @@ function AddPoemToCollectionForm({
 	isAddingPoem,
 	onAddPoemToCollection,
 }: AddPoemToCollectionFormProps) {
+	const [comboboxKey, setComboboxKey] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const form = useForm<AddPoemFormValues>({
 		defaultValues: { poemId: undefined },
 		mode: 'onChange',
@@ -41,24 +43,34 @@ function AddPoemToCollectionForm({
 			direction={{ base: 'column', md: 'row' }}
 			gap={2}
 			onSubmit={form.handleSubmit(async (values) => {
-				if (!values.poemId) return;
-				await onAddPoemToCollection({
-					collectionId,
-					poemId: values.poemId,
-				});
-				form.reset({ poemId: undefined });
+				if (!values.poemId || isSubmitting) return;
+				setIsSubmitting(true);
+				let didSucceed = false;
+				try {
+					await onAddPoemToCollection({
+						collectionId,
+						poemId: values.poemId,
+					});
+					didSucceed = true;
+				} finally {
+					setIsSubmitting(false);
+					if (didSucceed) {
+						form.reset({ poemId: undefined });
+						setComboboxKey((prev) => prev + 1);
+					}
+				}
 			})}
 		>
 			<Box flex='1'>
-				<PoemCombobox control={form.control} poems={poems} name='poemId' />
+				<PoemCombobox key={comboboxKey} control={form.control} poems={poems} name='poemId' />
 			</Box>
 			<IconButton
 				type='submit'
 				aria-label='Add poem to collection'
 				size={{ base: 'xs', md: 'sm' }}
 				variant='solidPink'
-				loading={isAddingPoem(selectedPoemId)}
-				disabled={!selectedPoemId || isAddingPoem(selectedPoemId)}
+				loading={isSubmitting || isAddingPoem(selectedPoemId)}
+				disabled={!selectedPoemId || isSubmitting || isAddingPoem(selectedPoemId)}
 			>
 				<Plus />
 			</IconButton>

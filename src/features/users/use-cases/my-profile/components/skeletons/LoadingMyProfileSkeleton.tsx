@@ -13,12 +13,7 @@ export const LoadingMyProfileSkeleton = (
 			variant='gradient'
 			bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
 		>
-			<Flex
-				justify='space-between'
-				align='start'
-				direction={{ base: 'column', md: 'row' }}
-				gap={4}
-			>
+			<Flex justify='space-between' align='start' direction={{ base: 'column', md: 'row' }} gap={4}>
 				<HStack align='start' gap={4} w='full' flex='1'>
 					<Skeleton boxSize={{ base: '5.5rem', md: '7.5rem' }} borderRadius='full' />
 					<VStack align='start' gap={2} w='full'>

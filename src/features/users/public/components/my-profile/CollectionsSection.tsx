@@ -124,29 +124,33 @@ export function CollectionsSection({
 					</Text>
 				)}
 
-				{collections.map((collection) => (
-					<Flex
-						key={collection.id}
-						direction='column'
-						borderTop='2px solid'
-						borderColor='purple.700'
-						pt={4}
-					>
-						<CollectionCard
-							collection={collection}
-							showManagementControls={showManagementControls}
-							myPoems={myPoems}
-							savedPoems={savedPoems}
-							availablePoems={availablePoems}
-							isDeletingCollection={isDeletingCollection}
-							isAddingCollectionItem={isAddingCollectionItem}
-							isRemovingCollectionItem={isRemovingCollectionItem}
-							onDeleteCollection={onDeleteCollection}
-							onAddPoemToCollection={onAddPoemToCollection}
-							onRemovePoemFromCollection={onRemovePoemFromCollection}
-						/>
-					</Flex>
-				))}
+				{collections.map((collection) => {
+					const poemIds = new Set(collection.poemIds);
+					const filteredAvailablePoems = availablePoems.filter((poem) => !poemIds.has(poem.id));
+					return (
+						<Flex
+							key={collection.id}
+							direction='column'
+							borderTop='2px solid'
+							borderColor='purple.700'
+							pt={4}
+						>
+							<CollectionCard
+								collection={collection}
+								showManagementControls={showManagementControls}
+								myPoems={myPoems}
+								savedPoems={savedPoems}
+								availablePoems={filteredAvailablePoems}
+								isDeletingCollection={isDeletingCollection}
+								isAddingCollectionItem={isAddingCollectionItem}
+								isRemovingCollectionItem={isRemovingCollectionItem}
+								onDeleteCollection={onDeleteCollection}
+								onAddPoemToCollection={onAddPoemToCollection}
+								onRemovePoemFromCollection={onRemovePoemFromCollection}
+							/>
+						</Flex>
+					);
+				})}
 			</Flex>
 
 			{collectionsError && (

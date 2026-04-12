@@ -14,6 +14,15 @@ export function usePoemCollections(enabled = true) {
 	const [removingItemKeys, setRemovingItemKeys] = useState<Set<string>>(new Set());
 
 	const buildItemKey = (collectionId: number, poemId: number) => `${collectionId}:${poemId}`;
+	const clearAddingItemKey = (itemKey?: string) => {
+		if (!itemKey) return;
+		setAddingItemKeys((prev) => {
+			if (!prev.has(itemKey)) return prev;
+			const next = new Set(prev);
+			next.delete(itemKey);
+			return next;
+		});
+	};
 
 	const query = useQuery({
 		...poems.getCollections.query(),
@@ -112,24 +121,21 @@ export function usePoemCollections(enabled = true) {
 			);
 			return { previousCollections, itemKey };
 		},
-		onError: (_error, _data, context) => {
+		onError: (_error, data, context) => {
 			if (context?.previousCollections) {
 				queryClient.setQueryData<PoemCollection[]>(
 					poemKeys.collections(),
 					context.previousCollections,
 				);
 			}
+			clearAddingItemKey(
+				context?.itemKey ?? (data ? buildItemKey(data.collectionId, data.poemId) : undefined),
+			);
 		},
 		onSettled: (_data, _error, data, context) => {
-			setAddingItemKeys((prev) => {
-				const next = new Set(prev);
-				if (context?.itemKey) {
-					next.delete(context.itemKey);
-				} else if (data) {
-					next.delete(buildItemKey(data.collectionId, data.poemId));
-				}
-				return next;
-			});
+			clearAddingItemKey(
+				context?.itemKey ?? (data ? buildItemKey(data.collectionId, data.poemId) : undefined),
+			);
 		},
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: poemKeys.collections() }),
 	});
@@ -202,7 +208,15 @@ export function usePoemCollections(enabled = true) {
 		isCollectionsError: query.isError,
 		createCollection: createCollectionMutation.mutateAsync,
 		deleteCollection: deleteCollectionMutation.mutateAsync,
-		addPoemToCollection: addCollectionItemMutation.mutateAsync,
+		addPoemToCollection: async (input: CollectionItemBody) => {
+			const currentCollections =
+				queryClient.getQueryData<PoemCollection[]>(poemKeys.collections()) ?? [];
+			const currentCollection = currentCollections.find(
+				(collection) => collection.id === input.collectionId,
+			);
+			if (currentCollection?.poemIds.includes(input.poemId)) return;
+			await addCollectionItemMutation.mutateAsync(input);
+		},
 		removePoemFromCollection: removeCollectionItemMutation.mutateAsync,
 		isCreatingCollection: createCollectionMutation.isPending,
 		isDeletingCollection: (collectionId: number) => deletingCollectionIds.has(collectionId),
