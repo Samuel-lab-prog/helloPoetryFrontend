@@ -1,4 +1,5 @@
 import { feed } from '@Api/feed/endpoints';
+import { feedKeys } from '@Api/feed/keys';
 import { getPoemsQueryPort } from '@core/ports/poems';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
@@ -62,7 +63,7 @@ export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) 
 
 	const query = useQuery({
 		// Include auth + user in key so the cache refreshes when identity changes.
-		queryKey: ['home-feed', { isAuthenticated, userId: clientId, limit }],
+		queryKey: feedKeys.home({ isAuthenticated, userId: clientId, limit }),
 		retry: 2,
 		staleTime: 1000 * 60 * 5,
 		queryFn: async (): Promise<HomeFeedResult> => {

@@ -8,8 +8,6 @@ import type { AppEvents } from '@root/core/events/eventBus';
 import { useUserBootstrapStore } from '@root/core/stores/useUserBootstrapStore';
 import type { QueryClient } from '@tanstack/react-query';
 
-const homeFeedKey = ['home-feed'] as const;
-
 async function clearUserSessionQueries(queryClient: QueryClient): Promise<void> {
 	const keysToClear = [userKeys.anyProfile(), userKeys.anySearch()];
 
@@ -22,7 +20,7 @@ async function clearUserSessionQueries(queryClient: QueryClient): Promise<void> 
 }
 
 async function clearFeedSessionQueries(queryClient: QueryClient): Promise<void> {
-	const keysToClear = [feedKeys.all(), homeFeedKey];
+	const keysToClear = [feedKeys.all(), feedKeys.homeBase()];
 
 	await Promise.all(
 		keysToClear.map(async (key) => {

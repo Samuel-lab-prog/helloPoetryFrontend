@@ -32,7 +32,7 @@ export function useLoginForm() {
 				status: client.status,
 			});
 
-			void eventBus.publish('userLoggedIn', {
+			eventBus.publish('userLoggedIn', {
 				userId: client.id,
 				role: client.role,
 				status: client.status,
@@ -107,6 +107,3 @@ function handleLoginError(
 
 	setGeneralError('Network error, please try again.');
 }
-
-
-

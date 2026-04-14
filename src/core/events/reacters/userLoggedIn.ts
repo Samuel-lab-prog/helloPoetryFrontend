@@ -4,7 +4,7 @@ import { notifications } from '@Api/notifications/endpoints';
 import { poems } from '@Api/poems/endpoints';
 import { users } from '@Api/users/endpoints';
 import { userKeys } from '@Api/users/keys';
-import type { UserPrivateProfile, UserRole, UserStatus } from '@Api/users/types';
+import type { UserPrivateProfile } from '@Api/users/types';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
@@ -28,11 +28,6 @@ export async function onUserLoggedIn(
 	payload: AppEvents['userLoggedIn'],
 ): Promise<void> {
 	const authStore = useAuthClientStore.getState();
-	authStore.setAuthClient({
-		id: payload.userId,
-		role: payload.role as UserRole,
-		status: payload.status as UserStatus,
-	});
 
 	await clearUserSessionQueries(queryClient);
 
@@ -61,5 +56,6 @@ export async function onUserLoggedIn(
 			orderDirection: 'asc',
 		}),
 		queryClient.invalidateQueries({ queryKey: feedKeys.all() }),
+		queryClient.invalidateQueries({ queryKey: feedKeys.homeBase() }),
 	]);
 }
