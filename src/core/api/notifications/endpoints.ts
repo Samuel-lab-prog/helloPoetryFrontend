@@ -31,8 +31,6 @@ const markNotificationAsRead = createMutationEndpoint<string, NotificationItem>(
 			method: 'PATCH',
 			path: `/notifications/${id}/read`,
 		}),
-
-	invalidate: [notificationsKeys.all],
 });
 
 const deleteNotification = createMutationEndpoint<string, NotificationItem>({
@@ -41,8 +39,6 @@ const deleteNotification = createMutationEndpoint<string, NotificationItem>({
 			method: 'DELETE',
 			path: `/notifications/${id}`,
 		}),
-
-	invalidate: [notificationsKeys.all],
 });
 
 const deleteAllNotifications = createMutationEndpoint<void, void>({
@@ -51,8 +47,6 @@ const deleteAllNotifications = createMutationEndpoint<void, void>({
 			method: 'DELETE',
 			path: `/notifications/all`,
 		}),
-
-	invalidate: [notificationsKeys.all],
 });
 
 const markAllAsRead = createMutationEndpoint<void, void>({
@@ -61,8 +55,6 @@ const markAllAsRead = createMutationEndpoint<void, void>({
 			method: 'PATCH',
 			path: `/notifications/mark-all-read`,
 		}),
-
-	invalidate: [notificationsKeys.all],
 });
 
 export const notifications = {

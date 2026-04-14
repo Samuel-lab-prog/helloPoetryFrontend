@@ -43,14 +43,13 @@ export function PoetsSearchView() {
 			layerStyle='main'
 			direction='column'
 			align='center'
-			py={12}
-			px={[4, 4, 0]}
+			py={4}
 			w='full'
 			maxW='2xl'
 			mx='auto'
 		>
 			<Flex as='section' direction='column' w='full' mb={3} p={4}>
-				<Field.Root p={0}>
+				<Field.Root pb={4}>
 					<Field.Label textStyle='small' fontWeight='medium' color='text'>
 						Search poets
 					</Field.Label>

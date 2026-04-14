@@ -28,21 +28,52 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
 			notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
-		onSuccess: (_, notificationId) => {
-			const cachedNotifications = queryClient.getQueriesData<NotificationsPage>({
+		onMutate: async (id) => {
+			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
+
+			const previousPages = queryClient.getQueriesData<NotificationsPage>({
 				queryKey: notificationsKeys.all(),
 			});
-			const wasUnread = cachedNotifications.some(([, cachedPage]) =>
-				cachedPage?.notifications.some(
-					(notification) => notification.id === notificationId && !notification.readAt,
-				),
+
+			let markedWasUnread = false;
+			queryClient.setQueriesData<NotificationsPage>(
+				{ queryKey: notificationsKeys.all() },
+				(old) => {
+					if (!old) return old;
+					const nowIso = new Date().toISOString();
+					return {
+						...old,
+						notifications: old.notifications.map((notification) => {
+							if (notification.id !== id) return notification;
+							if (!notification.readAt) markedWasUnread = true;
+							return notification.readAt
+								? notification
+								: {
+										...notification,
+										readAt: nowIso,
+									};
+						}),
+					};
+				},
 			);
 
-			if (wasUnread) decrementUnreadNotificationsCount(1);
+			if (markedWasUnread) decrementUnreadNotificationsCount(1);
 
-			queryClient.invalidateQueries({
-				queryKey: notificationsKeys.all(),
+			return { previousPages, markedWasUnread };
+		},
+		onError: (_error, _id, context) => {
+			if (!context) return;
+			context.previousPages.forEach(([key, data]) => {
+				if (!data) return;
+				queryClient.setQueryData(key, data);
 			});
+			if (context.markedWasUnread) {
+				const unreadCount =
+					context.previousPages
+						.flatMap(([, page]) => page?.notifications ?? [])
+						.filter((item) => !item.readAt).length ?? 0;
+				setUnreadNotificationsCount(unreadCount);
+			}
 		},
 	});
 
@@ -85,11 +116,6 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 					.filter((item) => !item.readAt).length ?? 0;
 			setUnreadNotificationsCount(unreadCount);
 		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: notificationsKeys.all(),
-			});
-		},
 	});
 
 	const deleteAllMutation = useMutation({
@@ -106,9 +132,6 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 						}
 					: old,
 			);
-			queryClient.invalidateQueries({
-				queryKey: notificationsKeys.all(),
-			});
 		},
 	});
 
@@ -162,9 +185,6 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			if (!context?.removedWasUnread && !notification.readAt) {
 				decrementUnreadNotificationsCount(1);
 			}
-			queryClient.invalidateQueries({
-				queryKey: notificationsKeys.all(),
-			});
 		},
 	});
 
