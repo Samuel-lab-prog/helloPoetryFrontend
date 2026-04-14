@@ -1,4 +1,4 @@
-import { Footer, SearchInput } from '@BaseComponents';
+import { SearchInput } from '@BaseComponents';
 import { Box, Flex, VStack } from '@chakra-ui/react';
 import { getPoemsQueryPort } from '@core/ports/poems';
 import { useIsAuthenticated } from '@features/auth/public/hooks/useIsAuthenticated';
@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 import { HomeFeed } from './components/HomeFeed';
 import { useHomeFeed } from './hooks/useHomeFeed';
-import { getFooterLinks } from './utils';
 import { POEMS_FEED_LIMIT, POEMS_FEED_LIMIT_UNAUTHENTICATED } from './utils/constants';
 
 export function HomePage() {
@@ -46,8 +45,8 @@ export function HomePage() {
 				layerStyle='main'
 				direction='column'
 				align='center'
-				py={12}
-				px={[4, 4, 0]}
+				pt={4}
+				pb={{ base: 20, md: 12 }}
 				flex='1'
 				w='full'
 				maxW='2xl'
@@ -60,6 +59,7 @@ export function HomePage() {
 							value={searchTitle}
 							onValueChange={setSearchTitle}
 							onDebouncedChange={setDebouncedSearch}
+							debounceMs={150}
 							placeholder='Search by title'
 						/>
 					</Box>
@@ -67,8 +67,6 @@ export function HomePage() {
 					<HomeFeed poems={displayedPoems} isLoading={isFeedLoading} isError={isFeedError} />
 				</VStack>
 			</Flex>
-
-			<Footer links={getFooterLinks(isAuthenticated)} />
 		</Flex>
 	);
 }

@@ -302,15 +302,15 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					scrollbarGutter='stable'
 					ref={contentRef}
 				>
-				<Flex
-					w='full'
-					maxW={isImmersiveRoute ? 'full' : '2xl'}
-					mx={isImmersiveRoute ? 0 : 'auto'}
-					direction='column'
-					minH='full'
-				>
-					<Outlet />
-				</Flex>
+					<Flex
+						w='full'
+						maxW={isImmersiveRoute ? 'full' : '2xl'}
+						mx={isImmersiveRoute ? 0 : 'auto'}
+						direction='column'
+						minH='full'
+					>
+						<Outlet />
+					</Flex>
 				</Flex>
 
 				<NavbarBottomNav

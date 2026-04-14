@@ -38,26 +38,20 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					)}
 
 					{!hideAuthorMeta && (
-						<LinkBox>
-							<Flex align='center' gap={2}>
-								<Avatar.Root size='md'>
-									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-									<Avatar.Fallback name={poem.author.nickname} />
-								</Avatar.Root>
-								<Flex direction='column' minW={0} gap={0}>
-									<LinkOverlay asChild>
-										<NavLink to={`/authors/${poem.author.id}`}>
-											<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-												{poem.author.name}
-											</Text>
-										</NavLink>
-									</LinkOverlay>
-									<Text textStyle='smaller' color='pink.200' opacity={0.9}>
-										@{poem.author.nickname}
-									</Text>
-								</Flex>
+						<Flex align='center' gap={2}>
+							<Avatar.Root size='md'>
+								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+								<Avatar.Fallback name={poem.author.nickname} />
+							</Avatar.Root>
+							<Flex direction='column' minW={0} gap={0}>
+								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+									{poem.author.name}
+								</Text>
+								<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
+								</Text>
 							</Flex>
-						</LinkBox>
+						</Flex>
 					)}
 
 					<Flex align='center' gap={4} wrap='wrap'>
@@ -151,26 +145,20 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 			<Card.Body p={0} flex='1'>
 				<Flex direction='column' gap={3}>
 					{!hideAuthorMeta && (
-						<LinkBox>
-							<Flex align='center' gap={2}>
-								<Avatar.Root size='md'>
-									<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-									<Avatar.Fallback name={poem.author.nickname} />
-								</Avatar.Root>
-								<Flex direction='column' minW={0} gap={0}>
-									<LinkOverlay asChild>
-										<NavLink to={`/authors/${poem.author.id}`}>
-											<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-												{poem.author.name}
-											</Text>
-										</NavLink>
-									</LinkOverlay>
-									<Text textStyle='smaller' color='pink.200' opacity={0.9}>
-										@{poem.author.nickname}
-									</Text>
-								</Flex>
+						<Flex align='center' gap={2}>
+							<Avatar.Root size='md'>
+								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+								<Avatar.Fallback name={poem.author.nickname} />
+							</Avatar.Root>
+							<Flex direction='column' minW={0} gap={0}>
+								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+									{poem.author.name}
+								</Text>
+								<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
+								</Text>
 							</Flex>
-						</LinkBox>
+						</Flex>
 					)}
 
 					<Flex align='center' gap={4} wrap='wrap'>

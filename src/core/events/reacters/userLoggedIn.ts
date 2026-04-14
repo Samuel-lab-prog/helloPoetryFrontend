@@ -12,9 +12,6 @@ import type { QueryClient } from '@tanstack/react-query';
 const POETS_SEARCH_LIMIT = 10;
 const NOTIFICATIONS_FETCH_LIMIT = 50;
 
-const homeFeedKey = (userId: number, limit = 8) =>
-	['home-feed', { isAuthenticated: true, userId, limit }] as const;
-
 async function clearUserSessionQueries(queryClient: QueryClient): Promise<void> {
 	const keysToClear = [userKeys.anyProfile(), userKeys.anySearch()];
 
@@ -64,6 +61,5 @@ export async function onUserLoggedIn(
 			orderDirection: 'asc',
 		}),
 		queryClient.invalidateQueries({ queryKey: feedKeys.all() }),
-		queryClient.invalidateQueries({ queryKey: homeFeedKey(payload.userId) }),
 	]);
 }
