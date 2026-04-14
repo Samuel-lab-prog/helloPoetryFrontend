@@ -11,6 +11,7 @@ export * from './components/my-profile/ProfileAccessGate';
 export * from './components/my-profile/ProfileOverviewSection';
 export * from './components/my-profile/ProfileReadOnly';
 export * from './components/my-profile/SavedPoemsSection';
+export * from './components/my-profile/schemas/createCollectionSchema';
 export * from './components/my-profile/types';
 export * from './components/UserDedicationCombobox';
 export * from './hooks/useMyFriendRequests';
