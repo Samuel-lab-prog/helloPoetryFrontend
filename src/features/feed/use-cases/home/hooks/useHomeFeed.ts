@@ -1,8 +1,8 @@
 import { feed } from '@Api/feed/endpoints';
 import { getPoemsQueryPort } from '@core/ports/poems';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import type { FeedPoemType } from '@features/feed/public/types';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
+import type { FeedPoem } from '@root/core/api/feed/types';
 import { useQuery } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
@@ -18,7 +18,7 @@ type HomeFeedResult = {
 	poems: PoemPreviewType[];
 };
 
-function toPoemPreviewType(item: FeedPoemType): PoemPreviewType {
+function toPoemPreviewType(item: FeedPoem): PoemPreviewType {
 	return {
 		id: item.id,
 		title: item.title,
@@ -47,7 +47,7 @@ function shouldFallbackToRecent(error: unknown) {
 }
 
 async function fetchPersonalizedFeed(): Promise<PoemPreviewType[]> {
-	const payload = (await feed.getFeed.query().queryFn()) as FeedPoemType[];
+	const payload = (await feed.getFeed.query().queryFn()) as FeedPoem[];
 	return payload.map(toPoemPreviewType);
 }
 
