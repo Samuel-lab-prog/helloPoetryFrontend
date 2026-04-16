@@ -23,6 +23,21 @@ type RouteErrorTelemetry = {
 	rawError?: unknown;
 };
 
+function isLikelyExpiredSessionValidationError({
+	status,
+	code,
+	message,
+}: {
+	status?: number;
+	code?: string;
+	message?: string;
+}) {
+	if (status !== 422) return false;
+	if (code !== 'VALIDATION') return false;
+	if (!message) return false;
+	return message.toLowerCase().includes('validation failed');
+}
+
 function sendErrorTelemetry(payload: RouteErrorTelemetry) {
 	console.error('[route-error]', payload);
 
@@ -51,9 +66,30 @@ function sendErrorTelemetry(payload: RouteErrorTelemetry) {
 
 function getErrorInfo(error: unknown): ErrorInfo {
 	if (isRouteErrorResponse(error)) {
+		const routeData = error.data as { code?: string; message?: string } | undefined;
+		const routeCode = routeData?.code;
+		const routeMessage = routeData?.message;
+
 		if (error.status === 401) {
 			return {
 				status: 401,
+				message: 'Your session has expired.',
+				description: 'Please sign in again to continue.',
+				recoveryTo: '/login',
+				recoveryLabel: 'Sign in again',
+			};
+		}
+
+		if (
+			isLikelyExpiredSessionValidationError({
+				status: error.status,
+				code: routeCode,
+				message: routeMessage,
+			})
+		) {
+			return {
+				status: 401,
+				code: routeCode,
 				message: 'Your session has expired.',
 				description: 'Please sign in again to continue.',
 				recoveryTo: '/login',
@@ -95,6 +131,23 @@ function getErrorInfo(error: unknown): ErrorInfo {
 		const status = maybeError.statusCode;
 
 		if (status === 401) {
+			return {
+				status: 401,
+				code: maybeError.code,
+				message: 'Your session has expired.',
+				description: 'Please sign in again to continue.',
+				recoveryTo: '/login',
+				recoveryLabel: 'Sign in again',
+			};
+		}
+
+		if (
+			isLikelyExpiredSessionValidationError({
+				status,
+				code: maybeError.code,
+				message: maybeError.message,
+			})
+		) {
 			return {
 				status: 401,
 				code: maybeError.code,
