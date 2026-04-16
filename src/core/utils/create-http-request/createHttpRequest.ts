@@ -4,6 +4,8 @@ type QueryPrimitive = string | number | boolean;
 type QueryValue = QueryPrimitive | QueryPrimitive[] | undefined;
 type QueryParams = Record<string, QueryValue>;
 
+let refreshSessionInFlight: Promise<boolean> | null = null;
+
 export type HttpRequestOptions<TBody> = {
 	path: string;
 	method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -63,31 +65,69 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	const csrfToken = getCookieValue('csrf_token');
 	const isUnsafeMethod = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
 
-	const response = await fetch(url, {
-		method,
-		credentials,
-		signal,
-		headers: {
-			...(body ? { 'Content-Type': 'application/json' } : {}),
-			...(isUnsafeMethod && csrfToken ? { 'x-csrf-token': csrfToken } : {}),
-			...headers,
-		},
-		body: body ? JSON.stringify(body) : undefined,
-	});
+	async function requestOnce(): Promise<TResponse> {
+		const response = await fetch(url, {
+			method,
+			credentials,
+			signal,
+			headers: {
+				...(body ? { 'Content-Type': 'application/json' } : {}),
+				...(isUnsafeMethod && csrfToken ? { 'x-csrf-token': csrfToken } : {}),
+				...headers,
+			},
+			body: body ? JSON.stringify(body) : undefined,
+		});
 
-	const contentType = response.headers.get('content-type');
-	const hasJson = contentType?.includes('application/json');
-	const parsedBody = hasJson ? await response.json() : null;
+		const contentType = response.headers.get('content-type');
+		const hasJson = contentType?.includes('application/json');
+		const parsedBody = hasJson ? await response.json() : null;
 
-	if (!response.ok) {
-		const error: AppErrorType = {
-			statusCode: response.status,
-			message: parsedBody?.message ?? `HTTP error ${response.status}`,
-			code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
-		};
-		throw error;
+		if (!response.ok) {
+			const error: AppErrorType = {
+				statusCode: response.status,
+				message: parsedBody?.message ?? `HTTP error ${response.status}`,
+				code: parsedBody?.code ?? 'INTERNAL_SERVER_ERROR',
+			};
+			throw error;
+		}
+		return parsedBody;
 	}
-	return parsedBody;
+
+	try {
+		return await requestOnce();
+	} catch (error) {
+		const appError = error as AppErrorType;
+		const canTryRefresh =
+			path !== '/auth/login' &&
+			path !== '/auth/refresh' &&
+			(appError.statusCode === 401 ||
+				(appError.statusCode === 422 &&
+					appError.code === 'VALIDATION' &&
+					appError.message.toLowerCase().includes('validation failed')));
+
+		if (!canTryRefresh) throw error;
+
+		const refreshed = await refreshSession(baseUrl);
+		if (!refreshed) throw error;
+
+		return requestOnce();
+	}
+}
+
+async function refreshSession(baseUrl: string): Promise<boolean> {
+	if (refreshSessionInFlight) return refreshSessionInFlight;
+
+	refreshSessionInFlight = fetch(`${baseUrl}/auth/refresh`, {
+		method: 'POST',
+		credentials: 'include',
+	})
+		.then((response) => response.ok)
+		.catch(() => false)
+		.finally(() => {
+			refreshSessionInFlight = null;
+		});
+
+	return refreshSessionInFlight;
 }
 
 /**
