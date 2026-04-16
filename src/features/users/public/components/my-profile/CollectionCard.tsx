@@ -121,14 +121,16 @@ export function CollectionCard({
 	useEffect(() => {
 		if (removingPoemIds.size === 0) return;
 		const stillPresent = new Set(collection.poemIds);
-		setRemovingPoemIds((prev) => {
-			const next = new Set(prev);
-			prev.forEach((poemId) => {
-				if (!stillPresent.has(poemId)) {
+		removingPoemIds.forEach((poemId) => {
+			if (stillPresent.has(poemId)) return;
+			window.setTimeout(() => {
+				setRemovingPoemIds((prev) => {
+					if (!prev.has(poemId)) return prev;
+					const next = new Set(prev);
 					next.delete(poemId);
-				}
-			});
-			return next;
+					return next;
+				});
+			}, 220);
 		});
 	}, [collection.poemIds, removingPoemIds.size]);
 
@@ -182,7 +184,7 @@ export function CollectionCard({
 			</Flex>
 
 			<Flex direction='column' gap={2} mb={3}>
-				{collection.poemIds.map((poemId) => {
+				{Array.from(new Set([...collection.poemIds, ...removingPoemIds])).map((poemId) => {
 					const poem = resolvePoem(poemId);
 					const isRemoving =
 						isRemovingCollectionItem(collection.id, poemId) || removingPoems.has(poemId);
@@ -195,17 +197,20 @@ export function CollectionCard({
 							flexDirection={{ base: 'column', md: 'row' }}
 							gap={2}
 							p={2}
+							pb={8}
+							overflow='hidden'
 							border='1px solid'
 							borderColor='purple.800'
 							borderRadius='md'
 							position='relative'
-							transition='background-color 0.2s ease, border-color 0.2s ease'
+							transition='background-color 0.2s ease, border-color 0.2s ease, max-height 0.2s ease, opacity 0.18s ease, transform 0.2s ease'
 							_hover={{
 								bg: 'rgba(255, 255, 255, 0.03)',
 								borderColor: 'purple.600',
 							}}
-							opacity={isRemoving ? 0.45 : 1}
-							transform={isRemoving ? 'scale(0.99)' : undefined}
+							opacity={isRemoving ? 0 : 1}
+							transform={isRemoving ? 'translateY(-6px)' : undefined}
+							maxH={isRemoving ? '0px' : '200px'}
 						>
 							<LinkOverlay asChild position='absolute' inset={0} zIndex={1}>
 								<NavLink to={poem?.slug ? `/poems/${poem.slug}/${poem.id}` : `/poems/${poemId}`} />
@@ -216,7 +221,13 @@ export function CollectionCard({
 								</Text>
 							</Box>
 							{showManagementControls && (
-								<Flex gap={2} zIndex={3} pointerEvents='auto'>
+								<Box
+									position='absolute'
+									right={2}
+									bottom={2}
+									zIndex={3}
+									pointerEvents='auto'
+								>
 									<IconButton
 										aria-label='Remove poem from collection'
 										size={{ base: 'xs', md: 'sm' }}
@@ -227,17 +238,15 @@ export function CollectionCard({
 										onClick={() => {
 											if (isRemoving) return;
 											setRemovingPoemIds((prev) => new Set(prev).add(poemId));
-											window.setTimeout(() => {
-												void onRemovePoemFromCollection({
-													collectionId: collection.id,
-													poemId,
-												});
-											}, 180);
+											void onRemovePoemFromCollection({
+												collectionId: collection.id,
+												poemId,
+											});
 										}}
 									>
 										<X />
 									</IconButton>
-								</Flex>
+								</Box>
 							)}
 						</LinkBox>
 					);

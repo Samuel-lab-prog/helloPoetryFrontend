@@ -1,8 +1,9 @@
 /* eslint-disable max-lines-per-function */
-import { AsyncState, MarkdownRenderer, toaster } from '@BaseComponents';
+import { AsyncState, ErrorStateCard, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions/public';
+import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
 import { findForbiddenWords } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
@@ -243,8 +244,16 @@ export function PoemPage() {
 					isError={!!isError}
 					isEmpty={!poem}
 					emptyElement={<Box textStyle='body'>Poem not found</Box>}
-					errorElement={<Box textStyle='body'>Error loading the poem. Please try again later.</Box>}
-					loadingElement={<Box textStyle='body'>Loading poem...</Box>}
+					errorElement={
+						<ErrorStateCard
+							eyebrow='POEM UNAVAILABLE'
+							title='We could not load this poem right now.'
+							description='Please try again in a moment, or refresh the page to reconnect.'
+							actionLabel='Refresh poem'
+							onAction={() => window.location.reload()}
+						/>
+					}
+					loadingElement={<LoadingPoemSkeleton variant='default' />}
 				>
 					{poem && poemHeaderPoem && (
 						<>

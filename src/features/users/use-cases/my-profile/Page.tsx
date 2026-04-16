@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions/public';
@@ -112,7 +112,15 @@ export function MyProfilePage() {
 					isError={isError}
 					isEmpty={!profile}
 					loadingElement={LoadingMyProfileSkeleton}
-					errorElement={<Text textStyle='body'>Error loading profile.</Text>}
+					errorElement={
+						<ErrorStateCard
+							eyebrow='PROFILE UNAVAILABLE'
+							title='We could not load your profile right now.'
+							description='Your information is safe. Please try again in a moment, or refresh the page to reconnect.'
+							actionLabel='Refresh profile'
+							onAction={() => window.location.reload()}
+						/>
+					}
 					emptyElement={<Text textStyle='body'>Profile not found.</Text>}
 				>
 					{profile && (

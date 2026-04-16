@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import {
@@ -109,7 +109,15 @@ export function AuthorPage() {
 						isError={isAuthorError}
 						isEmpty={!author}
 						loadingElement={LoadingAuthorProfileSkeleton}
-						errorElement={<Text textStyle='body'>Error loading author.</Text>}
+						errorElement={
+							<ErrorStateCard
+								eyebrow='AUTHOR UNAVAILABLE'
+								title='We could not load this author right now.'
+								description='Please try again in a moment, or refresh the page to reconnect.'
+								actionLabel='Refresh author'
+								onAction={() => window.location.reload()}
+							/>
+						}
 						emptyElement={<Text textStyle='body'>Author not found.</Text>}
 					>
 						{author && (

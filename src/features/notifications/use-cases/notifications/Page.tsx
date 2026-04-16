@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useState } from 'react';
@@ -73,7 +73,15 @@ export function NotificationsPage() {
 					isError={isError}
 					isEmpty={notifications.length === 0}
 					loadingElement={LoadingNotificationsSkeletons}
-					errorElement={<Text textStyle='body'>Error loading notifications.</Text>}
+					errorElement={
+						<ErrorStateCard
+							eyebrow='NOTIFICATIONS UNAVAILABLE'
+							title='We could not load your notifications right now.'
+							description='Nothing was lost. Please try again in a moment, or refresh the page to reconnect.'
+							actionLabel='Refresh notifications'
+							onAction={() => window.location.reload()}
+						/>
+					}
 					emptyElement={<Text textStyle='body'>No notifications found.</Text>}
 				>
 					<Flex direction='column' gap={1}>

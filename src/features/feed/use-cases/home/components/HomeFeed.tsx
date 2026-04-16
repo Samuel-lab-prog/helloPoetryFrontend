@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex } from '@chakra-ui/react';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
 import type { PoemPreview } from '@features/poems/public/types';
@@ -21,6 +21,15 @@ export function HomeFeed({ poems, isLoading, isError }: HomeFeedProps) {
 				isError={isError}
 				isEmpty={poems.length === 0}
 				loadingElement={LoadingPoemsSkeletons}
+				errorElement={
+					<ErrorStateCard
+						eyebrow='FEED UNAVAILABLE'
+						title='We could not load your feed right now.'
+						description='Your poems are safe. Please try again in a moment, or refresh the page to reconnect.'
+						actionLabel='Refresh feed'
+						onAction={() => window.location.reload()}
+					/>
+				}
 				emptyElement={
 					<Box
 						borderTop='1px solid'

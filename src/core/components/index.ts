@@ -4,6 +4,7 @@
 
 export * from './async-state/Component';
 export * from './Button';
+export * from './error-state/Component';
 export * from './footer/Component';
 export * from './footer/FooterBrand';
 export * from './footer/FooterCommunity';

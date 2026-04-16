@@ -1,4 +1,4 @@
-﻿import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Flex } from '@chakra-ui/react';
 
 import type { PoemPreviewType } from '../types';
@@ -18,6 +18,15 @@ export function PoemsGrid({ poems, isLoading, isError }: PoemsGridProps) {
 				isError={isError}
 				isEmpty={poems.length === 0 && !isLoading}
 				isLoading={isLoading}
+				errorElement={
+					<ErrorStateCard
+						eyebrow='POEMS UNAVAILABLE'
+						title='We could not load poems right now.'
+						description='Nothing was lost. Please try again in a moment, or refresh the page to reconnect.'
+						actionLabel='Refresh poems'
+						onAction={() => window.location.reload()}
+					/>
+				}
 			>
 				<PoemGrid>
 					{poems.map((poem) => (

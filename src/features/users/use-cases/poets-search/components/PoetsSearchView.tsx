@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Field, Flex, Input, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -83,7 +83,15 @@ export function PoetsSearchView() {
 				isError={isError}
 				isEmpty={visiblePoets.length === 0}
 				loadingElement={LoadingUsersSkeletons}
-				errorElement={<Text textStyle='body'>Error searching poets.</Text>}
+				errorElement={
+					<ErrorStateCard
+						eyebrow='SEARCH UNAVAILABLE'
+						title='We could not search poets right now.'
+						description='Please try again in a moment, or refresh the page to reconnect.'
+						actionLabel='Refresh search'
+						onAction={() => window.location.reload()}
+					/>
+				}
 				emptyElement={
 					<Text textStyle='body' px={4}>
 						No poets found.

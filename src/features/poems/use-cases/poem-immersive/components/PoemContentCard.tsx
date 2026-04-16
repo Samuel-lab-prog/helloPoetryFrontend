@@ -1,5 +1,6 @@
 import { AsyncState } from '@BaseComponents';
 import { Box, Text } from '@chakra-ui/react';
+import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 
 import { type DedicationUser, type Poem } from '../utils/types';
 import { PoemContent } from './PoemContent';
@@ -26,7 +27,7 @@ export function PoemContentCard({
 			isEmpty={!poem}
 			emptyElement={<Text textStyle='body'>Poem not found.</Text>}
 			errorElement={<Text textStyle='body'>Error loading the poem. Please try again.</Text>}
-			loadingElement={<Text textStyle='body'>Loading poem...</Text>}
+			loadingElement={<LoadingPoemSkeleton variant='immersive' />}
 		>
 			{poem && (
 				<Box w='full'>

@@ -1,4 +1,4 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Button, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions/public';
 import { SendHorizontal } from 'lucide-react';
@@ -165,7 +165,15 @@ export const CommentsSection = memo(function CommentsSection({
 					isError={isCommentsError}
 					isEmpty={comments.length === 0}
 					loadingElement={<Text textStyle='body'>Loading comments...</Text>}
-					errorElement={<Text textStyle='body'>Error loading comments.</Text>}
+					errorElement={
+						<ErrorStateCard
+							eyebrow='COMMENTS UNAVAILABLE'
+							title='We could not load comments right now.'
+							description='Please try again in a moment, or refresh the page to reconnect.'
+							actionLabel='Refresh comments'
+							onAction={() => window.location.reload()}
+						/>
+					}
 					emptyElement={
 						!isAuthenticated ? (
 							<Text textStyle='body'>Sign in to see the comments.</Text>

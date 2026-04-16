@@ -50,6 +50,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 				poemId: createdPoem.id,
 				createdAt: new Date().toISOString(),
 			});
+			form.reset();
 			const isPublished = data.status === 'published';
 			toaster.create({
 				type: 'success',
