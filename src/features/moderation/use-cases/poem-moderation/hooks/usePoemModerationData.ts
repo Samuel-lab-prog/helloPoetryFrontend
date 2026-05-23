@@ -33,6 +33,8 @@ export function usePoemModerationData(enabled: boolean) {
 		pendingQuery,
 		pendingPoems,
 		isModerating: moderateMutation.isPending,
+		isModeratingPoem: (poemId: number) =>
+			moderateMutation.isPending && moderateMutation.variables?.poemId === String(poemId),
 		handleModeration,
 	};
 }

@@ -122,6 +122,10 @@ export function useFriendRequestActions() {
 		rejectRequest: rejectMutation.mutateAsync,
 		isAccepting: acceptMutation.isPending,
 		isRejecting: rejectMutation.isPending,
+		isAcceptingRequester: (requesterId: number) =>
+			acceptMutation.isPending && acceptMutation.variables === requesterId,
+		isRejectingRequester: (requesterId: number) =>
+			rejectMutation.isPending && rejectMutation.variables === requesterId,
 		errorMessage: getErrorMessage(),
 	};
 }

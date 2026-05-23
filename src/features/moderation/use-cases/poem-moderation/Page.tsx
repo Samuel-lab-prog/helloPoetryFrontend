@@ -11,7 +11,7 @@ export function PoemModerationPage() {
 	const navigate = useNavigate();
 	const canAccess = useEnsureRole(['moderator', 'admin']);
 
-	const { pendingQuery, pendingPoems, isModerating, handleModeration } =
+	const { pendingQuery, pendingPoems, isModeratingPoem, handleModeration } =
 		usePoemModerationData(canAccess);
 
 	type Tab = {
@@ -65,7 +65,7 @@ export function PoemModerationPage() {
 					<AnalyzeTab
 						pendingQuery={pendingQuery}
 						pendingPoems={pendingPoems}
-						isModerating={isModerating}
+						isModeratingPoem={isModeratingPoem}
 						onModerate={handleModeration}
 					/>
 					<ActionsTab />

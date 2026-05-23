@@ -33,8 +33,13 @@ export function MyProfileFriendRequestsPage() {
 			}),
 		};
 	}, [debouncedSearch, friendRequests, isSearching]);
-	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
-		useFriendRequestActions();
+	const {
+		acceptRequest,
+		rejectRequest,
+		isAcceptingRequester,
+		isRejectingRequester,
+		errorMessage,
+	} = useFriendRequestActions();
 
 	if (!authClient?.id) return <ProfileAccessGate />;
 
@@ -69,8 +74,8 @@ export function MyProfileFriendRequestsPage() {
 					isFriendRequestsLoading={isFriendRequestsLoading}
 					isFriendRequestsError={isFriendRequestsError}
 					isSearchingFriendRequests={isSearching}
-					isAccepting={isAccepting}
-					isRejecting={isRejecting}
+					isAccepting={isAcceptingRequester}
+					isRejecting={isRejectingRequester}
 					errorMessage={errorMessage}
 					onAcceptRequest={(requesterId) => {
 						void acceptRequest(requesterId);

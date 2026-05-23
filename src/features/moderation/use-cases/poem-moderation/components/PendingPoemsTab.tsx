@@ -12,10 +12,10 @@ type Props = {
 		error: unknown;
 	};
 	pendingPoems: ModerationPoem[];
-	isModerating: boolean;
+	isModeratingPoem: (poemId: number) => boolean;
 	onModerate: (poemId: number, status: ModeratePoemBody['moderationStatus']) => void;
 };
-export function AnalyzeTab({ pendingQuery, pendingPoems, isModerating, onModerate }: Props) {
+export function AnalyzeTab({ pendingQuery, pendingPoems, isModeratingPoem, onModerate }: Props) {
 	function formatError(err: unknown) {
 		const appError = err as AppErrorType | null;
 		if (!appError) return 'Error loading pending poems.';
@@ -50,7 +50,7 @@ export function AnalyzeTab({ pendingQuery, pendingPoems, isModerating, onModerat
 						<ModerationPoemCard
 							key={poem.id}
 							poem={poem}
-							isPending={isModerating}
+							isPending={isModeratingPoem(poem.id)}
 							onModerate={onModerate}
 						/>
 					))}

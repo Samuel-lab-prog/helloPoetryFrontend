@@ -10,8 +10,8 @@ type FriendRequestsSectionProps = {
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;
 	isSearchingFriendRequests?: boolean;
-	isAccepting: boolean;
-	isRejecting: boolean;
+	isAccepting: (requesterId: number) => boolean;
+	isRejecting: (requesterId: number) => boolean;
 	errorMessage: string;
 	onAcceptRequest: (requesterId: number) => void;
 	onRejectRequest: (requesterId: number) => void;
@@ -22,8 +22,8 @@ type FriendRequestsSectionProps = {
  * @param viewAllHref - The URL to view all friend requests if there are more than the displayed ones.[optional]
  * @param isFriendRequestsLoading - Indicates if the friend requests are currently being loaded.
  * @param isFriendRequestsError - Indicates if there was an error loading the friend requests.
- * @param isAccepting - Indicates if a friend request is currently being accepted.
- * @param isRejecting - Indicates if a friend request is currently being rejected.
+ * @param isAccepting - Indicates if a specific friend request is currently being accepted.
+ * @param isRejecting - Indicates if a specific friend request is currently being rejected.
  * @param errorMessage - An error message to display if there was an error accepting or rejecting a friend request.
  * @param onAcceptRequest - Callback function to accept a friend request when the "Accept" action is selected.
  * @param onRejectRequest - Callback function to reject a friend request when the "Reject" action is selected.
@@ -136,7 +136,7 @@ export function FriendRequestsSection({
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								onClick={() => onAcceptRequest(request.requesterId)}
-								loading={isAccepting}
+								loading={isAccepting(request.requesterId)}
 							>
 								<Check />
 							</IconButton>
@@ -146,7 +146,7 @@ export function FriendRequestsSection({
 								variant='solidPink'
 								colorPalette='gray'
 								onClick={() => onRejectRequest(request.requesterId)}
-								loading={isRejecting}
+								loading={isRejecting(request.requesterId)}
 							>
 								<X />
 							</IconButton>

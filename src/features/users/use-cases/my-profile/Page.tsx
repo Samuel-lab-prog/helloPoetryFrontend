@@ -34,8 +34,13 @@ export function MyProfilePage() {
 		isLoading: isFriendRequestsLoading,
 		isError: isFriendRequestsError,
 	} = useMyFriendRequests(!isMissingClient);
-	const { acceptRequest, rejectRequest, isAccepting, isRejecting, errorMessage } =
-		useFriendRequestActions();
+	const {
+		acceptRequest,
+		rejectRequest,
+		isAcceptingRequester,
+		isRejectingRequester,
+		errorMessage,
+	} = useFriendRequestActions();
 	const {
 		poems: myPoems,
 		isLoading: isLoadingMyPoems,
@@ -158,8 +163,8 @@ export function MyProfilePage() {
 									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}
-									isAccepting={isAccepting}
-									isRejecting={isRejecting}
+									isAccepting={isAcceptingRequester}
+									isRejecting={isRejectingRequester}
 									errorMessage={errorMessage}
 									onAcceptRequest={(requesterId) => {
 										void acceptRequest(requesterId);
