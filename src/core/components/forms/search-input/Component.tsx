@@ -29,14 +29,15 @@ export function SearchInput({
 
 	return (
 		<Field.Root>
-			<Field.Label textStyle='small' fontWeight='medium' color='text'>
+			<Field.Label textStyle='smaller' fontWeight='medium' color='text'>
 				{label}
 			</Field.Label>
 			<Input
 				value={value}
+				padding={2}
 				onChange={(event) => onValueChange(event.target.value)}
 				placeholder={placeholder}
-				textStyle='small'
+				textStyle='smaller'
 				transition='all 0.22s ease'
 				bg='rgba(255, 255, 255, 0.03)'
 				borderColor='border'

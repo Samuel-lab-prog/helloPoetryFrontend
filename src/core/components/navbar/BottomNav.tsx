@@ -61,7 +61,7 @@ export function NavbarBottomNav({
 									gap={0}
 									position='relative'
 								>
-									<Icon as={getLinkIcon(link.to)} boxSize={4.5} strokeWidth={2.2} />
+									<Icon as={getLinkIcon(link.to)} boxSize={4} strokeWidth={2.2} />
 									{link.to === '/notifications' && unreadCount > 0 && (
 										<Badge
 											position='absolute'

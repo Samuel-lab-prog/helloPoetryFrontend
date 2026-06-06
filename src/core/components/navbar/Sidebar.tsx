@@ -50,7 +50,9 @@ export function NavbarSidebar({
 									<HStack gap={2} justify='space-between' w='full'>
 										<HStack gap={2}>
 											<Icon as={getLinkIcon(link.to)} boxSize={4} />
-											<Text>{link.label}</Text>
+											<Text fontSize={{ lg: '0.9rem' }} lineHeight='short'>
+												{link.label}
+											</Text>
 										</HStack>
 									</HStack>
 								</NavLink>

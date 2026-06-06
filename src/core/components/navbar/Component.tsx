@@ -95,13 +95,13 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	}, [isMobile, navHidden]);
 
 	return (
-		<Flex h='100vh' w='full' direction='column' overflow='hidden'>
+		<Flex h='full' w='full' direction='column' overflow='hidden'>
 			<Flex
 				as='header'
 				w='full'
 				h={shouldHideNav ? '0px' : '72px'}
-				px={{ base: 4, md: 8 }}
-				py={shouldHideNav ? 0 : 3}
+				px={{ base: 3, sm: 4, md: 8 }}
+				py={shouldHideNav ? 0 : { base: 2, md: 3 }}
 				borderBottom={shouldHideNav ? '0' : '1px solid'}
 				borderColor='border'
 				bg='rgba(18, 0, 17, 0.9)'
@@ -114,9 +114,15 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 				opacity={shouldHideNav ? 0 : 1}
 				overflow='hidden'
 			>
-				<Flex align='center' gap={6} w='full'>
+				<Flex align='center' gap={{ base: 3, md: 6 }} w='full'>
 					<Logo />
-					<Flex align='center' gap={3} ml='auto'>
+					<Flex
+						align='center'
+						gap={{ base: 1.5, md: 3 }}
+						ml='auto'
+						wrap='nowrap'
+						flexShrink={0}
+					>
 						{isAuthenticated ? (
 							<>
 								<Link
@@ -124,9 +130,11 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 									display='inline-flex'
 									alignItems='center'
 									justifyContent='center'
-									h={{ base: 8, md: 9 }}
-									px={{ base: 2.5, md: 3 }}
-									gap={2}
+									flexShrink={0}
+									minW='fit-content'
+									h={{ base: 7, md: 9 }}
+									px={{ base: 2, md: 3 }}
+									gap={{ base: 1.5, md: 2 }}
 									borderRadius='full'
 									border='1px solid'
 									borderColor='purple.500'
@@ -143,18 +151,24 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 										onMouseEnter={() => onPrefetchRoute?.('/poems/new')}
 										onFocus={() => onPrefetchRoute?.('/poems/new')}
 									>
-										<Icon as={PenSquare} boxSize={{ base: 3.5, md: 4 }} />
-										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
+										<Icon as={PenSquare} boxSize={{ base: 3, md: 4 }} />
+										<Text
+											fontSize={{ base: '2xs', md: 'sm' }}
+											fontWeight='medium'
+											whiteSpace='nowrap'
+										>
 											Create
 										</Text>
 									</NavLink>
 								</Link>
-								<Link
-									asChild
-									display={{ base: 'none', lg: 'inline-flex' }}
+									<Link
+										asChild
+										display={{ base: 'none', lg: 'inline-flex' }}
 									alignItems='center'
 									justifyContent='center'
 									position='relative'
+									flexShrink={0}
+									minW='fit-content'
 									h={9}
 									w={9}
 									borderRadius='full'
@@ -203,7 +217,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 										onFocus={() => onPrefetchRoute?.('/my-profile')}
 									>
 										<Avatar.Root
-											size='sm'
+											size={{ base: 'xs', md: 'sm' }}
 											bg='purple.700'
 											color='pink.50'
 											border='1px solid'
@@ -222,9 +236,11 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 									display='inline-flex'
 									alignItems='center'
 									justifyContent='center'
-									h={{ base: 8, md: 9 }}
-									px={{ base: 2.5, md: 3 }}
-									gap={2}
+									flexShrink={0}
+									minW='fit-content'
+									h={{ base: 7, md: 9 }}
+									px={{ base: 2, md: 3 }}
+									gap={{ base: 1.5, md: 2 }}
 									borderRadius='full'
 									border='1px solid'
 									borderColor='purple.500'
@@ -241,8 +257,12 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 										onMouseEnter={() => onPrefetchRoute?.('/login')}
 										onFocus={() => onPrefetchRoute?.('/login')}
 									>
-										<Icon as={LogIn} boxSize={{ base: 3.5, md: 4 }} />
-										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
+										<Icon as={LogIn} boxSize={{ base: 3, md: 4 }} />
+										<Text
+											fontSize={{ base: '2xs', md: 'sm' }}
+											fontWeight='medium'
+											whiteSpace='nowrap'
+										>
 											Sign in
 										</Text>
 									</NavLink>
@@ -252,9 +272,11 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 									display='inline-flex'
 									alignItems='center'
 									justifyContent='center'
-									h={{ base: 8, md: 9 }}
-									px={{ base: 2.5, md: 3 }}
-									gap={2}
+									flexShrink={0}
+									minW='fit-content'
+									h={{ base: 7, md: 9 }}
+									px={{ base: 2, md: 3 }}
+									gap={{ base: 1.5, md: 2 }}
 									borderRadius='full'
 									border='1px solid'
 									borderColor='pink.400'
@@ -272,8 +294,12 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 										onMouseEnter={() => onPrefetchRoute?.('/register')}
 										onFocus={() => onPrefetchRoute?.('/register')}
 									>
-										<Icon as={UserPlus} boxSize={{ base: 3.5, md: 4 }} />
-										<Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight='medium'>
+										<Icon as={UserPlus} boxSize={{ base: 3, md: 4 }} />
+										<Text
+											fontSize={{ base: '2xs', md: 'sm' }}
+											fontWeight='medium'
+											whiteSpace='nowrap'
+										>
 											Sign up
 										</Text>
 									</NavLink>

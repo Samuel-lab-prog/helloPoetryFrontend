@@ -11,7 +11,13 @@ export function Logo() {
 			transition='opacity 0.2s ease'
 			_hover={{ opacity: 0.8 }}
 		>
-			<Text textStyle='h5' color='pink.100' fontWeight='700' lineHeight='short'>
+			<Text
+				color='pink.100'
+				fontWeight='700'
+				lineHeight='short'
+				fontSize={{ base: 'xs', sm: 'sm', md: 'md', lg: 'lg' }}
+				letterSpacing={{ base: '-0.01em', md: '0' }}
+			>
 				HelloPoetry
 			</Text>
 		</Box>

@@ -19,16 +19,16 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 	if (variant === 'flat') {
 		return (
 			<LinkBox
-				py={5}
-				px={4}
+				py={{ base: 4, md: 5 }}
+				px={{ base: 3.5, md: 4 }}
 				borderRadius='lg'
 				transition='background-color 0.22s ease'
 				_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
 			>
-				<Flex direction='column' gap={3}>
+				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
 					<LinkOverlay asChild>
 						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-							<Text textStyle='h3'>{poem.title}</Text>
+							<Text textStyle='h4'>{poem.title}</Text>
 						</NavLink>
 					</LinkOverlay>
 					{poem.excerpt && (
@@ -39,7 +39,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 
 					{!hideAuthorMeta && (
 						<Flex align='center' gap={2}>
-							<Avatar.Root size='md'>
+							<Avatar.Root size={{ base: 'xs', md: 'md' }}>
 								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
 								<Avatar.Fallback name={poem.author.nickname} />
 							</Avatar.Root>
@@ -54,7 +54,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 						</Flex>
 					)}
 
-					<Flex align='center' gap={4} wrap='wrap'>
+					<Flex align='center' gap={{ base: 3, md: 4 }} wrap='wrap'>
 						{typeof likesCount === 'number' && (
 							<Flex align='center' gap={2} color='pink.200'>
 								<Icon as={Heart} boxSize={4} />
@@ -77,7 +77,15 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					{poem.tags.length > 0 && (
 						<Flex gap={2} wrap='wrap'>
 							{poem.tags.slice(0, 4).map((tag: TagType) => (
-								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
+								<Badge
+									key={tag.id}
+									size='sm'
+									colorPalette='pink'
+									variant='subtle'
+									fontSize={{ base: '2xs', md: 'xs' }}
+									px={{ base: 1.5, md: 2 }}
+									py={{ base: 0.5, md: 1 }}
+								>
 									#{tag.name}
 								</Badge>
 							))}
@@ -91,7 +99,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 	return (
 		<Card.Root
 			as={LinkBox}
-			p={6}
+			p={{ base: 4, md: 6 }}
 			h='full'
 			border='1px solid'
 			borderColor='purple.700'
@@ -124,13 +132,13 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header p={0} mb={5} gap={1}>
+			<Card.Header p={0} mb={{ base: 4, md: 5 }} gap={1}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poem
 				</Badge>
 				<LinkOverlay asChild>
 					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-						<Card.Title as='h3' textStyle='h3'>
+						<Card.Title as='h4' textStyle='h4'>
 							{poem.title}
 						</Card.Title>
 					</NavLink>
@@ -143,10 +151,10 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 			</Card.Header>
 
 			<Card.Body p={0} flex='1'>
-				<Flex direction='column' gap={3}>
+				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
 					{!hideAuthorMeta && (
 						<Flex align='center' gap={2}>
-							<Avatar.Root size='md'>
+							<Avatar.Root size={{ base: 'xs', md: 'md' }}>
 								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
 								<Avatar.Fallback name={poem.author.nickname} />
 							</Avatar.Root>
@@ -161,7 +169,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 						</Flex>
 					)}
 
-					<Flex align='center' gap={4} wrap='wrap'>
+					<Flex align='center' gap={{ base: 3, md: 4 }} wrap='wrap'>
 						{typeof likesCount === 'number' && (
 							<Flex align='center' gap={2} color='pink.200'>
 								<Icon as={Heart} boxSize={4} />
@@ -184,7 +192,15 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					{poem.tags.length > 0 && (
 						<Flex gap={2} wrap='wrap'>
 							{poem.tags.slice(0, 4).map((tag: TagType) => (
-								<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
+								<Badge
+									key={tag.id}
+									size='sm'
+									colorPalette='pink'
+									variant='subtle'
+									fontSize={['2xs', 'xs']}
+									px={{ base: 1.5, md: 2 }}
+									py={{ base: 0.5, md: 1 }}
+								>
 									#{tag.name}
 								</Badge>
 							))}
