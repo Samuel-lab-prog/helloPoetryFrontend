@@ -69,7 +69,7 @@ export function FormField<T extends FieldValues>({
 				return (
 					<Field.Root required={required} invalid={hasError}>
 						<Field.Label
-							textStyle='small'
+							textStyle='smaller'
 							fontWeight='medium'
 							color={hasError ? 'error' : 'text'}
 							transition='color 0.22s ease'
@@ -80,7 +80,7 @@ export function FormField<T extends FieldValues>({
 
 						<Component
 							{...field}
-							textStyle='small'
+							textStyle='smaller'
 							transition='all 0.22s ease'
 							bg='rgba(255, 255, 255, 0.03)'
 							borderColor={hasError ? 'error' : 'border'}
@@ -122,6 +122,7 @@ export function FormField<T extends FieldValues>({
 							transition='grid-template-rows 0.24s ease'
 						>
 							<Field.ErrorText
+							textStyle='smaller'
 								color='error'
 								opacity={hasError ? 1 : 0}
 								transform={hasError ? 'translateY(0)' : 'translateY(-3px)'}
@@ -135,7 +136,7 @@ export function FormField<T extends FieldValues>({
 
 						{shouldShowCharacterCount && (
 							<Text
-								textStyle='xs'
+								textStyle='smaller'
 								color={isBelowMinLength ? 'error' : 'pink.300'}
 								w='full'
 								textAlign='right'

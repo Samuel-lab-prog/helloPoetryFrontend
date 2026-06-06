@@ -63,6 +63,7 @@ const registerFields: Field<RegisterDataType>[] = [
 		type: 'textarea',
 		minLength: REGISTER_BIO_MIN_LENGTH,
 		maxLength: REGISTER_BIO_MAX_LENGTH,
+		rows: 3,
 		showCharacterCount: true,
 	},
 	{

@@ -28,7 +28,6 @@ export function NavbarSidebar({
 			p={5}
 			borderRight='1px solid'
 			borderColor='border'
-			overflowY='auto'
 			scrollbarGutter='stable'
 			bg='rgba(18, 0, 17, 0.86)'
 			backdropFilter='blur(6px)'
@@ -50,7 +49,7 @@ export function NavbarSidebar({
 									<HStack gap={2} justify='space-between' w='full'>
 										<HStack gap={2}>
 											<Icon as={getLinkIcon(link.to)} boxSize={4} />
-											<Text fontSize={{ lg: '0.9rem' }} lineHeight='short'>
+											<Text fontSize={{ lg: 'rem' }} lineHeight='short'>
 												{link.label}
 											</Text>
 										</HStack>

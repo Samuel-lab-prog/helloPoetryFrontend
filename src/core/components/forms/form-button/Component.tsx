@@ -20,7 +20,7 @@ export function FormButton({
 			variant={variant}
 			loading={loading}
 			disabled={!isValid || loading}
-			mt={6}
+			mt={4}
 			fullWidth
 			opacity={isValid ? 1 : 0.72}
 			filter={isValid ? 'saturate(1)' : 'saturate(0.72)'}

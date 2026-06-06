@@ -131,6 +131,8 @@ const globalCss = defineGlobalStyles({
 		display: 'flex',
 		margin: '0',
 		boxSizing: 'border-box',
+		overflow: 'hidden',
+		minHeight: '100dvh',
 	},
 
 	'#root': {
@@ -138,7 +140,8 @@ const globalCss = defineGlobalStyles({
 		flexDirection: 'column',
 		alignItems: 'stretch',
 		width: '100%',
-		minHeight: '100vh',
+		height: '100dvh',
+		minHeight: '100dvh',
 	},
 });
 

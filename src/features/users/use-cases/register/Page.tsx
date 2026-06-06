@@ -5,13 +5,20 @@ import { RegisterForm } from './components/RegisterForm';
 
 export function RegisterPage() {
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' py={12}>
+		<Flex
+			as='main'
+			layerStyle='main'
+			flex='1'
+			h='1/2'
+			direction='column'
+			align='center'
+		>
 			<Flex
 				as='section'
 				direction='column'
 				align='center'
 				justify='flex-start'
-				gap={6}
+				gap={4}
 				mt='0'
 				w='full'
 				maxW='md'
@@ -26,7 +33,7 @@ export function RegisterPage() {
 
 function PageHeader() {
 	return (
-		<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
+		<Flex direction='column' align='center' mb={2} gap={1} textAlign='center'>
 			<Heading as='h1' textStyle='h1' color='accent'>
 				Create account
 			</Heading>

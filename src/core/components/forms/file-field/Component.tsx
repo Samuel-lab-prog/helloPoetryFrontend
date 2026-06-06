@@ -39,7 +39,7 @@ export function FileField<T extends FieldValues>({
 				return (
 					<Field.Root required={required} invalid={hasError}>
 						<Field.Label
-							textStyle='small'
+							textStyle='smaller'
 							fontWeight='medium'
 							color={hasError ? 'error' : 'text'}
 							transition='color 0.22s ease'
