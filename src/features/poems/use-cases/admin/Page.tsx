@@ -33,7 +33,7 @@ export function AdminPage() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 			gap={8}
 			w='full'
 		>

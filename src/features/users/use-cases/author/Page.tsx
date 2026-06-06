@@ -97,7 +97,7 @@ export function AuthorPage() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 			gap={8}
 		>
 			<Box w='full' maxW='2xl'>

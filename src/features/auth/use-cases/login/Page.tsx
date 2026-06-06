@@ -18,7 +18,7 @@ function PageFooter() {
 	return (
 		<Text mt={4} variant='muted' textAlign='center'>
 			Don't have an account yet?{' '}
-			<Link asChild color='pink.300' textDecoration='underline'>
+		<Link asChild color='pink.300' textDecoration='underline'>
 				<NavLink to='/register'>Create account</NavLink>
 			</Link>
 		</Text>
@@ -27,7 +27,16 @@ function PageFooter() {
 
 export function LoginPage() {
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
+		<Flex
+			as='main'
+			layerStyle='main'
+			flex='1'
+			minH={0}
+			direction='column'
+			align='center'
+			py={12}
+			px={[4, 4, 8]}
+		>
 			<Flex
 				as='section'
 				direction='column'

@@ -10,7 +10,7 @@ export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
 			align='center'
 			justify='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 		>
 			<Surface variant='gradient' maxW='2xl' w='full'>
 				<VStack align='start' gap={3}>

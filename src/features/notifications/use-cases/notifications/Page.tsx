@@ -36,7 +36,7 @@ export function NotificationsPage() {
 	};
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
+		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
 			<Box as='section' w='full' maxW='2xl'>
 				<Flex
 					align={{ base: 'start', md: 'center' }}

@@ -48,7 +48,7 @@ export function CreatePoemPage() {
 
 	if (!isAuthenticated) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
 				<CreatePoemAccessGate />
 			</Flex>
 		);
@@ -61,7 +61,7 @@ export function CreatePoemPage() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 			gap={8}
 		>
 			<PageHeader />

@@ -21,7 +21,7 @@ function PageLoader() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 			minH='40vh'
 			justify='center'
 		>

@@ -70,7 +70,7 @@ export function MyProfilePage() {
 
 	if (isLoggingOut) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
 				<Text textStyle='body'>Signing out...</Text>
 			</Flex>
 		);
@@ -78,7 +78,7 @@ export function MyProfilePage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 0]}>
+			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -104,7 +104,7 @@ export function MyProfilePage() {
 			direction='column'
 			align='center'
 			py={12}
-			px={[4, 4, 0]}
+			px={[4, 4, 8]}
 			w='full'
 			maxW='2xl'
 			mx='auto'
