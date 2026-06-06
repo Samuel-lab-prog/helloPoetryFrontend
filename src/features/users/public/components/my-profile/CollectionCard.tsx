@@ -112,6 +112,15 @@ export function CollectionCard({
 
 	const removingPoems = useMemo(() => new Set(removingPoemIds), [removingPoemIds]);
 
+	function removePoemIdFromState(poemId: number) {
+		setRemovingPoemIds((prev) => {
+			if (!prev.has(poemId)) return prev;
+			const next = new Set(prev);
+			next.delete(poemId);
+			return next;
+		});
+	}
+
 	useEffect(() => {
 		if (!removingCollection) return;
 		if (isDeletingCollection(collection.id)) return;
@@ -121,18 +130,19 @@ export function CollectionCard({
 	useEffect(() => {
 		if (removingPoemIds.size === 0) return;
 		const stillPresent = new Set(collection.poemIds);
-		removingPoemIds.forEach((poemId) => {
-			if (stillPresent.has(poemId)) return;
-			window.setTimeout(() => {
-				setRemovingPoemIds((prev) => {
-					if (!prev.has(poemId)) return prev;
-					const next = new Set(prev);
-					next.delete(poemId);
-					return next;
-				});
-			}, 220);
-		});
-	}, [collection.poemIds, removingPoemIds.size]);
+		const timeoutIds: number[] = [];
+
+		for (const poemId of removingPoemIds) {
+			if (stillPresent.has(poemId)) continue;
+			timeoutIds.push(window.setTimeout(() => removePoemIdFromState(poemId), 220));
+		}
+
+		return () => {
+			for (const timeoutId of timeoutIds) {
+				window.clearTimeout(timeoutId);
+			}
+		};
+	}, [collection.poemIds, removingPoemIds]);
 
 	return (
 		<Box
@@ -221,13 +231,7 @@ export function CollectionCard({
 								</Text>
 							</Box>
 							{showManagementControls && (
-								<Box
-									position='absolute'
-									right={2}
-									bottom={2}
-									zIndex={3}
-									pointerEvents='auto'
-								>
+								<Box position='absolute' right={2} bottom={2} zIndex={3} pointerEvents='auto'>
 									<IconButton
 										aria-label='Remove poem from collection'
 										size={{ base: 'xs', md: 'sm' }}

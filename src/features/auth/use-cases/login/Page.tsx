@@ -18,7 +18,7 @@ function PageFooter() {
 	return (
 		<Text mt={4} variant='muted' textAlign='center'>
 			Don't have an account yet?{' '}
-		<Link asChild color='pink.300' textDecoration='underline'>
+			<Link asChild color='pink.300' textDecoration='underline'>
 				<NavLink to='/register'>Create account</NavLink>
 			</Link>
 		</Text>

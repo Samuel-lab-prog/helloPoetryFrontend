@@ -53,7 +53,7 @@ export function HomePage() {
 				mx='auto'
 			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
-					<Box px={4} pt={[4]} pb={[0, 2]} >
+					<Box px={4} pt={[4]} pb={[0, 2]}>
 						<SearchInput
 							label='Search poems'
 							value={searchTitle}

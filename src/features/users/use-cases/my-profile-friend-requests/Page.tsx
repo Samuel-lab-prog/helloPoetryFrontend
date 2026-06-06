@@ -33,13 +33,8 @@ export function MyProfileFriendRequestsPage() {
 			}),
 		};
 	}, [debouncedSearch, friendRequests, isSearching]);
-	const {
-		acceptRequest,
-		rejectRequest,
-		isAcceptingRequester,
-		isRejectingRequester,
-		errorMessage,
-	} = useFriendRequestActions();
+	const { acceptRequest, rejectRequest, isAcceptingRequester, isRejectingRequester, errorMessage } =
+		useFriendRequestActions();
 
 	if (!authClient?.id) return <ProfileAccessGate />;
 

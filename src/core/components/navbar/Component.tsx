@@ -116,13 +116,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 			>
 				<Flex align='center' gap={{ base: 3, md: 6 }} w='full'>
 					<Logo />
-					<Flex
-						align='center'
-						gap={{ base: 1.5, md: 3 }}
-						ml='auto'
-						wrap='nowrap'
-						flexShrink={0}
-					>
+					<Flex align='center' gap={{ base: 1.5, md: 3 }} ml='auto' wrap='nowrap' flexShrink={0}>
 						{isAuthenticated ? (
 							<>
 								<Link
@@ -161,9 +155,9 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 										</Text>
 									</NavLink>
 								</Link>
-									<Link
-										asChild
-										display={{ base: 'none', lg: 'inline-flex' }}
+								<Link
+									asChild
+									display={{ base: 'none', lg: 'inline-flex' }}
 									alignItems='center'
 									justifyContent='center'
 									position='relative'

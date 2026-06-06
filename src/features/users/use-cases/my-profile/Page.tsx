@@ -34,13 +34,8 @@ export function MyProfilePage() {
 		isLoading: isFriendRequestsLoading,
 		isError: isFriendRequestsError,
 	} = useMyFriendRequests(!isMissingClient);
-	const {
-		acceptRequest,
-		rejectRequest,
-		isAcceptingRequester,
-		isRejectingRequester,
-		errorMessage,
-	} = useFriendRequestActions();
+	const { acceptRequest, rejectRequest, isAcceptingRequester, isRejectingRequester, errorMessage } =
+		useFriendRequestActions();
 	const {
 		poems: myPoems,
 		isLoading: isLoadingMyPoems,
