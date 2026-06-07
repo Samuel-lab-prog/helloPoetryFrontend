@@ -42,18 +42,17 @@ export function HomePage() {
 		<Flex direction='column' minH='100%'>
 			<Flex
 				as='main'
-				layerStyle='main'
+				layerStyle='mainPadded'
 				direction='column'
 				align='center'
 				pb={{ base: 20, md: 12 }}
-				px={[0, 0, 4]}
 				flex='1'
 				w='full'
 				maxW='2xl'
 				mx='auto'
 			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
-					<Box px={4} pt={[4]} pb={[0, 2]}>
+					<Box>
 						<SearchInput
 							label='Search poems'
 							value={searchTitle}

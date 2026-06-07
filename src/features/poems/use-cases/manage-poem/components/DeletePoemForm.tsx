@@ -31,19 +31,22 @@ export function DeletePoemForm() {
 	}, [initialPoemId, poemId, setValue]);
 
 	return (
-		<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
-			{generalError && <Text color='red.500'>{generalError}</Text>}
+		<Flex as='form' w='full' direction='column' gap={4} onSubmit={handleSubmit(onSubmit)}>
+			{generalError && <Text textStyle='smaller' color='red.400'>{generalError}</Text>}
 
 			<PoemCombobox name='id' poems={poems} control={control} />
 
 			<Button
 				type='submit'
+				size='sm'
 				variant='solidPink'
 				colorPalette='gray'
 				disabled={!isValid || isPending}
 				loading={isPending}
-				w='full'
-				mt={4}
+				w={{ base: 'full', md: 'fit-content' }}
+				alignSelf={{ base: 'stretch', md: 'flex-end' }}
+				mt={2}
+				px={6}
 			>
 				Delete Poem
 			</Button>

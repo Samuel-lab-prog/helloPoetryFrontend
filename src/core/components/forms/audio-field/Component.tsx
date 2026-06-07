@@ -140,55 +140,51 @@ export function AudioField<T extends FieldValues>({
 				</Box>
 			)}
 
-			<Flex gap={2} wrap='wrap'>
+			<Flex gap={{ base: 1.5, md: 2 }} wrap='wrap'>
 				<Button
-					size='xs'
-					fontSize='xs'
+					size={{ base: '2xs', md: 'xs' }}
 					variant='solidPink'
 					onClick={handleStartRecording}
 					disabled={isRecording || disabled}
 				>
-					<HStack gap={2}>
-						<Mic size={14} />
-						<Text fontSize='xs'>{labelsResolved.record}</Text>
+					<HStack gap={1.5}>
+						<Mic size={12} />
+						<Text textStyle='smaller'>{labelsResolved.record}</Text>
 					</HStack>
 				</Button>
 				<Button
-					size='xs'
-					fontSize='xs'
+					size={{ base: '2xs', md: 'xs' }}
 					variant='solidPink'
 					colorPalette='gray'
 					onClick={handleStopRecording}
 					disabled={!isRecording || disabled}
 				>
-					<HStack gap={2}>
-						<Square size={14} />
-						<Text fontSize='xs'>{labelsResolved.stop}</Text>
+					<HStack gap={1.5}>
+						<Square size={12} />
+						<Text textStyle='smaller'>{labelsResolved.stop}</Text>
 					</HStack>
 				</Button>
 				<Button
-					size='xs'
-					fontSize='xs'
+					size={{ base: '2xs', md: 'xs' }}
 					variant='ghost'
 					colorPalette='gray'
 					onClick={handleDiscardRecording}
 					disabled={!file || disabled}
 				>
-					<HStack gap={2}>
-						<Trash2 size={14} />
-						<Text fontSize='xs'>{labelsResolved.discard}</Text>
+					<HStack gap={1.5}>
+						<Trash2 size={12} />
+						<Text textStyle='smaller'>{labelsResolved.discard}</Text>
 					</HStack>
 				</Button>
 				<Button
-					size='xs'
-					fontSize='xs'
+					size={{ base: '2xs', md: 'xs' }}
 					variant='outlinePurple'
 					onClick={() => audioFileInputRef.current?.click()}
 					disabled={disabled}
 				>
-					<HStack gap={2}>
-						<Upload size={14} />
-						<Text fontSize='xs'>{labelsResolved.upload}</Text>
+					<HStack gap={1.5}>
+						<Upload size={12} />
+						<Text textStyle='smaller'>{labelsResolved.upload}</Text>
 					</HStack>
 				</Button>
 			</Flex>

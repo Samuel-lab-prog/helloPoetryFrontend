@@ -50,8 +50,8 @@ export function UpdatePoemForm() {
 	}, [poem, reset]);
 
 	return (
-		<Flex as='form' w='full' direction='column' gap={6} onSubmit={handleSubmit(onSubmit)}>
-			{generalError && <Text color='red.500'>{generalError}</Text>}
+		<Flex as='form' w='full' direction='column' gap={4} onSubmit={handleSubmit(onSubmit)}>
+			{generalError && <Text textStyle='smaller' color='red.400'>{generalError}</Text>}
 
 			<PoemCombobox name='id' control={control} poems={poems} />
 
@@ -141,12 +141,15 @@ export function UpdatePoemForm() {
 
 			<Button
 				type='submit'
+				size='sm'
 				variant='solidPink'
 				colorPalette='gray'
 				disabled={!isValid || isPending || isLoading}
 				loading={isPending}
-				w='full'
-				mt={4}
+				w={{ base: 'full', md: 'fit-content' }}
+				alignSelf={{ base: 'stretch', md: 'flex-end' }}
+				mt={2}
+				px={6}
 			>
 				Update Poem
 			</Button>

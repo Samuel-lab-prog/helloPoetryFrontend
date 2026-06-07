@@ -2,6 +2,7 @@ import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem } from '@Api/poems/types';
 import { toaster } from '@BaseComponents';
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -61,16 +62,13 @@ function useDeletePoem(queryClient: ReturnType<typeof useQueryClient>) {
 		mutationFn: (poemId: number) => poems.deletePoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
 			const poemKey = poemKeys.byId(String(poemId));
-			await queryClient.cancelQueries({ queryKey: poemKeys.mine() });
-			await queryClient.cancelQueries({ queryKey: poemKey });
+			const previousMyPoems = await snapshotQueryData<FullPoem[]>(queryClient, poemKeys.mine());
+			const previousPoem = await snapshotQueryData<FullPoem>(queryClient, poemKey);
 
-			const previousMyPoems = queryClient.getQueryData<FullPoem[]>(poemKeys.mine());
-			const previousPoem = queryClient.getQueryData<FullPoem>(poemKey);
-
-			if (previousMyPoems) {
+			if (previousMyPoems.data) {
 				queryClient.setQueryData<FullPoem[]>(
 					poemKeys.mine(),
-					previousMyPoems.filter((poem) => poem.id !== poemId),
+					previousMyPoems.data.filter((poem) => poem.id !== poemId),
 				);
 			}
 
@@ -80,12 +78,8 @@ function useDeletePoem(queryClient: ReturnType<typeof useQueryClient>) {
 		},
 		onError: (_error, _poemId, context) => {
 			if (!context) return;
-			if (context.previousMyPoems) {
-				queryClient.setQueryData(poemKeys.mine(), context.previousMyPoems);
-			}
-			if (context.previousPoem) {
-				queryClient.setQueryData(poemKeys.byId(String(context.poemId)), context.previousPoem);
-			}
+			restoreSnapshot(queryClient, context.previousMyPoems);
+			restoreSnapshot(queryClient, context.previousPoem);
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });

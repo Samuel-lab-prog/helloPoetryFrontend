@@ -30,21 +30,23 @@ export function MyProfilePoemsPage() {
 	if (!authClient?.id) return <ProfileAccessGate />;
 
 	return (
-	<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Box as='section' w='full' maxW='5xl'>
 				<Flex mb={6} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
 					<Flex direction='column' gap={3} w='full' maxW={{ base: 'full', md: '360px' }}>
 						<Heading as='h1' textStyle='h3'>
 							All my poems
 						</Heading>
-						<SearchInput
-							label='Search poems'
-							value={searchTitle}
-							onValueChange={setSearchTitle}
-							onDebouncedChange={setDebouncedSearch}
-							placeholder='Search by title'
-							debounceMs={150}
-						/>
+						<Box px={4} pt={[4]} pb={[0, 2]}>
+							<SearchInput
+								label='Search poems'
+								value={searchTitle}
+								onValueChange={setSearchTitle}
+								onDebouncedChange={setDebouncedSearch}
+								placeholder='Search by title'
+								debounceMs={150}
+							/>
+						</Box>
 					</Flex>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
 						<NavLink to='/my-profile'>

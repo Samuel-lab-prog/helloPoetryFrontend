@@ -15,8 +15,8 @@ type AuthorPoemsSectionProps = {
 export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSectionProps) {
 	return (
 		<>
-			<Flex align='center' justify='space-between' gap={3} mb={4} wrap='wrap'>
-				<Heading as='h2' textStyle='h4'>
+			<Flex align='center' justify='space-between' gap={2} mb={3} wrap='wrap'>
+				<Heading as='h2' textStyle={{ base: 'h5', md: 'h4' }}>
 					Author poems
 				</Heading>
 				<Text textStyle='smaller' color='pink.200'>
@@ -52,7 +52,7 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 					</Flex>
 				}
 			>
-				<Flex direction='column' gap={3}>
+				<Flex direction='column' gap={2}>
 					{poems.map((poem, index) => (
 						<Box key={poem.id} w='full'>
 							<Link
@@ -67,8 +67,8 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 										borderBottom='1px solid'
 										borderColor='purple.700'
 										w='full'
-										pt={1.5}
-										pb={1}
+										pt={1}
+										pb={0.75}
 										transition='background 0.2s ease, border-color 0.2s ease'
 										_hover={{
 											bg: 'rgba(255, 255, 255, 0.03)',
@@ -87,7 +87,7 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 									>
 										<Flex align='center' justify='space-between' gap={2}>
 											<Flex direction='column' minW={0} gap={1}>
-												<Text textStyle='small' color='pink.100' truncate>
+												<Text textStyle='smaller' color='pink.100' truncate>
 													{poem.title}
 												</Text>
 												{poem.createdAt && (

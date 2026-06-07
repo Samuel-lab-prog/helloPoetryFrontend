@@ -1,5 +1,6 @@
 import { interactions } from '@Api/interactions/endpoints';
 import { interactionsKeys } from '@Api/interactions/keys';
+import { type OptimisticSnapshot, restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
 import { eventBus } from '@root/core/events/eventBus';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -80,31 +81,28 @@ async function prepareCommentQueries(
 	const baseKey = buildCommentsKey(poemId);
 	const repliesKey = parentId ? buildCommentsKey(poemId, parentId) : null;
 
-	await queryClient.cancelQueries({ queryKey: baseKey });
-	if (repliesKey) await queryClient.cancelQueries({ queryKey: repliesKey });
-
-	const previousBase = queryClient.getQueryData<InfiniteComments>(baseKey);
+	const previousBase = await snapshotQueryData<InfiniteComments>(queryClient, baseKey);
 	const previousReplies = repliesKey
-		? queryClient.getQueryData<CommentPage>(repliesKey)
+		? await snapshotQueryData<CommentPage>(queryClient, repliesKey)
 		: undefined;
 
 	return { previousBase, previousReplies, baseKey, repliesKey };
 }
 
+type CommentQueryContext = {
+	previousBase: OptimisticSnapshot<InfiniteComments>;
+	previousReplies?: OptimisticSnapshot<CommentPage>;
+	baseKey: ReturnType<typeof buildCommentsKey>;
+	repliesKey: ReturnType<typeof buildCommentsKey> | null;
+};
+
 function restoreCommentQueries(
 	queryClient: ReturnType<typeof useQueryClient>,
-	context?: {
-		previousBase?: InfiniteComments;
-		previousReplies?: CommentPage;
-		baseKey: ReturnType<typeof buildCommentsKey>;
-		repliesKey: ReturnType<typeof buildCommentsKey> | null;
-	},
+	context?: CommentQueryContext,
 ) {
 	if (!context) return;
-	queryClient.setQueryData(context.baseKey, context.previousBase);
-	if (context.repliesKey) {
-		queryClient.setQueryData(context.repliesKey, context.previousReplies);
-	}
+	restoreSnapshot(queryClient, context.previousBase);
+	restoreSnapshot(queryClient, context.previousReplies);
 }
 
 function removeCommentFromList(list: PoemCommentType[], params: CommentMutationParams) {
@@ -200,16 +198,16 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			interactions.deleteComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
-			if (context.previousBase) {
+			if (context.previousBase.data) {
 				queryClient.setQueryData<InfiniteComments>(
 					context.baseKey,
-					updatePages(context.previousBase, (list) => removeCommentFromList(list, params)),
+					updatePages(context.previousBase.data, (list) => removeCommentFromList(list, params)),
 				);
 			}
-			if (context.repliesKey && context.previousReplies) {
+			if (context.repliesKey && context.previousReplies?.data) {
 				queryClient.setQueryData<CommentPage>(context.repliesKey, {
-					...context.previousReplies,
-					comments: context.previousReplies.comments.filter((comment) => comment.id !== params.id),
+					...context.previousReplies.data,
+					comments: context.previousReplies.data.comments.filter((comment) => comment.id !== params.id),
 				});
 			}
 			return context;
@@ -231,16 +229,16 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
-			if (context.previousBase) {
+			if (context.previousBase.data) {
 				queryClient.setQueryData(
 					context.baseKey,
-					updatePages(context.previousBase, (list) => updateLikeState(list, params, 1, true)),
+					updatePages(context.previousBase.data, (list) => updateLikeState(list, params, 1, true)),
 				);
 			}
-			if (context.repliesKey && context.previousReplies) {
+			if (context.repliesKey && context.previousReplies?.data) {
 				queryClient.setQueryData(context.repliesKey, {
-					...context.previousReplies,
-					comments: updateLikeState(context.previousReplies.comments, params, 1, true),
+					...context.previousReplies.data,
+					comments: updateLikeState(context.previousReplies.data.comments, params, 1, true),
 				});
 			}
 			return context;
@@ -262,16 +260,16 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
 			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
-			if (context.previousBase) {
+			if (context.previousBase.data) {
 				queryClient.setQueryData(
 					context.baseKey,
-					updatePages(context.previousBase, (list) => updateLikeState(list, params, -1, false)),
+					updatePages(context.previousBase.data, (list) => updateLikeState(list, params, -1, false)),
 				);
 			}
-			if (context.repliesKey && context.previousReplies) {
+			if (context.repliesKey && context.previousReplies?.data) {
 				queryClient.setQueryData(context.repliesKey, {
-					...context.previousReplies,
-					comments: updateLikeState(context.previousReplies.comments, params, -1, false),
+					...context.previousReplies.data,
+					comments: updateLikeState(context.previousReplies.data.comments, params, -1, false),
 				});
 			}
 			return context;

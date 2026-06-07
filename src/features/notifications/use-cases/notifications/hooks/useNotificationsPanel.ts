@@ -1,6 +1,7 @@
 import { notifications } from '@Api/notifications/endpoints';
 import { notificationsKeys } from '@Api/notifications/keys';
 import type { NotificationItem, NotificationsPage } from '@Api/notifications/types';
+import { restoreSnapshots, snapshotQueriesData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -29,11 +30,10 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: (id: number) =>
 			notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onMutate: async (id) => {
-			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
-
-			const previousPages = queryClient.getQueriesData<NotificationsPage>({
-				queryKey: notificationsKeys.all(),
-			});
+			const previousPages = await snapshotQueriesData<NotificationsPage>(
+				queryClient,
+				notificationsKeys.all(),
+			);
 
 			let markedWasUnread = false;
 			queryClient.setQueriesData<NotificationsPage>(
@@ -63,14 +63,11 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 		onError: (_error, _id, context) => {
 			if (!context) return;
-			context.previousPages.forEach(([key, data]) => {
-				if (!data) return;
-				queryClient.setQueryData(key, data);
-			});
+			restoreSnapshots(queryClient, context.previousPages);
 			if (context.markedWasUnread) {
 				const unreadCount =
 					context.previousPages
-						.flatMap(([, page]) => page?.notifications ?? [])
+						.flatMap((page) => page.data?.notifications ?? [])
 						.filter((item) => !item.readAt).length ?? 0;
 				setUnreadNotificationsCount(unreadCount);
 			}
@@ -80,11 +77,10 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	const markAllReadMutation = useMutation({
 		mutationFn: () => notifications.markAllAsRead.mutate(),
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
-
-			const previousPages = queryClient.getQueriesData<NotificationsPage>({
-				queryKey: notificationsKeys.all(),
-			});
+			const previousPages = await snapshotQueriesData<NotificationsPage>(
+				queryClient,
+				notificationsKeys.all(),
+			);
 
 			queryClient.setQueriesData<NotificationsPage>(
 				{ queryKey: notificationsKeys.all() },
@@ -106,13 +102,10 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 		onError: (_error, _variables, context) => {
 			if (!context) return;
-			context.previousPages.forEach(([key, data]) => {
-				if (!data) return;
-				queryClient.setQueryData(key, data);
-			});
+			restoreSnapshots(queryClient, context.previousPages);
 			const unreadCount =
 				context.previousPages
-					.flatMap(([, page]) => page?.notifications ?? [])
+					.flatMap((page) => page.data?.notifications ?? [])
 					.filter((item) => !item.readAt).length ?? 0;
 			setUnreadNotificationsCount(unreadCount);
 		},
@@ -139,11 +132,10 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: (id: number) =>
 			notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
 		onMutate: async (id) => {
-			await queryClient.cancelQueries({ queryKey: notificationsKeys.all() });
-
-			const previousPages = queryClient.getQueriesData<NotificationsPage>({
-				queryKey: notificationsKeys.all(),
-			});
+			const previousPages = await snapshotQueriesData<NotificationsPage>(
+				queryClient,
+				notificationsKeys.all(),
+			);
 
 			let removedWasUnread = false;
 			queryClient.setQueriesData<NotificationsPage>(
@@ -169,14 +161,11 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 		onError: (_error, _id, context) => {
 			if (!context) return;
-			context.previousPages.forEach(([key, data]) => {
-				if (!data) return;
-				queryClient.setQueryData(key, data);
-			});
+			restoreSnapshots(queryClient, context.previousPages);
 			if (context.removedWasUnread) {
 				const unreadCount =
 					context.previousPages
-						.flatMap(([, page]) => page?.notifications ?? [])
+						.flatMap((page) => page.data?.notifications ?? [])
 						.filter((item) => !item.readAt).length ?? 0;
 				setUnreadNotificationsCount(unreadCount);
 			}

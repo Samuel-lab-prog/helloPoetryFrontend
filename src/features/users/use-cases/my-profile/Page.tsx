@@ -34,8 +34,15 @@ export function MyProfilePage() {
 		isLoading: isFriendRequestsLoading,
 		isError: isFriendRequestsError,
 	} = useMyFriendRequests(!isMissingClient);
-	const { acceptRequest, rejectRequest, isAcceptingRequester, isRejectingRequester, errorMessage } =
-		useFriendRequestActions();
+	const {
+		acceptRequest,
+		rejectRequest,
+		isAcceptingRequester,
+		isRejectingRequester,
+		isRemovingRequester,
+		isHiddenRequester,
+		errorMessage,
+	} = useFriendRequestActions();
 	const {
 		poems: myPoems,
 		isLoading: isLoadingMyPoems,
@@ -62,6 +69,12 @@ export function MyProfilePage() {
 		isRemovingCollectionItem,
 		collectionsError,
 	} = usePoemCollections(!isMissingClient);
+	const visibleFriendRequests = {
+		...friendRequests,
+		received: friendRequests.received.filter(
+			(request) => !isHiddenRequester(request.requesterId),
+		),
+	};
 
 	if (isLoggingOut) {
 		return (
@@ -92,15 +105,15 @@ export function MyProfilePage() {
 		});
 	}
 
-		return (
-			<Flex
-				as='main'
-				layerStyle='mainPadded'
-				direction='column'
-				align='center'
-				w='full'
-				maxW='2xl'
-				mx='auto'
+	return (
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			align='center'
+			w='full'
+			maxW='2xl'
+			mx='auto'
 		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
@@ -150,14 +163,15 @@ export function MyProfilePage() {
 							>
 								<FriendRequestsSection
 									friendRequests={{
-										...friendRequests,
-										received: friendRequests.received.slice(0, 3),
+										...visibleFriendRequests,
+										received: visibleFriendRequests.received.slice(0, 3),
 									}}
 									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}
 									isAccepting={isAcceptingRequester}
 									isRejecting={isRejectingRequester}
+									isRemovingRequester={isRemovingRequester}
 									errorMessage={errorMessage}
 									onAcceptRequest={(requesterId) => {
 										void acceptRequest(requesterId);

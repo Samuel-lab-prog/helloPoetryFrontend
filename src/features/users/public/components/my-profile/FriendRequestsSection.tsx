@@ -1,5 +1,5 @@
 import { Surface } from '@BaseComponents';
-import { Avatar, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
 import type { MyFriendRequestsType } from '@core/ports/friends';
 import { Check, UserPlus, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -12,6 +12,7 @@ type FriendRequestsSectionProps = {
 	isSearchingFriendRequests?: boolean;
 	isAccepting: (requesterId: number) => boolean;
 	isRejecting: (requesterId: number) => boolean;
+	isRemovingRequester?: (requesterId: number) => boolean;
 	errorMessage: string;
 	onAcceptRequest: (requesterId: number) => void;
 	onRejectRequest: (requesterId: number) => void;
@@ -37,6 +38,7 @@ export function FriendRequestsSection({
 	isSearchingFriendRequests,
 	isAccepting,
 	isRejecting,
+	isRemovingRequester,
 	errorMessage,
 	onAcceptRequest,
 	onRejectRequest,
@@ -86,73 +88,88 @@ export function FriendRequestsSection({
 					</Text>
 				)}
 
-				{friendRequests.received.map((request, index) => (
-					<Flex
-						key={request.requesterId}
-						align='center'
-						justify='space-between'
-						direction='row'
-						gap={3}
-						py={3}
-						borderTop='1px solid'
-						borderColor='border'
-						animationName='slide-from-bottom, fade-in'
-						animationDuration='320ms'
-						animationTimingFunction='ease-out'
-						animationFillMode='backwards'
-						animationDelay={`${30 + index * 30}ms`}
-					>
-						<HStack gap={3}>
-							<Avatar.Root size='sm'>
-								<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
-								<Avatar.Fallback name={request.requesterNickname} />
-							</Avatar.Root>
-							<Flex direction='column' gap={0}>
-								<Text textStyle='small' color='pink.100' fontWeight='semibold'>
-									{request.requesterName}
-								</Text>
-								<Link
-									asChild
-									textStyle='smaller'
-									color='pink.200'
-									textDecoration='underline'
-									textUnderlineOffset='3px'
-									_hover={{ color: 'pink.100' }}
-									_focusVisible={{
-										outline: '2px solid',
-										outlineColor: 'pink.300',
-										outlineOffset: '2px',
-									}}
-								>
-									<NavLink to={`/authors/${request.requesterId}`}>
-										@{request.requesterNickname}
-									</NavLink>
-								</Link>
+				{friendRequests.received.map((request, index) => {
+					const isRemoving = isRemovingRequester?.(request.requesterId) ?? false;
+					return (
+						<Box
+							key={request.requesterId}
+							overflow='hidden'
+							maxH={isRemoving ? '0px' : '96px'}
+							opacity={isRemoving ? 0 : 1}
+							transform={isRemoving ? 'translateY(-6px)' : 'translateY(0)'}
+							transition='max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease'
+							pointerEvents={isRemoving ? 'none' : 'auto'}
+							animationName='slide-from-bottom, fade-in'
+							animationDuration='320ms'
+							animationTimingFunction='ease-out'
+							animationFillMode='backwards'
+							animationDelay={`${30 + index * 30}ms`}
+							borderTop='1px solid'
+							borderColor='border'
+						>
+							<Flex
+								align='center'
+								justify='space-between'
+								direction='row'
+								gap={3}
+								py={3}
+							>
+								<HStack gap={3}>
+									<Avatar.Root size='sm'>
+										<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
+										<Avatar.Fallback name={request.requesterNickname} />
+									</Avatar.Root>
+									<Flex direction='column' gap={0}>
+										<Text textStyle='small' color='pink.100' fontWeight='semibold'>
+											{request.requesterName}
+										</Text>
+										<Link
+											asChild
+											textStyle='smaller'
+											color='pink.200'
+											textDecoration='underline'
+											textUnderlineOffset='3px'
+											_hover={{ color: 'pink.100' }}
+											_focusVisible={{
+												outline: '2px solid',
+												outlineColor: 'pink.300',
+												outlineOffset: '2px',
+											}}
+										>
+											<NavLink to={`/authors/${request.requesterId}`}>
+												@{request.requesterNickname}
+											</NavLink>
+										</Link>
+									</Flex>
+								</HStack>
+								<Flex gap={2} ml='auto'>
+									<IconButton
+										aria-label='Accept request'
+										size={{ base: '2xs', md: 'xs' }}
+										variant='subtle'
+										colorPalette='green'
+										onClick={() => onAcceptRequest(request.requesterId)}
+										loading={isAccepting(request.requesterId)}
+										disabled={isRemoving}
+									>
+										<Check />
+									</IconButton>
+									<IconButton
+										aria-label='Decline request'
+										size={{ base: '2xs', md: 'xs' }}
+										variant='subtle'
+										colorPalette='red'
+										onClick={() => onRejectRequest(request.requesterId)}
+										loading={isRejecting(request.requesterId)}
+										disabled={isRemoving}
+									>
+										<X />
+									</IconButton>
+								</Flex>
 							</Flex>
-						</HStack>
-						<Flex gap={2} ml='auto'>
-							<IconButton
-								aria-label='Accept request'
-								size={{ base: 'xs', md: 'sm' }}
-								variant='solidPink'
-								onClick={() => onAcceptRequest(request.requesterId)}
-								loading={isAccepting(request.requesterId)}
-							>
-								<Check />
-							</IconButton>
-							<IconButton
-								aria-label='Decline request'
-								size={{ base: 'xs', md: 'sm' }}
-								variant='solidPink'
-								colorPalette='gray'
-								onClick={() => onRejectRequest(request.requesterId)}
-								loading={isRejecting(request.requesterId)}
-							>
-								<X />
-							</IconButton>
-						</Flex>
-					</Flex>
-				))}
+						</Box>
+					);
+				})}
 			</Flex>
 
 			{errorMessage && (

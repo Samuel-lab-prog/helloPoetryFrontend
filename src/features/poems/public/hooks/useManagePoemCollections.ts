@@ -1,6 +1,7 @@
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { CollectionItemBody, CreateCollectionBody, PoemCollection } from '@Api/poems/types';
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -38,9 +39,10 @@ export function usePoemCollections(enabled = true) {
 				description: data.description?.trim() || undefined,
 			}),
 		onMutate: async (data) => {
-			await queryClient.cancelQueries({ queryKey: poemKeys.collections() });
-			const previousCollections =
-				queryClient.getQueryData<PoemCollection[]>(poemKeys.collections()) ?? [];
+			const previousCollections = await snapshotQueryData<PoemCollection[]>(
+				queryClient,
+				poemKeys.collections(),
+			);
 			const now = new Date().toISOString();
 			const optimistic: PoemCollection = {
 				id: -Date.now(),
@@ -52,26 +54,23 @@ export function usePoemCollections(enabled = true) {
 			};
 			queryClient.setQueryData<PoemCollection[]>(poemKeys.collections(), [
 				optimistic,
-				...previousCollections,
+				...(previousCollections.data ?? []),
 			]);
 			return { previousCollections };
 		},
 		onError: (_error, _data, context) => {
-			if (context?.previousCollections) {
-				queryClient.setQueryData<PoemCollection[]>(
-					poemKeys.collections(),
-					context.previousCollections,
-				);
-			}
+			restoreSnapshot(queryClient, context?.previousCollections);
 		},
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: poemKeys.collections() }),
 	});
 
 	const deleteCollectionMutation = useMutation({
 		mutationFn: (collectionId: number) => poems.deleteCollection.mutate(String(collectionId)),
-		onMutate: (collectionId) => {
-			const previousCollections =
-				queryClient.getQueryData<PoemCollection[]>(poemKeys.collections()) ?? [];
+		onMutate: async (collectionId) => {
+			const previousCollections = await snapshotQueryData<PoemCollection[]>(
+				queryClient,
+				poemKeys.collections(),
+			);
 			setDeletingCollectionIds((prev) => new Set(prev).add(collectionId));
 			queryClient.setQueryData<PoemCollection[]>(poemKeys.collections(), (current = []) =>
 				current.filter((collection) => collection.id !== collectionId),
@@ -79,12 +78,7 @@ export function usePoemCollections(enabled = true) {
 			return { previousCollections };
 		},
 		onError: (_error, _collectionId, context) => {
-			if (context?.previousCollections) {
-				queryClient.setQueryData<PoemCollection[]>(
-					poemKeys.collections(),
-					context.previousCollections,
-				);
-			}
+			restoreSnapshot(queryClient, context?.previousCollections);
 		},
 		onSettled: (_data, _error, collectionId) => {
 			setDeletingCollectionIds((prev) => {
@@ -103,9 +97,10 @@ export function usePoemCollections(enabled = true) {
 				poemId: data.poemId,
 			}),
 		onMutate: async (data) => {
-			await queryClient.cancelQueries({ queryKey: poemKeys.collections() });
-			const previousCollections =
-				queryClient.getQueryData<PoemCollection[]>(poemKeys.collections()) ?? [];
+			const previousCollections = await snapshotQueryData<PoemCollection[]>(
+				queryClient,
+				poemKeys.collections(),
+			);
 			const itemKey = buildItemKey(data.collectionId, data.poemId);
 			setAddingItemKeys((prev) => new Set(prev).add(itemKey));
 			queryClient.setQueryData<PoemCollection[]>(poemKeys.collections(), (current = []) =>
@@ -122,12 +117,7 @@ export function usePoemCollections(enabled = true) {
 			return { previousCollections, itemKey };
 		},
 		onError: (_error, data, context) => {
-			if (context?.previousCollections) {
-				queryClient.setQueryData<PoemCollection[]>(
-					poemKeys.collections(),
-					context.previousCollections,
-				);
-			}
+			restoreSnapshot(queryClient, context?.previousCollections);
 			clearAddingItemKey(
 				context?.itemKey ?? (data ? buildItemKey(data.collectionId, data.poemId) : undefined),
 			);
@@ -147,9 +137,10 @@ export function usePoemCollections(enabled = true) {
 				poemId: data.poemId,
 			}),
 		onMutate: async (data) => {
-			await queryClient.cancelQueries({ queryKey: poemKeys.collections() });
-			const previousCollections =
-				queryClient.getQueryData<PoemCollection[]>(poemKeys.collections()) ?? [];
+			const previousCollections = await snapshotQueryData<PoemCollection[]>(
+				queryClient,
+				poemKeys.collections(),
+			);
 			const itemKey = buildItemKey(data.collectionId, data.poemId);
 			setRemovingItemKeys((prev) => new Set(prev).add(itemKey));
 			queryClient.setQueryData<PoemCollection[]>(poemKeys.collections(), (current = []) =>
@@ -166,12 +157,7 @@ export function usePoemCollections(enabled = true) {
 			return { previousCollections, itemKey };
 		},
 		onError: (_error, _data, context) => {
-			if (context?.previousCollections) {
-				queryClient.setQueryData<PoemCollection[]>(
-					poemKeys.collections(),
-					context.previousCollections,
-				);
-			}
+			restoreSnapshot(queryClient, context?.previousCollections);
 		},
 		onSettled: (_data, _error, data, context) => {
 			setRemovingItemKeys((prev) => {

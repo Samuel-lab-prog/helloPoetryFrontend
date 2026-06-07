@@ -33,8 +33,21 @@ export function MyProfileFriendRequestsPage() {
 			}),
 		};
 	}, [debouncedSearch, friendRequests, isSearching]);
-	const { acceptRequest, rejectRequest, isAcceptingRequester, isRejectingRequester, errorMessage } =
-		useFriendRequestActions();
+	const {
+		acceptRequest,
+		rejectRequest,
+		isAcceptingRequester,
+		isRejectingRequester,
+		isRemovingRequester,
+		isHiddenRequester,
+		errorMessage,
+	} = useFriendRequestActions();
+	const visibleRequests = {
+		...filteredRequests,
+		received: filteredRequests.received.filter(
+			(request) => !isHiddenRequester(request.requesterId),
+		),
+	};
 
 	if (!authClient?.id) return <ProfileAccessGate />;
 
@@ -65,12 +78,13 @@ export function MyProfileFriendRequestsPage() {
 				</Flex>
 
 				<FriendRequestsSection
-					friendRequests={filteredRequests}
+					friendRequests={visibleRequests}
 					isFriendRequestsLoading={isFriendRequestsLoading}
 					isFriendRequestsError={isFriendRequestsError}
 					isSearchingFriendRequests={isSearching}
 					isAccepting={isAcceptingRequester}
 					isRejecting={isRejectingRequester}
+					isRemovingRequester={isRemovingRequester}
 					errorMessage={errorMessage}
 					onAcceptRequest={(requesterId) => {
 						void acceptRequest(requesterId);

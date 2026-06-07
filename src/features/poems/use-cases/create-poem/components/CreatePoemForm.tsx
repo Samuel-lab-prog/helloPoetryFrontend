@@ -165,7 +165,7 @@ export function CreatePoemForm() {
 				handleSubmitFn={handleSubmit}
 				buttonLabel='Create Poem'
 				buttonVariant='surface'
-				cardProps={{ w: 'full', maxW: '4xl', gap: 3 }}
+				cardProps={{ w: 'full', maxW: '3xl', gap: 2 }}
 				renderers={{
 					dedication: ({ control, errors }) => (
 						<>
@@ -187,15 +187,15 @@ export function CreatePoemForm() {
 				}}
 			/>
 
-			<Heading as='h2' textStyle='h3' mt={10}>
+			<Heading as='h2' textStyle='h4' mt={8}>
 				Preview
 			</Heading>
 
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
-						<Box textStyle='small' color='gray.500'>
-							Fill out the form to see the poem preview
-						</Box>
+							<Box textStyle='smaller' color='gray.500'>
+								Fill out the form to see the poem preview
+							</Box>
 				) : (
 					<>
 						<PoemHeader
@@ -217,7 +217,7 @@ export function CreatePoemForm() {
 							mt={10}
 							whiteSpace='pre-wrap'
 							wordBreak='break-word'
-							textStyle='small'
+							textStyle='smaller'
 						>
 							<MarkdownRenderer content={previewPoem.content} />
 						</Box>

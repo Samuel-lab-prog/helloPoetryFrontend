@@ -40,7 +40,7 @@ export function ProfileEditFields({
 	onPickAvatar,
 }: ProfileEditFieldsProps) {
 	return (
-		<Flex direction='column' gap={2} w='full'>
+		<Flex direction='column' gap={1.5} w='full'>
 			<Input
 				value={nameDraft}
 				onChange={(e) => onChangeName(e.target.value)}
@@ -76,12 +76,12 @@ export function ProfileEditFields({
 				</Text>
 			)}
 
-			<Flex direction='column' gap={2} w='full'>
+			<Flex direction='column' gap={1.5} w='full'>
 				<Text textStyle='smaller' color='pink.200'>
 					Avatar (file)
 				</Text>
-				<Flex align='center' gap={3} wrap='wrap'>
-					<Button as='label' size='sm' variant='outlinePurple' cursor='pointer'>
+				<Flex align='center' gap={2} wrap='wrap'>
+					<Button as='label' size={{ base: 'xs', md: 'sm' }} variant='outlinePurple' cursor='pointer'>
 						Choose file
 						<VisuallyHidden>
 							<Input
@@ -112,7 +112,7 @@ export function ProfileEditFields({
 				value={bioDraft}
 				onChange={(e) => onChangeBio(e.target.value)}
 				placeholder='Bio'
-				rows={4}
+				rows={3}
 				w='full'
 				{...profileInputStyles}
 			/>

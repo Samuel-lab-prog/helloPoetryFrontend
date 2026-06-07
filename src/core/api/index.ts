@@ -23,6 +23,7 @@ export * from './notifications/types';
 export * from './poems/endpoints';
 export * from './poems/keys';
 export * from './poems/types';
+export * from './optimistic';
 export * from './users/endpoints';
 export * from './users/keys';
 export * from './users/types';

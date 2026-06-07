@@ -1,13 +1,7 @@
 import { Surface } from '@BaseComponents';
-import { Badge, Heading, Tabs, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-
-import { BanUserForm } from './BanUserForm';
-import { RemovePoemForm } from './RemovePoemForm';
+import { Badge, Heading, Tabs, Text, VStack } from '@chakra-ui/react';
 
 export function ActionsTab() {
-	const authClient = useAuthClientStore((state) => state.authClient);
-
 	return (
 		<Tabs.Content value='actions'>
 			<Surface variant='panel'>
@@ -16,23 +10,11 @@ export function ActionsTab() {
 						Administrative actions
 					</Heading>
 					<Text textStyle='small' color='pink.100'>
-						Ban users directly from moderation.
+						Temporarily unavailable for maintenance.
 					</Text>
-					<Wrap>
-						<WrapItem>
-							<Badge colorPalette='pink' variant='subtle'>
-								Ban user
-							</Badge>
-						</WrapItem>
-						<WrapItem>
-							<Badge colorPalette='pink' variant='subtle'>
-								Remove poem
-							</Badge>
-						</WrapItem>
-					</Wrap>
-
-					<BanUserForm authClient={authClient} />
-					<RemovePoemForm />
+					<Badge colorPalette='pink' variant='subtle'>
+						Maintenance
+					</Badge>
 				</VStack>
 			</Surface>
 		</Tabs.Content>

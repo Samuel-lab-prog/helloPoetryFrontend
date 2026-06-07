@@ -30,7 +30,7 @@ export function ProfileOverviewSection({
 }: ProfileOverviewSectionProps) {
 	const profileInputStyles = {
 		w: 'full',
-		textStyle: 'small',
+		textStyle: 'smaller',
 		transition: 'all 0.22s ease',
 		bg: 'rgba(255, 255, 255, 0.03)',
 		borderColor: 'border',
@@ -118,7 +118,7 @@ export function ProfileOverviewSection({
 	return (
 		<>
 			<Surface
-				p={{ base: 5, md: 6 }}
+				p={{ base: 4, md: 6 }}
 				variant='gradient'
 				bg='linear-gradient(145deg, rgba(122,19,66,0.18) 0%, rgba(27,0,25,0.34) 100%)'
 				position='relative'
@@ -127,13 +127,13 @@ export function ProfileOverviewSection({
 					justify='space-between'
 					align='start'
 					direction={{ base: 'column', md: 'row' }}
-					gap={4}
+					gap={{ base: 3, md: 4 }}
 				>
-					<VStack align='start' gap={2} flex='1' w='full'>
+					<VStack align='start' gap={1.5} flex='1' w='full'>
 						<Avatar.Root
-							size='2xl'
-							w={{ base: '6rem', md: '8rem' }}
-							h={{ base: '6rem', md: '8rem' }}
+							size={{ base: 'xl', md: '2xl' }}
+							w={{ base: '4.75rem', md: '8rem' }}
+							h={{ base: '4.75rem', md: '8rem' }}
 						>
 							<Avatar.Image src={displayAvatarUrl} />
 							<Avatar.Fallback name={profile.name} />
@@ -161,7 +161,7 @@ export function ProfileOverviewSection({
 
 					<Flex
 						direction='column'
-						gap={2}
+						gap={1.5}
 						w={{ base: 'full', md: 'auto' }}
 						position={{ base: 'static', md: 'absolute' }}
 						top={{ md: 5 }}

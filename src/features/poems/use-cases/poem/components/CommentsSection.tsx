@@ -103,7 +103,7 @@ export const CommentsSection = memo(function CommentsSection({
 
 	return (
 		<Box mt={10}>
-			<Heading as='h2' textStyle='h3' mb={4}>
+			<Heading as='h2' textStyle={{ base: 'h4', md: 'h3' }} mb={4}>
 				Comments
 			</Heading>
 
@@ -114,6 +114,8 @@ export const CommentsSection = memo(function CommentsSection({
 					placeholder='Write a comment (1-3000 characters)'
 					rows={4}
 					maxLength={3000}
+					textStyle='body'
+					_placeholder={{ fontSize: 'small', color: 'fg.muted' }}
 					borderColor={commentError ? 'red.400' : undefined}
 					_focusVisible={commentError ? { borderColor: 'red.400' } : undefined}
 					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
@@ -143,17 +145,17 @@ export const CommentsSection = memo(function CommentsSection({
 					</IconButton>
 				</Flex>
 				{!poemIsCommentable && (
-					<Text textStyle='small' color='pink.200'>
+					<Text textStyle='smaller' color='pink.200'>
 						Comments are disabled for this poem.
 					</Text>
 				)}
 				{!isAuthenticated && (
-					<Text textStyle='small' color='pink.200'>
+					<Text textStyle='smaller' color='pink.200'>
 						Sign in to comment.
 					</Text>
 				)}
 				{commentError && (
-					<Text textStyle='small' color='red.400'>
+					<Text textStyle='smaller' color='red.400'>
 						{commentError}
 					</Text>
 				)}
@@ -164,7 +166,7 @@ export const CommentsSection = memo(function CommentsSection({
 					isLoading={isLoadingComments}
 					isError={isCommentsError}
 					isEmpty={comments.length === 0}
-					loadingElement={<Text textStyle='body'>Loading comments...</Text>}
+					loadingElement={<Text textStyle='smaller'>Loading comments...</Text>}
 					errorElement={
 						<ErrorStateCard
 							eyebrow='COMMENTS UNAVAILABLE'
@@ -176,9 +178,9 @@ export const CommentsSection = memo(function CommentsSection({
 					}
 					emptyElement={
 						!isAuthenticated ? (
-							<Text textStyle='body'>Sign in to see the comments.</Text>
+							<Text textStyle='smaller'>Sign in to see the comments.</Text>
 						) : (
-							<Text textStyle='body'>Be the first to comment.</Text>
+							<Text textStyle='smaller'>Be the first to comment.</Text>
 						)
 					}
 				>
@@ -190,7 +192,7 @@ export const CommentsSection = memo(function CommentsSection({
 					<Flex justify='center' mt={4}>
 						<Button
 							variant='outlinePurple'
-							size='sm'
+							size='xs'
 							onClick={() => {
 								void onLoadMoreComments();
 							}}

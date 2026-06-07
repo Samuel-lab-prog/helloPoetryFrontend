@@ -1,3 +1,4 @@
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
 import type { AuthorProfileType } from '@features/poems/public/types';
@@ -14,20 +15,18 @@ export function useCancelFriendRequest() {
 		mutationFn: (authorId: number) => friendsActionsPort.cancelFriendRequest(authorId),
 		onMutate: async (authorId) => {
 			const queryKey = usersCachePort.getProfileKey(authorId);
-			await queryClient.cancelQueries({ queryKey });
-			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
+			const previousProfile = await snapshotQueryData<AuthorProfileType>(queryClient, queryKey);
 
-			if (previousProfile)
+			if (previousProfile.data)
 				queryClient.setQueryData<AuthorProfileType>(queryKey, {
-					...previousProfile,
+					...previousProfile.data,
 					isFriendRequester: false,
 				});
 
 			return { previousProfile, queryKey };
 		},
 		onError: (_error, _authorId, context) => {
-			if (context?.previousProfile)
-				queryClient.setQueryData(context.queryKey, context.previousProfile);
+			restoreSnapshot(queryClient, context?.previousProfile);
 		},
 		onSuccess: (_, authorId) => {
 			void eventBus.publish('friendRequestCanceled', {

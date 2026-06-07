@@ -1,7 +1,7 @@
 import { interactions } from '@Api/interactions/endpoints';
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
 import type { FullPoem } from '@features/poems/public/types';
-import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
@@ -33,46 +33,28 @@ export function usePoemLike(poemId: number) {
 	const likeMutation = useMutation({
 		mutationFn: () => interactions.likePoem.mutate(String(poemId)),
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: poemKey });
-			const previousPoem = queryClient.getQueryData<FullPoem>(poemKey);
+			const previousPoem = await snapshotQueryData<FullPoem>(queryClient, poemKey);
 			optimisticUpdate(true);
-			return { previousPoem, nextLiked: true };
+			return previousPoem;
 		},
-		onSuccess: () =>
-			eventBus.publish('poemLiked', {
-				poemId,
-				liked: true,
-				likedAt: new Date().toISOString(),
-			}),
 		onError: (error, _variables, context) => {
 			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
-			if (context?.previousPoem) {
-				queryClient.setQueryData(poemKey, context.previousPoem);
-			}
+			restoreSnapshot(queryClient, context);
 		},
 	});
 
 	const unlikeMutation = useMutation({
 		mutationFn: () => interactions.unlikePoem.mutate(String(poemId)),
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: poemKey });
-			const previousPoem = queryClient.getQueryData<FullPoem>(poemKey);
+			const previousPoem = await snapshotQueryData<FullPoem>(queryClient, poemKey);
 			optimisticUpdate(false);
-			return { previousPoem, nextLiked: false };
+			return previousPoem;
 		},
-		onSuccess: () =>
-			eventBus.publish('poemLiked', {
-				poemId,
-				liked: false,
-				likedAt: new Date().toISOString(),
-			}),
 		onError: (error, _variables, context) => {
 			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
-			if (context?.previousPoem) {
-				queryClient.setQueryData(poemKey, context.previousPoem);
-			}
+			restoreSnapshot(queryClient, context);
 		},
 	});
 

@@ -39,7 +39,6 @@ export const PoemActions = memo(function PoemActions({
 				variant='solidPink'
 				colorPalette={likedPoem ? 'pink' : 'gray'}
 				minW='auto'
-				loading={isUpdatingLike}
 				disabled={isUpdatingLike}
 				boxShadow={likedPoem ? '0 0 0 1px rgba(255, 92, 145, 0.6)' : undefined}
 				_hover={
@@ -63,7 +62,6 @@ export const PoemActions = memo(function PoemActions({
 				px={{ base: 2.5, md: 3.5 }}
 				variant='solidPink'
 				minW='auto'
-				loading={isSavingPoem}
 				disabled={isSavingPoem}
 				onClick={() => {
 					if (isSavingPoem) return;

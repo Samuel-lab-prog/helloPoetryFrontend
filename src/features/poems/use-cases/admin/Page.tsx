@@ -35,8 +35,8 @@ export function AdminPage() {
 			gap={6}
 			w='full'
 		>
-			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Heading as='h1' textStyle='h3' mb={2}>
+			<Flex as='section' direction='column' align='center' justify='center' w='full' gap={3}>
+				<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={0}>
 					Admin Panel
 				</Heading>
 			</Flex>
@@ -50,12 +50,10 @@ export function AdminPage() {
 					maxW='4xl'
 				>
 					<Tabs.List
-						flexWrap='wrap'
+						display='grid'
+						gridTemplateColumns={{ base: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }}
 						gap={2}
-						w='fit-content'
-						minW='280px'
-						mx='auto'
-						justifyContent='center'
+						w='full'
 						bg='rgba(255, 143, 189, 0.12)'
 						border='1px solid'
 						borderColor='purple.700'
@@ -66,7 +64,8 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='create'
 							textStyle='small'
-							px={3.5}
+							px={3}
+							py={2}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -75,7 +74,8 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='update'
 							textStyle='small'
-							px={3.5}
+							px={3}
+							py={2}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -84,7 +84,8 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='delete'
 							textStyle='small'
-							px={3.5}
+							px={3}
+							py={2}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -92,30 +93,15 @@ export function AdminPage() {
 						</Tabs.Trigger>
 					</Tabs.List>
 
-					<Flex direction='column' w='full' mt={6}>
+					<Flex direction='column' w='full' mt={5}>
 						<Tabs.Content value='create'>
-							<>
-								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
-									Create Poem
-								</Heading>
-								<CreatePoemForm />
-							</>
+							<CreatePoemForm />
 						</Tabs.Content>
 						<Tabs.Content value='update'>
-							<>
-								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
-									Update Poem
-								</Heading>
-								<UpdatePoemForm />
-							</>
+							<UpdatePoemForm />
 						</Tabs.Content>
 						<Tabs.Content value='delete'>
-							<>
-								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
-									Delete Poem
-								</Heading>
-								<DeletePoemForm />
-							</>
+							<DeletePoemForm />
 						</Tabs.Content>
 					</Flex>
 				</Tabs.Root>

@@ -18,11 +18,12 @@ export function PoemModerationPage() {
 	type Tab = {
 		value: string;
 		label: string;
+		disabled?: boolean;
 	};
 
 	const tabs: Tab[] = [
 		{ value: 'pending', label: 'Pending poems' },
-		{ value: 'actions', label: 'Administrative actions' },
+		{ value: 'actions', label: 'Administrative actions', disabled: true },
 	];
 
 	if (!canAccess) return <UnauthorizedPage onBack={() => navigate('/')} />;
@@ -70,6 +71,7 @@ export function PoemModerationPage() {
 								<Tabs.Trigger
 									key={tab.value}
 									value={tab.value}
+									disabled={tab.disabled}
 									flex='1 1 220px'
 									minH='12'
 									px={4}

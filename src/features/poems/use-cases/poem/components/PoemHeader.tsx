@@ -17,12 +17,12 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 
 	return (
 		<>
-			<Heading as='h1' textStyle='h3' mb={[2, 3]}>
+			<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={[2, 3]}>
 				{title}
 			</Heading>
 
 			{excerpt && (
-				<Text textStyle='small' my={[2, 3]}>
+				<Text textStyle='smaller' my={[2, 3]}>
 					{excerpt}
 				</Text>
 			)}
@@ -34,12 +34,12 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 			</Flex>
 
 			<VStack align='start'>
-				<Text fontStyle='italic' textStyle='small'>
+				<Text fontStyle='italic' textStyle='smaller'>
 					Created on {formatDate(createdAt)}
 				</Text>
 
 				{updatedAt !== createdAt && (
-					<Text textStyle='small' fontStyle='italic'>
+					<Text textStyle='smaller' fontStyle='italic'>
 						Last updated on {formatDate(updatedAt)}
 					</Text>
 				)}

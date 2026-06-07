@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Flex, Heading, Icon, Text } from '@chakra-ui/react';
+import { Avatar, Button, Flex, Heading, Icon, Text } from '@chakra-ui/react';
 import type { AuthorProfileType } from '@features/poems/public/types';
 
 import type { RelationStatus } from './utils';
@@ -25,55 +25,57 @@ export function AuthorProfileCard({
 }: AuthorProfileCardProps) {
 	return (
 		<Flex
-			p={{ base: 5, md: 6 }}
+			p={{ base: 3.5, md: 5 }}
 			border='1px solid'
 			borderColor='purple.700'
 			borderRadius='xl'
 			bg='rgba(255, 255, 255, 0.02)'
 			backdropFilter='blur(4px)'
-			gap={6}
-			align={{ base: 'start', md: 'center' }}
-			direction={{ base: 'column', md: 'row' }}
+			gap={3}
+			align='start'
+			direction='column'
 			animationName='slide-from-bottom, fade-in'
 			animationDuration='320ms'
 			animationTimingFunction='ease-out'
 			animationFillMode='backwards'
 			animationDelay='30ms'
 		>
-			<Avatar.Root size='xl' w={{ base: '5.5rem', md: '7rem' }} h={{ base: '5.5rem', md: '7rem' }}>
-				<Avatar.Image src={author.avatarUrl ?? undefined} />
-				<Avatar.Fallback name={author.name} />
-			</Avatar.Root>
+			<Flex align='start' gap={3} w='full'>
+				<Avatar.Root size='lg' w={{ base: '4.75rem', md: '6rem' }} h={{ base: '4.75rem', md: '6rem' }}>
+					<Avatar.Image src={author.avatarUrl ?? undefined} />
+					<Avatar.Fallback name={author.name} />
+				</Avatar.Root>
 
-			<Flex direction='column' gap={1}>
-				<Heading as='h1' textStyle='h3'>
-					{author.name}
-				</Heading>
-				<Text textStyle='smaller' color='pink.200'>
-					@{author.nickname}
-				</Text>
-				<Text textStyle='small'>{author.bio || 'No bio'}</Text>
-				<Text textStyle='smaller' color='pink.200'>
-					Poems: {author.stats.poemsCount} | Comments: {author.stats.commentsCount} | Friends:{' '}
-					{author.stats.friendsCount}
-				</Text>
+				<Flex direction='column' gap={0.75} minW={0} flex='1'>
+					<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }}>
+						{author.name}
+					</Heading>
+					<Text textStyle='smaller' color='pink.200'>
+						@{author.nickname}
+					</Text>
+					<Text textStyle='smaller'>{author.bio || 'No bio'}</Text>
+					<Text textStyle='smaller' color='pink.200'>
+						Poems: {author.stats.poemsCount} | Comments: {author.stats.commentsCount} | Friends:{' '}
+						{author.stats.friendsCount}
+					</Text>
+				</Flex>
+			</Flex>
 
-				<Flex mt={2} direction='column' gap={2} align='start'>
-					<Box minH='24px'>
-						{relationStatus && (
-							<Flex align='center' gap={2}>
-								<Icon as={relationStatus.icon} boxSize={4.5} color={relationStatus.color} />
-								<Text textStyle='smaller' color={relationStatus.color} truncate>
-									{relationStatus.text}
-								</Text>
-							</Flex>
-						)}
-					</Box>
+			<Flex direction='column' gap={1} align='start' w='full'>
+				{relationStatus && (
+					<Flex align='center' gap={2}>
+						<Icon as={relationStatus.icon} boxSize={4} color={relationStatus.color} />
+						<Text textStyle='smaller' color={relationStatus.color} truncate>
+							{relationStatus.text}
+						</Text>
+					</Flex>
+				)}
 
-					<Flex minH='32px' w='full' minW={0} gap={2} direction={{ base: 'column', sm: 'row' }}>
+				{(action?.label || action?.secondaryLabel) && (
+					<Flex w='full' minW={0} gap={2} direction={{ base: 'column', sm: 'row' }}>
 						{action?.label ? (
 							<Button
-								size='sm'
+								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
 								onClick={action.onClick}
 								loading={action.isLoading}
@@ -89,7 +91,7 @@ export function AuthorProfileCard({
 						) : null}
 						{action?.secondaryLabel ? (
 							<Button
-								size='sm'
+								size={{ base: 'xs', md: 'sm' }}
 								variant='danger'
 								onClick={action.secondaryOnClick}
 								justifyContent='center'
@@ -102,13 +104,13 @@ export function AuthorProfileCard({
 							</Button>
 						) : null}
 					</Flex>
+				)}
 
-					{errorMessage && (
-						<Text textStyle='smaller' color='red.400'>
-							{errorMessage}
-						</Text>
-					)}
-				</Flex>
+				{errorMessage && (
+					<Text textStyle='smaller' color='red.400'>
+						{errorMessage}
+					</Text>
+				)}
 			</Flex>
 		</Flex>
 	);

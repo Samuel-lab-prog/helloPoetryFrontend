@@ -1,3 +1,4 @@
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
 import type { AuthorProfileType } from '@features/poems/public/types';
@@ -13,12 +14,11 @@ export function useSendFriendRequest() {
 		mutationFn: (authorId: number) => friendsActionsPort.sendFriendRequest(authorId),
 		onMutate: async (authorId) => {
 			const queryKey = usersCachePort.getProfileKey(authorId);
-			await queryClient.cancelQueries({ queryKey });
-			const previousProfile = queryClient.getQueryData<AuthorProfileType>(queryKey);
+			const previousProfile = await snapshotQueryData<AuthorProfileType>(queryClient, queryKey);
 
-			if (previousProfile) {
+			if (previousProfile.data) {
 				queryClient.setQueryData<AuthorProfileType>(queryKey, {
-					...previousProfile,
+					...previousProfile.data,
 					isFriendRequester: true,
 					hasIncomingFriendRequest: false,
 				});
@@ -27,9 +27,7 @@ export function useSendFriendRequest() {
 			return { previousProfile, queryKey };
 		},
 		onError: (_error, _authorId, context) => {
-			if (context?.previousProfile) {
-				queryClient.setQueryData(context.queryKey, context.previousProfile);
-			}
+			restoreSnapshot(queryClient, context?.previousProfile);
 		},
 		onSuccess: (_, authorId) => {
 			queryClient.invalidateQueries({ queryKey: usersCachePort.getProfileKey(authorId) });

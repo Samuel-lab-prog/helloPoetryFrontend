@@ -34,7 +34,6 @@ export function HomeFeed({ poems, isLoading, isError }: HomeFeedProps) {
 					<Box
 						borderTop='1px solid'
 						borderColor='purple.700'
-						p={4}
 						textStyle='body'
 						color='pink.200'
 					>

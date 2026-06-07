@@ -29,7 +29,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 			pt={embedded ? 5 : 4}
 			px={embedded ? 0 : 4}
 			pb={embedded ? 0 : 4}
-			gap={4}
+			gap={3}
 			direction='column'
 			borderTop={embedded ? '1px solid' : undefined}
 			border={embedded ? undefined : '1px solid'}
@@ -39,7 +39,7 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 		>
 			<Flex
 				w='full'
-				gap={3}
+				gap={2.5}
 				align={{ base: 'center', md: 'center' }}
 				direction={{ base: 'row', md: 'row' }}
 			>
@@ -49,10 +49,10 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 				</Avatar.Root>
 
 				<Flex direction='column' gap={1} flex='1' minW={0}>
-					<Text textStyle='small' color='pink.200'>
+					<Text textStyle='smaller' color='pink.200'>
 						Author
 					</Text>
-					<Text textStyle='body' wordBreak='break-word'>
+					<Text textStyle='smaller' fontWeight='semibold' wordBreak='break-word'>
 						{author.name}
 					</Text>
 					<Link

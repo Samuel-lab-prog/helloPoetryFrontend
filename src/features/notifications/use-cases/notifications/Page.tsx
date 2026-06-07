@@ -1,6 +1,14 @@
 import { AsyncState, ErrorStateCard } from '@BaseComponents';
-import { Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import {
+	Box,
+	Flex,
+	Heading,
+	IconButton,
+	Menu,
+	Portal,
+	Text,
+} from '@chakra-ui/react';
+import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 
 import { LoadingNotificationsSkeletons } from './components/LoadingNotificationsSkeletons';
@@ -19,7 +27,6 @@ export function NotificationsPage() {
 		deleteNotification,
 	} = useNotificationsPanel(false);
 
-	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const isRemoving = (id: number) => removingIds.has(id);
 	const scheduleRemove = async (id: number): Promise<void> => {
 		if (removingIds.has(id)) return;
@@ -58,31 +65,43 @@ export function NotificationsPage() {
 					<Heading as='h1' textStyle='h3'>
 						Notifications
 					</Heading>
-					<Badge
-						size='sm'
-						colorPalette='pink'
-						variant='subtle'
-						fontSize={{ base: '2xs', md: 'xs' }}
-						px={{ base: 1.5, md: 2 }}
-						py={{ base: 0.5, md: 1 }}
-					>
-						{unreadCount} Unread
-					</Badge>
-				</Flex>
-
-				<Flex mb={6} gap={2} wrap='wrap'>
-					<Button
-						size={{ base: 'xs', md: 'sm' }}
-						w='auto'
-						variant='solidPink'
-						onClick={() => {
-							void markAllAsRead();
-						}}
-						disabled={notifications.length === 0}
-						loading={isMarkingAllAsRead}
-					>
-						Mark all as read
-					</Button>
+					<Menu.Root positioning={{ placement: 'bottom-end' }}>
+						<Menu.Trigger asChild>
+							<IconButton
+								aria-label='Open notification actions'
+								size={{ base: 'xs', md: 'sm' }}
+								variant='solidPink'
+								disabled={notifications.length === 0 || isMarkingAllAsRead}
+							>
+								<EllipsisVertical size={16} />
+							</IconButton>
+						</Menu.Trigger>
+						<Portal>
+							<Menu.Positioner>
+								<Menu.Content
+									bg='rgba(27, 0, 25, 0.98)'
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='lg'
+									backdropFilter='blur(6px)'
+									minW='220px'
+									p={1}
+								>
+									<Menu.Item
+										value='mark-all-read'
+										color='pink.100'
+										_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+										onClick={() => {
+											void markAllAsRead();
+										}}
+										disabled={notifications.length === 0}
+									>
+										Mark all as read
+									</Menu.Item>
+								</Menu.Content>
+							</Menu.Positioner>
+						</Portal>
+					</Menu.Root>
 				</Flex>
 
 				<AsyncState

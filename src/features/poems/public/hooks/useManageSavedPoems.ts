@@ -1,6 +1,7 @@
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -22,9 +23,8 @@ export function useSavedPoems(enabled = true) {
 		mutationFn: (poemId: number) => poems.savePoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
 			setUpdatingSavedPoemId(poemId);
-			await queryClient.cancelQueries({ queryKey: savedKey });
-			const previous = queryClient.getQueryData<SavedPoem[]>(savedKey) ?? [];
-			if (previous.some((poem) => poem.id === poemId)) return { previous };
+			const previous = await snapshotQueryData<SavedPoem[]>(queryClient, savedKey);
+			if ((previous.data ?? []).some((poem) => poem.id === poemId)) return previous;
 			const poem = queryClient.getQueryData<FullPoem>(poemKeys.byId(String(poemId)));
 			const optimistic: SavedPoem = {
 				id: poemId,
@@ -38,15 +38,13 @@ export function useSavedPoems(enabled = true) {
 					avatarUrl: null,
 				},
 			};
-			queryClient.setQueryData<SavedPoem[]>(savedKey, [...previous, optimistic]);
-			return { previous };
+			queryClient.setQueryData<SavedPoem[]>(savedKey, [...(previous.data ?? []), optimistic]);
+			return previous;
 		},
 		onError: (error, _variables, context) => {
 			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
-			if (context?.previous) {
-				queryClient.setQueryData(savedKey, context.previous);
-			}
+			restoreSnapshot(queryClient, context);
 		},
 		onSettled: (_data, _error, poemId) => {
 			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));
@@ -58,20 +56,17 @@ export function useSavedPoems(enabled = true) {
 		mutationFn: (poemId: number) => poems.removeSavedPoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
 			setUpdatingSavedPoemId(poemId);
-			await queryClient.cancelQueries({ queryKey: savedKey });
-			const previous = queryClient.getQueryData<SavedPoem[]>(savedKey) ?? [];
+			const previous = await snapshotQueryData<SavedPoem[]>(queryClient, savedKey);
 			queryClient.setQueryData<SavedPoem[]>(
 				savedKey,
-				previous.filter((poem) => poem.id !== poemId),
+				(previous.data ?? []).filter((poem) => poem.id !== poemId),
 			);
-			return { previous };
+			return previous;
 		},
 		onError: (error, _variables, context) => {
 			const appError = error as unknown as AppErrorType;
 			if (appError?.statusCode === 409) return;
-			if (context?.previous) {
-				queryClient.setQueryData(savedKey, context.previous);
-			}
+			restoreSnapshot(queryClient, context);
 		},
 		onSettled: (_data, _error, poemId) => {
 			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));

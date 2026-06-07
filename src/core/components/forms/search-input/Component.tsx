@@ -33,6 +33,7 @@ export function SearchInput({
 				{label}
 			</Field.Label>
 			<Input
+				w='full'
 				value={value}
 				padding={2}
 				onChange={(event) => onValueChange(event.target.value)}

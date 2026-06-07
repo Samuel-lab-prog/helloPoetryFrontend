@@ -39,7 +39,7 @@ export function PoetsSearchView() {
 			maxW='2xl'
 			mx='auto'
 		>
-			<Flex as='section' direction='column' w='full' mb={4}>
+			<Box as='section' w='full' >
 				<SearchInput
 					label='Search poets'
 					value={searchNickname}
@@ -48,7 +48,7 @@ export function PoetsSearchView() {
 					placeholder='Search by nickname'
 					debounceMs={DEBOUNCE_DELAY_MS}
 				/>
-			</Flex>
+			</Box>
 
 			<AsyncState
 				isLoading={showSkeletons}
@@ -70,7 +70,7 @@ export function PoetsSearchView() {
 					</Text>
 				}
 			>
-				<Flex direction='column' gap={3} w='full' mb={6}>
+				<Flex direction='column' gap={3} w='full' mb={6} mt={4}>
 					{visiblePoets.map((poet, index) => (
 						<Box
 							key={poet.id}
