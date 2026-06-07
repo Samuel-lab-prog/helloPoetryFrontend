@@ -32,7 +32,7 @@ export function DynamicForm<T extends FieldValues>({
 			{generalError && (
 				<Text
 					color='red.500'
-					fontSize='sm'
+					textStyle='body'
 					mb={2}
 					animationName='shake-x, fade-in'
 					animationDuration='240ms'

@@ -93,12 +93,10 @@ export function AuthorPage() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			direction='column'
 			align='center'
-			py={12}
-			px={[4, 4, 8]}
-			gap={8}
+			gap={6}
 		>
 			<Box w='full' maxW='2xl'>
 				{!isValidAuthorId ? (

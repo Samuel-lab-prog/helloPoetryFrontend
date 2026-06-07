@@ -25,9 +25,9 @@ export function PoemContent({ content }: PoemContentProps) {
 
 	return (
 		<Box
-			textStyle='body'
-			fontSize={{ base: '1.05rem', md: '1.2rem' }}
-			lineHeight={{ base: '1.9', md: '2.1' }}
+			textStyle='small'
+			fontSize={{ base: '1rem', md: '1.1rem' }}
+			lineHeight={{ base: '1.8', md: '1.95' }}
 			letterSpacing='0.01em'
 			whiteSpace='pre-wrap'
 			textAlign='left'
@@ -51,7 +51,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h1: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h1' textStyle='h1' mt={8} mb={4}>
+								<Heading as='h1' textStyle='h2' mt={6} mb={3}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);
@@ -59,7 +59,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h2: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h2' textStyle='h2' mt={7} mb={3}>
+								<Heading as='h2' textStyle='h3' mt={5} mb={2.5}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);
@@ -67,7 +67,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h3: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h3' textStyle='h3' mt={6} mb={3}>
+								<Heading as='h3' textStyle='h4' mt={4} mb={2.5}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);
@@ -75,7 +75,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h4: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h4' textStyle='h4' mt={5} mb={2}>
+								<Heading as='h4' textStyle='h5' mt={4} mb={2}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);
@@ -83,7 +83,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h5: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h5' textStyle='h5' mt={4} mb={2}>
+								<Heading as='h5' textStyle='h6' mt={3} mb={2}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);
@@ -91,7 +91,7 @@ export function PoemContent({ content }: PoemContentProps) {
 						h6: ({ children }) => {
 							textAnimator.onBlockStart(children);
 							return (
-								<Heading as='h6' textStyle='h6' mt={4} mb={2}>
+								<Heading as='h6' textStyle='h6' mt={3} mb={2}>
 									{textAnimator.renderNode(children)}
 								</Heading>
 							);

@@ -7,19 +7,20 @@ export function RegisterPage() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			flex='1'
-			h='1/2'
+			minH={0}
 			direction='column'
 			align='center'
+			overflowY='auto'
+			scrollbarGutter='stable'
 		>
 			<Flex
 				as='section'
 				direction='column'
 				align='center'
 				justify='flex-start'
-				gap={4}
-				mt='0'
+				gap={5}
 				w='full'
 				maxW='md'
 			>
@@ -33,18 +34,20 @@ export function RegisterPage() {
 
 function PageHeader() {
 	return (
-		<Flex direction='column' align='center' mb={2} gap={1} textAlign='center'>
-			<Heading as='h1' textStyle='h1' color='accent'>
+		<Flex direction='column' align='center' mb={3} gap={1.5} textAlign='center'>
+			<Heading as='h1' textStyle='h3' color='accent'>
 				Create account
 			</Heading>
-			<Text variant='muted'>Fill in your details to create your account.</Text>
+			<Text textStyle='small' color='pink.100'>
+				Fill in your details to create your account.
+			</Text>
 		</Flex>
 	);
 }
 
 function PageFooter() {
 	return (
-		<Text mt={4} variant='muted' textAlign='center'>
+		<Text mt={4} mb={4} textStyle='small' color='pink.100' textAlign='center'>
 			Already have an account?{' '}
 			<Link asChild color='pink.300' textDecoration='underline'>
 				<NavLink to='/login'>Sign in</NavLink>

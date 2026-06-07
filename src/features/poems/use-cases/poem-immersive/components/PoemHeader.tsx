@@ -8,10 +8,10 @@ interface PoemHeaderProps {
 export function PoemHeader({ title, authorName }: PoemHeaderProps) {
 	return (
 		<>
-			<Heading as='h1' textStyle='h1' color='pink.300' mb={3} textAlign='center'>
+			<Heading as='h1' textStyle='h3' color='pink.300' mb={3} textAlign='center'>
 				{title}
 			</Heading>
-			<Text textStyle='smaller' color='pink.200' textAlign='center' mb={10}>
+			<Text textStyle='small' color='pink.200' textAlign='center' mb={8}>
 				by {authorName}
 			</Text>
 		</>

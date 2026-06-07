@@ -41,7 +41,7 @@ export function TagsField<T extends FieldValues>({
 	return (
 		<Field.Root required={required} invalid={!!error} w='full'>
 			<Field.Label
-				textStyle='small'
+				textStyle='smaller'
 				fontWeight='medium'
 				color={hasError ? 'error' : 'text'}
 				transition='color 0.22s ease'

@@ -5,18 +5,20 @@ import { LoginForm } from './components/LoginForm';
 
 function PageHeader() {
 	return (
-		<Flex direction='column' align='center' mb={4} gap={2} textAlign='center'>
-			<Heading as='h1' textStyle='h1' color='accent'>
+		<Flex direction='column' align='center' mb={3} gap={1.5} textAlign='center'>
+			<Heading as='h1' textStyle='h3' color='accent'>
 				Sign in
 			</Heading>
-			<Text variant='muted'>Enter your credentials to sign in.</Text>
+			<Text textStyle='small' color='pink.100'>
+				Enter your credentials to sign in.
+			</Text>
 		</Flex>
 	);
 }
 
 function PageFooter() {
 	return (
-		<Text mt={4} variant='muted' textAlign='center'>
+		<Text mt={4} textStyle='small' color='pink.100' textAlign='center'>
 			Don't have an account yet?{' '}
 			<Link asChild color='pink.300' textDecoration='underline'>
 				<NavLink to='/register'>Create account</NavLink>
@@ -29,20 +31,20 @@ export function LoginPage() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			flex='1'
 			minH={0}
 			direction='column'
 			align='center'
-			py={12}
-			px={[4, 4, 8]}
+			overflowY='auto'
+			scrollbarGutter='stable'
 		>
 			<Flex
 				as='section'
 				direction='column'
 				align='center'
 				justify='flex-start'
-				gap={6}
+				gap={5}
 				mt='0'
 				w='full'
 				maxW='md'

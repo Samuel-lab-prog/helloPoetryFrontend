@@ -63,7 +63,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 	return (
 		<Field.Root required={false} invalid={hasError} w='full'>
 			<Field.Label
-				textStyle='small'
+				textStyle='smaller'
 				fontWeight='medium'
 				color={hasError ? 'error' : 'text'}
 				transition='color 0.22s ease'
@@ -136,7 +136,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 								>
 									<Combobox.Input
 										placeholder={isLoading ? 'Loading users...' : 'Search users to dedicate to'}
-										textStyle='small'
+										textStyle='smaller'
 										color='text'
 										_placeholder={{ color: 'pink.200' }}
 									/>
@@ -177,7 +177,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 							</Combobox.Root>
 
 							<Flex mt={2} gap={2} wrap='wrap' align='center'>
-								<Text textStyle='small' color='pink.200'>
+								<Text textStyle='smaller' color='pink.200'>
 									Selected: {selectedUsers.length}/5
 								</Text>
 								{selectedUsers.map((user) => (

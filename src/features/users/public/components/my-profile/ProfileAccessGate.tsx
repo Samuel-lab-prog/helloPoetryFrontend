@@ -9,11 +9,11 @@ import { NavLink } from 'react-router-dom';
  */
 export function ProfileAccessGate() {
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Surface
 				w='full'
 				maxW='2xl'
-				p={{ base: 6, md: 8 }}
+				p={{ base: 5, md: 6 }}
 				variant='gradient'
 				bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
 			>
@@ -21,8 +21,8 @@ export function ProfileAccessGate() {
 					<Badge colorPalette='pink' variant='subtle'>
 						Profile
 					</Badge>
-					<Text textStyle='h2'>Sign in to view your profile</Text>
-					<Text textStyle='body' color='pink.100'>
+					<Text textStyle='h3'>Sign in to view your profile</Text>
+					<Text textStyle='small' color='pink.100'>
 						Track saved poems, friend requests, and your stats in one place.
 					</Text>
 					<HStack gap={3} wrap='wrap'>

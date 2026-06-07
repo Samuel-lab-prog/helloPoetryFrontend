@@ -1,10 +1,17 @@
 import { moderation } from '@Api/moderation/endpoints';
 import { moderationKeys } from '@Api/moderation/keys';
 import type { ModeratePoemBody } from '@Api/moderation/types';
+import { toaster } from '@BaseComponents';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+const EXIT_ANIMATION_MS = 220;
 
 export function usePoemModerationData(enabled: boolean) {
+	const [removingPoemIds, setRemovingPoemIds] = useState<Set<number>>(new Set());
+	const [hiddenPoemIds, setHiddenPoemIds] = useState<Set<number>>(new Set());
+	const removalTimersRef = useRef(new Map<number, number>());
+
 	const pendingQuery = useQuery({
 		queryKey: moderationKeys.pendingPoems(),
 		enabled,
@@ -16,25 +23,93 @@ export function usePoemModerationData(enabled: boolean) {
 		mutationFn: (payload: ModeratePoemBody) => moderation.moderatePoem.mutate(payload),
 	});
 
-	const pendingPoems = useMemo(() => pendingQuery.data ?? [], [pendingQuery.data]);
+	const pendingPoems = useMemo(
+		() => (pendingQuery.data ?? []).filter((poem) => !hiddenPoemIds.has(poem.id)),
+		[pendingQuery.data, hiddenPoemIds],
+	);
 
-	const handleModeration = useCallback(
-		(poemId: number, status: ModeratePoemBody['moderationStatus']) => {
-			if (moderateMutation.isPending) return;
-			void moderateMutation.mutateAsync({
-				poemId: String(poemId),
-				moderationStatus: status,
+	const clearRemovalTimer = useCallback((poemId: number) => {
+		const timer = removalTimersRef.current.get(poemId);
+		if (timer) {
+			window.clearTimeout(timer);
+			removalTimersRef.current.delete(poemId);
+		}
+	}, []);
+
+	const restorePoem = useCallback(
+		(poemId: number) => {
+			clearRemovalTimer(poemId);
+			setRemovingPoemIds((prev) => {
+				const next = new Set(prev);
+				next.delete(poemId);
+				return next;
+			});
+			setHiddenPoemIds((prev) => {
+				const next = new Set(prev);
+				next.delete(poemId);
+				return next;
 			});
 		},
-		[moderateMutation],
+		[clearRemovalTimer],
+	);
+
+	const scheduleHidePoem = useCallback(
+		(poemId: number) => {
+			clearRemovalTimer(poemId);
+			const timer = window.setTimeout(() => {
+				setHiddenPoemIds((prev) => new Set(prev).add(poemId));
+				setRemovingPoemIds((prev) => {
+					const next = new Set(prev);
+					next.delete(poemId);
+					return next;
+				});
+				removalTimersRef.current.delete(poemId);
+			}, EXIT_ANIMATION_MS);
+			removalTimersRef.current.set(poemId, timer);
+		},
+		[clearRemovalTimer],
+	);
+
+	useEffect(
+		() => () => {
+			removalTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+			removalTimersRef.current.clear();
+		},
+		[],
+	);
+
+	const handleModeration = useCallback(
+		async (poemId: number, status: ModeratePoemBody['moderationStatus']) => {
+			if (moderateMutation.isPending || removingPoemIds.has(poemId)) return;
+			setRemovingPoemIds((prev) => new Set(prev).add(poemId));
+
+			try {
+				await moderateMutation.mutateAsync({
+					poemId: String(poemId),
+					moderationStatus: status,
+				});
+				scheduleHidePoem(poemId);
+			} catch (error) {
+				restorePoem(poemId);
+				toaster.create({
+					type: 'error',
+					title: status === 'approved' ? 'Could not approve poem' : 'Could not reject poem',
+					description: error instanceof Error ? error.message : 'Try again later.',
+					closable: true,
+				});
+			}
+		},
+		[moderateMutation, removingPoemIds, restorePoem, scheduleHidePoem],
 	);
 
 	return {
 		pendingQuery,
 		pendingPoems,
-		isModerating: moderateMutation.isPending,
+		isModerating: moderateMutation.isPending || removingPoemIds.size > 0,
 		isModeratingPoem: (poemId: number) =>
-			moderateMutation.isPending && moderateMutation.variables?.poemId === String(poemId),
+			removingPoemIds.has(poemId) ||
+			(moderateMutation.isPending && moderateMutation.variables?.poemId === String(poemId)),
+		isRemovingPoem: (poemId: number) => removingPoemIds.has(poemId),
 		handleModeration,
 	};
 }

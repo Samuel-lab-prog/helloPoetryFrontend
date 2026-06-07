@@ -17,12 +17,10 @@ function PageLoader() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			direction='column'
 			align='center'
-			py={12}
-			px={[4, 4, 8]}
-			minH='40vh'
+			minH='32vh'
 			justify='center'
 		>
 			<Spinner size='lg' color='pink.300' />

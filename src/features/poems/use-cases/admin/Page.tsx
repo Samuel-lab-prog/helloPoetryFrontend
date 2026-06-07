@@ -29,16 +29,14 @@ export function AdminPage() {
 	return (
 		<Flex
 			as='main'
-			layerStyle='main'
+			layerStyle='mainPadded'
 			direction='column'
 			align='center'
-			py={12}
-			px={[4, 4, 8]}
-			gap={8}
+			gap={6}
 			w='full'
 		>
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Heading as='h1' textStyle='h2' mb={2}>
+				<Heading as='h1' textStyle='h3' mb={2}>
 					Admin Panel
 				</Heading>
 			</Flex>
@@ -68,7 +66,7 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='create'
 							textStyle='small'
-							px={4}
+							px={3.5}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -77,7 +75,7 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='update'
 							textStyle='small'
-							px={4}
+							px={3.5}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -86,7 +84,7 @@ export function AdminPage() {
 						<Tabs.Trigger
 							value='delete'
 							textStyle='small'
-							px={4}
+							px={3.5}
 							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
 							_selected={{ bg: 'pink.500', color: 'white' }}
 						>
@@ -97,7 +95,7 @@ export function AdminPage() {
 					<Flex direction='column' w='full' mt={6}>
 						<Tabs.Content value='create'>
 							<>
-								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
 									Create Poem
 								</Heading>
 								<CreatePoemForm />
@@ -105,7 +103,7 @@ export function AdminPage() {
 						</Tabs.Content>
 						<Tabs.Content value='update'>
 							<>
-								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
 									Update Poem
 								</Heading>
 								<UpdatePoemForm />
@@ -113,7 +111,7 @@ export function AdminPage() {
 						</Tabs.Content>
 						<Tabs.Content value='delete'>
 							<>
-								<Heading as='h2' textStyle='h2' mb={4} textAlign='center'>
+								<Heading as='h2' textStyle='h3' mb={4} textAlign='center'>
 									Delete Poem
 								</Heading>
 								<DeletePoemForm />

@@ -69,6 +69,7 @@ export function TagsInputControl({
 					borderColor={hasError ? 'error' : isFocused ? 'pink.300' : 'border'}
 					borderRadius='md'
 					px={2}
+					textStyle='smaller'
 					py={2}
 					minH='42px'
 					transition='all 0.22s ease'

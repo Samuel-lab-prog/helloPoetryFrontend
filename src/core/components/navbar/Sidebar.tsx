@@ -23,7 +23,7 @@ export function NavbarSidebar({
 			direction='column'
 			justify='space-between'
 			w='320px'
-			h='full'
+			h='100vh'
 			alignSelf='flex-start'
 			p={5}
 			borderRight='1px solid'

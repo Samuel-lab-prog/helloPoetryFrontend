@@ -25,7 +25,7 @@ export function AuthorProfileCard({
 }: AuthorProfileCardProps) {
 	return (
 		<Flex
-			p={6}
+			p={{ base: 5, md: 6 }}
 			border='1px solid'
 			borderColor='purple.700'
 			borderRadius='xl'
@@ -40,16 +40,16 @@ export function AuthorProfileCard({
 			animationFillMode='backwards'
 			animationDelay='30ms'
 		>
-			<Avatar.Root size='2xl' w={{ base: '6rem', md: '8rem' }} h={{ base: '6rem', md: '8rem' }}>
+			<Avatar.Root size='xl' w={{ base: '5.5rem', md: '7rem' }} h={{ base: '5.5rem', md: '7rem' }}>
 				<Avatar.Image src={author.avatarUrl ?? undefined} />
 				<Avatar.Fallback name={author.name} />
 			</Avatar.Root>
 
 			<Flex direction='column' gap={1}>
-				<Heading as='h1' textStyle='h2'>
+				<Heading as='h1' textStyle='h3'>
 					{author.name}
 				</Heading>
-				<Text textStyle='small' color='pink.200'>
+				<Text textStyle='smaller' color='pink.200'>
 					@{author.nickname}
 				</Text>
 				<Text textStyle='small'>{author.bio || 'No bio'}</Text>

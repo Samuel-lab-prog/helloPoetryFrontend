@@ -65,15 +65,15 @@ export function MyProfilePage() {
 
 	if (isLoggingOut) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
-				<Text textStyle='body'>Signing out...</Text>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+				<Text textStyle='small'>Signing out...</Text>
 			</Flex>
 		);
 	}
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -92,17 +92,15 @@ export function MyProfilePage() {
 		});
 	}
 
-	return (
-		<Flex
-			as='main'
-			layerStyle='main'
-			direction='column'
-			align='center'
-			py={12}
-			px={[4, 4, 8]}
-			w='full'
-			maxW='2xl'
-			mx='auto'
+		return (
+			<Flex
+				as='main'
+				layerStyle='mainPadded'
+				direction='column'
+				align='center'
+				w='full'
+				maxW='2xl'
+				mx='auto'
 		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />

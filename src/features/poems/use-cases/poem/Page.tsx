@@ -228,16 +228,16 @@ export function PoemPage() {
 
 	if (!isPoemIdValid) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<Box as='section' maxW='4xl' w='full'>
-					<Box textStyle='body'>Invalid poem ID.</Box>
+					<Box textStyle='small'>Invalid poem ID.</Box>
 				</Box>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Box as='section' maxW='2xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}
@@ -258,7 +258,7 @@ export function PoemPage() {
 					{poem && poemHeaderPoem && (
 						<>
 							<Box
-								p={[4, 6]}
+								p={{ base: 4, md: 5 }}
 								border='1px solid'
 								borderColor='purple.700'
 								borderRadius='2xl'
@@ -281,7 +281,7 @@ export function PoemPage() {
 								as='article'
 								display='flex'
 								mt={6}
-								p={[4, 6]}
+								p={{ base: 4, md: 5 }}
 								border='1px solid'
 								borderColor='purple.700'
 								borderRadius='xl'
@@ -309,8 +309,8 @@ export function PoemPage() {
 												asChild
 												size={{ base: 'sm', md: 'sm' }}
 												variant='outlinePurple'
-												px={{ base: 4, md: 4 }}
-												py={{ base: 2.5, md: 2.5 }}
+												px={{ base: 3.5, md: 4 }}
+												py={{ base: 2, md: 2.5 }}
 												bg='rgba(255, 255, 255, 0.04)'
 												borderColor='pink.400'
 												color='pink.50'
@@ -378,8 +378,8 @@ export function PoemPage() {
 					display='flex'
 				>
 					<Link
-						px={4}
-						py={2}
+						px={3.5}
+						py={1.5}
 						color='pink.100'
 						border='1px solid'
 						borderColor='purple.500'

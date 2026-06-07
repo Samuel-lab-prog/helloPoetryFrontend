@@ -29,7 +29,7 @@ export function MyProfileCollectionsPage() {
 
 	if (isMissingClient) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<ProfileAccessGate />
 			</Flex>
 		);
@@ -37,17 +37,17 @@ export function MyProfileCollectionsPage() {
 
 	if (isProfileLoading || !profile) {
 		return (
-			<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
-				<Text textStyle='body'>Loading profile...</Text>
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+				<Text textStyle='small'>Loading profile...</Text>
 			</Flex>
 		);
 	}
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 			<Box as='section' w='full' maxW='2xl'>
-				<Flex mb={8} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
-					<Heading as='h1' textStyle='h2'>
+				<Flex mb={6} align='center' justify='space-between' direction='row' gap={3} wrap='wrap'>
+					<Heading as='h1' textStyle='h3'>
 						All my collections
 					</Heading>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>

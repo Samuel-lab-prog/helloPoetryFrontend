@@ -187,15 +187,15 @@ export function CreatePoemForm() {
 				}}
 			/>
 
-			<Heading as='h2' textStyle='h2' mt={12}>
+			<Heading as='h2' textStyle='h3' mt={10}>
 				Preview
 			</Heading>
 
 			<Box as='section' maxW='4xl' w='full'>
 				{isEmptyPreview ? (
-					<Box textStyle='body' color='gray.500'>
-						Fill out the form to see the poem preview
-					</Box>
+						<Box textStyle='small' color='gray.500'>
+							Fill out the form to see the poem preview
+						</Box>
 				) : (
 					<>
 						<PoemHeader
@@ -214,7 +214,7 @@ export function CreatePoemForm() {
 						<Box
 							as='article'
 							textAlign='justify'
-							mt={50}
+							mt={10}
 							whiteSpace='pre-wrap'
 							wordBreak='break-word'
 							textStyle='small'

@@ -25,8 +25,8 @@ export function PoemContentCard({
 			isLoading={isLoading}
 			isError={isError}
 			isEmpty={!poem}
-			emptyElement={<Text textStyle='body'>Poem not found.</Text>}
-			errorElement={<Text textStyle='body'>Error loading the poem. Please try again.</Text>}
+			emptyElement={<Text textStyle='small'>Poem not found.</Text>}
+			errorElement={<Text textStyle='small'>Error loading the poem. Please try again.</Text>}
 			loadingElement={<LoadingPoemSkeleton variant='immersive' />}
 		>
 			{poem && (

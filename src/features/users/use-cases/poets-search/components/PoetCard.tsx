@@ -18,7 +18,7 @@ export function PoetCard({ poet }: PoetCardProps) {
 			asChild
 			display='block'
 			w='full'
-			pt={2}
+			pt={1.5}
 			pb={1}
 			transition='background 0.2s ease, border-color 0.2s ease'
 			_hover={{
@@ -29,7 +29,7 @@ export function PoetCard({ poet }: PoetCardProps) {
 			<NavLink to={`/authors/${poet.id}`}>
 				<Flex align='center' justify='space-between' gap={2}>
 					<Flex align='center' gap={3}>
-						<Avatar.Root size='lg'>
+						<Avatar.Root size={{ base: 'xs', md: 'md' }}>
 							<Avatar.Image src={poet.avatarUrl ?? undefined} />
 							<Avatar.Fallback name={poet.nickname} />
 						</Avatar.Root>

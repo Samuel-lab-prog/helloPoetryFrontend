@@ -12,10 +12,10 @@ export function ActionsTab() {
 		<Tabs.Content value='actions'>
 			<Surface variant='panel'>
 				<VStack align='start' gap={3}>
-					<Heading as='h2' textStyle='h3'>
+					<Heading as='h2' textStyle='h4'>
 						Administrative actions
 					</Heading>
-					<Text textStyle='body' color='pink.100'>
+					<Text textStyle='small' color='pink.100'>
 						Ban users directly from moderation.
 					</Text>
 					<Wrap>

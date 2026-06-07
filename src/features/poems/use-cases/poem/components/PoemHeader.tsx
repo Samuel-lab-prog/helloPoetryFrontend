@@ -17,12 +17,12 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 
 	return (
 		<>
-			<Heading as='h1' textStyle='h1' mb={[2, 3, 4]}>
+			<Heading as='h1' textStyle='h3' mb={[2, 3]}>
 				{title}
 			</Heading>
 
 			{excerpt && (
-				<Text textStyle='body' my={[2, 3, 4]}>
+				<Text textStyle='small' my={[2, 3]}>
 					{excerpt}
 				</Text>
 			)}

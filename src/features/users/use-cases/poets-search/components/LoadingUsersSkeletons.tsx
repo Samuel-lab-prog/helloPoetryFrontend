@@ -13,7 +13,7 @@ export const LoadingUsersSkeletons = (
 				_first={{ borderTop: 'none' }}
 			>
 				<Flex align='center' gap={3}>
-					<Skeleton boxSize='12' borderRadius='full' />
+					<Skeleton boxSize={{ base: '8', md: '12' }} borderRadius='full' />
 					<Flex direction='column' gap={2}>
 						<Skeleton height='12px' width='160px' />
 						<Skeleton height='12px' width='110px' />

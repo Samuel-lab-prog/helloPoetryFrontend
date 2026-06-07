@@ -16,10 +16,10 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 	return (
 		<>
 			<Flex align='center' justify='space-between' gap={3} mb={4} wrap='wrap'>
-				<Heading as='h2' textStyle='h3'>
+				<Heading as='h2' textStyle='h4'>
 					Author poems
 				</Heading>
-				<Text textStyle='small' color='pink.200'>
+				<Text textStyle='smaller' color='pink.200'>
 					{poems.length} {poems.length === 1 ? 'poem' : 'poems'}
 				</Text>
 			</Flex>
@@ -31,7 +31,7 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 				loadingElement={LoadingAuthorPoemsSkeletons}
 				errorElement={
 					<Flex
-						p={6}
+						p={5}
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='xl'
@@ -42,7 +42,7 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 				}
 				emptyElement={
 					<Flex
-						p={6}
+						p={5}
 						border='1px solid'
 						borderColor='purple.700'
 						borderRadius='xl'
@@ -67,7 +67,7 @@ export function AuthorPoemsSection({ poems, isLoading, isError }: AuthorPoemsSec
 										borderBottom='1px solid'
 										borderColor='purple.700'
 										w='full'
-										pt={2}
+										pt={1.5}
 										pb={1}
 										transition='background 0.2s ease, border-color 0.2s ease'
 										_hover={{

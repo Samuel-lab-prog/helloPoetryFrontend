@@ -44,7 +44,7 @@ export function SelectField<T extends FieldValues>({
 	return (
 		<Field.Root required={required} invalid={!!error} w='full'>
 			<Field.Label
-				textStyle='small'
+				textStyle='smaller'
 				fontWeight='medium'
 				color={hasError ? 'error' : 'text'}
 				transition='color 0.22s ease'
@@ -66,7 +66,7 @@ export function SelectField<T extends FieldValues>({
 						animationTimingFunction='ease-out'
 					>
 						<NativeSelect.Field
-							textStyle='small'
+							textStyle='smaller'
 							bg='rgba(255, 255, 255, 0.03)'
 							border='1px solid'
 							borderColor={hasError ? 'error' : 'border'}

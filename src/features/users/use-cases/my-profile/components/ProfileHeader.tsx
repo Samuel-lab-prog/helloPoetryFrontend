@@ -8,8 +8,8 @@ type ProfileHeaderProps = {
 
 export function ProfileHeader({ isLoggingOut, onLogout }: ProfileHeaderProps) {
 	return (
-		<Flex mb={8} align='center' justify='space-between' gap={3}>
-			<Heading as='h1' textStyle='h2'>
+		<Flex mb={6} align='center' justify='space-between' gap={3}>
+			<Heading as='h1' textStyle='h3'>
 				My Profile
 			</Heading>
 			<Button

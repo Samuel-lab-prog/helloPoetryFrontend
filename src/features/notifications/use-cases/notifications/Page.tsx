@@ -36,8 +36,18 @@ export function NotificationsPage() {
 	};
 
 	return (
-		<Flex as='main' layerStyle='main' direction='column' align='center' py={12} px={[4, 4, 8]}>
-			<Box as='section' w='full' maxW='2xl'>
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			align='center'
+			w='full'
+			maxW='2xl'
+			mx='auto'
+			overflowY='auto'
+			scrollbarGutter='stable'
+		>
+			<Box as='section' w='full' mb={6}>
 				<Flex
 					align={{ base: 'start', md: 'center' }}
 					justify='space-between'
@@ -45,10 +55,17 @@ export function NotificationsPage() {
 					mb={3}
 					flexWrap='wrap'
 				>
-					<Heading as='h1' textStyle='h2'>
+					<Heading as='h1' textStyle='h3'>
 						Notifications
 					</Heading>
-					<Badge colorPalette='pink' variant='subtle'>
+					<Badge
+						size='sm'
+						colorPalette='pink'
+						variant='subtle'
+						fontSize={{ base: '2xs', md: 'xs' }}
+						px={{ base: 1.5, md: 2 }}
+						py={{ base: 0.5, md: 1 }}
+					>
 						{unreadCount} Unread
 					</Badge>
 				</Flex>
@@ -82,9 +99,9 @@ export function NotificationsPage() {
 							onAction={() => window.location.reload()}
 						/>
 					}
-					emptyElement={<Text textStyle='body'>No notifications found.</Text>}
+					emptyElement={<Text textStyle='small'>No notifications found.</Text>}
 				>
-					<Flex direction='column' gap={1}>
+					<Flex direction='column' gap={1} mb={4}>
 						{notifications.map((item, index) => (
 							<Box
 								key={item.id}
