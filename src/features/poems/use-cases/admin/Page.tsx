@@ -1,4 +1,5 @@
-import { Flex, Heading, Tabs } from '@chakra-ui/react';
+import { Badge, Box, Flex, Heading, IconButton, Menu, Portal } from '@chakra-ui/react';
+import { EllipsisVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -32,80 +33,80 @@ export function AdminPage() {
 			layerStyle='mainPadded'
 			direction='column'
 			align='center'
-			gap={6}
 			w='full'
+			maxW='2xl'
+			mx='auto'
+			overflowY='auto'
+			scrollbarGutter='stable'
+			gap={0}
 		>
-			<Flex as='section' direction='column' align='center' justify='center' w='full' gap={3}>
-				<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={0}>
-					Admin Panel
-				</Heading>
-			</Flex>
-			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Tabs.Root
-					variant='enclosed'
-					colorPalette='pink'
-					value={activeForm}
-					onValueChange={(details) => changeForm(details.value as ActiveForm)}
-					w='full'
-					maxW='4xl'
-				>
-					<Tabs.List
-						display='grid'
-						gridTemplateColumns={{ base: '1fr', sm: 'repeat(3, minmax(0, 1fr))' }}
-						gap={2}
-						w='full'
-						bg='rgba(255, 143, 189, 0.12)'
-						border='1px solid'
-						borderColor='purple.700'
-						borderRadius='xl'
-						p={1}
-						backdropFilter='blur(6px)'
-					>
-						<Tabs.Trigger
-							value='create'
-							textStyle='small'
-							px={3}
-							py={2}
-							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
-							_selected={{ bg: 'pink.500', color: 'white' }}
-						>
-							Create Poem
-						</Tabs.Trigger>
-						<Tabs.Trigger
-							value='update'
-							textStyle='small'
-							px={3}
-							py={2}
-							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
-							_selected={{ bg: 'pink.500', color: 'white' }}
-						>
-							Update Poem
-						</Tabs.Trigger>
-						<Tabs.Trigger
-							value='delete'
-							textStyle='small'
-							px={3}
-							py={2}
-							_hover={{ bg: 'rgba(255, 143, 189, 0.18)' }}
-							_selected={{ bg: 'pink.500', color: 'white' }}
-						>
-							Delete Poem
-						</Tabs.Trigger>
-					</Tabs.List>
+			<Box as='section' w='full' mb={6}>
+				<Flex align={{ base: 'start', md: 'center' }} justify='space-between' gap={3} mb={3} flexWrap='wrap'>
+					<Box>
+						<Heading as='h1' textStyle='h3' mb={1}>
+							Admin Panel
+						</Heading>
+						<Badge colorPalette='pink' variant='subtle' textStyle='smaller'>
+							Mode: {activeForm === 'create' ? 'Create Poem' : activeForm === 'update' ? 'Update Poem' : 'Delete Poem'}
+						</Badge>
+					</Box>
+					<Menu.Root positioning={{ placement: 'bottom-end' }}>
+						<Menu.Trigger asChild>
+							<IconButton
+								aria-label='Select admin action'
+								size={{ base: 'xs', md: 'sm' }}
+								variant='solidPink'
+							>
+								<EllipsisVertical size={16} />
+							</IconButton>
+						</Menu.Trigger>
+						<Portal>
+							<Menu.Positioner>
+								<Menu.Content
+									bg='rgba(27, 0, 25, 0.98)'
+									border='1px solid'
+									borderColor='purple.700'
+									borderRadius='lg'
+									backdropFilter='blur(6px)'
+									minW='220px'
+									p={1}
+								>
+									<Menu.Item
+										value='create-poem'
+										color='pink.100'
+										_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+										onClick={() => changeForm('create')}
+									>
+										Create Poem
+									</Menu.Item>
+									<Menu.Item
+										value='update-poem'
+										color='pink.100'
+										_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+										onClick={() => changeForm('update')}
+									>
+										Update Poem
+									</Menu.Item>
+									<Menu.Item
+										value='delete-poem'
+										color='pink.100'
+										_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+										onClick={() => changeForm('delete')}
+									>
+										Delete Poem
+									</Menu.Item>
+								</Menu.Content>
+							</Menu.Positioner>
+						</Portal>
+					</Menu.Root>
+				</Flex>
 
-					<Flex direction='column' w='full' mt={5}>
-						<Tabs.Content value='create'>
-							<CreatePoemForm />
-						</Tabs.Content>
-						<Tabs.Content value='update'>
-							<UpdatePoemForm />
-						</Tabs.Content>
-						<Tabs.Content value='delete'>
-							<DeletePoemForm />
-						</Tabs.Content>
-					</Flex>
-				</Tabs.Root>
-			</Flex>
+				<Flex direction='column' w='full' gap={4}>
+					{activeForm === 'create' && <CreatePoemForm />}
+					{activeForm === 'update' && <UpdatePoemForm />}
+					{activeForm === 'delete' && <DeletePoemForm />}
+				</Flex>
+			</Box>
 		</Flex>
 	);
 }

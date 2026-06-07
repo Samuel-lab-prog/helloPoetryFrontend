@@ -56,7 +56,7 @@ export function CommentThreadHeader({
 						</Text>
 					</Box>
 				</Flex>
-				<Text textStyle='small'>
+				<Text textStyle='smaller'>
 					{parentAuthorId && parentAuthorNickname && (
 						<>
 							<Link asChild color='pink.200' textDecoration='underline' textUnderlineOffset='3px'>

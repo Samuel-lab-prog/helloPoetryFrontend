@@ -1,6 +1,6 @@
 import type { ModeratePoemBody, ModerationPoem } from '@Api/moderation/types';
 import { AsyncState } from '@BaseComponents';
-import { Flex, Spinner, Tabs, Text, VStack } from '@chakra-ui/react';
+import { Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 import type { AppErrorType } from '@Utils';
 
 import { ModerationPoemCard } from './PoemModerationCard';
@@ -31,39 +31,37 @@ export function AnalyzeTab({
 	}
 
 	return (
-		<Tabs.Content value='pending'>
-			<AsyncState
-				isLoading={pendingQuery.isLoading}
-				isError={pendingQuery.isError}
-				isEmpty={!pendingPoems.length}
-				loadingElement={
-					<Flex justify='center' py={8}>
-						<Spinner size='md' color='pink.300' />
-					</Flex>
-				}
-				errorElement={
-					<Text textStyle='small' color='pink.200'>
-						{formatError(pendingQuery.error)}
-					</Text>
-				}
-				emptyElement={
-					<Text textStyle='small' color='pink.100' textAlign='center'>
-						No pending poems at the moment.
-					</Text>
-				}
-			>
-				<VStack align='stretch' gap={5} mb={4}>
-					{pendingPoems.map((poem) => (
-						<ModerationPoemCard
-							key={poem.id}
-							poem={poem}
-							isPending={isModeratingPoem(poem.id)}
-							isRemoving={isRemovingPoem(poem.id)}
-							onModerate={onModerate}
-						/>
-					))}
-				</VStack>
-			</AsyncState>
-		</Tabs.Content>
+		<AsyncState
+			isLoading={pendingQuery.isLoading}
+			isError={pendingQuery.isError}
+			isEmpty={!pendingPoems.length}
+			loadingElement={
+				<Flex justify='center' py={8}>
+					<Spinner size='md' color='pink.300' />
+				</Flex>
+			}
+			errorElement={
+				<Text textStyle='small' color='pink.200'>
+					{formatError(pendingQuery.error)}
+				</Text>
+			}
+			emptyElement={
+				<Text textStyle='small' color='pink.100' textAlign='center'>
+					No pending poems at the moment.
+				</Text>
+			}
+		>
+			<VStack align='stretch' gap={5} mb={4}>
+				{pendingPoems.map((poem) => (
+					<ModerationPoemCard
+						key={poem.id}
+						poem={poem}
+						isPending={isModeratingPoem(poem.id)}
+						isRemoving={isRemovingPoem(poem.id)}
+						onModerate={onModerate}
+					/>
+				))}
+			</VStack>
+		</AsyncState>
 	);
 }

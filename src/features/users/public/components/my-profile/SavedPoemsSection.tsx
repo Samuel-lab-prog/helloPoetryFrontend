@@ -101,11 +101,13 @@ export function SavedPoemsSection({
 					return (
 						<Flex
 							key={poem.id}
+							position='relative'
 							align={{ base: 'start', md: 'center' }}
 							justify='space-between'
 							direction={{ base: 'column', md: 'row' }}
 							gap={3}
 							p={3}
+							pr={{ base: 14, md: 3 }}
 							border='1px solid'
 							borderColor='purple.700'
 							borderRadius='md'
@@ -145,7 +147,9 @@ export function SavedPoemsSection({
 									variant='solidPink'
 									colorPalette='pink'
 									size='sm'
-									alignSelf={{ base: 'end', md: 'center' }}
+									position='absolute'
+									top={3}
+									right={3}
 									minW='36px'
 									flexShrink={0}
 									loading={isRemoving}
@@ -158,9 +162,9 @@ export function SavedPoemsSection({
 											void onUnsavePoem(poem.id);
 										}, 180);
 									}}
-								>
-									<X size={16} />
-								</IconButton>
+									>
+										<X size={16} />
+									</IconButton>
 							)}
 						</Flex>
 					);

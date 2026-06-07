@@ -148,7 +148,13 @@ export function MyPoemsSection({
 								{poem.tags?.length > 0 && (
 									<HStack gap={1} wrap='wrap'>
 										{poem.tags.slice(0, 4).map((tag) => (
-											<Badge key={tag.id} size='sm' colorPalette='pink' variant='subtle'>
+											<Badge
+												key={tag.id}
+												size='sm'
+												colorPalette='pink'
+												variant='subtle'
+												textStyle='smaller'
+											>
 												#{tag.name}
 											</Badge>
 										))}

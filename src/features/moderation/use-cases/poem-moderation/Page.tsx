@@ -1,6 +1,7 @@
-import { Surface } from '@BaseComponents';
-import { Flex, Heading, Tabs, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton, Menu, Portal } from '@chakra-ui/react';
 import { useEnsureRole } from '@features/auth/public/hooks/useEnsureRole';
+import { EllipsisVertical } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ActionsTab } from './components/ActionsTab';
@@ -11,33 +12,19 @@ import { usePoemModerationData } from './hooks/usePoemModerationData';
 export function PoemModerationPage() {
 	const navigate = useNavigate();
 	const canAccess = useEnsureRole(['moderator', 'admin']);
+	const [selectedView, setSelectedView] = useState<'pending' | 'actions'>('pending');
 
 	const { pendingQuery, pendingPoems, isModeratingPoem, isRemovingPoem, handleModeration } =
 		usePoemModerationData(canAccess);
-
-	type Tab = {
-		value: string;
-		label: string;
-		disabled?: boolean;
-	};
-
-	const tabs: Tab[] = [
-		{ value: 'pending', label: 'Pending poems' },
-		{ value: 'actions', label: 'Administrative actions', disabled: true },
-	];
 
 	if (!canAccess) return <UnauthorizedPage onBack={() => navigate('/')} />;
 
 	function PageHeader() {
 		return (
-			<Flex as='section' direction='column' align='center' textAlign='center' gap={2}>
-				<Heading as='h1' textStyle='h3' mb={0}>
+			<Flex as='section' direction='column' align='flex-start' textAlign='left' gap={2} w='full'>
+				<Heading as='h1' textStyle='h3' mb={5}>
 					Poem moderation
 				</Heading>
-				<Text textStyle='small' color='pink.200' maxW='2xl' mb={2}>
-					Review pending poems, then switch to the administrative tools when you need to take
-					action.
-				</Text>
 			</Flex>
 		);
 	}
@@ -55,66 +42,76 @@ export function PoemModerationPage() {
 			overflowY='auto'
 			scrollbarGutter='stable'
 		>
-			<PageHeader />
+			<Box w='full' maxW='3xl' mx='auto'>
+				<PageHeader />
 
-			<Tabs.Root variant='plain' colorPalette='pink' defaultValue='pending' w='full'>
-				<Surface variant='gradient' w='full' maxW='3xl' mx='auto'>
-					<Flex direction='column' gap={4}>
-						<Tabs.List
-							display='flex'
-							flexWrap='wrap'
-							gap={2}
-							w='full'
-							justifyContent='stretch'
-						>
-							{tabs.map((tab) => (
-								<Tabs.Trigger
-									key={tab.value}
-									value={tab.value}
-									disabled={tab.disabled}
-									flex='1 1 220px'
-									minH='12'
-									px={4}
-									py={3}
-									border='1px solid'
-									borderColor='purple.700'
-									borderRadius='lg'
-									bg='rgba(255, 255, 255, 0.03)'
-									color='pink.200'
-									textStyle='small'
-									fontWeight='semibold'
-									transition='transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease'
-									_hover={{
-										bg: 'rgba(255, 255, 255, 0.06)',
-										borderColor: 'pink.400',
-										color: 'pink.100',
-										transform: 'translateY(-1px)',
-									}}
-									_selected={{
-										bg: 'linear-gradient(135deg, rgba(255, 143, 189, 0.22), rgba(240, 68, 142, 0.28))',
-										borderColor: 'pink.400',
-										color: 'white',
-										boxShadow: '0 10px 22px rgba(58, 33, 56, 0.28)',
-									}}
+				<Flex direction='column' gap={4}>
+					<Flex align='center' justify='space-between' gap={3} w='full'>
+						<Box>
+							<Flex direction='column' align='flex-start'>
+								<Box textStyle='small' fontWeight='semibold'>
+									{selectedView === 'pending' ? 'Pending poems' : 'Administrative actions'}
+								</Box>
+							</Flex>
+						</Box>
+						<Menu.Root positioning={{ placement: 'bottom-end' }}>
+							<Menu.Trigger asChild>
+								<IconButton
+									aria-label='Select moderation view'
+									size='sm'
+									variant='solidPink'
 								>
-									{tab.label}
-								</Tabs.Trigger>
-							))}
-						</Tabs.List>
+									<EllipsisVertical size={16} />
+								</IconButton>
+							</Menu.Trigger>
+							<Portal>
+								<Menu.Positioner>
+									<Menu.Content
+										bg='rgba(27, 0, 25, 0.98)'
+										border='1px solid'
+										borderColor='purple.700'
+										borderRadius='lg'
+										backdropFilter='blur(6px)'
+										minW='220px'
+										p={1}
+									>
+										<Menu.Item
+											value='pending-poems'
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											onClick={() => setSelectedView('pending')}
+										>
+											Pending poems
+										</Menu.Item>
+										<Menu.Item
+											value='administrative-actions'
+											color='pink.100'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+											onClick={() => setSelectedView('actions')}
+										>
+											Administrative actions
+										</Menu.Item>
+									</Menu.Content>
+								</Menu.Positioner>
+							</Portal>
+						</Menu.Root>
 					</Flex>
-				</Surface>
 
-				<Flex direction='column' gap={6} mb={4} w='full'>
-					<AnalyzeTab
-						pendingQuery={pendingQuery}
-						pendingPoems={pendingPoems}
-						isModeratingPoem={isModeratingPoem}
-						isRemovingPoem={isRemovingPoem}
-						onModerate={handleModeration}
-					/>
-					<ActionsTab />
+					<Flex direction='column' gap={6} mb={4} w='full'>
+						{selectedView === 'pending' ? (
+							<AnalyzeTab
+								pendingQuery={pendingQuery}
+								pendingPoems={pendingPoems}
+								isModeratingPoem={isModeratingPoem}
+								isRemovingPoem={isRemovingPoem}
+								onModerate={handleModeration}
+							/>
+						) : (
+							<ActionsTab />
+						)}
+					</Flex>
 				</Flex>
-			</Tabs.Root>
+			</Box>
 		</Flex>
 	);
 }

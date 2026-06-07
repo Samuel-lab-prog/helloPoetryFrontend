@@ -39,7 +39,7 @@ export function PoetsSearchView() {
 			maxW='2xl'
 			mx='auto'
 		>
-			<Box as='section' w='full' >
+			<Box as='section' w='full' px='4'>
 				<SearchInput
 					label='Search poets'
 					value={searchNickname}

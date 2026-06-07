@@ -20,6 +20,7 @@ export function PoetCard({ poet }: PoetCardProps) {
 			w='full'
 			pt={1.5}
 			pb={1}
+			px={4}
 			transition='background 0.2s ease, border-color 0.2s ease'
 			_hover={{
 				bg: 'rgba(255, 255, 255, 0.03)',
