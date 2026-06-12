@@ -1,6 +1,7 @@
 import { moderation } from '@Api/moderation/endpoints';
 import { moderationKeys } from '@Api/moderation/keys';
 import type { ModeratePoemBody } from '@Api/moderation/types';
+import { poems } from '@Api/poems/endpoints';
 import { toaster } from '@BaseComponents';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -79,7 +80,7 @@ export function usePoemModerationData(enabled: boolean) {
 	);
 
 	const handleModeration = useCallback(
-		async (poemId: number, status: ModeratePoemBody['moderationStatus']) => {
+		async (poemId: number, status: ModeratePoemBody['moderationStatus'], reason?: string) => {
 			if (moderateMutation.isPending || removingPoemIds.has(poemId)) return;
 			setRemovingPoemIds((prev) => new Set(prev).add(poemId));
 
@@ -87,7 +88,9 @@ export function usePoemModerationData(enabled: boolean) {
 				await moderateMutation.mutateAsync({
 					poemId: String(poemId),
 					moderationStatus: status,
+					reason,
 				});
+				void poems.getPoem.invalidate(String(poemId));
 				scheduleHidePoem(poemId);
 			} catch (error) {
 				restorePoem(poemId);

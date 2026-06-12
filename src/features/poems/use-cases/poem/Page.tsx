@@ -73,6 +73,8 @@ export function PoemPage() {
 						tags: poem.tags,
 						createdAt: poem.createdAt,
 						updatedAt: poem.updatedAt,
+						moderationStatus: poem.moderationStatus,
+						rejectionReason: poem.rejectionReason,
 					}
 				: null,
 		[poem],

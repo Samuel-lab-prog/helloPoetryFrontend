@@ -95,7 +95,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	}, [isMobile, navHidden]);
 
 	return (
-		<Flex position='fixed' inset={0} w='full' h='full' direction='column' >
+		<Flex position='fixed' inset={0} w='full' h='full' direction='column'>
 			<Flex
 				as='header'
 				w='full'

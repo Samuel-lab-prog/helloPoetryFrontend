@@ -39,6 +39,7 @@ export type FullPoem = {
 	status: PoemStatus;
 	visibility: PoemVisibility;
 	moderationStatus: 'rejected' | 'removed' | 'approved' | 'pending';
+	rejectionReason?: string | null;
 	isCommentable: boolean;
 	author: PoemAuthor;
 	toUsers?: PoemDedicationUser[];
@@ -141,6 +142,7 @@ export type CreatePoemResult = {
 	visibility: PoemVisibility;
 	status: PoemStatus;
 	moderationStatus: 'rejected' | 'removed' | 'approved' | 'pending';
+	rejectionReason?: string | null;
 	createdAt: Date;
 	updatedAt: Date;
 	isCommentable: boolean;

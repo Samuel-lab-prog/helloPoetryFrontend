@@ -41,7 +41,11 @@ export function AuthorProfileCard({
 			animationDelay='30ms'
 		>
 			<Flex align='start' gap={3} w='full'>
-				<Avatar.Root size='lg' w={{ base: '4.75rem', md: '6rem' }} h={{ base: '4.75rem', md: '6rem' }}>
+				<Avatar.Root
+					size='lg'
+					w={{ base: '4.75rem', md: '6rem' }}
+					h={{ base: '4.75rem', md: '6rem' }}
+				>
 					<Avatar.Image src={author.avatarUrl ?? undefined} />
 					<Avatar.Fallback name={author.name} />
 				</Avatar.Root>

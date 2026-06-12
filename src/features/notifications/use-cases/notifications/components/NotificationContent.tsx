@@ -22,10 +22,10 @@ export function NotificationContent({
 		<Box py={2}>
 			<Flex align='start' gap={3}>
 				<HStack align='start' gap={3} flex='1' minW={0}>
-						<Avatar.Root size={{ base: 'sm', md: 'md' }}>
-							<Avatar.Image src={avatarUrl ?? undefined} />
-							<Avatar.Fallback name={actorName} />
-						</Avatar.Root>
+					<Avatar.Root size={{ base: 'sm', md: 'md' }}>
+						<Avatar.Image src={avatarUrl ?? undefined} />
+						<Avatar.Fallback name={actorName} />
+					</Avatar.Root>
 					<VStack align='start' gap={1} flex='1' minW={0}>
 						<Text
 							textStyle='small'
@@ -43,16 +43,16 @@ export function NotificationContent({
 								</Text>
 							)}
 							{item.aggregatedCount > 1 && (
-							<Badge
-								size='sm'
-								colorPalette='pink'
-								variant='subtle'
-								fontSize={{ base: '2xs', md: 'xs' }}
-								px={{ base: 1.5, md: 2 }}
-								py={{ base: 0.5, md: 1 }}
-								opacity={isRead ? 0.7 : 1}
-								mr={2}
-							>
+								<Badge
+									size='sm'
+									colorPalette='pink'
+									variant='subtle'
+									fontSize={{ base: '2xs', md: 'xs' }}
+									px={{ base: 1.5, md: 2 }}
+									py={{ base: 0.5, md: 1 }}
+									opacity={isRead ? 0.7 : 1}
+									mr={2}
+								>
 									{item.aggregatedCount} notifications
 								</Badge>
 							)}

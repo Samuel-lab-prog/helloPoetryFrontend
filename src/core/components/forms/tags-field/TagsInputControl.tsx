@@ -148,7 +148,7 @@ export function TagsInputControl({
 				</TagsInput.Control>
 			</TagsInput.Root>
 
-			<Field.HelperText color='pink.200' mt={1}>
+			<Field.HelperText textStyle='smaller' color='pink.200' mt={1}>
 				{tagsCount}/{maxTags} tags
 			</Field.HelperText>
 		</>

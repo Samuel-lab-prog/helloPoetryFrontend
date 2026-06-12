@@ -71,9 +71,7 @@ export function MyProfilePage() {
 	} = usePoemCollections(!isMissingClient);
 	const visibleFriendRequests = {
 		...friendRequests,
-		received: friendRequests.received.filter(
-			(request) => !isHiddenRequester(request.requesterId),
-		),
+		received: friendRequests.received.filter((request) => !isHiddenRequester(request.requesterId)),
 	};
 
 	if (isLoggingOut) {
@@ -166,6 +164,7 @@ export function MyProfilePage() {
 										...visibleFriendRequests,
 										received: visibleFriendRequests.received.slice(0, 3),
 									}}
+									totalFriendRequestsCount={visibleFriendRequests.received.length}
 									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}
@@ -214,6 +213,9 @@ export function MyProfilePage() {
 									totalCollectionsCount={collections.length}
 									viewAllHref='/my-profile/collections'
 									showManagementControls={false}
+									showCreateCollectionForm={false}
+									showPoems={false}
+									showAddPoemForm={false}
 									myPoems={myPoems}
 									savedPoems={savedPoems}
 									isLoadingCollections={isLoadingCollections}

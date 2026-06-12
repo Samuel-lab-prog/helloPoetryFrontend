@@ -1,7 +1,7 @@
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { CollectionItemBody, CreateCollectionBody, PoemCollection } from '@Api/poems/types';
-import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -192,6 +192,7 @@ export function usePoemCollections(enabled = true) {
 		collections: query.data ?? [],
 		isLoadingCollections: query.isLoading,
 		isCollectionsError: query.isError,
+		refetchCollections: query.refetch,
 		createCollection: createCollectionMutation.mutateAsync,
 		deleteCollection: deleteCollectionMutation.mutateAsync,
 		addPoemToCollection: async (input: CollectionItemBody) => {

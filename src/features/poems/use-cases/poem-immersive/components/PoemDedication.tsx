@@ -21,7 +21,7 @@ export function PoemDedication({ dedicationUsers }: PoemDedicationProps) {
 			opacity={0.9}
 			pointerEvents='auto'
 		>
-			<Text textStyle='smaller' letterSpacing='0.12em' textTransform='uppercase' color='purple.200'>
+			<Text textStyle='label' color='purple.200'>
 				Dedicated to
 			</Text>
 			<Text textStyle='body' fontSize={{ base: '0.95rem', md: '1rem' }} color='pink.200'>

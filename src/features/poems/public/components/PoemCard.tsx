@@ -1,4 +1,15 @@
-import { Avatar, Badge, Box, Card, Flex, Icon, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
+import {
+	Avatar,
+	Badge,
+	Box,
+	Card,
+	Flex,
+	Icon,
+	Link,
+	LinkBox,
+	LinkOverlay,
+	Text,
+} from '@chakra-ui/react';
 import { formatRelativeTime } from '@Utils';
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -19,7 +30,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 	if (variant === 'flat') {
 		return (
 			<LinkBox
-				py={{ base: 4, md: 5 }}
+				py={{ base: 3, md: 4 }}
 				px={{ base: 3.5, md: 4 }}
 				borderRadius='lg'
 				transition='background-color 0.22s ease'
@@ -28,7 +39,9 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
 					<LinkOverlay asChild>
 						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-							<Text textStyle='h4'>{poem.title}</Text>
+							<Text textStyle='h4' pb={1}>
+								{poem.title}
+							</Text>
 						</NavLink>
 					</LinkOverlay>
 					{poem.excerpt && (
@@ -38,20 +51,35 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					)}
 
 					{!hideAuthorMeta && (
-						<Flex align='center' gap={2}>
-							<Avatar.Root size={{ base: 'xs', md: 'md' }}>
-								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-								<Avatar.Fallback name={poem.author.nickname} />
-							</Avatar.Root>
-							<Flex direction='column' minW={0} gap={0}>
-								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-									{poem.author.name}
-								</Text>
-								<Text textStyle='smaller' color='pink.200' opacity={0.9}>
-									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-								</Text>
-							</Flex>
-						</Flex>
+						<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
+							<NavLink to={`/authors/${poem.author.id}`}>
+								<Flex
+									align='center'
+									alignSelf='start'
+									gap={2}
+									pr={2}
+									py={1.5}
+									w='fit-content'
+									display='inline-flex'
+									borderRadius='md'
+									transition='background-color 0.2s ease'
+									_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
+								>
+									<Avatar.Root size={{ base: 'xs', md: 'md' }}>
+										<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+										<Avatar.Fallback name={poem.author.nickname} />
+									</Avatar.Root>
+									<Flex direction='column' minW={0} gap={0}>
+										<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+											{poem.author.name}
+										</Text>
+										<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+											@{poem.author.nickname}
+										</Text>
+									</Flex>
+								</Flex>
+							</NavLink>
+						</Link>
 					)}
 
 					<Flex align='center' gap={{ base: 3, md: 4 }} wrap='wrap'>
@@ -138,7 +166,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				</Badge>
 				<LinkOverlay asChild>
 					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-						<Card.Title as='h4' textStyle='h4'>
+						<Card.Title as='h4' textStyle='h4' pb={1}>
 							{poem.title}
 						</Card.Title>
 					</NavLink>
@@ -153,20 +181,35 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 			<Card.Body p={0} flex='1'>
 				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
 					{!hideAuthorMeta && (
-						<Flex align='center' gap={2}>
-							<Avatar.Root size={{ base: 'xs', md: 'md' }}>
-								<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
-								<Avatar.Fallback name={poem.author.nickname} />
-							</Avatar.Root>
-							<Flex direction='column' minW={0} gap={0}>
-								<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-									{poem.author.name}
-								</Text>
-								<Text textStyle='smaller' color='pink.200' opacity={0.9}>
-									<NavLink to={`/authors/${poem.author.id}`}>@{poem.author.nickname}</NavLink>
-								</Text>
-							</Flex>
-						</Flex>
+						<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
+							<NavLink to={`/authors/${poem.author.id}`}>
+								<Flex
+									align='center'
+									alignSelf='start'
+									gap={2}
+									px={2}
+									py={1.5}
+									w='fit-content'
+									display='inline-flex'
+									borderRadius='md'
+									transition='background-color 0.2s ease'
+									_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
+								>
+									<Avatar.Root size={{ base: 'xs', md: 'md' }}>
+										<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+										<Avatar.Fallback name={poem.author.nickname} />
+									</Avatar.Root>
+									<Flex direction='column' minW={0} gap={0}>
+										<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+											{poem.author.name}
+										</Text>
+										<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+											@{poem.author.nickname}
+										</Text>
+									</Flex>
+								</Flex>
+							</NavLink>
+						</Link>
 					)}
 
 					<Flex align='center' gap={{ base: 3, md: 4 }} wrap='wrap'>

@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 type FriendRequestsSectionProps = {
 	friendRequests: MyFriendRequestsType;
+	totalFriendRequestsCount?: number;
 	viewAllHref?: string;
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;
@@ -32,6 +33,7 @@ type FriendRequestsSectionProps = {
  */
 export function FriendRequestsSection({
 	friendRequests,
+	totalFriendRequestsCount,
 	viewAllHref,
 	isFriendRequestsLoading,
 	isFriendRequestsError,
@@ -45,16 +47,10 @@ export function FriendRequestsSection({
 }: FriendRequestsSectionProps) {
 	return (
 		<Surface p={5} variant='panel'>
-			<Flex
-				align={{ base: 'start', md: 'center' }}
-				justify='space-between'
-				direction={{ base: 'column', md: 'row' }}
-				gap={3}
-				mb={4}
-			>
+			<Flex align='center' justify='space-between' direction='row' gap={3} mb={2} w='full'>
 				<HStack gap={2}>
 					<UserPlus size={18} color='var(--chakra-colors-pink-300)' />
-					<Heading as='h2' textStyle='h4' color='pink.300'>
+					<Heading as='h2' textStyle='h5' color='pink.300' textTransform='none'>
 						Friend requests received
 					</Heading>
 				</HStack>
@@ -65,11 +61,17 @@ export function FriendRequestsSection({
 						color='pink.200'
 						textDecoration='underline'
 						textUnderlineOffset='3px'
+						flexShrink={0}
 					>
 						<NavLink to={viewAllHref}>View all</NavLink>
 					</Link>
 				)}
 			</Flex>
+			{viewAllHref && Boolean(totalFriendRequestsCount) && (
+				<Text mb={4} textStyle='smaller' color='pink.200' textAlign='left'>
+					Showing {friendRequests.received.length} of {totalFriendRequestsCount} requests
+				</Text>
+			)}
 
 			<Flex direction='column' gap={1}>
 				{isFriendRequestsLoading && <Text textStyle='small'>Loading requests...</Text>}
@@ -107,41 +109,36 @@ export function FriendRequestsSection({
 							borderTop='1px solid'
 							borderColor='border'
 						>
-							<Flex
-								align='center'
-								justify='space-between'
-								direction='row'
-								gap={3}
-								py={3}
-							>
-								<HStack gap={3}>
-									<Avatar.Root size='sm'>
-										<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
-										<Avatar.Fallback name={request.requesterNickname} />
-									</Avatar.Root>
-									<Flex direction='column' gap={0}>
-										<Text textStyle='small' color='pink.100' fontWeight='semibold'>
-											{request.requesterName}
-										</Text>
-										<Link
-											asChild
-											textStyle='smaller'
-											color='pink.200'
-											textDecoration='underline'
-											textUnderlineOffset='3px'
-											_hover={{ color: 'pink.100' }}
-											_focusVisible={{
-												outline: '2px solid',
-												outlineColor: 'pink.300',
-												outlineOffset: '2px',
-											}}
+							<Flex align='center' justify='space-between' direction='row' gap={3} py={3}>
+								<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
+									<NavLink to={`/authors/${request.requesterId}`}>
+										<Flex
+											align='center'
+											alignSelf='start'
+											gap={2}
+											pr={2}
+											py={1.5}
+											w='fit-content'
+											display='inline-flex'
+											borderRadius='md'
+											transition='background-color 0.2s ease'
+											_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
 										>
-											<NavLink to={`/authors/${request.requesterId}`}>
-												@{request.requesterNickname}
-											</NavLink>
-										</Link>
-									</Flex>
-								</HStack>
+											<Avatar.Root size='sm'>
+												<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
+												<Avatar.Fallback name={request.requesterNickname} />
+											</Avatar.Root>
+											<Flex direction='column' minW={0} gap={0}>
+												<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+													{request.requesterName}
+												</Text>
+												<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+													@{request.requesterNickname}
+												</Text>
+											</Flex>
+										</Flex>
+									</NavLink>
+								</Link>
 								<Flex gap={2} ml='auto'>
 									<IconButton
 										aria-label='Accept request'

@@ -1,6 +1,7 @@
 import { createMutationEndpoint, createQueryEndpoint } from '@Api/utils';
 import { createHTTPRequest } from '@Utils';
 
+import { poemKeys } from '../poems/keys';
 import { moderationKeys } from './keys';
 import type {
 	BannedUserResponse,
@@ -47,15 +48,19 @@ const moderatePoem = createMutationEndpoint<ModeratePoemBody, ModeratePoemResult
 	fn: (data) =>
 		createHTTPRequest<
 			ModeratePoemResult,
-			{ moderationStatus: ModeratePoemBody['moderationStatus'] }
+			{
+				moderationStatus: ModeratePoemBody['moderationStatus'];
+				reason?: string;
+			}
 		>({
 			method: 'PATCH',
 			path: `/moderation/poems/${data.poemId}`,
 			body: {
 				moderationStatus: data.moderationStatus,
+				reason: data.reason?.trim() || undefined,
 			},
 		}),
-	invalidate: [moderationKeys.pendingPoems],
+	invalidate: [moderationKeys.pendingPoems, poemKeys.mine],
 });
 
 export const moderation = {

@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { queryClient } from '../queryClient';
-import { restoreSnapshot, restoreSnapshots, snapshotQueriesData, snapshotQueryData } from './optimistic';
+import {
+	restoreSnapshot,
+	restoreSnapshots,
+	snapshotQueriesData,
+	snapshotQueryData,
+} from './optimistic';
 
 describe('API - optimistic helpers', () => {
 	beforeEach(() => {
@@ -26,10 +31,9 @@ describe('API - optimistic helpers', () => {
 		queryClient.setQueryData(keyA, { value: 'A' });
 		queryClient.setQueryData(keyB, { value: 'B' });
 
-		const snapshots = await snapshotQueriesData<{ value: string }>(
-			queryClient,
-			['notifications'] as const,
-		);
+		const snapshots = await snapshotQueriesData<{ value: string }>(queryClient, [
+			'notifications',
+		] as const);
 		queryClient.setQueryData(keyA, { value: 'A2' });
 		queryClient.setQueryData(keyB, { value: 'B2' });
 

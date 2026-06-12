@@ -1,3 +1,4 @@
+import { type UserPreview } from '@Api/users/types';
 import {
 	Box,
 	Button,
@@ -13,30 +14,26 @@ import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientSt
 import { useEffect, useState } from 'react';
 import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
 
-type UserOption = {
-	id: number;
-	nickname: string;
-};
+import { useUsersPreview } from '../hooks/useUsersPreview';
+
+type UserOption = UserPreview;
 
 interface UserDedicationComboboxProps<T extends FieldValues> {
 	control: Control<T>;
 	name: Path<T>;
 	error?: { message?: string };
-	users: UserOption[];
 	disabled?: boolean;
-	isLoading?: boolean;
 }
 
 export function UserDedicationCombobox<T extends FieldValues>({
 	control,
 	name,
 	error,
-	users,
 	disabled,
-	isLoading,
 }: UserDedicationComboboxProps<T>) {
 	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const [isOpen, setIsOpen] = useState(false);
+	const { users, isLoadingUsers } = useUsersPreview({ enabled: isOpen });
 
 	const { contains } = useFilter({
 		sensitivity: 'base',
@@ -83,7 +80,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 						: selectedIds;
 					const selectedUsers = filteredSelectedIds
 						.map((id) => users.find((user) => user.id === id))
-						.filter((user): user is UserOption => Boolean(user));
+						.filter(Boolean) as UserPreview[];
 
 					return (
 						<>
@@ -135,7 +132,9 @@ export function UserDedicationCombobox<T extends FieldValues>({
 									}}
 								>
 									<Combobox.Input
-										placeholder={isLoading ? 'Loading users...' : 'Search users to dedicate to'}
+										placeholder={
+											isLoadingUsers ? 'Loading users...' : 'Search users to dedicate to'
+										}
 										textStyle='smaller'
 										color='text'
 										_placeholder={{ color: 'pink.200' }}
@@ -157,7 +156,7 @@ export function UserDedicationCombobox<T extends FieldValues>({
 											overflow='hidden'
 										>
 											<Combobox.Empty>
-												{isLoading ? 'Loading users...' : 'No users found.'}
+												{isLoadingUsers ? 'Loading users...' : 'No users found.'}
 											</Combobox.Empty>
 											{collection.items.map((item) => (
 												<Combobox.Item

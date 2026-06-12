@@ -18,14 +18,7 @@ export const LoadingNotificationsSkeletons = (
 						<Skeleton height='12px' width='62%' maxW='12rem' />
 						<Flex align='center' justify='space-between' w='full' gap={2}>
 							<Skeleton height='10px' width='28%' maxW='7rem' />
-							<Badge
-								size='sm'
-								colorPalette='pink'
-								variant='subtle'
-								opacity={0.45}
-								px={2}
-								py={1}
-							>
+							<Badge size='sm' colorPalette='pink' variant='subtle' opacity={0.45} px={2} py={1}>
 								<Skeleton height='10px' width='6.5rem' />
 							</Badge>
 						</Flex>

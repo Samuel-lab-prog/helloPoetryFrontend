@@ -41,13 +41,24 @@ export function AdminPage() {
 			gap={0}
 		>
 			<Box as='section' w='full' mb={6}>
-				<Flex align={{ base: 'start', md: 'center' }} justify='space-between' gap={3} mb={3} flexWrap='wrap'>
+				<Flex
+					align={{ base: 'start', md: 'center' }}
+					justify='space-between'
+					gap={3}
+					mb={3}
+					flexWrap='wrap'
+				>
 					<Box>
 						<Heading as='h1' textStyle='h3' mb={1}>
 							Admin Panel
 						</Heading>
 						<Badge colorPalette='pink' variant='subtle' textStyle='smaller'>
-							Mode: {activeForm === 'create' ? 'Create Poem' : activeForm === 'update' ? 'Update Poem' : 'Delete Poem'}
+							Mode:{' '}
+							{activeForm === 'create'
+								? 'Create Poem'
+								: activeForm === 'update'
+									? 'Update Poem'
+									: 'Delete Poem'}
 						</Badge>
 					</Box>
 					<Menu.Root positioning={{ placement: 'bottom-end' }}>

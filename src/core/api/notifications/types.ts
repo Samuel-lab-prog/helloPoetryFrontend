@@ -18,6 +18,7 @@ export type NotificationPayload = {
 	replierId?: number;
 	replierNickname?: string;
 	removalReason?: string | null;
+	rejectionReason?: string | null;
 };
 
 export type NotificationItem = {

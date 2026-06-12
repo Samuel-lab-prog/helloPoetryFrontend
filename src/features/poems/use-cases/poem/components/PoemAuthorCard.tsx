@@ -38,7 +38,9 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 			bg={embedded ? 'transparent' : 'rgba(255, 255, 255, 0.02)'}
 		>
 			<Flex
-				w='full'
+				w='fit-content'
+				display='inline-flex'
+				alignSelf='start'
 				gap={2.5}
 				align={{ base: 'center', md: 'center' }}
 				direction={{ base: 'row', md: 'row' }}
@@ -48,20 +50,14 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 					<Avatar.Fallback name={author.name} />
 				</Avatar.Root>
 
-				<Flex direction='column' gap={1} flex='1' minW={0}>
+				<Flex direction='column' gap={1} minW={0}>
 					<Text textStyle='smaller' color='pink.200'>
 						Author
 					</Text>
 					<Text textStyle='smaller' fontWeight='semibold' wordBreak='break-word'>
 						{author.name}
 					</Text>
-					<Link
-						asChild
-						textStyle='smaller'
-						color='pink.200'
-						wordBreak='break-all'
-						_hover={{ color: 'pink.100' }}
-					>
+					<Link asChild textStyle='smaller' color='pink.200' _hover={{ color: 'pink.100' }}>
 						<NavLink to={`/authors/${author.id}`}>@{author.nickname}</NavLink>
 					</Link>
 					<Text textStyle='smaller' color='pink.200'>

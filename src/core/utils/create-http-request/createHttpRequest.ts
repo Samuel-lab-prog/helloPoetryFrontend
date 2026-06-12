@@ -114,7 +114,7 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 	}
 }
 
-async function refreshSession(baseUrl: string): Promise<boolean> {
+function refreshSession(baseUrl: string): Promise<boolean> {
 	if (refreshSessionInFlight) return refreshSessionInFlight;
 
 	refreshSessionInFlight = fetch(`${baseUrl}/auth/refresh`, {

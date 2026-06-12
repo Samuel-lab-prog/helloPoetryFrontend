@@ -81,7 +81,12 @@ export function ProfileEditFields({
 					Avatar (file)
 				</Text>
 				<Flex align='center' gap={2} wrap='wrap'>
-					<Button as='label' size={{ base: 'xs', md: 'sm' }} variant='outlinePurple' cursor='pointer'>
+					<Button
+						as='label'
+						size={{ base: 'xs', md: 'sm' }}
+						variant='outlinePurple'
+						cursor='pointer'
+					>
 						Choose file
 						<VisuallyHidden>
 							<Input

@@ -5,31 +5,23 @@ import { NavLink } from 'react-router-dom';
 
 import { CreatePoemForm } from './components/CreatePoemForm';
 
-function PageHeader() {
-	return (
-		<Heading as='h1' textStyle='h3' color='accent' textAlign='center' mb={3}>
-			Create Poem
-		</Heading>
-	);
-}
-
 function CreatePoemAccessGate() {
 	return (
-			<Surface
-				w='full'
-				maxW='2xl'
-				p={{ base: 5, md: 6 }}
-				variant='gradient'
-				bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
-			>
-				<VStack align='start' gap={4}>
-					<Badge colorPalette='pink' variant='subtle'>
-						Poems
-					</Badge>
-					<Text textStyle='h3'>Sign in to create a poem</Text>
-					<Text textStyle='small' color='pink.100'>
-						You need to be authenticated to publish new poems.
-					</Text>
+		<Surface
+			w='full'
+			maxW='2xl'
+			p={{ base: 5, md: 6 }}
+			variant='gradient'
+			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
+		>
+			<VStack align='start' gap={4}>
+				<Badge colorPalette='pink' variant='subtle'>
+					Poems
+				</Badge>
+				<Text textStyle='h3'>Sign in to create a poem</Text>
+				<Text textStyle='small' color='pink.100'>
+					You need to be authenticated to publish new poems.
+				</Text>
 				<HStack gap={3} wrap='wrap'>
 					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
 						<NavLink to='/login'>Sign in</NavLink>
@@ -55,17 +47,15 @@ export function CreatePoemPage() {
 	}
 
 	return (
-		<Flex
-			as='main'
-			layerStyle='mainPadded'
-			direction='column'
-			align='center'
-			gap={6}
-		>
-			<PageHeader />
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' gap={4}>
+			<Flex as='section' direction='column' w='full' maxW='3xl'>
+				<Heading as='h1' textStyle='h2' color='accent' mb={0} textAlign='center'>
+					Create Poem
+				</Heading>
+			</Flex>
 
 			<Flex as='section' direction='column' align='center' justify='center' w='full'>
-				<Flex direction='column' w='full' maxW='xl'>
+				<Flex direction='column' w='full' maxW='3xl'>
 					<CreatePoemForm />
 				</Flex>
 			</Flex>

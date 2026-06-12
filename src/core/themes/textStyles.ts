@@ -34,7 +34,7 @@ export const textStyles = defineTextStyles({
 			...baseText,
 			fontWeight: '400',
 			fontSize: ['xs', 'xs', 'sm'],
-			lineHeight: ['tall', 'tall', 'tall'],
+			lineHeight: ['shorter', 'shorter', 'shorter'],
 			letterSpacing: '0',
 		},
 	},
@@ -44,8 +44,8 @@ export const textStyles = defineTextStyles({
 			...baseText,
 			fontWeight: '400',
 			fontSize: ['2xs', 'xs'],
-			lineHeight: ['tall', 'tall'],
-			letterSpacing: '0.01em',
+			lineHeight: ['shorter', 'shorter'],
+			letterSpacing: '0.015em',
 		},
 	},
 	h1: {
@@ -93,7 +93,7 @@ export const textStyles = defineTextStyles({
 		value: {
 			...baseText,
 			fontWeight: '600',
-			fontSize: ['sm', 'md', 'lg'],
+			fontSize: ['xs', 'sm', 'md'],
 			lineHeight: ['short', 'short', 'short', 'short'],
 			letterSpacing: '0',
 		},
@@ -110,13 +110,14 @@ export const textStyles = defineTextStyles({
 		},
 	},
 	label: {
-		description: 'Field label and metadata text',
+		description: 'Eyebrow label and compact section text',
 		value: {
 			...baseText,
 			fontWeight: '600',
-			fontSize: ['xs', 'sm'],
+			fontSize: ['2xs', 'xs'],
 			lineHeight: ['short', 'short'],
-			letterSpacing: '0.02em',
+			letterSpacing: '0.08em',
+			textTransform: 'uppercase',
 		},
 	},
 	code: {

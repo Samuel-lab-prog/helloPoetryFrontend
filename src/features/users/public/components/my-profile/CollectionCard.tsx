@@ -84,6 +84,8 @@ type CollectionCardProps = {
 	myPoems: FullPoemType[];
 	savedPoems: SavedPoemType[];
 	availablePoems: PoemMinimalDataType[];
+	showPoems?: boolean;
+	showAddPoemForm?: boolean;
 	isDeletingCollection: (collectionId: number) => boolean;
 	isAddingCollectionItem: (collectionId: number, poemId: number) => boolean;
 	isRemovingCollectionItem: (collectionId: number, poemId: number) => boolean;
@@ -98,6 +100,8 @@ export function CollectionCard({
 	myPoems,
 	savedPoems,
 	availablePoems,
+	showPoems = true,
+	showAddPoemForm = true,
 	isDeletingCollection,
 	isAddingCollectionItem,
 	isRemovingCollectionItem,
@@ -162,7 +166,9 @@ export function CollectionCard({
 				w='5/6'
 			>
 				<Flex direction='column' gap={1}>
-					<Text textStyle='md'>{collection.name}</Text>
+					<Text textStyle='small' fontWeight='semibold'>
+						{collection.name}
+					</Text>
 					<Text textStyle='smaller' color='pink.200' mt={1}>
 						{collection.description || 'No description.'}
 					</Text>
@@ -193,71 +199,75 @@ export function CollectionCard({
 				)}
 			</Flex>
 
-			<Flex direction='column' gap={2} mb={3}>
-				{Array.from(new Set([...collection.poemIds, ...removingPoemIds])).map((poemId) => {
-					const poem = resolvePoem(poemId);
-					const isRemoving =
-						isRemovingCollectionItem(collection.id, poemId) || removingPoems.has(poemId);
-					return (
-						<LinkBox
-							key={`${collection.id}-${poemId}`}
-							display='flex'
-							alignItems={{ base: 'start', md: 'center' }}
-							justifyContent='space-between'
-							flexDirection={{ base: 'column', md: 'row' }}
-							gap={2}
-							p={2}
-							pb={8}
-							overflow='hidden'
-							border='1px solid'
-							borderColor='purple.800'
-							borderRadius='md'
-							position='relative'
-							transition='background-color 0.2s ease, border-color 0.2s ease, max-height 0.2s ease, opacity 0.18s ease, transform 0.2s ease'
-							_hover={{
-								bg: 'rgba(255, 255, 255, 0.03)',
-								borderColor: 'purple.600',
-							}}
-							opacity={isRemoving ? 0 : 1}
-							transform={isRemoving ? 'translateY(-6px)' : undefined}
-							maxH={isRemoving ? '0px' : '200px'}
-						>
-							<LinkOverlay asChild position='absolute' inset={0} zIndex={1}>
-								<NavLink to={poem?.slug ? `/poems/${poem.slug}/${poem.id}` : `/poems/${poemId}`} />
-							</LinkOverlay>
-							<Box zIndex={2} pointerEvents='none' w='full'>
-								<Text textStyle='smaller' color='pink.100'>
-									{poem ? poem.title : `Poem #${poemId}`}
-								</Text>
-							</Box>
-							{showManagementControls && (
-								<Box position='absolute' right={2} bottom={2} zIndex={3} pointerEvents='auto'>
-									<IconButton
-										aria-label='Remove poem from collection'
-										size={{ base: 'xs', md: 'sm' }}
-										variant='solidPink'
-										colorPalette='gray'
-										loading={isRemoving}
-										disabled={isRemoving}
-										onClick={() => {
-											if (isRemoving) return;
-											setRemovingPoemIds((prev) => new Set(prev).add(poemId));
-											void onRemovePoemFromCollection({
-												collectionId: collection.id,
-												poemId,
-											});
-										}}
-									>
-										<X />
-									</IconButton>
+			{showPoems && (
+				<Flex direction='column' gap={2} mb={3}>
+					{Array.from(new Set([...collection.poemIds, ...removingPoemIds])).map((poemId) => {
+						const poem = resolvePoem(poemId);
+						const isRemoving =
+							isRemovingCollectionItem(collection.id, poemId) || removingPoems.has(poemId);
+						return (
+							<LinkBox
+								key={`${collection.id}-${poemId}`}
+								display='flex'
+								alignItems={{ base: 'start', md: 'center' }}
+								justifyContent='space-between'
+								flexDirection={{ base: 'column', md: 'row' }}
+								gap={2}
+								p={2}
+								pb={8}
+								overflow='hidden'
+								border='1px solid'
+								borderColor='purple.800'
+								borderRadius='md'
+								position='relative'
+								transition='background-color 0.2s ease, border-color 0.2s ease, max-height 0.2s ease, opacity 0.18s ease, transform 0.2s ease'
+								_hover={{
+									bg: 'rgba(255, 255, 255, 0.03)',
+									borderColor: 'purple.600',
+								}}
+								opacity={isRemoving ? 0 : 1}
+								transform={isRemoving ? 'translateY(-6px)' : undefined}
+								maxH={isRemoving ? '0px' : '200px'}
+							>
+								<LinkOverlay asChild position='absolute' inset={0} zIndex={1}>
+									<NavLink
+										to={poem?.slug ? `/poems/${poem.slug}/${poem.id}` : `/poems/${poemId}`}
+									/>
+								</LinkOverlay>
+								<Box zIndex={2} pointerEvents='none' w='full'>
+									<Text textStyle='smaller' color='pink.100'>
+										{poem ? poem.title : `Poem #${poemId}`}
+									</Text>
 								</Box>
-							)}
-						</LinkBox>
-					);
-				})}
-			</Flex>
+								{showManagementControls && (
+									<Box position='absolute' right={2} bottom={2} zIndex={3} pointerEvents='auto'>
+										<IconButton
+											aria-label='Remove poem from collection'
+											size={{ base: 'xs', md: 'sm' }}
+											variant='solidPink'
+											colorPalette='gray'
+											loading={isRemoving}
+											disabled={isRemoving}
+											onClick={() => {
+												if (isRemoving) return;
+												setRemovingPoemIds((prev) => new Set(prev).add(poemId));
+												void onRemovePoemFromCollection({
+													collectionId: collection.id,
+													poemId,
+												});
+											}}
+										>
+											<X />
+										</IconButton>
+									</Box>
+								)}
+							</LinkBox>
+						);
+					})}
+				</Flex>
+			)}
 
-			{showManagementControls && (
+			{showManagementControls && showAddPoemForm && (
 				<AddPoemToCollectionForm
 					collectionId={collection.id}
 					poems={availablePoems}

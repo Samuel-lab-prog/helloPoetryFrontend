@@ -45,6 +45,7 @@ export function HomePage() {
 				layerStyle='mainPadded'
 				direction='column'
 				align='center'
+				px={0}
 				pb={{ base: 20, md: 12 }}
 				flex='1'
 				w='full'
@@ -52,7 +53,7 @@ export function HomePage() {
 				mx='auto'
 			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
-					<Box mx='4'>
+					<Box px={4}>
 						<SearchInput
 							label='Search poems'
 							value={searchTitle}
@@ -63,7 +64,16 @@ export function HomePage() {
 						/>
 					</Box>
 
-					<HomeFeed poems={displayedPoems} isLoading={isFeedLoading} isError={isFeedError} />
+					<HomeFeed
+						poems={displayedPoems}
+						isLoading={isFeedLoading}
+						isError={isFeedError}
+						isSearching={isSearching}
+						onClearSearch={() => {
+							setSearchTitle('');
+							setDebouncedSearch('');
+						}}
+					/>
 				</VStack>
 			</Flex>
 		</Flex>

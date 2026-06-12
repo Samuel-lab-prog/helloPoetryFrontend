@@ -1,7 +1,7 @@
+import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
-import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -48,7 +48,13 @@ export function useSavedPoems(enabled = true) {
 		},
 		onSettled: (_data, _error, poemId) => {
 			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));
-			return queryClient.invalidateQueries({ queryKey: savedKey });
+			return Promise.all([
+				queryClient.invalidateQueries({ queryKey: savedKey, refetchType: 'all' }),
+				queryClient.invalidateQueries({
+					queryKey: poemKeys.byId(String(poemId)),
+					refetchType: 'all',
+				}),
+			]);
 		},
 	});
 
@@ -70,7 +76,13 @@ export function useSavedPoems(enabled = true) {
 		},
 		onSettled: (_data, _error, poemId) => {
 			setUpdatingSavedPoemId((current) => (current === poemId ? null : current));
-			return queryClient.invalidateQueries({ queryKey: savedKey });
+			return Promise.all([
+				queryClient.invalidateQueries({ queryKey: savedKey, refetchType: 'all' }),
+				queryClient.invalidateQueries({
+					queryKey: poemKeys.byId(String(poemId)),
+					refetchType: 'all',
+				}),
+			]);
 		},
 	});
 

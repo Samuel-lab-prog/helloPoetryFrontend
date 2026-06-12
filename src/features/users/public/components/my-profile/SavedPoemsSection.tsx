@@ -1,5 +1,6 @@
 import { Surface } from '@BaseComponents';
 import {
+	Avatar,
 	Flex,
 	Heading,
 	HStack,
@@ -53,31 +54,33 @@ export function SavedPoemsSection({
 	const content = (
 		<>
 			{showHeader && (
-				<Flex
-					align={{ base: 'start', md: 'center' }}
-					justify='space-between'
-					direction={{ base: 'column', md: 'row' }}
-					gap={3}
-					mb={4}
-				>
-					<HStack gap={2}>
-						<Bookmark size={18} color='var(--chakra-colors-pink-300)' />
-						<Heading as='h2' textStyle='h4' color='pink.300'>
-							Saved poems
-						</Heading>
-					</HStack>
-					{viewAllHref && (
-						<Link
-							asChild
-							textStyle='small'
-							color='pink.200'
-							textDecoration='underline'
-							textUnderlineOffset='3px'
-						>
-							<NavLink to={viewAllHref}>View all</NavLink>
-						</Link>
+				<>
+					<Flex align='center' justify='space-between' direction='row' gap={3} mb={2} w='full'>
+						<HStack gap={2}>
+							<Bookmark size={18} color='var(--chakra-colors-pink-300)' />
+							<Heading as='h2' textStyle='h5' color='pink.300' textTransform='none'>
+								Saved poems
+							</Heading>
+						</HStack>
+						{viewAllHref && (
+							<Link
+								asChild
+								textStyle='small'
+								color='pink.200'
+								textDecoration='underline'
+								textUnderlineOffset='3px'
+								flexShrink={0}
+							>
+								<NavLink to={viewAllHref}>View all</NavLink>
+							</Link>
+						)}
+					</Flex>
+					{viewAllHref && Boolean(totalSavedPoemsCount) && (
+						<Text mb={4} textStyle='smaller' color='pink.200' textAlign='left'>
+							Showing {savedPoems.length} of {totalSavedPoemsCount} saved poems
+						</Text>
 					)}
-				</Flex>
+				</>
 			)}
 
 			<Flex direction='column' gap={3}>
@@ -89,7 +92,7 @@ export function SavedPoemsSection({
 							: 'You have not saved any poems yet.'}
 					</Text>
 				)}
-				{!isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (
+				{!showHeader && !isLoadingSavedPoems && Boolean(totalSavedPoemsCount) && (
 					<Text textStyle='smaller' color='pink.200'>
 						Showing {savedPoems.length} of {totalSavedPoemsCount} saved poems.
 					</Text>
@@ -129,17 +132,43 @@ export function SavedPoemsSection({
 									<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 										<Flex direction='column' gap={1}>
 											<Text textStyle='small'>{poem.title}</Text>
-											{poem.author?.name && poem.author?.nickname && (
-												<Text textStyle='smaller' color='pink.200'>
-													{poem.author.name} · @{poem.author.nickname}
-												</Text>
-											)}
 											<Text textStyle='smaller' color='pink.200'>
 												Saved on {formatSavedDate(poem.savedAt)}
 											</Text>
 										</Flex>
 									</NavLink>
 								</LinkOverlay>
+								{poem.author?.name && poem.author?.nickname && (
+									<Link asChild display='inline-flex' w='fit-content' alignSelf='start' mt={2}>
+										<NavLink to={`/authors/${poem.author.id}`}>
+											<Flex
+												align='center'
+												gap={2}
+												pl={2}
+												pr={2}
+												py={1.5}
+												w='fit-content'
+												display='inline-flex'
+												borderRadius='md'
+												transition='background-color 0.2s ease'
+												_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
+											>
+												<Avatar.Root size='xs'>
+													<Avatar.Image src={poem.author.avatarUrl ?? undefined} />
+													<Avatar.Fallback name={poem.author.nickname} />
+												</Avatar.Root>
+												<Flex direction='column' minW={0} gap={0}>
+													<Text textStyle='smaller' color='pink.100' lineHeight='short' truncate>
+														{poem.author.name}
+													</Text>
+													<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+														@{poem.author.nickname}
+													</Text>
+												</Flex>
+											</Flex>
+										</NavLink>
+									</Link>
+								)}
 							</LinkBox>
 							{onUnsavePoem && (
 								<IconButton
@@ -162,9 +191,9 @@ export function SavedPoemsSection({
 											void onUnsavePoem(poem.id);
 										}, 180);
 									}}
-									>
-										<X size={16} />
-									</IconButton>
+								>
+									<X size={16} />
+								</IconButton>
 							)}
 						</Flex>
 					);

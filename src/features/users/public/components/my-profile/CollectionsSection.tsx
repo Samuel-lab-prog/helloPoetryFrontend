@@ -20,6 +20,9 @@ export type CollectionsSectionProps = {
 	totalCollectionsCount?: number;
 	viewAllHref?: string;
 	showManagementControls?: boolean;
+	showCreateCollectionForm?: boolean;
+	showPoems?: boolean;
+	showAddPoemForm?: boolean;
 	myPoems: FullPoemType[];
 	savedPoems: SavedPoemType[];
 	isLoadingCollections: boolean;
@@ -46,6 +49,9 @@ export function CollectionsSection({
 	totalCollectionsCount,
 	viewAllHref,
 	showManagementControls = true,
+	showCreateCollectionForm = true,
+	showPoems = true,
+	showAddPoemForm = true,
 	myPoems,
 	savedPoems,
 	isLoadingCollections,
@@ -78,34 +84,36 @@ export function CollectionsSection({
 	const content = (
 		<>
 			{showHeader && (
-				<Flex
-					align={{ base: 'start', md: 'center' }}
-					justify='space-between'
-					direction={{ base: 'column', md: 'row' }}
-					gap={3}
-					mb={4}
-				>
-					<HStack gap={2}>
-						<Layers size={18} color='var(--chakra-colors-pink-300)' />
-						<Heading as='h2' textStyle='h4' color='pink.300'>
-							Poem collections
-						</Heading>
-					</HStack>
-					{viewAllHref && (
-						<Link
-							asChild
-							textStyle='small'
-							color='pink.200'
-							textDecoration='underline'
-							textUnderlineOffset='3px'
-						>
-							<NavLink to={viewAllHref}>View all</NavLink>
-						</Link>
+				<>
+					<Flex align='center' justify='space-between' direction='row' gap={3} mb={2} w='full'>
+						<HStack gap={2}>
+							<Layers size={18} color='var(--chakra-colors-pink-300)' />
+							<Heading as='h2' textStyle='h5' color='pink.300' textTransform='none'>
+								Poem collections
+							</Heading>
+						</HStack>
+						{viewAllHref && (
+							<Link
+								asChild
+								textStyle='small'
+								color='pink.200'
+								textDecoration='underline'
+								textUnderlineOffset='3px'
+								flexShrink={0}
+							>
+								<NavLink to={viewAllHref}>View all</NavLink>
+							</Link>
+						)}
+					</Flex>
+					{viewAllHref && Boolean(totalCollectionsCount) && (
+						<Text mb={4} textStyle='smaller' color='pink.200' textAlign='left'>
+							Showing {collections.length} of {totalCollectionsCount} collections
+						</Text>
 					)}
-				</Flex>
+				</>
 			)}
 
-			{showManagementControls && (
+			{showManagementControls && showCreateCollectionForm && (
 				<CreateCollectionForm
 					userId={profile.id}
 					isCreatingCollection={isCreatingCollection}
@@ -118,7 +126,7 @@ export function CollectionsSection({
 				{!isLoadingCollections && collections.length === 0 && (
 					<Text textStyle='small'>You have not created any collections yet.</Text>
 				)}
-				{!isLoadingCollections && Boolean(totalCollectionsCount) && (
+				{!showHeader && !isLoadingCollections && Boolean(totalCollectionsCount) && (
 					<Text textStyle='smaller' color='pink.200'>
 						Showing {collections.length} of {totalCollectionsCount} collections.
 					</Text>
@@ -141,6 +149,8 @@ export function CollectionsSection({
 								myPoems={myPoems}
 								savedPoems={savedPoems}
 								availablePoems={filteredAvailablePoems}
+								showPoems={showPoems}
+								showAddPoemForm={showAddPoemForm}
 								isDeletingCollection={isDeletingCollection}
 								isAddingCollectionItem={isAddingCollectionItem}
 								isRemovingCollectionItem={isRemovingCollectionItem}

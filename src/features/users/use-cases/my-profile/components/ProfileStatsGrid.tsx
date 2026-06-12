@@ -41,7 +41,9 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 					<Text textStyle='smaller' color='pink.200'>
 						Comments
 					</Text>
-					<Text textStyle={{ base: 'h4', md: 'h3' }}>{profile.stats?.commentsIds?.length ?? 0}</Text>
+					<Text textStyle={{ base: 'h4', md: 'h3' }}>
+						{profile.stats?.commentsIds?.length ?? 0}
+					</Text>
 				</Flex>
 			</Flex>
 			<Flex flex='1' p={{ base: 3, md: 4 }} gap={2} align='center'>

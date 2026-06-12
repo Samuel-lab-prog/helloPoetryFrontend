@@ -207,7 +207,9 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (context.repliesKey && context.previousReplies?.data) {
 				queryClient.setQueryData<CommentPage>(context.repliesKey, {
 					...context.previousReplies.data,
-					comments: context.previousReplies.data.comments.filter((comment) => comment.id !== params.id),
+					comments: context.previousReplies.data.comments.filter(
+						(comment) => comment.id !== params.id,
+					),
 				});
 			}
 			return context;
@@ -263,7 +265,9 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			if (context.previousBase.data) {
 				queryClient.setQueryData(
 					context.baseKey,
-					updatePages(context.previousBase.data, (list) => updateLikeState(list, params, -1, false)),
+					updatePages(context.previousBase.data, (list) =>
+						updateLikeState(list, params, -1, false),
+					),
 				);
 			}
 			if (context.repliesKey && context.previousReplies?.data) {

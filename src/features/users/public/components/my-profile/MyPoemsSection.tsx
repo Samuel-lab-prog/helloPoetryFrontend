@@ -1,6 +1,7 @@
 import { Surface } from '@BaseComponents';
 import {
 	Badge,
+	Box,
 	Flex,
 	Heading,
 	HStack,
@@ -11,7 +12,7 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import type { FullPoemType } from '@features/poems/public/types';
-import { formatDate, translateModerationStatus } from '@Utils';
+import { formatRelativeTime, translateModerationStatus } from '@Utils';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ export type MyPoemsSectionProps = {
 	myPoems: FullPoemType[];
 	totalPoemsCount?: number;
 	viewAllHref?: string;
+	searchAnimationKey?: string;
 	isLoadingMyPoems: boolean;
 	isMyPoemsError: boolean;
 	isSearchingMyPoems?: boolean;
@@ -43,7 +45,9 @@ export type MyPoemsSectionProps = {
  */
 export function MyPoemsSection({
 	myPoems,
+	totalPoemsCount,
 	viewAllHref,
+	searchAnimationKey,
 	isLoadingMyPoems,
 	isMyPoemsError,
 	isSearchingMyPoems,
@@ -56,34 +60,44 @@ export function MyPoemsSection({
 	const content = (
 		<>
 			{showHeader && (
-				<Flex
-					align={{ base: 'start', md: 'center' }}
-					justify='space-between'
-					direction={{ base: 'column', md: 'row' }}
-					gap={3}
-					mb={4}
-				>
-					<HStack gap={2}>
-						<Feather size={18} color='var(--chakra-colors-pink-300)' />
-						<Heading as='h2' textStyle='h4' color='pink.300'>
-							My poems
-						</Heading>
-					</HStack>
-					{viewAllHref && (
-						<Link
-							asChild
-							textStyle='small'
-							color='pink.200'
-							textDecoration='underline'
-							textUnderlineOffset='3px'
-						>
-							<NavLink to={viewAllHref}>View all</NavLink>
-						</Link>
+				<>
+					<Flex align='center' justify='space-between' direction='row' gap={3} mb={2} w='full'>
+						<HStack gap={2}>
+							<Feather size={18} color='var(--chakra-colors-pink-300)' />
+							<Heading as='h2' textStyle='h5' color='pink.300' textTransform='none'>
+								My poems
+							</Heading>
+						</HStack>
+						{viewAllHref && (
+							<Link
+								asChild
+								textStyle='small'
+								color='pink.200'
+								textDecoration='underline'
+								textUnderlineOffset='3px'
+								flexShrink={0}
+							>
+								<NavLink to={viewAllHref}>View all</NavLink>
+							</Link>
+						)}
+					</Flex>
+					{viewAllHref && Boolean(totalPoemsCount) && (
+						<Text mb={4} textStyle='smaller' color='pink.200' textAlign='left'>
+							Showing {myPoems.length} of {totalPoemsCount} poems
+						</Text>
 					)}
-				</Flex>
+				</>
 			)}
 
-			<Flex direction='column' gap={3}>
+			<Flex
+				key={searchAnimationKey ?? 'poems-list'}
+				direction='column'
+				gap={3}
+				animationName='fade-in, slide-from-bottom'
+				animationDuration='220ms'
+				animationTimingFunction='ease-out'
+				animationFillMode='backwards'
+			>
 				{isLoadingMyPoems && <Text textStyle='small'>Loading your poems...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
 					<Text textStyle='small'>
@@ -99,7 +113,9 @@ export function MyPoemsSection({
 				)}
 
 				{myPoems.map((poem, index) => {
-					const canEdit = poem.status !== 'published' && poem.moderationStatus !== 'removed';
+					const canEdit =
+						poem.moderationStatus === 'rejected' ||
+						(poem.status !== 'published' && poem.moderationStatus !== 'removed');
 					const canDelete = poem.moderationStatus !== 'removed';
 					return (
 						<Flex
@@ -128,7 +144,7 @@ export function MyPoemsSection({
 									)}
 								</Flex>
 								<Text textStyle='smaller' color='pink.200'>
-									{formatDate(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
+									{formatRelativeTime(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
 									{translateVisibility(poem.visibility)}
 								</Text>
 								{poem.status === 'published' && (
@@ -139,6 +155,24 @@ export function MyPoemsSection({
 									>
 										{translateModerationStatus(poem.moderationStatus)}
 									</Text>
+								)}
+								{poem.moderationStatus === 'rejected' && (
+									<Box
+										mt={1}
+										px={3}
+										py={2}
+										border='1px solid'
+										borderColor='red.500'
+										borderRadius='md'
+										bg='rgba(255, 60, 100, 0.08)'
+									>
+										<Text textStyle='smaller' color='red.200' fontWeight='semibold'>
+											Rejected
+										</Text>
+										<Text textStyle='smaller' color='pink.100' mt={1} whiteSpace='pre-wrap'>
+											{poem.rejectionReason?.trim() || 'No rejection reason was provided.'}
+										</Text>
+									</Box>
 								)}
 								{poem.stats && (
 									<Text textStyle='smaller' color='pink.200'>

@@ -32,7 +32,11 @@ export function DeletePoemForm() {
 
 	return (
 		<Flex as='form' w='full' direction='column' gap={4} onSubmit={handleSubmit(onSubmit)}>
-			{generalError && <Text textStyle='smaller' color='red.400'>{generalError}</Text>}
+			{generalError && (
+				<Text textStyle='smaller' color='red.400'>
+					{generalError}
+				</Text>
+			)}
 
 			<PoemCombobox name='id' poems={poems} control={control} />
 

@@ -35,7 +35,8 @@ export function SearchInput({
 			<Input
 				w='full'
 				value={value}
-				padding={2}
+				px={3}
+				py={2}
 				onChange={(event) => onValueChange(event.target.value)}
 				placeholder={placeholder}
 				textStyle='smaller'

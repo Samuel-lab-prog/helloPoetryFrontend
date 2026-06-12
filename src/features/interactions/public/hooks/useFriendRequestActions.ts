@@ -1,5 +1,5 @@
-import { getFriendsActionsPort } from '@core/ports/friends';
 import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
+import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import type { AuthorProfileType } from '@features/poems/public/types';
