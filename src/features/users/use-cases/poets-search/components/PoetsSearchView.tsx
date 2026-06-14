@@ -1,4 +1,4 @@
-import { AsyncState, EmptyStateCard, ErrorStateCard, SearchInput } from '@BaseComponents';
+import { AsyncState, EmptyStateCard, ErrorStateCard, SearchInput, getStaggeredEntryAnimationStyle } from '@BaseComponents';
 import { Box, Button, Flex, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -112,11 +112,7 @@ export function PoetsSearchView() {
 								{visiblePoets.map((poet, index) => (
 									<Box
 										key={poet.id}
-										animationName='slide-from-bottom, fade-in'
-										animationDuration='320ms'
-										animationTimingFunction='ease-out'
-										animationFillMode='backwards'
-										animationDelay={`${30 + index * 30}ms`}
+										{...getStaggeredEntryAnimationStyle(index)}
 										borderTop='1px solid'
 										borderColor='purple.700'
 										pt={0}

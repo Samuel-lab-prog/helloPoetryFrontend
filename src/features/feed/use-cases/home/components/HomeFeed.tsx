@@ -1,10 +1,9 @@
-import { AsyncState, EmptyStateCard, ErrorStateCard } from '@BaseComponents';
+import { AsyncState, EmptyStateCard, ErrorStateCard, getStaggeredEntryAnimationStyle } from '@BaseComponents';
 import { Box, Button, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
 import type { PoemPreview } from '@features/poems/public/types';
 import { SearchX, Sparkles, X } from 'lucide-react';
 
-import { getHomeFeedEntryAnimationStyle } from './homeFeedAnimations';
 import { LoadingPoemsSkeletons } from './LoadingPoemsSkeletons';
 
 type HomeFeedProps = {
@@ -64,7 +63,7 @@ export function HomeFeed({ poems, isLoading, isError, isSearching, onClearSearch
 					{poems.map((poem, index) => (
 						<Box
 							key={poem.id}
-							{...getHomeFeedEntryAnimationStyle(index)}
+							{...getStaggeredEntryAnimationStyle(index, { baseDelayMs: 60, delayStepMs: 70 })}
 							borderTop='1px solid'
 							borderColor='purple.700'
 							_first={{ borderTop: 'none' }}

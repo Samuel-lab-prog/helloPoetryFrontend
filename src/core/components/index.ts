@@ -4,6 +4,7 @@
 
 export * from './async-state/Component';
 export * from './Button';
+export * from './animations/entryAnimation';
 export * from './empty-state/Component';
 export * from './error-state/Component';
 export * from './footer/Component';
