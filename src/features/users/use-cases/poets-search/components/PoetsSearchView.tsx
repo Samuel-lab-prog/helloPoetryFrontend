@@ -125,6 +125,7 @@ export function PoetsSearchView() {
 				layerStyle='mainPadded'
 				direction='column'
 				align='center'
+				px={0}
 				pb={{ base: 20, md: 12 }}
 				flex='1'
 				w='full'
@@ -132,7 +133,7 @@ export function PoetsSearchView() {
 				mx='auto'
 			>
 				<VStack as='section' w='full' align='stretch' gap={{ base: 0 }}>
-					<Box mx='4'>
+					<Box px={4}>
 						<SearchInput
 							label='Search poets'
 							value={searchNickname}
@@ -143,7 +144,7 @@ export function PoetsSearchView() {
 						/>
 					</Box>
 
-					<Box mt={{ base: 0, md: 0 }} w='full'>
+					<Box mt={4} w='full'>
 						<AsyncState
 							isLoading={showSkeletons}
 							isError={isError}
@@ -159,7 +160,7 @@ export function PoetsSearchView() {
 								/>
 							}
 							emptyElement={
-								<Box mt={4} w='full'>
+								<Box mt={4} px={4}>
 									<EmptyPoetsState
 										hasSearch={debouncedSearch.trim().length > 0}
 										onClearSearch={() => {
@@ -170,7 +171,7 @@ export function PoetsSearchView() {
 								</Box>
 							}
 						>
-							<Flex direction='column' gap={3} w='full' mb={6} mt={4}>
+							<Flex direction='column' gap={0} w='full'>
 								{visiblePoets.map((poet, index) => (
 									<Box
 										key={poet.id}
@@ -181,7 +182,7 @@ export function PoetsSearchView() {
 										animationDelay={`${30 + index * 30}ms`}
 										borderTop='1px solid'
 										borderColor='purple.700'
-										w='full'
+										pt={0}
 										_first={{ borderTop: 'none' }}
 									>
 										<PoetCard poet={poet} />

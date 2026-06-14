@@ -18,28 +18,27 @@ export function PoetCard({ poet }: PoetCardProps) {
 			asChild
 			display='block'
 			w='full'
-			pt={1.5}
-			pb={1}
-			px={4}
-			transition='background 0.2s ease, border-color 0.2s ease'
+			py={{ base: 2.5, md: 3 }}
+			px={{ base: 3.5, md: 4 }}
+			borderRadius='lg'
+			transition='background-color 0.22s ease'
 			_hover={{
 				bg: 'rgba(255, 255, 255, 0.03)',
-				borderColor: 'purple.600',
 			}}
 		>
 			<NavLink to={`/authors/${poet.id}`}>
-				<Flex align='center' justify='space-between' gap={2}>
-					<Flex align='center' gap={3}>
-						<Avatar.Root size={{ base: 'xs', md: 'md' }}>
-							<Avatar.Image src={poet.avatarUrl ?? undefined} />
-							<Avatar.Fallback name={poet.nickname} />
-						</Avatar.Root>
-						<Flex direction='column'>
-							<Text textStyle='small'>{poet.name}</Text>
-							<Text textStyle='small' color='pink.200'>
-								@{poet.nickname}
-							</Text>
-						</Flex>
+				<Flex align='center' gap={3}>
+					<Avatar.Root size={{ base: 'xs', md: 'md' }}>
+						<Avatar.Image src={poet.avatarUrl ?? undefined} />
+						<Avatar.Fallback name={poet.nickname} />
+					</Avatar.Root>
+					<Flex direction='column' minW={0}>
+						<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+							{poet.name}
+						</Text>
+						<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+							@{poet.nickname}
+						</Text>
 					</Flex>
 				</Flex>
 			</NavLink>
