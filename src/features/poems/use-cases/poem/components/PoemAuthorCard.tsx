@@ -9,20 +9,11 @@ type PoemAuthorCardProps = {
 		nickname: string;
 		avatarUrl: string | null;
 	};
-	stats: {
-		likesCount: number;
-		commentsCount: number;
-	};
 	embedded?: boolean;
 	children?: ReactNode;
 };
 
-export const PoemAuthorCard = memo(function PoemAuthorCard({
-	author,
-	stats,
-	embedded = false,
-	children,
-}: PoemAuthorCardProps) {
+export const PoemAuthorCard = memo(function PoemAuthorCard({ author, embedded = false, children }: PoemAuthorCardProps) {
 	return (
 		<Flex
 			mt={embedded ? 5 : 6}
@@ -60,9 +51,6 @@ export const PoemAuthorCard = memo(function PoemAuthorCard({
 					<Link asChild textStyle='smaller' color='pink.200' _hover={{ color: 'pink.100' }}>
 						<NavLink to={`/authors/${author.id}`}>@{author.nickname}</NavLink>
 					</Link>
-					<Text textStyle='smaller' color='pink.200'>
-						Likes: {stats.likesCount} | Comments: {stats.commentsCount}
-					</Text>
 				</Flex>
 			</Flex>
 

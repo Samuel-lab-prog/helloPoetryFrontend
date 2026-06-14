@@ -40,7 +40,7 @@ export function PoemContentCard({
 						p={{ base: 5, md: 8 }}
 						boxShadow='0 30px 80px rgba(0,0,0,0.45)'
 						display='flex'
-						justifyContent='center'
+						justifyContent='flex-start'
 						position='relative'
 						w='full'
 					>

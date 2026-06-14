@@ -12,6 +12,7 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import type { FullPoemType } from '@features/poems/public/types';
+import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
 import { formatRelativeTime, translateModerationStatus } from '@Utils';
 import { EllipsisVertical, Feather } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -113,9 +114,7 @@ export function MyPoemsSection({
 				)}
 
 				{myPoems.map((poem, index) => {
-					const canEdit =
-						poem.moderationStatus === 'rejected' ||
-						(poem.status !== 'published' && poem.moderationStatus !== 'removed');
+					const canEdit = canUpdatePoem(poem);
 					const canDelete = poem.moderationStatus !== 'removed';
 					return (
 						<Flex

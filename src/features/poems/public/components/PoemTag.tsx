@@ -11,9 +11,9 @@ export function Tag({ children }: TagProps) {
 			alignItems='center'
 			justifyContent='center'
 			borderRadius='full'
-			px={3}
-			py={1}
-			textStyle='small'
+			px={2}
+			py={0.5}
+			textStyle='xs'
 			fontWeight='medium'
 			color='pink.100'
 			border='1px solid'

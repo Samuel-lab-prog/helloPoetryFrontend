@@ -1,4 +1,4 @@
-import { AsyncState, ErrorStateCard } from '@BaseComponents';
+import { AsyncState } from '@BaseComponents';
 import { Box, Button, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions/public';
 import { SendHorizontal } from 'lucide-react';
@@ -114,8 +114,8 @@ export const CommentsSection = memo(function CommentsSection({
 					placeholder='Write a comment (1-3000 characters)'
 					rows={4}
 					maxLength={3000}
-					textStyle='body'
-					_placeholder={{ fontSize: 'small', color: 'fg.muted' }}
+					textStyle='smaller'
+					_placeholder={{ fontSize: 'xs', color: 'fg.muted' }}
 					borderColor={commentError ? 'red.400' : undefined}
 					_focusVisible={commentError ? { borderColor: 'red.400' } : undefined}
 					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}
@@ -168,13 +168,27 @@ export const CommentsSection = memo(function CommentsSection({
 					isEmpty={comments.length === 0}
 					loadingElement={<Text textStyle='smaller'>Loading comments...</Text>}
 					errorElement={
-						<ErrorStateCard
-							eyebrow='COMMENTS UNAVAILABLE'
-							title='We could not load comments right now.'
-							description='Please try again in a moment, or refresh the page to reconnect.'
-							actionLabel='Refresh comments'
-							onAction={() => window.location.reload()}
-						/>
+						<Box
+							role='alert'
+							w='full'
+							border='1px solid'
+							borderColor='pink.500'
+							borderRadius='xl'
+							bg='rgba(255, 255, 255, 0.03)'
+							p={4}
+						>
+							<Flex direction='column' align='start' gap={2}>
+								<Text textStyle='smaller' color='pink.200' fontWeight='semibold'>
+									COMMENTS UNAVAILABLE
+								</Text>
+								<Text textStyle='smaller' color='pink.100'>
+									We could not load comments right now. Please try again in a moment, or refresh the page.
+								</Text>
+								<Button size='xs' colorPalette='pink' variant='solid' onClick={() => window.location.reload()}>
+									Refresh comments
+								</Button>
+							</Flex>
+						</Box>
 					}
 					emptyElement={
 						!isAuthenticated ? (

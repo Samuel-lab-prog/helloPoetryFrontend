@@ -1,27 +1,24 @@
-import { Badge, Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+import { Badge, Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { Tag } from '@features/poems/public/components/PoemTag';
-import { formatDate } from '@Utils';
 
 type PoemHeaderProps = {
 	poem: {
 		title: string;
 		excerpt: string | null;
 		tags: { id: number; name: string }[];
-		createdAt: string | Date;
-		updatedAt: string | Date;
 		moderationStatus?: 'rejected' | 'removed' | 'approved' | 'pending';
 		rejectionReason?: string | null;
 	};
 };
 
 export function PoemHeader({ poem }: PoemHeaderProps) {
-	const { title, excerpt, tags, createdAt, updatedAt, moderationStatus, rejectionReason } = poem;
+	const { title, excerpt, tags, moderationStatus, rejectionReason } = poem;
 	const normalizedRejectionReason = rejectionReason?.trim();
 	const shouldShowRejectionReason = moderationStatus === 'rejected';
 
 	return (
 		<>
-			<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={[2, 3]}>
+			<Heading as='h1' textStyle={{ base: 'h3', md: 'h2' }} color='pink.100' mb={[2, 3]}>
 				{title}
 			</Heading>
 
@@ -36,18 +33,6 @@ export function PoemHeader({ poem }: PoemHeaderProps) {
 					<Tag key={tag.id}>{tag.name}</Tag>
 				))}
 			</Flex>
-
-			<VStack align='start'>
-				<Text fontStyle='italic' textStyle='smaller'>
-					Created on {formatDate(createdAt)}
-				</Text>
-
-				{updatedAt !== createdAt && (
-					<Text textStyle='smaller' fontStyle='italic'>
-						Last updated on {formatDate(updatedAt)}
-					</Text>
-				)}
-			</VStack>
 
 			{shouldShowRejectionReason && (
 				<Box

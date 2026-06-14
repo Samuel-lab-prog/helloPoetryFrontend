@@ -242,8 +242,6 @@ export function CreatePoemForm() {
 									id: index,
 									name: tag,
 								})),
-								createdAt: previewPoem.createdAt,
-								updatedAt: previewPoem.createdAt,
 							}}
 						/>
 

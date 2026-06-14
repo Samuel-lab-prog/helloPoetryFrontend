@@ -28,6 +28,7 @@ export function CommentThreadReplyComposer({
 					onChange={(e) => onChange(e.target.value)}
 					placeholder='Reply to comment'
 					textStyle='smaller'
+					_placeholder={{ fontSize: 'xs', color: 'fg.muted' }}
 					rows={3}
 					maxLength={3000}
 					disabled={!isAuthenticated || !poemIsCommentable || isCreatingComment}

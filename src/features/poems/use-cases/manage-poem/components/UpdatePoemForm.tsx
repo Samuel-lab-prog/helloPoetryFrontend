@@ -1,16 +1,17 @@
-import { FormField, SelectField, TagsField } from '@BaseComponents';
+import { FormField, SelectField, Surface, TagsField } from '@BaseComponents';
 import { Button, Flex, Text } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { PoemCombobox } from '../../../public/components/PoemCombobox';
-import { usePoemsMinimal } from '../../../public/hooks/useGetPoemsMinimal';
+import { useMyPoems } from '../../../public/hooks/useGetMyPoems';
+import { canUpdatePoem } from '../../../public/utils/canUpdatePoem';
 import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../create-poem/components/constants';
 import { usePoem } from '../../poem/hooks/usePoem';
 import { useUpdatePoemForm } from '../hooks/update-poem-form';
 
 export function UpdatePoemForm() {
-	const { poems } = usePoemsMinimal();
+	const { poems: myPoems } = useMyPoems();
 
 	const {
 		control,
@@ -28,6 +29,9 @@ export function UpdatePoemForm() {
 	const { poem, isLoading } = usePoem(poemId);
 	const [searchParams] = useSearchParams();
 	const initialPoemId = Number(searchParams.get('poemId') ?? '');
+	const editablePoems = useMemo(() => myPoems.filter((item) => canUpdatePoem(item)), [myPoems]);
+	const isEditablePoem = canUpdatePoem(poem);
+	const formDisabled = isLoading || !poemId || !isEditablePoem;
 
 	useEffect(() => {
 		if (!initialPoemId || Number.isNaN(initialPoemId)) return;
@@ -36,7 +40,7 @@ export function UpdatePoemForm() {
 	}, [initialPoemId, poemId, setValue]);
 
 	useEffect(() => {
-		if (!poem) return;
+		if (!poem || !isEditablePoem) return;
 		reset({
 			id: poem.id,
 			title: poem.title,
@@ -47,7 +51,7 @@ export function UpdatePoemForm() {
 			isCommentable: poem.isCommentable,
 			tags: poem.tags?.flatMap((tag) => tag.name),
 		});
-	}, [poem, reset]);
+	}, [isEditablePoem, poem, reset]);
 
 	return (
 		<Flex as='form' w='full' direction='column' gap={4} onSubmit={handleSubmit(onSubmit)}>
@@ -57,7 +61,16 @@ export function UpdatePoemForm() {
 				</Text>
 			)}
 
-			<PoemCombobox name='id' control={control} poems={poems} />
+			<PoemCombobox name='id' control={control} poems={editablePoems} />
+
+			{poem && !isEditablePoem && (
+				<Surface variant='soft' p={4}>
+					<Text textStyle='smaller' color='pink.100'>
+						This poem cannot be edited from the admin panel anymore. Only drafts and rejected poems
+						can be updated here.
+					</Text>
+				</Surface>
+			)}
 
 			<FormField
 				label='Title'
@@ -65,7 +78,7 @@ export function UpdatePoemForm() {
 				name='title'
 				error={errors.title}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<SelectField
@@ -78,7 +91,7 @@ export function UpdatePoemForm() {
 				]}
 				error={errors.status}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<SelectField
@@ -93,7 +106,7 @@ export function UpdatePoemForm() {
 				]}
 				error={errors.visibility}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<SelectField
@@ -107,7 +120,7 @@ export function UpdatePoemForm() {
 				transformValue={(value) => value === 'true'}
 				error={errors.isCommentable}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<FormField
@@ -118,7 +131,7 @@ export function UpdatePoemForm() {
 				name='excerpt'
 				error={errors.excerpt}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<FormField
@@ -129,7 +142,7 @@ export function UpdatePoemForm() {
 				name='content'
 				error={errors.content}
 				required
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 			/>
 
 			<TagsField
@@ -137,7 +150,7 @@ export function UpdatePoemForm() {
 				control={control}
 				name='tags'
 				error={errors.tags}
-				disabled={isLoading || !poemId}
+				disabled={formDisabled}
 				maxTags={POEM_TAGS_MAX_AMOUNT}
 				maxTagLength={POEM_TAG_MAX_LENGTH}
 				placeholder='Add your tags'
@@ -148,7 +161,7 @@ export function UpdatePoemForm() {
 				size='sm'
 				variant='solidPink'
 				colorPalette='gray'
-				disabled={!isValid || isPending || isLoading}
+				disabled={!isValid || isPending || formDisabled}
 				loading={isPending}
 				w={{ base: 'full', md: 'fit-content' }}
 				alignSelf={{ base: 'stretch', md: 'flex-end' }}

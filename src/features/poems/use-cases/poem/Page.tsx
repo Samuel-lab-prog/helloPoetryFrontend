@@ -71,8 +71,6 @@ export function PoemPage() {
 						title: poem.title,
 						excerpt: poem.excerpt,
 						tags: poem.tags,
-						createdAt: poem.createdAt,
-						updatedAt: poem.updatedAt,
 						moderationStatus: poem.moderationStatus,
 						rejectionReason: poem.rejectionReason,
 					}
@@ -88,7 +86,6 @@ export function PoemPage() {
 	const shownErrorsRef = useRef<Record<string, string>>({});
 
 	const likedPoem = poem?.stats?.likedByCurrentUser ?? false;
-	const likesCount = poem?.stats?.likesCount ?? 0;
 
 	useEffect(() => {
 		if (!comments.length) return;
@@ -272,16 +269,13 @@ export function PoemPage() {
 								<PoemAuthorCard
 									embedded
 									author={poem.author}
-									stats={{
-										...poem.stats,
-										likesCount,
-									}}
 								/>
 							</Box>
 
 							<Box
 								as='article'
 								display='flex'
+								justifyContent='center'
 								mt={6}
 								p={{ base: 4, md: 5 }}
 								border='1px solid'
@@ -299,14 +293,14 @@ export function PoemPage() {
 									},
 								}}
 							>
-								<Box w='full' maxW='full' textAlign='left'>
+								<Box w='full' maxW='2xl' mx='auto'>
 									{poem.audioUrl && (
-										<Box mb={4} w='full'>
+										<Box mb={4} w='full' display='flex' justifyContent='center'>
 											<PoemAudioPlayer src={poem.audioUrl} />
 										</Box>
 									)}
 									{immersiveUrl && (
-										<Box w='full' textAlign='left' mb={5}>
+										<Box w='full' textAlign='center' mb={5}>
 											<Button
 												asChild
 												size={{ base: 'sm', md: 'sm' }}
@@ -331,7 +325,9 @@ export function PoemPage() {
 											</Button>
 										</Box>
 									)}
-									<MarkdownRenderer content={poem.content} />
+									<Box textAlign='left'>
+										<MarkdownRenderer content={poem.content} />
+									</Box>
 									<Flex justify='flex-end' mt={6}>
 										<PoemActions
 											authClientId={authClientId}

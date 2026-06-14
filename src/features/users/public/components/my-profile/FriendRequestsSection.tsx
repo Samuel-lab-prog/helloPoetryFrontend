@@ -1,5 +1,5 @@
 import { Surface } from '@BaseComponents';
-import { Avatar, Box, Flex, Heading, HStack, IconButton, Link, Text } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Heading, HStack, Link, Text } from '@chakra-ui/react';
 import type { MyFriendRequestsType } from '@core/ports/friends';
 import { Check, UserPlus, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -109,7 +109,13 @@ export function FriendRequestsSection({
 							borderTop='1px solid'
 							borderColor='border'
 						>
-							<Flex align='center' justify='space-between' direction='row' gap={3} py={3}>
+							<Flex
+								align={{ base: 'stretch', md: 'center' }}
+								justify='space-between'
+								direction={{ base: 'column', md: 'row' }}
+								gap={3}
+								py={3}
+							>
 								<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
 									<NavLink to={`/authors/${request.requesterId}`}>
 										<Flex
@@ -139,29 +145,41 @@ export function FriendRequestsSection({
 										</Flex>
 									</NavLink>
 								</Link>
-								<Flex gap={2} ml='auto'>
-									<IconButton
+								<Flex
+									w={{ base: 'full', md: 'auto' }}
+									gap={2}
+									ml={{ base: 0, md: 'auto' }}
+									direction={{ base: 'column', sm: 'row' }}
+								>
+									<Button
 										aria-label='Accept request'
-										size={{ base: '2xs', md: 'xs' }}
-										variant='subtle'
+										size='sm'
+										variant='solidPink'
 										colorPalette='green'
 										onClick={() => onAcceptRequest(request.requesterId)}
 										loading={isAccepting(request.requesterId)}
 										disabled={isRemoving}
+										w={{ base: 'full', sm: 'auto' }}
+										minH='44px'
+										justifyContent='center'
 									>
 										<Check />
-									</IconButton>
-									<IconButton
+										Accept
+									</Button>
+									<Button
 										aria-label='Decline request'
-										size={{ base: '2xs', md: 'xs' }}
-										variant='subtle'
-										colorPalette='red'
+										size='sm'
+										variant='danger'
 										onClick={() => onRejectRequest(request.requesterId)}
 										loading={isRejecting(request.requesterId)}
 										disabled={isRemoving}
+										w={{ base: 'full', sm: 'auto' }}
+										minH='44px'
+										justifyContent='center'
 									>
 										<X />
-									</IconButton>
+										Reject
+									</Button>
 								</Flex>
 							</Flex>
 						</Box>
