@@ -39,16 +39,18 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
 					<LinkOverlay asChild>
 						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-							<Text textStyle='h4' pb={1}>
-								{poem.title}
-							</Text>
+							<Flex direction='column' gap={1}>
+								<Text textStyle='h4' mb={0}>
+									{poem.title}
+								</Text>
+								{poem.excerpt && (
+									<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
+										{poem.excerpt}
+									</Text>
+								)}
+							</Flex>
 						</NavLink>
 					</LinkOverlay>
-					{poem.excerpt && (
-						<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mt={-3} mb={1}>
-							{poem.excerpt}
-						</Text>
-					)}
 
 					{!hideAuthorMeta && (
 						<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
@@ -160,22 +162,24 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				bgGradient='linear(to-r, purple.500, pink.400)'
 			/>
 
-			<Card.Header p={0} mb={{ base: 4, md: 5 }} gap={1}>
+			<Card.Header p={0} mb={{ base: 2, md: 2 }} gap={1}>
 				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
 					Poem
 				</Badge>
 				<LinkOverlay asChild>
 					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-						<Card.Title as='h4' textStyle='h4' pb={1}>
-							{poem.title}
-						</Card.Title>
+						<Flex direction='column' gap={1}>
+							<Card.Title as='h4' textStyle='h4' mb={0}>
+								{poem.title}
+							</Card.Title>
+							{poem.excerpt && (
+								<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
+									{poem.excerpt}
+								</Text>
+							)}
+						</Flex>
 					</NavLink>
 				</LinkOverlay>
-				{poem.excerpt && (
-					<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mt={-1}>
-						{poem.excerpt}
-					</Text>
-				)}
 			</Card.Header>
 
 			<Card.Body p={0} flex='1'>
