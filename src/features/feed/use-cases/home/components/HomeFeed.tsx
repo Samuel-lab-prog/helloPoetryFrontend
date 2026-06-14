@@ -1,9 +1,9 @@
-import { AsyncState, ErrorStateCard } from '@BaseComponents';
-import { Box, Flex } from '@chakra-ui/react';
+import { AsyncState, EmptyStateCard, ErrorStateCard } from '@BaseComponents';
+import { Box, Button, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
 import type { PoemPreview } from '@features/poems/public/types';
+import { SearchX, Sparkles, X } from 'lucide-react';
 
-import { EmptyFeedState } from './EmptyFeedState';
 import { getHomeFeedEntryAnimationStyle } from './homeFeedAnimations';
 import { LoadingPoemsSkeletons } from './LoadingPoemsSkeletons';
 
@@ -34,7 +34,31 @@ export function HomeFeed({ poems, isLoading, isError, isSearching, onClearSearch
 						onAction={() => window.location.reload()}
 					/>
 				}
-				emptyElement={<EmptyFeedState isSearching={isSearching} onClearSearch={onClearSearch} />}
+				emptyElement={
+					<EmptyStateCard
+						mt={4}
+						mx={3}
+						eyebrow={isSearching ? 'Search empty' : 'Nothing here yet'}
+						eyebrowIcon={isSearching ? SearchX : Sparkles}
+						title={isSearching ? 'No poems match this search' : 'This feed is still quiet'}
+						description={
+							isSearching
+								? 'Try another title or clear the search to see the full feed again.'
+								: 'When new poems are published, they will appear here with a cleaner, more visual empty state.'
+						}
+						action={
+							isSearching && onClearSearch ? (
+								<Button size='sm' variant='solidPink' onClick={onClearSearch}>
+									<HStack gap={2}>
+										<Icon as={X} boxSize={3.5} />
+										<Text as='span'>Clear search</Text>
+									</HStack>
+								</Button>
+							) : null
+						}
+						actionAlign='end'
+					/>
+				}
 			>
 				<Flex direction='column' gap={0}>
 					{poems.map((poem, index) => (

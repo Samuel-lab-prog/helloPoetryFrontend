@@ -1,5 +1,5 @@
-import { AsyncState, ErrorStateCard, SearchInput } from '@BaseComponents';
-import { Box, Button, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { AsyncState, EmptyStateCard, ErrorStateCard, SearchInput } from '@BaseComponents';
+import { Box, Button, Flex, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SearchX, Users, X } from 'lucide-react';
@@ -12,94 +12,6 @@ import { LoadingUsersSkeletons } from './LoadingUsersSkeletons';
 import { PoetCard } from './PoetCard';
 
 const DEBOUNCE_DELAY_MS = 250;
-
-function EmptyPoetsState({
-	hasSearch,
-	onClearSearch,
-}: {
-	hasSearch: boolean;
-	onClearSearch?: () => void;
-}) {
-	return (
-		<Box
-			w='full'
-			role='status'
-			aria-live='polite'
-			position='relative'
-			overflow='hidden'
-			borderRadius='2xl'
-			border='1px solid'
-			borderColor='purple.700'
-			bgGradient='linear(to-br, rgba(42, 21, 57, 0.92), rgba(30, 20, 46, 0.98) 55%, rgba(25, 31, 58, 0.96))'
-			p={{ base: 5, md: 6 }}
-			shadow='0 12px 30px rgba(0,0,0,0.28)'
-			_before={{
-				content: '""',
-				position: 'absolute',
-				inset: '-40px auto auto -30px',
-				w: '180px',
-				h: '180px',
-				borderRadius: 'full',
-				bg: 'pink.500',
-				filter: 'blur(70px)',
-				opacity: 0.14,
-			}}
-			_after={{
-				content: '""',
-				position: 'absolute',
-				inset: 'auto -50px -60px auto',
-				w: '200px',
-				h: '200px',
-				borderRadius: 'full',
-				bg: 'purple.500',
-				filter: 'blur(75px)',
-				opacity: 0.18,
-			}}
-		>
-			<VStack align='start' gap={4} position='relative' zIndex={1}>
-				<HStack
-					px={3}
-					py={2}
-					borderRadius='full'
-					bg='rgba(255, 255, 255, 0.06)'
-					border='1px solid'
-					borderColor='rgba(255, 255, 255, 0.08)'
-					gap={2}
-				>
-					<Icon as={hasSearch ? SearchX : Users} boxSize={4.5} color='pink.200' />
-					<Text
-						textStyle='smaller'
-						color='pink.200'
-						letterSpacing='0.08em'
-						textTransform='uppercase'
-					>
-						{hasSearch ? 'Search empty' : 'No poets yet'}
-					</Text>
-				</HStack>
-
-				<VStack align='start' gap={2} w='full'>
-					<Heading as='h2' textStyle='h4' color='white' mb={0}>
-						{hasSearch ? 'No poets match this nickname' : 'This search is waiting for poets'}
-					</Heading>
-					<Text textStyle='smaller' color='pink.100'>
-						{hasSearch
-							? 'Try a different nickname or clear the search to browse all poets again.'
-							: 'When poets appear, they will show up here in a clearer empty state.'}
-					</Text>
-				</VStack>
-
-				{hasSearch && onClearSearch ? (
-					<Button size='sm' variant='solidPink' onClick={onClearSearch} alignSelf='start'>
-						<HStack gap={2}>
-							<Icon as={X} boxSize={3.5} />
-							<Text as='span'>Clear search</Text>
-						</HStack>
-					</Button>
-				) : null}
-			</VStack>
-		</Box>
-	);
-}
 
 export function PoetsSearchView() {
 	const form = useForm<SearchPoetsForm>({
@@ -161,12 +73,37 @@ export function PoetsSearchView() {
 							}
 							emptyElement={
 								<Box mt={4} px={4}>
-									<EmptyPoetsState
-										hasSearch={debouncedSearch.trim().length > 0}
-										onClearSearch={() => {
-											form.setValue('searchNickname', '');
-											setDebouncedSearch('');
-										}}
+									<EmptyStateCard
+										eyebrow={debouncedSearch.trim().length > 0 ? 'Search empty' : 'No poets yet'}
+										eyebrowIcon={debouncedSearch.trim().length > 0 ? SearchX : Users}
+										title={
+											debouncedSearch.trim().length > 0
+												? 'No poets match this nickname'
+												: 'This search is waiting for poets'
+										}
+										description={
+											debouncedSearch.trim().length > 0
+												? 'Try a different nickname or clear the search to browse all poets again.'
+												: 'When poets appear, they will show up here in a clearer empty state.'
+										}
+										action={
+											debouncedSearch.trim().length > 0 ? (
+												<Button
+													size='sm'
+													variant='solidPink'
+													onClick={() => {
+														form.setValue('searchNickname', '');
+														setDebouncedSearch('');
+													}}
+												>
+													<HStack gap={2}>
+														<Icon as={X} boxSize={3.5} />
+														<Text as='span'>Clear search</Text>
+													</HStack>
+												</Button>
+											) : null
+										}
+										actionAlign='start'
 									/>
 								</Box>
 							}

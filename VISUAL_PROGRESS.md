@@ -29,7 +29,8 @@ Use this file to track visual polishing across the frontend.
 - Prefer fixing page-level layout issues before tuning individual components.
 - Record any page-specific exceptions here so they do not get lost.
 - If a screen has both a summary and a detailed view, track them separately.
-- Poets search now matches the feed spacing more closely, with the input, empty state, skeletons, and result rows aligned.
+- Poets search now matches the feed spacing more closely, with the input, empty state, skeletons,
+  and result rows aligned.
 
 ## Changelog
 
