@@ -2,6 +2,8 @@ import { Box, type BoxProps, Heading, HStack, Icon, Text, VStack } from '@chakra
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { stateCardSurfaceStyles } from '../state-card/surfaceStyles';
+
 type EmptyStateCardProps = Omit<BoxProps, 'title'> & {
 	role?: 'status' | 'alert';
 	ariaLive?: 'polite' | 'assertive';
@@ -31,36 +33,8 @@ export function EmptyStateCard({
 		<Box
 			role={role}
 			aria-live={ariaLive}
-			position='relative'
-			overflow='hidden'
-			borderRadius='2xl'
-			border='1px solid'
-			borderColor='purple.700'
-			bgGradient='linear(to-br, rgba(42, 21, 57, 0.92), rgba(30, 20, 46, 0.98) 55%, rgba(25, 31, 58, 0.96))'
-			p={{ base: 5, md: 6 }}
-			shadow='0 12px 30px rgba(0,0,0,0.28)'
-			_before={{
-				content: '""',
-				position: 'absolute',
-				inset: '-40px auto auto -30px',
-				w: '180px',
-				h: '180px',
-				borderRadius: 'full',
-				bg: 'pink.500',
-				filter: 'blur(70px)',
-				opacity: 0.14,
-			}}
-			_after={{
-				content: '""',
-				position: 'absolute',
-				inset: 'auto -50px -60px auto',
-				w: '200px',
-				h: '200px',
-				borderRadius: 'full',
-				bg: 'purple.500',
-				filter: 'blur(75px)',
-				opacity: 0.18,
-			}}
+			w='full'
+			{...stateCardSurfaceStyles}
 			{...boxProps}
 		>
 			<VStack align='start' gap={4} position='relative' zIndex={1}>

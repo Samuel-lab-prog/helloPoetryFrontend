@@ -3,8 +3,10 @@ import { notificationsKeys } from '@Api/notifications/keys';
 import type { NotificationItem, NotificationsPage } from '@Api/notifications/types';
 import { restoreSnapshots, snapshotQueriesData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useInfiniteQuery, useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import type { OptimisticSnapshot } from '@Api/optimistic';
+
+type NotificationsInfiniteData = InfiniteData<NotificationsPage, string | undefined>;
 
 export function useNotificationsPanel(onlyUnread: boolean) {
 	const queryClient = useQueryClient();
@@ -16,46 +18,61 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		(state) => state.decrementUnreadNotificationsCount,
 	);
 
-	const query = useQuery({
+	const query = useInfiniteQuery({
 		queryKey: notificationsKeys.page({ onlyUnread, limit: 50 }),
 		enabled: !!clientId,
 		staleTime: 1000 * 60 * 5,
-		queryFn: () =>
+		initialPageParam: undefined as string | undefined,
+		queryFn: ({ pageParam }) =>
 			notifications.getNotifications
-				.query({ onlyUnread, limit: 50 })
+				.query({ onlyUnread, limit: 50, nextCursor: pageParam })
 				.queryFn() as Promise<NotificationsPage>,
+		getNextPageParam: (lastPage) => (lastPage.hasMore ? String(lastPage.nextCursor) : undefined),
 	});
+
+	function updateNotificationPages(
+		updater: (notification: NotificationItem) => NotificationItem | null,
+	) {
+		queryClient.setQueriesData<NotificationsInfiniteData>(
+			{ queryKey: notificationsKeys.page() },
+			(old) => {
+				if (!old) return old;
+				return {
+					...old,
+					pages: old.pages.map((page) => ({
+						...page,
+						notifications: page.notifications
+							.map((notification) => updater(notification))
+							.filter((notification): notification is NotificationItem => notification !== null),
+					})),
+				};
+			},
+		);
+	}
+
+	function getUnreadCountFromSnapshots(snapshots: Array<OptimisticSnapshot<NotificationsInfiniteData>>) {
+		return snapshots
+			.flatMap((snapshot) => snapshot.data?.pages ?? [])
+			.flatMap((page) => page.notifications)
+			.filter((item) => !item.readAt).length;
+	}
 
 	const markAsReadMutation = useMutation({
 		mutationFn: (id: number) =>
 			notifications.markNotificationAsRead.mutate(String(id)) as Promise<NotificationItem>,
 		onMutate: async (id) => {
-			const previousPages = await snapshotQueriesData<NotificationsPage>(
+			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.all(),
+				notificationsKeys.page(),
 			);
 
 			let markedWasUnread = false;
-			queryClient.setQueriesData<NotificationsPage>(
-				{ queryKey: notificationsKeys.all() },
-				(old) => {
-					if (!old) return old;
-					const nowIso = new Date().toISOString();
-					return {
-						...old,
-						notifications: old.notifications.map((notification) => {
-							if (notification.id !== id) return notification;
-							if (!notification.readAt) markedWasUnread = true;
-							return notification.readAt
-								? notification
-								: {
-										...notification,
-										readAt: nowIso,
-									};
-						}),
-					};
-				},
-			);
+			const nowIso = new Date().toISOString();
+			updateNotificationPages((notification) => {
+				if (notification.id !== id) return notification;
+				if (!notification.readAt) markedWasUnread = true;
+				return notification.readAt ? notification : { ...notification, readAt: nowIso };
+			});
 
 			if (markedWasUnread) decrementUnreadNotificationsCount(1);
 
@@ -65,11 +82,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			if (!context) return;
 			restoreSnapshots(queryClient, context.previousPages);
 			if (context.markedWasUnread) {
-				const unreadCount =
-					context.previousPages
-						.flatMap((page) => page.data?.notifications ?? [])
-						.filter((item) => !item.readAt).length ?? 0;
-				setUnreadNotificationsCount(unreadCount);
+				setUnreadNotificationsCount(getUnreadCountFromSnapshots(context.previousPages));
 			}
 		},
 	});
@@ -77,23 +90,14 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	const markAllReadMutation = useMutation({
 		mutationFn: () => notifications.markAllAsRead.mutate(),
 		onMutate: async () => {
-			const previousPages = await snapshotQueriesData<NotificationsPage>(
+			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.all(),
+				notificationsKeys.page(),
 			);
 
-			queryClient.setQueriesData<NotificationsPage>(
-				{ queryKey: notificationsKeys.all() },
-				(old) => {
-					if (!old) return old;
-					const nowIso = new Date().toISOString();
-					return {
-						...old,
-						notifications: old.notifications.map((notification) =>
-							notification.readAt ? notification : { ...notification, readAt: nowIso },
-						),
-					};
-				},
+			const nowIso = new Date().toISOString();
+			updateNotificationPages((notification) =>
+				notification.readAt ? notification : { ...notification, readAt: nowIso },
 			);
 
 			setUnreadNotificationsCount(0);
@@ -103,11 +107,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onError: (_error, _variables, context) => {
 			if (!context) return;
 			restoreSnapshots(queryClient, context.previousPages);
-			const unreadCount =
-				context.previousPages
-					.flatMap((page) => page.data?.notifications ?? [])
-					.filter((item) => !item.readAt).length ?? 0;
-			setUnreadNotificationsCount(unreadCount);
+			setUnreadNotificationsCount(getUnreadCountFromSnapshots(context.previousPages));
 		},
 	});
 
@@ -115,13 +115,18 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: () => notifications.deleteAllNotifications.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
-			queryClient.setQueriesData<NotificationsPage>({ queryKey: notificationsKeys.all() }, (old) =>
+			queryClient.setQueriesData<NotificationsInfiniteData>({ queryKey: notificationsKeys.page() }, (old) =>
 				old
 					? {
 							...old,
-							notifications: [],
-							hasMore: false,
-							nextCursor: undefined,
+							pages: [
+								{
+									notifications: [],
+									hasMore: false,
+									nextCursor: undefined,
+								},
+							],
+							pageParams: [undefined],
 						}
 					: old,
 			);
@@ -132,28 +137,17 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: (id: number) =>
 			notifications.deleteNotification.mutate(String(id)) as Promise<NotificationItem>,
 		onMutate: async (id) => {
-			const previousPages = await snapshotQueriesData<NotificationsPage>(
+			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.all(),
+				notificationsKeys.page(),
 			);
 
 			let removedWasUnread = false;
-			queryClient.setQueriesData<NotificationsPage>(
-				{ queryKey: notificationsKeys.all() },
-				(old) => {
-					if (!old) return old;
-					const existsUnread = old.notifications.some(
-						(notification) => notification.id === id && !notification.readAt,
-					);
-					if (existsUnread) removedWasUnread = true;
-					return {
-						...old,
-						notifications: old.notifications.filter((notification) => notification.id !== id),
-						hasMore: old.hasMore,
-						nextCursor: old.nextCursor,
-					};
-				},
-			);
+			updateNotificationPages((notification) => {
+				if (notification.id !== id) return notification;
+				if (!notification.readAt) removedWasUnread = true;
+				return null;
+			});
 
 			if (removedWasUnread) decrementUnreadNotificationsCount(1);
 
@@ -163,11 +157,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			if (!context) return;
 			restoreSnapshots(queryClient, context.previousPages);
 			if (context.removedWasUnread) {
-				const unreadCount =
-					context.previousPages
-						.flatMap((page) => page.data?.notifications ?? [])
-						.filter((item) => !item.readAt).length ?? 0;
-				setUnreadNotificationsCount(unreadCount);
+				setUnreadNotificationsCount(getUnreadCountFromSnapshots(context.previousPages));
 			}
 		},
 		onSuccess: (notification, _id, context) => {
@@ -177,20 +167,17 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 	});
 
-	useEffect(() => {
-		if (!clientId) return;
-		if (!query.data) return;
-		if (onlyUnread) return;
-		const unreadCount = query.data.notifications.filter((item) => !item.readAt).length;
-		setUnreadNotificationsCount(unreadCount);
-	}, [clientId, onlyUnread, query.data, setUnreadNotificationsCount]);
+	const notificationsList = query.data?.pages.flatMap((page) => page.notifications) ?? [];
 
 	return {
-		notifications: query.data?.notifications ?? [],
+		notifications: notificationsList,
+		hasMoreNotifications: query.hasNextPage ?? false,
 		isLoading: query.isLoading,
+		isLoadingMoreNotifications: query.isFetchingNextPage,
 		isError: query.isError,
 		error: query.error,
 		refetch: query.refetch,
+		loadMoreNotifications: () => query.fetchNextPage(),
 		markAsRead: markAsReadMutation.mutateAsync,
 		markAllAsRead: markAllReadMutation.mutateAsync,
 		deleteAllNotifications: deleteAllMutation.mutateAsync,

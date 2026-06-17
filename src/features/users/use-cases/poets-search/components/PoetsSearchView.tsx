@@ -72,40 +72,38 @@ export function PoetsSearchView() {
 								/>
 							}
 							emptyElement={
-								<Box mt={4} px={4}>
-									<EmptyStateCard
-										eyebrow={debouncedSearch.trim().length > 0 ? 'Search empty' : 'No poets yet'}
-										eyebrowIcon={debouncedSearch.trim().length > 0 ? SearchX : Users}
-										title={
-											debouncedSearch.trim().length > 0
-												? 'No poets match this nickname'
-												: 'This search is waiting for poets'
-										}
-										description={
-											debouncedSearch.trim().length > 0
-												? 'Try a different nickname or clear the search to browse all poets again.'
-												: 'When poets appear, they will show up here in a clearer empty state.'
-										}
-										action={
-											debouncedSearch.trim().length > 0 ? (
-												<Button
-													size='sm'
-													variant='solidPink'
-													onClick={() => {
-														form.setValue('searchNickname', '');
-														setDebouncedSearch('');
-													}}
-												>
-													<HStack gap={2}>
-														<Icon as={X} boxSize={3.5} />
-														<Text as='span'>Clear search</Text>
-													</HStack>
-												</Button>
-											) : null
-										}
-										actionAlign='start'
-									/>
-								</Box>
+								<EmptyStateCard
+									eyebrow={debouncedSearch.trim().length > 0 ? 'Search empty' : 'No poets yet'}
+									eyebrowIcon={debouncedSearch.trim().length > 0 ? SearchX : Users}
+									title={
+										debouncedSearch.trim().length > 0
+											? 'No poets match this nickname'
+											: 'This search is waiting for poets'
+									}
+									description={
+										debouncedSearch.trim().length > 0
+											? 'Try a different nickname or clear the search to browse all poets again.'
+											: 'When poets appear, they will show up here in a clearer empty state.'
+									}
+									action={
+										debouncedSearch.trim().length > 0 ? (
+											<Button
+												size='sm'
+												variant='solidPink'
+												onClick={() => {
+													form.setValue('searchNickname', '');
+													setDebouncedSearch('');
+												}}
+											>
+												<HStack gap={2}>
+													<Icon as={X} boxSize={3.5} />
+													<Text as='span'>Clear search</Text>
+												</HStack>
+											</Button>
+										) : null
+									}
+									actionAlign='start'
+								/>
 							}
 						>
 							<Flex direction='column' gap={0} w='full'>

@@ -26,6 +26,7 @@ export function HomeFeed({ poems, isLoading, isError, isSearching, onClearSearch
 				loadingElement={LoadingPoemsSkeletons}
 				errorElement={
 					<ErrorStateCard
+						mt={4}
 						eyebrow='FEED UNAVAILABLE'
 						title='We could not load your feed right now.'
 						description='Your poems are safe. Please try again in a moment, or refresh the page to reconnect.'
@@ -36,7 +37,6 @@ export function HomeFeed({ poems, isLoading, isError, isSearching, onClearSearch
 				emptyElement={
 					<EmptyStateCard
 						mt={4}
-						mx={3}
 						eyebrow={isSearching ? 'Search empty' : 'Nothing here yet'}
 						eyebrowIcon={isSearching ? SearchX : Sparkles}
 						title={isSearching ? 'No poems match this search' : 'This feed is still quiet'}

@@ -1,6 +1,8 @@
-import { Box, Button, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, type BoxProps, Text, VStack } from '@chakra-ui/react';
 
-type ErrorStateCardProps = {
+import { stateCardSurfaceStyles } from '../state-card/surfaceStyles';
+
+type ErrorStateCardProps = BoxProps & {
 	eyebrow?: string;
 	title: string;
 	description: string;
@@ -14,33 +16,14 @@ export function ErrorStateCard({
 	description,
 	actionLabel = 'Try again',
 	onAction,
+	...boxProps
 }: ErrorStateCardProps) {
 	return (
 		<Box
 			role='alert'
 			w='full'
-			maxW={{ base: 'calc(100% - 2rem)', md: 'full' }}
-			mx={{ base: 4, md: 0 }}
-			position='relative'
-			overflow='hidden'
-			borderRadius='2xl'
-			border='1px solid'
-			borderColor='pink.500'
-			bgGradient='linear(to-br, #2A1539, #1E1B38 45%, #191F3A)'
-			p={{ base: 5, md: 6 }}
-			shadow='0 12px 30px rgba(0,0,0,0.35)'
-			_before={{
-				content: '""',
-				position: 'absolute',
-				top: '-40px',
-				right: '-40px',
-				w: '140px',
-				h: '140px',
-				borderRadius: 'full',
-				bg: 'pink.500',
-				filter: 'blur(70px)',
-				opacity: 0.25,
-			}}
+			{...stateCardSurfaceStyles}
+			{...boxProps}
 		>
 			<VStack align='start' gap={3} position='relative' zIndex={1}>
 				<Text fontSize='sm' fontWeight='bold' color='pink.200' letterSpacing='0.06em'>
