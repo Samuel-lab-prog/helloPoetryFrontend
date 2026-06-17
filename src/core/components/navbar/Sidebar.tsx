@@ -1,4 +1,4 @@
-import { Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
+import { Badge, Flex, HStack, Icon, Link, Text, VStack } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 import { getLinkIcon, type NavbarLink } from './utils';
@@ -6,6 +6,7 @@ import { getLinkIcon, type NavbarLink } from './utils';
 type NavbarSidebarProps = {
 	links: NavbarLink[];
 	currentPath: string;
+	moderationCount: number;
 	onSameRouteClick: () => void;
 	onPrefetchRoute?: (to: string) => void;
 };
@@ -13,6 +14,7 @@ type NavbarSidebarProps = {
 export function NavbarSidebar({
 	links,
 	currentPath,
+	moderationCount,
 	onSameRouteClick,
 	onPrefetchRoute,
 }: NavbarSidebarProps) {
@@ -53,6 +55,22 @@ export function NavbarSidebar({
 												{link.label}
 											</Text>
 										</HStack>
+										{link.to === '/admin/moderation' && moderationCount > 0 && (
+											<Badge
+												minW='1.25rem'
+												h='1.25rem'
+												px='1'
+												display='inline-flex'
+												alignItems='center'
+												justifyContent='center'
+												borderRadius='full'
+												colorPalette='pink'
+												variant='solid'
+												fontSize='2xs'
+											>
+												{moderationCount > 9 ? '9+' : moderationCount}
+											</Badge>
+										)}
 									</HStack>
 								</NavLink>
 							</Link>

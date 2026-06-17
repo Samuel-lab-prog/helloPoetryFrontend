@@ -1,7 +1,9 @@
 /* eslint-disable max-lines-per-function */
+import { moderation } from '@Api/moderation/endpoints';
 import { Avatar, Badge, Flex, Icon, Link, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMyProfile } from '@features/users/public/hooks/useMyProfile';
+import { useQuery } from '@tanstack/react-query';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
@@ -20,6 +22,13 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const { profile } = useMyProfile();
+	const canSeeModerationBadge = authClient?.role === 'moderator' || authClient?.role === 'admin';
+	const { data: moderationPendingCount = 0 } = useQuery({
+		...moderation.getPendingPoems.query(),
+		enabled: canSeeModerationBadge,
+		staleTime: 1000 * 30,
+		select: (pendingPoems) => pendingPoems.length,
+	});
 	const location = useLocation();
 	const contentRef = useRef<HTMLDivElement | null>(null);
 	const [navHidden, setNavHidden] = useState(false);
@@ -308,6 +317,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 				<NavbarSidebar
 					links={links}
 					currentPath={location.pathname}
+					moderationCount={moderationPendingCount}
 					onSameRouteClick={scrollToTop}
 					onPrefetchRoute={onPrefetchRoute}
 				/>
@@ -337,6 +347,7 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					links={links}
 					currentPath={location.pathname}
 					unreadCount={unreadCount}
+					moderationCount={moderationPendingCount}
 					onSameRouteClick={scrollToTop}
 					onPrefetchRoute={onPrefetchRoute}
 					isHidden={shouldHideNav}

@@ -56,7 +56,9 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 				type: 'success',
 				title: 'Poem created',
 				description: isPublished
-					? 'Your poem has been created and will be reviewed for moderation.'
+					? createdPoem.moderationStatus === 'approved'
+						? 'Your poem has been published and approved instantly.'
+						: 'Your poem has been created and will be reviewed for moderation.'
 					: 'Your poem has been saved as a draft.',
 				duration: 6000,
 				meta: {

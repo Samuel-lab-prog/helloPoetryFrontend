@@ -2,6 +2,7 @@ import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import { toaster } from '@BaseComponents';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { findForbiddenWords } from '@Utils';
 import { useState } from 'react';
@@ -13,6 +14,7 @@ import { handleUpdatePoemError } from './handleUpdatePoemError';
 export function useUpdatePoemForm() {
 	const queryClient = useQueryClient();
 	const [generalError, setGeneralError] = useState('');
+	const requesterRole = useAuthClientStore((state) => state.authClient?.role);
 
 	const form = useForm<UpdatePoemType>({
 		resolver: zodResolver(updatePoemSchema),
@@ -29,10 +31,18 @@ export function useUpdatePoemForm() {
 			await mutateAsync(data);
 			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });
 			queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(data.id)) });
+			const isPublished = data.status === 'published';
+			const wasApprovedImmediately =
+				isPublished &&
+				(requesterRole === 'admin' || requesterRole === 'moderator');
 			toaster.create({
 				type: 'success',
 				title: 'Poem updated',
-				description: 'Your poem was updated successfully.',
+				description: isPublished
+					? wasApprovedImmediately
+						? 'Your poem was published and approved instantly.'
+						: 'Your poem was updated and will be reviewed for moderation.'
+					: 'Your poem was updated and saved as a draft.',
 				duration: 5000,
 				meta: {
 					colorPalette: 'green',

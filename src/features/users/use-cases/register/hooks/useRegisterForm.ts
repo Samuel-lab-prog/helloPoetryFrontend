@@ -37,6 +37,7 @@ export function useRegisterForm() {
 
 	function onSubmit(data: RegisterDataType) {
 		setGeneralError('');
+		form.clearErrors('avatar');
 
 		if (!form.formState.isValid) return;
 
@@ -48,7 +49,10 @@ export function useRegisterForm() {
 					avatarUrl = await uploadAvatarFile(avatar as File);
 				} catch (err) {
 					const message = err instanceof Error ? err.message : 'Error uploading avatar.';
-					setGeneralError(message);
+					form.setError('avatar', {
+						type: 'manual',
+						message,
+					});
 					return;
 				}
 			}

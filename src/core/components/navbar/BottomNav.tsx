@@ -7,6 +7,7 @@ type NavbarBottomNavProps = {
 	links: NavbarLink[];
 	currentPath: string;
 	unreadCount: number;
+	moderationCount: number;
 	onSameRouteClick: () => void;
 	onPrefetchRoute?: (to: string) => void;
 	isHidden?: boolean;
@@ -16,6 +17,7 @@ export function NavbarBottomNav({
 	links,
 	currentPath,
 	unreadCount,
+	moderationCount,
 	onSameRouteClick,
 	onPrefetchRoute,
 	isHidden,
@@ -77,8 +79,27 @@ export function NavbarBottomNav({
 											colorPalette='pink'
 											variant='solid'
 											fontSize='2xs'
+											>
+												{unreadCount > 9 ? '9+' : unreadCount}
+											</Badge>
+									)}
+									{link.to === '/admin/moderation' && moderationCount > 0 && (
+										<Badge
+											position='absolute'
+											top='-2'
+											right='-2'
+											minW='1.1rem'
+											h='1.1rem'
+											px='1'
+											display='inline-flex'
+											alignItems='center'
+											justifyContent='center'
+											borderRadius='full'
+											colorPalette='pink'
+											variant='solid'
+											fontSize='2xs'
 										>
-											{unreadCount > 9 ? '9+' : unreadCount}
+											{moderationCount > 9 ? '9+' : moderationCount}
 										</Badge>
 									)}
 								</Flex>

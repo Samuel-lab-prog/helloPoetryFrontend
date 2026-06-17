@@ -13,10 +13,10 @@ export const MAX_AVATAR_SIZE_BYTES = MAX_AVATAR_SIZE_MB * 1024 * 1024;
 
 export function getAvatarFileError(file: File): string | null {
 	if (!allowedImageTypes.has(file.type.toLowerCase()))
-		return 'Formato de imagem inv�lido. Use JPG, PNG, WEBP ou GIF.';
+		return 'Formato de imagem não suportado. Use JPG, PNG, WEBP ou GIF.';
 
 	if (file.size > MAX_AVATAR_SIZE_BYTES)
-		return `A imagem deve ter no m�ximo ${MAX_AVATAR_SIZE_MB}MB.`;
+		return `A imagem deve ter no máximo ${MAX_AVATAR_SIZE_MB}MB.`;
 
 	return null;
 }
