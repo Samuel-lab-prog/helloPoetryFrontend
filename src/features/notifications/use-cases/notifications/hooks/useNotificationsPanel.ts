@@ -1,12 +1,25 @@
 import { notifications } from '@Api/notifications/endpoints';
 import { notificationsKeys } from '@Api/notifications/keys';
 import type { NotificationItem, NotificationsPage } from '@Api/notifications/types';
-import { restoreSnapshots, snapshotQueriesData } from '@Api/optimistic';
+import { type OptimisticSnapshot, restoreSnapshots, snapshotQueriesData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { useInfiniteQuery, useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
-import type { OptimisticSnapshot } from '@Api/optimistic';
+import { type InfiniteData,useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 type NotificationsInfiniteData = InfiniteData<NotificationsPage, string | undefined>;
+
+function getNotificationsFromPage(page: NotificationsPage | undefined): NotificationItem[] {
+	const maybePage = page as Partial<NotificationsPage> | undefined;
+	return Array.isArray(maybePage?.notifications) ? maybePage.notifications : [];
+}
+
+function normalizeNotificationsPage(page: NotificationsPage | undefined): NotificationsPage {
+	return {
+		...page,
+		notifications: getNotificationsFromPage(page),
+		hasMore: Boolean(page?.hasMore),
+		nextCursor: page?.nextCursor,
+	};
+}
 
 export function useNotificationsPanel(onlyUnread: boolean) {
 	const queryClient = useQueryClient();
@@ -27,7 +40,8 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 			notifications.getNotifications
 				.query({ onlyUnread, limit: 50, nextCursor: pageParam })
 				.queryFn() as Promise<NotificationsPage>,
-		getNextPageParam: (lastPage) => (lastPage.hasMore ? String(lastPage.nextCursor) : undefined),
+		getNextPageParam: (lastPage) =>
+			lastPage?.hasMore && lastPage.nextCursor ? String(lastPage.nextCursor) : undefined,
 	});
 
 	function updateNotificationPages(
@@ -39,12 +53,15 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 				if (!old) return old;
 				return {
 					...old,
-					pages: old.pages.map((page) => ({
-						...page,
-						notifications: page.notifications
-							.map((notification) => updater(notification))
-							.filter((notification): notification is NotificationItem => notification !== null),
-					})),
+					pages: old.pages.map((page) => {
+						const normalizedPage = normalizeNotificationsPage(page);
+						return {
+							...normalizedPage,
+							notifications: normalizedPage.notifications
+								.map((notification) => updater(notification))
+								.filter((notification): notification is NotificationItem => notification !== null),
+						};
+					}),
 				};
 			},
 		);
@@ -53,7 +70,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	function getUnreadCountFromSnapshots(snapshots: Array<OptimisticSnapshot<NotificationsInfiniteData>>) {
 		return snapshots
 			.flatMap((snapshot) => snapshot.data?.pages ?? [])
-			.flatMap((page) => page.notifications)
+			.flatMap((page) => getNotificationsFromPage(page))
 			.filter((item) => !item.readAt).length;
 	}
 
@@ -167,10 +184,11 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 	});
 
-	const notificationsList = query.data?.pages.flatMap((page) => page.notifications) ?? [];
+	const notificationsList = query.data?.pages.flatMap((page) => getNotificationsFromPage(page)) ?? [];
+	const safeNotificationsList = Array.isArray(notificationsList) ? notificationsList : [];
 
 	return {
-		notifications: notificationsList,
+		notifications: safeNotificationsList,
 		hasMoreNotifications: query.hasNextPage ?? false,
 		isLoading: query.isLoading,
 		isLoadingMoreNotifications: query.isFetchingNextPage,

@@ -10,6 +10,7 @@ import {
 	LinkOverlay,
 	Text,
 } from '@chakra-ui/react';
+import { ModerationActionsMenu } from '@features/moderation/public';
 import { formatRelativeTime } from '@Utils';
 import { Heart, MessageCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -26,6 +27,18 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
 	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
 	const commentsCount = poem.stats?.commentsCount ?? poem.commentsCount;
+	const moderationPoemTarget = {
+		id: poem.id,
+		title: poem.title,
+		status: poem.status,
+		moderationStatus: poem.moderationStatus,
+		author: {
+			id: poem.author.id,
+			name: poem.author.name,
+			nickname: poem.author.nickname,
+			avatarUrl: poem.author.avatarUrl,
+		},
+	};
 
 	if (variant === 'flat') {
 		return (
@@ -37,20 +50,28 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
 			>
 				<Flex direction='column' gap={{ base: 2.5, md: 3 }}>
-					<LinkOverlay asChild>
-						<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-							<Flex direction='column' gap={1}>
-								<Text textStyle='h4' mb={0}>
-									{poem.title}
-								</Text>
-								{poem.excerpt && (
-									<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
-										{poem.excerpt}
+					<Flex align='start' justify='space-between' gap={2}>
+						<LinkOverlay asChild>
+							<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
+								<Flex direction='column' gap={1}>
+									<Text textStyle='h4' mb={0}>
+										{poem.title}
 									</Text>
-								)}
-							</Flex>
-						</NavLink>
-					</LinkOverlay>
+									{poem.excerpt && (
+										<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
+											{poem.excerpt}
+										</Text>
+									)}
+								</Flex>
+							</NavLink>
+						</LinkOverlay>
+						<ModerationActionsMenu
+							poem={moderationPoemTarget}
+							size='xs'
+							variant='ghost'
+							ariaLabel='Open poem moderation actions'
+						/>
+					</Flex>
 
 					{!hideAuthorMeta && (
 						<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
@@ -163,9 +184,17 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 			/>
 
 			<Card.Header p={0} mb={{ base: 2, md: 2 }} gap={1}>
-				<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
-					Poem
-				</Badge>
+				<Flex align='start' justify='space-between' gap={2}>
+					<Badge size='sm' colorPalette='pink' w='fit-content' variant='subtle'>
+						Poem
+					</Badge>
+					<ModerationActionsMenu
+						poem={moderationPoemTarget}
+						size='xs'
+						variant='ghost'
+						ariaLabel='Open poem moderation actions'
+					/>
+				</Flex>
 				<LinkOverlay asChild>
 					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
 						<Flex direction='column' gap={1}>

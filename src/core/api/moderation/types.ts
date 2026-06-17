@@ -14,6 +14,11 @@ export type BanUserBody = {
 export type SuspendUserBody = {
 	userId: string;
 	reason: string;
+	durationDays?: number;
+};
+
+export type UserModerationBody = {
+	userId: string;
 };
 
 export type BannedUserResponse = {
@@ -31,6 +36,27 @@ export type SuspendedUserResponse = {
 	reason: string;
 	suspendedAt: string;
 	endAt: string;
+};
+
+export type SanctionType = 'ban' | 'suspension';
+
+export type UserSanction = {
+	id: number;
+	userId: number;
+	moderatorId: number;
+	type: SanctionType;
+	reason: string;
+	startAt: string;
+	endAt: string | null;
+};
+
+export type UserSanctionsResponse = {
+	items: UserSanction[];
+};
+
+export type UserSanctionStatusResponse = {
+	activeBan: BannedUserResponse | null;
+	activeSuspension: SuspendedUserResponse | null;
 };
 
 export type ModerationPoem = {

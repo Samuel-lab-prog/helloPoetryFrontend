@@ -1,5 +1,6 @@
 import { Surface } from '@BaseComponents';
 import { Avatar, Badge, Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { ModerationActionsMenu } from '@features/moderation/public';
 import type { AuthorProfileType } from '@features/poems/public/types';
 
 import type { RelationStatus } from './utils';
@@ -36,46 +37,68 @@ export function AuthorProfileCard({
 		>
 			<Flex direction='column' gap={4}>
 				<Flex
-					direction={{ base: 'column', md: 'row' }}
-					align={{ base: 'start', md: 'start' }}
+					align='start'
+					justify='space-between'
 					gap={4}
+					w='full'
 				>
-					<Box
-						p='2px'
-						borderRadius='full'
-						bgGradient='linear(to-br, pink.400, purple.500)'
-						boxShadow='0 0 0 1px rgba(255,255,255,0.04)'
+					<Flex
+						direction={{ base: 'column', md: 'row' }}
+						align={{ base: 'start', md: 'start' }}
+						gap={4}
+						minW={0}
+						flex='1'
 					>
-						<Avatar.Root
-							size='lg'
-							w={{ base: '5rem', md: '6.5rem' }}
-							h={{ base: '5rem', md: '6.5rem' }}
-							border='2px solid'
-							borderColor='rgba(20, 0, 18, 0.85)'
+						<Box
+							p='2px'
+							borderRadius='full'
+							bgGradient='linear(to-br, pink.400, purple.500)'
+							boxShadow='0 0 0 1px rgba(255,255,255,0.04)'
 						>
-							<Avatar.Image src={author.avatarUrl ?? undefined} />
-							<Avatar.Fallback name={author.name} />
-						</Avatar.Root>
-					</Box>
+							<Avatar.Root
+								size='lg'
+								w={{ base: '5rem', md: '6.5rem' }}
+								h={{ base: '5rem', md: '6.5rem' }}
+								border='2px solid'
+								borderColor='rgba(20, 0, 18, 0.85)'
+							>
+								<Avatar.Image src={author.avatarUrl ?? undefined} />
+								<Avatar.Fallback name={author.name} />
+							</Avatar.Root>
+						</Box>
 
-					<Flex direction='column' gap={2} minW={0} flex='1'>
-						<Flex align='center' gap={2} wrap='wrap'>
-							<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={0}>
-								{author.name}
-							</Heading>
-							{relationStatus && (
-								<Badge colorPalette='pink' variant='subtle'>
-									{relationStatus.text}
-								</Badge>
-							)}
+						<Flex direction='column' gap={2} minW={0} flex='1'>
+							<Flex align='center' gap={2} wrap='wrap'>
+								<Heading as='h1' textStyle={{ base: 'h4', md: 'h3' }} mb={0}>
+									{author.name}
+								</Heading>
+								{relationStatus && (
+									<Badge colorPalette='pink' variant='subtle'>
+										{relationStatus.text}
+									</Badge>
+								)}
+							</Flex>
+							<Text textStyle='smaller' color='pink.200'>
+								@{author.nickname}
+							</Text>
+							<Text textStyle='smaller' color='pink.100'>
+								{author.bio || 'No bio yet.'}
+							</Text>
 						</Flex>
-						<Text textStyle='smaller' color='pink.200'>
-							@{author.nickname}
-						</Text>
-						<Text textStyle='smaller' color='pink.100'>
-							{author.bio || 'No bio yet.'}
-						</Text>
 					</Flex>
+					<ModerationActionsMenu
+						user={{
+							id: author.id,
+							name: author.name,
+							nickname: author.nickname,
+							role: author.role,
+							status: author.status,
+							avatarUrl: author.avatarUrl,
+						}}
+						size={{ base: 'xs', md: 'sm' }}
+						variant='ghost'
+						ariaLabel='Open user moderation actions'
+					/>
 				</Flex>
 
 				<Flex gap={2} wrap='wrap'>

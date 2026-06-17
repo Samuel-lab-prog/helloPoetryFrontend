@@ -3,12 +3,12 @@ import {
 	Box,
 	Button,
 	Flex,
+	Heading,
 	HStack,
 	Icon,
 	IconButton,
 	Menu,
 	Portal,
-	Heading,
 	Text,
 } from '@chakra-ui/react';
 import { BellOff, EllipsisVertical, RefreshCw } from 'lucide-react';
@@ -32,6 +32,8 @@ export function NotificationsPage() {
 		isMarkingAllAsRead,
 		deleteNotification,
 	} = useNotificationsPanel(false);
+	const notificationItems = Array.isArray(notifications) ? notifications : [];
+	const hasNotifications = notificationItems.some(() => true);
 
 	const isRemoving = (id: number) => removingIds.has(id);
 	const scheduleRemove = async (id: number): Promise<void> => {
@@ -77,7 +79,7 @@ export function NotificationsPage() {
 								aria-label='Open notification actions'
 								size={{ base: 'xs', md: 'sm' }}
 								variant='solidPink'
-								disabled={notifications.length === 0 || isMarkingAllAsRead}
+								disabled={!hasNotifications || isMarkingAllAsRead}
 							>
 								<EllipsisVertical size={16} />
 							</IconButton>
@@ -100,7 +102,7 @@ export function NotificationsPage() {
 										onClick={() => {
 											void markAllAsRead();
 										}}
-										disabled={notifications.length === 0}
+										disabled={!hasNotifications}
 									>
 										Mark all as read
 									</Menu.Item>
@@ -113,7 +115,7 @@ export function NotificationsPage() {
 				<AsyncState
 					isLoading={isLoading}
 					isError={isError}
-					isEmpty={notifications.length === 0}
+					isEmpty={!hasNotifications}
 					loadingElement={LoadingNotificationsSkeletons}
 					errorElement={
 						<ErrorStateCard
@@ -149,7 +151,7 @@ export function NotificationsPage() {
 					}
 				>
 					<Flex direction='column' gap={1} mb={4}>
-						{notifications.map((item, index) => (
+						{notificationItems.map((item, index) => (
 							<Box
 								key={item.id}
 								overflow='hidden'

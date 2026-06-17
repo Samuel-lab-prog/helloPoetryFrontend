@@ -3,6 +3,7 @@ import { AsyncState, ErrorStateCard, MarkdownRenderer, toaster } from '@BaseComp
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions/public';
+import { ModerationActionsMenu } from '@features/moderation/public';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
 import { findForbiddenWords } from '@Utils';
@@ -75,6 +76,24 @@ export function PoemPage() {
 						rejectionReason: poem.rejectionReason,
 					}
 				: null,
+		[poem],
+	);
+	const moderationPoemTarget = useMemo(
+		() =>
+			poem
+				? {
+						id: poem.id,
+						title: poem.title,
+						status: poem.status,
+						moderationStatus: poem.moderationStatus,
+						author: {
+							id: poem.author.id,
+							name: poem.author.name,
+							nickname: poem.author.nickname,
+							avatarUrl: poem.author.avatarUrl,
+						},
+					}
+				: undefined,
 		[poem],
 	);
 	const immersiveUrl = useMemo(() => {
@@ -265,7 +284,16 @@ export function PoemPage() {
 								backdropFilter='blur(4px)'
 								mb={6}
 							>
-								<PoemHeader poem={poemHeaderPoem} />
+								<Flex align='start' justify='space-between' gap={3}>
+									<Box minW={0} flex='1'>
+										<PoemHeader poem={poemHeaderPoem} />
+									</Box>
+									<ModerationActionsMenu
+										poem={moderationPoemTarget}
+										size={{ base: 'xs', md: 'sm' }}
+										variant='ghost'
+									/>
+								</Flex>
 								<PoemAuthorCard
 									embedded
 									author={poem.author}

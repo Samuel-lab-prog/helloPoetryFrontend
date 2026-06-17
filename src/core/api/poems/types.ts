@@ -54,6 +54,7 @@ export type PoemPreview = {
 	id: number;
 	createdAt?: string | Date;
 	status?: PoemStatus;
+	moderationStatus?: 'rejected' | 'removed' | 'approved' | 'pending';
 	likesCount?: number;
 	commentsCount?: number;
 	stats?: {
