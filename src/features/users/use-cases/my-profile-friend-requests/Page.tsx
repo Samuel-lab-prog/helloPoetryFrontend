@@ -1,5 +1,6 @@
 import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMyFriendRequests } from '@features/users/public/hooks/useMyFriendRequests';
@@ -16,6 +17,7 @@ export function MyProfileFriendRequestsPage() {
 		requests: friendRequests,
 		isLoading: isFriendRequestsLoading,
 		isError: isFriendRequestsError,
+		error: friendRequestsError,
 	} = useMyFriendRequests(Boolean(authClient?.id));
 	const [searchName, setSearchName] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -48,6 +50,11 @@ export function MyProfileFriendRequestsPage() {
 			(request) => !isHiddenRequester(request.requesterId),
 		),
 	};
+	const friendRequestsErrorMessage = isBannedAccessError(friendRequestsError)
+		? getBannedPrivilegeMessage('view friend requests')
+		: undefined;
+	const isFriendRequestsUnavailable =
+		isFriendRequestsError || isBannedAccessError(friendRequestsError);
 
 	if (!authClient?.id) return <ProfileAccessGate />;
 
@@ -88,7 +95,8 @@ export function MyProfileFriendRequestsPage() {
 				<FriendRequestsSection
 					friendRequests={visibleRequests}
 					isFriendRequestsLoading={isFriendRequestsLoading}
-					isFriendRequestsError={isFriendRequestsError}
+					isFriendRequestsError={isFriendRequestsUnavailable}
+					friendRequestsErrorMessage={friendRequestsErrorMessage}
 					isSearchingFriendRequests={isSearching}
 					isAccepting={isAcceptingRequester}
 					isRejecting={isRejectingRequester}

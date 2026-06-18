@@ -1,5 +1,10 @@
 import { Flex, Heading, IconButton, Menu, Portal } from '@chakra-ui/react';
-import { useEnsureRole } from '@features/auth/public/hooks/useEnsureRole';
+import {
+	getBannedPrivilegeMessage,
+	getSuspendedPrivilegeMessage,
+	useAuthClientStore,
+} from '@features/auth/public';
+import { canUseModerationTools } from '@features/moderation/public';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,13 +16,31 @@ import { usePoemModerationData } from './hooks/usePoemModerationData';
 
 export function PoemModerationPage() {
 	const navigate = useNavigate();
-	const canAccess = useEnsureRole(['moderator', 'admin']);
+	const authClient = useAuthClientStore((state) => state.authClient);
+	const hasModerationRole = authClient?.role === 'moderator' || authClient?.role === 'admin';
+	const isBannedModerator = hasModerationRole && authClient?.status === 'banned';
+	const isSuspendedModerator = hasModerationRole && authClient?.status === 'suspended';
+	const canAccess = canUseModerationTools(authClient);
 	const [selectedView, setSelectedView] = useState<'pending' | 'actions'>('pending');
 
 	const { pendingQuery, pendingPoems, isModeratingPoem, isRemovingPoem, handleModeration } =
 		usePoemModerationData(canAccess);
 
-	if (!canAccess) return <UnauthorizedPage onBack={() => navigate('/')} />;
+	if (!canAccess) {
+		return (
+			<UnauthorizedPage
+				description={
+					isBannedModerator
+						? getBannedPrivilegeMessage('use moderation tools')
+						: isSuspendedModerator
+							? getSuspendedPrivilegeMessage('use moderation tools')
+							: undefined
+				}
+				onBack={() => navigate('/')}
+				title={isBannedModerator || isSuspendedModerator ? 'Moderation unavailable' : undefined}
+			/>
+		);
+	}
 
 	return (
 		<Flex

@@ -1,7 +1,11 @@
 import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { AuthorProfileType } from '@features/poems/public/types';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -49,11 +53,13 @@ export function useCancelFriendRequest() {
 	function getErrorMessage() {
 		const err = mutation.error as AppErrorType | null;
 		if (!err) return '';
+		if (err.statusCode === 401 && isBannedAccessError(err)) {
+			return getBannedPrivilegeMessage('manage friend requests');
+		}
 		if (err.statusCode === 404) return 'Request not found.';
 		if (err.statusCode === 403) {
 			return getAccessDeniedMessage({
 				fallback: 'You cannot cancel this request.',
-				suspendedMessage: 'Your account is suspended, so you cannot cancel friend requests.',
 			});
 		}
 		return 'Error cancelling request.';

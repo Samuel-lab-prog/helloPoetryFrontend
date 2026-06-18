@@ -11,6 +11,7 @@ import {
 	Portal,
 	Text,
 } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { BellOff, EllipsisVertical, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,6 +25,7 @@ export function NotificationsPage() {
 		notifications,
 		isLoading,
 		isError,
+		error,
 		hasMoreNotifications,
 		isLoadingMoreNotifications,
 		loadMoreNotifications,
@@ -34,6 +36,7 @@ export function NotificationsPage() {
 	} = useNotificationsPanel(false);
 	const notificationItems = Array.isArray(notifications) ? notifications : [];
 	const hasNotifications = notificationItems.length > 0;
+	const isBannedError = isBannedAccessError(error);
 
 	const isRemoving = (id: number) => removingIds.has(id);
 	const scheduleRemove = async (id: number): Promise<void> => {
@@ -114,17 +117,25 @@ export function NotificationsPage() {
 
 				<AsyncState
 					isLoading={isLoading}
-					isError={isError}
+					isError={isError || isBannedError}
 					isEmpty={!hasNotifications}
 					loadingElement={LoadingNotificationsSkeletons}
 					errorElement={
 						<ErrorStateCard
 							mt={4}
 							eyebrow='NOTIFICATIONS UNAVAILABLE'
-							title='We could not load your notifications right now.'
-							description='Nothing was lost. Please try again in a moment, or refresh the page to reconnect.'
-							actionLabel='Refresh notifications'
-							onAction={() => window.location.reload()}
+							title={
+								isBannedError
+									? 'Notifications are unavailable for this account'
+									: 'We could not load your notifications right now.'
+							}
+							description={
+								isBannedError
+									? getBannedPrivilegeMessage('read notifications')
+									: 'Nothing was lost. Please try again in a moment, or refresh the page to reconnect.'
+							}
+							actionLabel={isBannedError ? undefined : 'Refresh notifications'}
+							onAction={isBannedError ? undefined : () => window.location.reload()}
 						/>
 					}
 					emptyElement={

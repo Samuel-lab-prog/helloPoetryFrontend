@@ -2,7 +2,12 @@ import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { CollectionItemBody, CreateCollectionBody, PoemCollection } from '@Api/poems/types';
-import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
@@ -10,6 +15,7 @@ import { useState } from 'react';
 export function usePoemCollections(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const clientStatus = useAuthClientStore((state) => state.authClient?.status);
 	const [deletingCollectionIds, setDeletingCollectionIds] = useState<Set<number>>(new Set());
 	const [addingItemKeys, setAddingItemKeys] = useState<Set<string>>(new Set());
 	const [removingItemKeys, setRemovingItemKeys] = useState<Set<string>>(new Set());
@@ -174,17 +180,26 @@ export function usePoemCollections(enabled = true) {
 	});
 
 	function getErrorMessage() {
+		if (clientStatus === 'banned') return getBannedPrivilegeMessage('view collections');
+
+		const isQueryError = Boolean(query.error);
 		const error = (query.error ||
 			createCollectionMutation.error ||
 			deleteCollectionMutation.error ||
 			addCollectionItemMutation.error ||
 			removeCollectionItemMutation.error) as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 401) return 'Sign in to manage collections.';
+		const action = isQueryError ? 'view collections' : 'manage collections';
+		if (error.statusCode === 401) {
+			if (isBannedAccessError(error)) return getBannedPrivilegeMessage(action);
+			return 'Sign in to manage collections.';
+		}
 		if (error.statusCode === 403) {
 			return getAccessDeniedMessage({
-				fallback: 'You do not have permission to change this collection.',
-				suspendedMessage: 'Your account is suspended, so you cannot change collections.',
+				bannedAction: action,
+				fallback: isQueryError
+					? 'You do not have permission to view collections.'
+					: 'You do not have permission to change this collection.',
 			});
 		}
 		if (error.statusCode === 404) return 'Collection or poem not found.';
@@ -194,9 +209,10 @@ export function usePoemCollections(enabled = true) {
 	}
 
 	return {
-		collections: query.data ?? [],
+		collections: clientStatus === 'banned' ? [] : (query.data ?? []),
 		isLoadingCollections: query.isLoading,
-		isCollectionsError: query.isError,
+		isCollectionsError: query.isError || clientStatus === 'banned',
+		collectionsLoadError: query.error,
 		refetchCollections: query.refetch,
 		createCollection: createCollectionMutation.mutateAsync,
 		deleteCollection: deleteCollectionMutation.mutateAsync,

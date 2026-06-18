@@ -2,7 +2,12 @@ import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
-import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
@@ -10,6 +15,7 @@ import { useState } from 'react';
 export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const clientStatus = useAuthClientStore((state) => state.authClient?.status);
 	const savedKey = poemKeys.saved();
 	const [updatingSavedPoemId, setUpdatingSavedPoemId] = useState<number | null>(null);
 
@@ -87,14 +93,25 @@ export function useSavedPoems(enabled = true) {
 	});
 
 	function getErrorMessage() {
-		const error = (saveMutation.error || unsaveMutation.error) as unknown as AppErrorType | null;
+		if (clientStatus === 'banned') return getBannedPrivilegeMessage('view saved poems');
+
+		const isQueryError = Boolean(query.error);
+		const error = (query.error ||
+			saveMutation.error ||
+			unsaveMutation.error) as unknown as AppErrorType | null;
 		if (!error) return '';
-		if (error.statusCode === 401) return 'Sign in to save poems.';
+		const action = isQueryError ? 'view saved poems' : 'change saved poems';
+		if (error.statusCode === 401) {
+			if (isBannedAccessError(error)) return getBannedPrivilegeMessage(action);
+			return 'Sign in to save poems.';
+		}
 		if (error.statusCode === 404) return 'Poem not found.';
 		if (error.statusCode === 403) {
 			return getAccessDeniedMessage({
-				fallback: 'You do not have permission to change saved poems.',
-				suspendedMessage: 'Your account is suspended, so you cannot save poems.',
+				bannedAction: action,
+				fallback: isQueryError
+					? 'You do not have permission to view saved poems.'
+					: 'You do not have permission to change saved poems.',
 			});
 		}
 		if (error.statusCode === 409) return '';
@@ -102,7 +119,7 @@ export function useSavedPoems(enabled = true) {
 	}
 
 	return {
-		savedPoems: query.data ?? [],
+		savedPoems: clientStatus === 'banned' ? [] : (query.data ?? []),
 		isLoadingSavedPoems: query.isLoading,
 		savePoem: saveMutation.mutateAsync,
 		unsavePoem: unsaveMutation.mutateAsync,

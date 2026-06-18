@@ -1,13 +1,19 @@
 /* eslint-disable max-lines-per-function */
 import { AsyncState, ErrorStateCard, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
-import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	getSuspendedPrivilegeMessage,
+	isBannedAccessError,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions/public';
 import { ModerationActionsMenu } from '@features/moderation/public';
-import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
-import { findForbiddenWords, type AppErrorType } from '@Utils';
+import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
+import { type AppErrorType, findForbiddenWords } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
@@ -31,7 +37,10 @@ export function PoemPage() {
 	const navigate = useNavigate();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
 	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
+	const authClientStatus = useAuthClientStore((state) => state.authClient?.status);
 	const isAuthenticated = authClientId > 0;
+	const isSuspended = authClientStatus === 'suspended';
+	const isBanned = authClientStatus === 'banned';
 	const isPoemIdValid = poemId > 0;
 
 	const [commentInput, setCommentInput] = useState('');
@@ -44,7 +53,10 @@ export function PoemPage() {
 	const isPendingPoem = poem?.moderationStatus === 'pending';
 	const isRemovedPoem = poem?.moderationStatus === 'removed';
 	const isInteractionBlocked = isRejectedPoem || isPendingPoem || isRemovedPoem;
-	const canEditRejectedPoem = Boolean(poem && authClientId === poem.author.id && canUpdatePoem(poem));
+	const canEditRejectedPoem = Boolean(
+		poem && authClientId === poem.author.id && canUpdatePoem(poem),
+	);
+	const isBannedPoemError = isBannedAccessError(poemError);
 	const poemErrorInfo = getPoemErrorInfo(poemError);
 	const {
 		comments,
@@ -55,6 +67,7 @@ export function PoemPage() {
 		loadMoreComments,
 		createComment,
 		isCreatingComment,
+		commentsError,
 		createCommentError,
 		deleteComment,
 		isDeletingComment,
@@ -62,7 +75,9 @@ export function PoemPage() {
 		likeCommentError,
 		fetchReplies,
 		prefetchReplies,
-	} = usePoemComments(poemId, { enabled: isAuthenticated && !!poem && !isInteractionBlocked });
+	} = usePoemComments(poemId, {
+		enabled: isAuthenticated && !isSuspended && !isBanned && !!poem && !isInteractionBlocked,
+	});
 	const { likePoem, unlikePoem, isUpdatingLike, likeError } = usePoemLike(poemId);
 	const { savedPoems, savePoem, unsavePoem, updatingSavedPoemId, saveError } = useSavedPoems(
 		authClientId > 0,
@@ -116,6 +131,11 @@ export function PoemPage() {
 	const shownErrorsRef = useRef<Record<string, string>>({});
 
 	const likedPoem = poem?.stats?.likedByCurrentUser ?? false;
+	const commentRestrictionMessage = isBanned
+		? getBannedPrivilegeMessage('view or write comments')
+		: isSuspended
+			? getSuspendedPrivilegeMessage('view or write comments')
+			: '';
 
 	useEffect(() => {
 		if (!comments.length) return;
@@ -188,6 +208,7 @@ export function PoemPage() {
 	}, [likeCommentError, showErrorToast]);
 
 	const handlePublishComment = useCallback(async () => {
+		if (commentRestrictionMessage) return;
 		if (isInteractionBlocked) return;
 		const content = commentInput.trim();
 		if (!content) return;
@@ -209,7 +230,7 @@ export function PoemPage() {
 		} catch {
 			// Error handled by createCommentError + consolidated toast.
 		}
-	}, [commentInput, createComment, isInteractionBlocked]);
+	}, [commentInput, commentRestrictionMessage, createComment, isInteractionBlocked]);
 
 	const handleCommentInputChange = useCallback(
 		(value: string) => {
@@ -220,6 +241,14 @@ export function PoemPage() {
 	);
 
 	const handleTogglePoemLike = useCallback(async () => {
+		if (isBanned) {
+			showErrorToast('likeError', getBannedPrivilegeMessage('like poems'));
+			return;
+		}
+		if (isSuspended) {
+			showErrorToast('likeError', getSuspendedPrivilegeMessage('like poems'));
+			return;
+		}
 		if (isInteractionBlocked) return;
 		if (isUpdatingLike) return;
 
@@ -233,9 +262,22 @@ export function PoemPage() {
 		} catch {
 			// Error handled by likeError + consolidated toast.
 		}
-	}, [isInteractionBlocked, isUpdatingLike, likedPoem, likePoem, unlikePoem]);
+	}, [
+		isInteractionBlocked,
+		isBanned,
+		isSuspended,
+		isUpdatingLike,
+		likedPoem,
+		likePoem,
+		showErrorToast,
+		unlikePoem,
+	]);
 
 	const handleToggleSavePoem = useCallback(async () => {
+		if (isBanned) {
+			showErrorToast('saveError', getBannedPrivilegeMessage('save poems'));
+			return;
+		}
 		if (isInteractionBlocked) return;
 		if (updatingSavedPoemId === poemId) return;
 		try {
@@ -248,7 +290,16 @@ export function PoemPage() {
 		} catch {
 			// Error handled by saveError + consolidated toast.
 		}
-	}, [isInteractionBlocked, isSaved, poemId, savePoem, unsavePoem, updatingSavedPoemId]);
+	}, [
+		isBanned,
+		isInteractionBlocked,
+		isSaved,
+		poemId,
+		savePoem,
+		showErrorToast,
+		unsavePoem,
+		updatingSavedPoemId,
+	]);
 
 	const handleBack = useCallback(() => {
 		if (window.history.length > 1) {
@@ -273,7 +324,7 @@ export function PoemPage() {
 			<Box as='section' maxW='2xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}
-					isError={!!isError}
+					isError={!!isError || isBannedPoemError}
 					isEmpty={!poem}
 					emptyElement={<Box textStyle='body'>Poem not found</Box>}
 					errorElement={
@@ -281,8 +332,8 @@ export function PoemPage() {
 							eyebrow={poemErrorInfo.eyebrow}
 							title={poemErrorInfo.title}
 							description={poemErrorInfo.description}
-							actionLabel='Refresh poem'
-							onAction={() => window.location.reload()}
+							actionLabel={isBannedPoemError ? undefined : 'Refresh poem'}
+							onAction={isBannedPoemError ? undefined : () => window.location.reload()}
 						/>
 					}
 					loadingElement={<LoadingPoemSkeleton variant='default' />}
@@ -312,10 +363,7 @@ export function PoemPage() {
 										variant='ghost'
 									/>
 								</Flex>
-								<PoemAuthorCard
-									embedded
-									author={poem.author}
-								/>
+								<PoemAuthorCard embedded author={poem.author} />
 							</Box>
 
 							<Box
@@ -394,12 +442,14 @@ export function PoemPage() {
 								<CommentsSection
 									poemIsCommentable={poem.isCommentable}
 									isAuthenticated={isAuthenticated}
+									commentRestrictionMessage={commentRestrictionMessage}
 									commentInput={commentInput}
 									commentError={commentInputError}
 									authClientId={authClientId}
 									comments={comments}
 									isLoadingComments={isLoadingComments}
 									isCommentsError={isCommentsError}
+									commentsError={commentsError}
 									isCreatingComment={isCreatingComment}
 									isDeletingComment={isDeletingComment}
 									repliesByCommentId={repliesByCommentId}
@@ -455,17 +505,27 @@ function getPoemErrorInfo(error: unknown) {
 	const status = appError?.statusCode;
 	const message = typeof appError?.message === 'string' ? appError.message.toLowerCase() : '';
 
+	if (isBannedAccessError(appError)) {
+		return {
+			eyebrow: 'POEM UNAVAILABLE',
+			title: getBannedPrivilegeMessage('view poems'),
+			description:
+				'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
+		};
+	}
+
 	if (status === 403) {
 		return {
 			eyebrow: 'POEM UNAVAILABLE',
 			title: getAccessDeniedMessage({
+				bannedAction: 'view poems',
 				fallback: 'You do not have permission to view this poem.',
-				suspendedMessage: 'Your account is suspended.',
 			}),
 			description: getAccessDeniedMessage({
-				fallback: 'This poem may be private, under moderation, or no longer available to your account.',
-				suspendedMessage:
-					'Suspended accounts can still read notifications, but this poem is not available here.',
+				bannedMessage:
+					'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
+				fallback:
+					'This poem may be private, under moderation, or no longer available to your account.',
 			}),
 		};
 	}
@@ -490,13 +550,14 @@ function getPoemErrorInfo(error: unknown) {
 		return {
 			eyebrow: 'POEM UNAVAILABLE',
 			title: getAccessDeniedMessage({
+				bannedAction: 'view poems',
 				fallback: 'You do not have permission to view this poem.',
-				suspendedMessage: 'Your account is suspended.',
 			}),
 			description: getAccessDeniedMessage({
-				fallback: 'This poem may be private, under moderation, or no longer available to your account.',
-				suspendedMessage:
-					'Suspended accounts can still read notifications, but this poem is not available here.',
+				bannedMessage:
+					'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
+				fallback:
+					'This poem may be private, under moderation, or no longer available to your account.',
 			}),
 		};
 	}

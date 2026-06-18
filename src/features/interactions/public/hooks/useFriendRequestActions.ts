@@ -1,7 +1,12 @@
 import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
-import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+	useAuthClientStore,
+} from '@features/auth/public';
 import type { AuthorProfileType } from '@features/poems/public/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -141,11 +146,13 @@ export function useFriendRequestActions() {
 			| AppErrorType
 			| undefined;
 		if (!err) return '';
+		if (err.statusCode === 401 && isBannedAccessError(err)) {
+			return getBannedPrivilegeMessage('manage friend requests');
+		}
 		if (err.statusCode === 404) return 'Request not found.';
 		if (err.statusCode === 403) {
 			return getAccessDeniedMessage({
 				fallback: 'You cannot perform this action.',
-				suspendedMessage: 'Your account is suspended, so you cannot manage friend requests.',
 			});
 		}
 		return 'Error processing request.';

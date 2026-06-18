@@ -1,7 +1,13 @@
-import { Badge, Box, Flex, Heading, IconButton, Menu, Portal } from '@chakra-ui/react';
+import { Surface } from '@BaseComponents';
+import { Badge, Box, Button, Flex, Heading, IconButton, Menu, Portal, Text, VStack } from '@chakra-ui/react';
+import {
+	getBannedPrivilegeMessage,
+	getSuspendedPrivilegeMessage,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { EllipsisVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 
 import { CreatePoemForm } from '../create-poem/components/CreatePoemForm';
 import { DeletePoemForm } from '../manage-poem/components/DeletePoemForm';
@@ -9,7 +15,52 @@ import { UpdatePoemForm } from '../manage-poem/components/UpdatePoemForm';
 
 type ActiveForm = 'create' | 'update' | 'delete';
 
+function SuspendedPoemToolGate({ action }: { action: string }) {
+	return (
+		<Surface variant='gradient' maxW='2xl' w='full'>
+			<VStack align='start' gap={4}>
+				<Badge colorPalette='pink' variant='subtle'>
+					Poems
+				</Badge>
+				<Heading as='h1' textStyle='h3'>
+					Poem tool unavailable
+				</Heading>
+				<Text textStyle='small' color='pink.100'>
+					{getSuspendedPrivilegeMessage(action)}
+				</Text>
+				<Button size='sm' variant='solidPink' asChild>
+					<NavLink to='/'>Go to home</NavLink>
+				</Button>
+			</VStack>
+		</Surface>
+	);
+}
+
+function BannedPoemToolGate({ action }: { action: string }) {
+	return (
+		<Surface variant='gradient' maxW='2xl' w='full'>
+			<VStack align='start' gap={4}>
+				<Badge colorPalette='pink' variant='subtle'>
+					Poems
+				</Badge>
+				<Heading as='h1' textStyle='h3'>
+					Poem tool unavailable
+				</Heading>
+				<Text textStyle='small' color='pink.100'>
+					{getBannedPrivilegeMessage(action)}
+				</Text>
+				<Button size='sm' variant='solidPink' asChild>
+					<NavLink to='/my-profile'>Go to profile</NavLink>
+				</Button>
+			</VStack>
+		</Surface>
+	);
+}
+
 export function AdminPage() {
+	const authClient = useAuthClientStore((state) => state.authClient);
+	const isSuspended = authClient?.status === 'suspended';
+	const isBanned = authClient?.status === 'banned';
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [activeForm, setActiveForm] = useState<ActiveForm>('create');
 	const modeParam = searchParams.get('mode');
@@ -113,9 +164,24 @@ export function AdminPage() {
 				</Flex>
 
 				<Flex direction='column' w='full' gap={4}>
-					{activeForm === 'create' && <CreatePoemForm />}
-					{activeForm === 'update' && <UpdatePoemForm />}
-					{activeForm === 'delete' && <DeletePoemForm />}
+					{activeForm === 'create' &&
+						(isBanned ? (
+							<BannedPoemToolGate action='create poems' />
+						) : isSuspended ? (
+							<SuspendedPoemToolGate action='create poems' />
+						) : (
+							<CreatePoemForm />
+						))}
+					{activeForm === 'update' &&
+						(isBanned ? (
+							<BannedPoemToolGate action='update poems' />
+						) : isSuspended ? (
+							<SuspendedPoemToolGate action='update poems' />
+						) : (
+							<UpdatePoemForm />
+						))}
+					{activeForm === 'delete' &&
+						(isBanned ? <BannedPoemToolGate action='delete poems' /> : <DeletePoemForm />)}
 				</Flex>
 			</Box>
 		</Flex>

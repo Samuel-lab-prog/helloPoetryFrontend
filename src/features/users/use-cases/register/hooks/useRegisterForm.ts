@@ -8,10 +8,20 @@ import { useForm, type UseFormSetError } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import { uploadAvatarFile } from '../../../internal/utils/avatarUpload';
+import {
+	REGISTER_BIO_MAX_LENGTH,
+	REGISTER_PASSWORD_MAX_LENGTH,
+	REGISTER_PASSWORD_MIN_LENGTH,
+} from '../schemas/constants';
 import { type RegisterDataType, registerSchema } from '../schemas/registerSchema';
+
+const REGISTER_NETWORK_ERROR_MESSAGE =
+	"We couldn't create your account. Check your connection and try again.";
+const AVATAR_UPLOAD_FALLBACK_MESSAGE = "We couldn't upload your avatar. Please try again.";
 
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
+	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 	const navigate = useNavigate();
 
 	const form = useForm<RegisterDataType>({
@@ -37,31 +47,34 @@ export function useRegisterForm() {
 
 	function onSubmit(data: RegisterDataType) {
 		setGeneralError('');
-		form.clearErrors('avatar');
+		form.clearErrors();
 
-		if (!form.formState.isValid) return;
+		if (isUploadingAvatar || registerMutation.isPending) return;
 
 		void (async () => {
 			const { avatar, ...rest } = data;
 			let avatarUrl: string | undefined;
-			if (avatar) {
-				try {
+			try {
+				if (avatar) {
+					setIsUploadingAvatar(true);
 					avatarUrl = await uploadAvatarFile(avatar as File);
-				} catch (err) {
-					const message = err instanceof Error ? err.message : 'Error uploading avatar.';
-					form.setError('avatar', {
-						type: 'manual',
-						message,
-					});
-					return;
 				}
-			}
-			const payload: CreateUserBody = {
-				...rest,
-				avatarUrl,
-			};
 
-			registerMutation.mutate(payload);
+				const payload: CreateUserBody = {
+					...rest,
+					avatarUrl,
+				};
+
+				registerMutation.mutate(payload);
+			} catch (err) {
+				const message = err instanceof Error ? err.message : AVATAR_UPLOAD_FALLBACK_MESSAGE;
+				form.setError('avatar', {
+					type: 'manual',
+					message,
+				});
+			} finally {
+				setIsUploadingAvatar(false);
+			}
 		})();
 	}
 
@@ -71,7 +84,7 @@ export function useRegisterForm() {
 		handleSubmit: form.handleSubmit,
 		formState: form.formState,
 		control: form.control,
-		isPending: registerMutation.isPending,
+		isPending: isUploadingAvatar || registerMutation.isPending,
 		setError: form.setError,
 		clearErrors: form.clearErrors,
 	};
@@ -82,9 +95,10 @@ function handleRegisterError(
 	setError: UseFormSetError<RegisterDataType>,
 	setGeneralError: (msg: string) => void,
 ) {
-	const error = err as AppErrorType;
+	const error = err as Partial<AppErrorType>;
 	const status = error?.statusCode;
-	const message = error?.message.toLowerCase();
+	const rawMessage = typeof error?.message === 'string' ? error.message : '';
+	const message = rawMessage.toLowerCase();
 
 	if (status === 409) {
 		let mapped = false;
@@ -92,7 +106,7 @@ function handleRegisterError(
 		if (message.includes('nickname')) {
 			setError('nickname', {
 				type: 'manual',
-				message: 'Nickname is already in use',
+				message: 'This nickname is already in use.',
 			});
 			mapped = true;
 		}
@@ -100,26 +114,67 @@ function handleRegisterError(
 		if (message.includes('email')) {
 			setError('email', {
 				type: 'manual',
-				message: 'Email is already in use',
+				message: 'This email is already in use.',
 			});
 			mapped = true;
 		}
 
 		if (mapped) return;
 
-		setGeneralError('Conflict while creating the account. Review the data and try again.');
+		setGeneralError('An account with these details may already exist. Review the fields and try again.');
 		return;
 	}
 
 	if (status === 422) {
-		setGeneralError('Invalid data. Check the fields and try again.');
+		if (setValidationFieldError(message, setError)) return;
+
+		setGeneralError('Review your account details and try again.');
 		return;
 	}
 
 	if (status === 429) {
-		setGeneralError('Too many attempts. Please try again later.');
+		setGeneralError('Too many attempts. Please wait a moment and try again.');
 		return;
 	}
 
-	setGeneralError('Network error. Please try again.');
+	setGeneralError(REGISTER_NETWORK_ERROR_MESSAGE);
+}
+
+function setValidationFieldError(
+	message: string,
+	setError: UseFormSetError<RegisterDataType>,
+) {
+	if (message.includes('email')) {
+		setError('email', {
+			type: 'manual',
+			message: 'Enter a valid email address.',
+		});
+		return true;
+	}
+
+	if (message.includes('password')) {
+		setError('password', {
+			type: 'manual',
+			message: `Password must be between ${REGISTER_PASSWORD_MIN_LENGTH} and ${REGISTER_PASSWORD_MAX_LENGTH} characters.`,
+		});
+		return true;
+	}
+
+	if (message.includes('bio')) {
+		setError('bio', {
+			type: 'manual',
+			message: `Bio must be at most ${REGISTER_BIO_MAX_LENGTH} characters.`,
+		});
+		return true;
+	}
+
+	if (message.includes('avatar')) {
+		setError('avatar', {
+			type: 'manual',
+			message: "We couldn't use this avatar. Choose another image and try again.",
+		});
+		return true;
+	}
+
+	return false;
 }

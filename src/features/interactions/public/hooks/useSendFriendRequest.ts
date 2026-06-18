@@ -1,7 +1,11 @@
 import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getFriendsActionsPort } from '@core/ports/friends';
 import { getUsersCachePort } from '@core/ports/users';
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { AuthorProfileType } from '@features/poems/public/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -44,11 +48,13 @@ export function useSendFriendRequest() {
 		const err = mutation.error as AppErrorType | null;
 		if (!err) return '';
 
+		if (err.statusCode === 401 && isBannedAccessError(err)) {
+			return getBannedPrivilegeMessage('send friend requests');
+		}
 		if (err.statusCode === 409) return 'Request already sent or relationship already exists.';
 		if (err.statusCode === 403) {
 			return getAccessDeniedMessage({
 				fallback: 'You cannot send a request to this user.',
-				suspendedMessage: 'Your account is suspended, so you cannot send friend requests.',
 			});
 		}
 		if (err.statusCode === 404) return 'Author not found.';

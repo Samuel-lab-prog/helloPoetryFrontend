@@ -1,6 +1,11 @@
 import type { ModeratePoemBody, ModerationPoem } from '@Api/moderation/types';
 import { AsyncState } from '@BaseComponents';
 import { Box, Flex, Heading, HStack, Icon, Spinner, Text, VStack } from '@chakra-ui/react';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 import { Hourglass } from 'lucide-react';
 
@@ -31,7 +36,15 @@ export function AnalyzeTab({
 	function formatError(err: unknown) {
 		const appError = err as AppErrorType | null;
 		if (!appError) return 'Error loading pending poems.';
-		if (appError.statusCode === 403) return 'Restricted access for moderation.';
+		if (appError.statusCode === 401 && isBannedAccessError(appError)) {
+			return getBannedPrivilegeMessage('review pending poems');
+		}
+		if (appError.statusCode === 403) {
+			return getAccessDeniedMessage({
+				fallback: 'Restricted access for moderation.',
+				suspendedAction: 'review pending poems',
+			});
+		}
 		return appError.message ?? 'Error loading pending poems.';
 	}
 

@@ -1,5 +1,6 @@
 import { SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { ArrowLeft } from 'lucide-react';
@@ -16,6 +17,7 @@ export function MyProfilePoemsPage() {
 		poems: myPoems,
 		isLoading: isLoadingMyPoems,
 		isError: isMyPoemsError,
+		error: myPoemsError,
 	} = useMyPoems(Boolean(authClient?.id));
 	const [searchTitle, setSearchTitle] = useState('');
 	const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -26,6 +28,10 @@ export function MyProfilePoemsPage() {
 		const normalized = debouncedSearch.trim().toLowerCase();
 		return myPoems.filter((poem) => poem.title.toLowerCase().includes(normalized));
 	}, [debouncedSearch, isSearching, myPoems]);
+	const myPoemsErrorMessage = isBannedAccessError(myPoemsError)
+		? getBannedPrivilegeMessage('view your poems')
+		: undefined;
+	const isMyPoemsUnavailable = isMyPoemsError || isBannedAccessError(myPoemsError);
 
 	if (!authClient?.id) return <ProfileAccessGate />;
 
@@ -68,7 +74,8 @@ export function MyProfilePoemsPage() {
 					myPoems={filteredPoems}
 					searchAnimationKey={debouncedSearch.trim().toLowerCase() || 'all'}
 					isLoadingMyPoems={isLoadingMyPoems}
-					isMyPoemsError={isMyPoemsError}
+					isMyPoemsError={isMyPoemsUnavailable}
+					myPoemsErrorMessage={myPoemsErrorMessage}
 					isSearchingMyPoems={isSearching}
 					onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
 					onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}

@@ -1,5 +1,6 @@
 import { AsyncState, EmptyStateCard, ErrorStateCard, getStaggeredEntryAnimationStyle } from '@BaseComponents';
 import { Box, Button, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { PoemCard } from '@features/poems/public/components/PoemCard';
 import type { PoemPreview } from '@features/poems/public/types';
 import { SearchX, Sparkles, X } from 'lucide-react';
@@ -11,27 +12,44 @@ type HomeFeedProps = {
 	isLoading: boolean;
 	isError: boolean;
 	isSearching: boolean;
+	error?: unknown;
 	onClearSearch?: () => void;
 };
 
-export function HomeFeed({ poems, isLoading, isError, isSearching, onClearSearch }: HomeFeedProps) {
+export function HomeFeed({
+	poems,
+	isLoading,
+	isError,
+	isSearching,
+	error,
+	onClearSearch,
+}: HomeFeedProps) {
 	const showSkeletons = isLoading && poems.length === 0;
+	const isBannedError = isBannedAccessError(error);
 
 	return (
 		<Box px={{ base: 0, md: 0 }} pt={{ base: 0, md: 0 }}>
 			<AsyncState
 				isLoading={showSkeletons}
-				isError={isError}
+				isError={isError || isBannedError}
 				isEmpty={poems.length === 0}
 				loadingElement={LoadingPoemsSkeletons}
 				errorElement={
 					<ErrorStateCard
 						mt={4}
 						eyebrow='FEED UNAVAILABLE'
-						title='We could not load your feed right now.'
-						description='Your poems are safe. Please try again in a moment, or refresh the page to reconnect.'
-						actionLabel='Refresh feed'
-						onAction={() => window.location.reload()}
+						title={
+							isBannedError
+								? 'The feed is unavailable for this account'
+								: 'We could not load your feed right now.'
+						}
+						description={
+							isBannedError
+								? getBannedPrivilegeMessage('view poems')
+								: 'Your poems are safe. Please try again in a moment, or refresh the page to reconnect.'
+						}
+						actionLabel={isBannedError ? undefined : 'Refresh feed'}
+						onAction={isBannedError ? undefined : () => window.location.reload()}
 					/>
 				}
 				emptyElement={

@@ -2,7 +2,11 @@ import { interactions } from '@Api/interactions/endpoints';
 import { interactionsKeys } from '@Api/interactions/keys';
 import { type OptimisticSnapshot, restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import { eventBus } from '@root/core/events/eventBus';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -138,23 +142,44 @@ function updateLikeState(
 
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
+	if (error.statusCode === 401 && isBannedAccessError(error)) {
+		return getBannedPrivilegeMessage('write comments');
+	}
 	if (error.statusCode === 404) return 'Poem not found.';
 	if (error.statusCode === 403) {
 		return getAccessDeniedMessage({
 			fallback: 'You cannot comment on this poem.',
-			suspendedMessage: 'Your account is suspended, so you cannot comment on this poem.',
+			suspendedAction: 'write comments',
 		});
 	}
 	if (error.statusCode === 422) return 'Invalid comment (1-3000 chars).';
 	return 'Error sending comment.';
 }
 
+function getCommentsErrorMessage(error: AppErrorType | null) {
+	if (!error) return '';
+	if (error.statusCode === 401 && isBannedAccessError(error)) {
+		return getBannedPrivilegeMessage('view comments');
+	}
+	if (error.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: 'You cannot view comments for this poem.',
+			suspendedAction: 'view comments',
+		});
+	}
+	if (error.statusCode === 404) return 'Poem not found.';
+	return 'We could not load comments right now. Please try again in a moment, or refresh the page.';
+}
+
 function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
+	if (error.statusCode === 401 && isBannedAccessError(error)) {
+		return getBannedPrivilegeMessage('delete comments');
+	}
 	if (error.statusCode === 403) {
 		return getAccessDeniedMessage({
 			fallback: 'You cannot delete this comment.',
-			suspendedMessage: 'Your account is suspended, so you cannot delete this comment.',
+			suspendedAction: 'delete comments',
 		});
 	}
 	if (error.statusCode === 404) return 'Comment not found.';
@@ -163,8 +188,17 @@ function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 
 function getToggleLikeErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
+	if (error.statusCode === 401 && isBannedAccessError(error)) {
+		return getBannedPrivilegeMessage('like comments');
+	}
 	if (error.statusCode === 404) return 'Comment not found.';
 	if (error.statusCode === 409) return '';
+	if (error.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: 'You cannot like this comment.',
+			suspendedAction: 'like comments',
+		});
+	}
 	return 'Error updating comment like.';
 }
 
@@ -334,6 +368,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		comments: query.data?.pages.flatMap((page) => page.comments) ?? [],
 		isLoadingComments: query.isLoading,
 		isCommentsError: query.isError,
+		commentsError: getCommentsErrorMessage(query.error as unknown as AppErrorType | null),
 		hasMoreComments: query.hasNextPage ?? false,
 		isLoadingMoreComments: query.isFetchingNextPage,
 		loadMoreComments: () => query.fetchNextPage(),

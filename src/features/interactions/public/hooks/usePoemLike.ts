@@ -1,7 +1,11 @@
 import { interactions } from '@Api/interactions/endpoints';
 import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { FullPoem } from '@features/poems/public/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -62,12 +66,15 @@ export function usePoemLike(poemId: number) {
 	function getErrorMessage() {
 		const error = (likeMutation.error || unlikeMutation.error) as unknown as AppErrorType | null;
 		if (!error) return '';
+		if (error.statusCode === 401 && isBannedAccessError(error)) {
+			return getBannedPrivilegeMessage('like poems');
+		}
 		if (error.statusCode === 404) return 'Poem not found.';
 		if (error.statusCode === 409) return '';
 		if (error.statusCode === 403) {
 			return getAccessDeniedMessage({
 				fallback: 'You cannot like this poem.',
-				suspendedMessage: 'Your account is suspended, so you cannot like this poem.',
+				suspendedAction: 'like poems',
 			});
 		}
 		return 'Error updating like.';

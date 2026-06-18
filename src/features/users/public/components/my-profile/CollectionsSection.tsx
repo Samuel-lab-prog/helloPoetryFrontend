@@ -123,7 +123,7 @@ export function CollectionsSection({
 
 			<Flex direction='column' gap={4}>
 				{isLoadingCollections && <Text textStyle='small'>Loading collections...</Text>}
-				{!isLoadingCollections && collections.length === 0 && (
+				{!isLoadingCollections && !collectionsError && collections.length === 0 && (
 					<Text textStyle='small'>You have not created any collections yet.</Text>
 				)}
 				{!showHeader && !isLoadingCollections && Boolean(totalCollectionsCount) && (

@@ -1,7 +1,11 @@
 import { poems } from '@Api/poems/endpoints';
 import type { CreatePoemResult } from '@Api/poems/types';
 import { toaster } from '@BaseComponents';
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { eventBus } from '@root/core/events/eventBus';
 import { useMutation } from '@tanstack/react-query';
@@ -100,9 +104,13 @@ export function handleCreatePoemError(
 ) {
 	const error = err as AppErrorType;
 	const status = error?.statusCode;
-	const lowerMessage = error?.message?.toLowerCase();
+	const lowerMessage = error?.message?.toLowerCase() ?? '';
 
 	if (status === 401) {
+		if (isBannedAccessError(error)) {
+			setGeneralError(getBannedPrivilegeMessage('create poems'));
+			return;
+		}
 		setGeneralError('You do not have permission to create poems.');
 		return;
 	}
@@ -117,14 +125,19 @@ export function handleCreatePoemError(
 		}
 
 		if (lowerMessage.includes('author is not active')) {
-			setGeneralError('Your user must be active to create poems.');
+			setGeneralError(
+				getAccessDeniedMessage({
+					fallback: 'Your account must be active to create poems.',
+					suspendedAction: 'create poems',
+				}),
+			);
 			return;
 		}
 
 		setGeneralError(
 			getAccessDeniedMessage({
 				fallback: 'You do not have permission to create this poem.',
-				suspendedMessage: 'Your account is suspended, so you cannot create poems.',
+				suspendedAction: 'create poems',
 			}),
 		);
 		return;

@@ -85,7 +85,7 @@ export function SavedPoemsSection({
 
 			<Flex direction='column' gap={3}>
 				{isLoadingSavedPoems && <Text textStyle='small'>Loading saved poems...</Text>}
-				{!isLoadingSavedPoems && savedPoems.length === 0 && (
+				{!isLoadingSavedPoems && !saveError && savedPoems.length === 0 && (
 					<Text textStyle='small'>
 						{isSearchingSavedPoems
 							? 'No poems found for your search.'

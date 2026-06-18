@@ -1,5 +1,6 @@
 import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
@@ -26,13 +27,14 @@ export function MyProfilePage() {
 	const clearAuthClient = useAuthClientStore((state) => state.clearAuthClient);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-	const { profile, isLoading, isError, isMissingClient } = useMyProfile();
+	const { profile, isLoading, isError, error: profileError, isMissingClient } = useMyProfile();
 	const { updateMyProfile, isUpdatingProfile, updateProfileError, conflictField } =
 		useUpdateMyProfile();
 	const {
 		requests: friendRequests,
 		isLoading: isFriendRequestsLoading,
 		isError: isFriendRequestsError,
+		error: friendRequestsError,
 	} = useMyFriendRequests(!isMissingClient);
 	const {
 		acceptRequest,
@@ -47,6 +49,7 @@ export function MyProfilePage() {
 		poems: myPoems,
 		isLoading: isLoadingMyPoems,
 		isError: isMyPoemsError,
+		error: myPoemsError,
 	} = useMyPoems(!isMissingClient);
 	const {
 		savedPoems,
@@ -73,6 +76,14 @@ export function MyProfilePage() {
 		...friendRequests,
 		received: friendRequests.received.filter((request) => !isHiddenRequester(request.requesterId)),
 	};
+	const isBannedProfileError = isBannedAccessError(profileError);
+	const friendRequestsErrorMessage = isBannedAccessError(friendRequestsError)
+		? getBannedPrivilegeMessage('view friend requests')
+		: undefined;
+	const myPoemsErrorMessage = isBannedAccessError(myPoemsError)
+		? getBannedPrivilegeMessage('view your poems')
+		: undefined;
+	const isProfileUnavailable = isError || isBannedProfileError;
 
 	if (isLoggingOut) {
 		return (
@@ -118,16 +129,24 @@ export function MyProfilePage() {
 
 				<AsyncState
 					isLoading={isLoading}
-					isError={isError}
+					isError={isProfileUnavailable}
 					isEmpty={!profile}
 					loadingElement={LoadingMyProfileSkeleton}
 					errorElement={
 						<ErrorStateCard
 							eyebrow='PROFILE UNAVAILABLE'
-							title='We could not load your profile right now.'
-							description='Your information is safe. Please try again in a moment, or refresh the page to reconnect.'
-							actionLabel='Refresh profile'
-							onAction={() => window.location.reload()}
+							title={
+								isBannedProfileError
+									? 'Profile access is unavailable for this account'
+									: 'We could not load your profile right now.'
+							}
+							description={
+								isBannedProfileError
+									? getBannedPrivilegeMessage('view profiles')
+									: 'Your information is safe. Please try again in a moment, or refresh the page to reconnect.'
+							}
+							actionLabel={isBannedProfileError ? undefined : 'Refresh profile'}
+							onAction={isBannedProfileError ? undefined : () => window.location.reload()}
 						/>
 					}
 					emptyElement={<Text textStyle='body'>Profile not found.</Text>}
@@ -168,6 +187,7 @@ export function MyProfilePage() {
 									viewAllHref='/my-profile/friend-requests'
 									isFriendRequestsLoading={isFriendRequestsLoading}
 									isFriendRequestsError={isFriendRequestsError}
+									friendRequestsErrorMessage={friendRequestsErrorMessage}
 									isAccepting={isAcceptingRequester}
 									isRejecting={isRejectingRequester}
 									isRemovingRequester={isRemovingRequester}
@@ -194,6 +214,7 @@ export function MyProfilePage() {
 									viewAllHref='/my-profile/poems'
 									isLoadingMyPoems={isLoadingMyPoems}
 									isMyPoemsError={isMyPoemsError}
+									myPoemsErrorMessage={myPoemsErrorMessage}
 									onOpenPoem={(slug, id) => navigate(`/poems/${slug}/${id}`)}
 									onUpdatePoem={(id) => navigate(`/admin?mode=update&poemId=${id}`)}
 									onDeletePoem={(id) => navigate(`/admin?mode=delete&poemId=${id}`)}

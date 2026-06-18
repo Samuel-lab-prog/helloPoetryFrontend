@@ -1,5 +1,10 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	getSuspendedPrivilegeMessage,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { useEffect } from 'react';
 import { isRouteErrorResponse, NavLink, useLocation, useRouteError } from 'react-router-dom';
 
@@ -71,6 +76,17 @@ function getErrorInfo(error: unknown): ErrorInfo {
 		const routeMessage = routeData?.message;
 
 		if (error.status === 401) {
+			if (routeMessage?.toLowerCase().includes('banned')) {
+				return {
+					status: 401,
+					code: routeCode,
+					message: getBannedPrivilegeMessage(),
+					description: 'Please use a different account or contact support if this seems incorrect.',
+					recoveryTo: '/login',
+					recoveryLabel: 'Go to sign in',
+				};
+			}
+
 			return {
 				status: 401,
 				message: 'Your session has expired.',
@@ -102,12 +118,15 @@ function getErrorInfo(error: unknown): ErrorInfo {
 				status: 403,
 				message: getAccessDeniedMessage({
 					fallback: 'You do not have permission to access this page.',
-					suspendedMessage: 'Your account is suspended.',
+					bannedMessage: getBannedPrivilegeMessage(),
+					suspendedMessage: getSuspendedPrivilegeMessage(),
 				}),
 				description: getAccessDeniedMessage({
 					fallback: 'Try with another account or go back to the home page.',
+					bannedMessage:
+						'This account cannot use authenticated areas. Please use a different account or contact support if this seems incorrect.',
 					suspendedMessage:
-						'Suspended accounts can still read notifications, but other areas may be restricted.',
+						'You can still use available areas, such as notifications, while restricted privileges remain unavailable.',
 				}),
 				recoveryTo: '/',
 				recoveryLabel: 'Go to home',
@@ -138,6 +157,17 @@ function getErrorInfo(error: unknown): ErrorInfo {
 		const status = maybeError.statusCode;
 
 		if (status === 401) {
+			if (maybeError.message?.toLowerCase().includes('banned')) {
+				return {
+					status: 401,
+					code: maybeError.code,
+					message: getBannedPrivilegeMessage(),
+					description: 'Please use a different account or contact support if this seems incorrect.',
+					recoveryTo: '/login',
+					recoveryLabel: 'Go to sign in',
+				};
+			}
+
 			return {
 				status: 401,
 				code: maybeError.code,
@@ -171,12 +201,15 @@ function getErrorInfo(error: unknown): ErrorInfo {
 				code: maybeError.code,
 				message: getAccessDeniedMessage({
 					fallback: 'Access denied for this action.',
-					suspendedMessage: 'Your account is suspended.',
+					bannedMessage: getBannedPrivilegeMessage(),
+					suspendedMessage: getSuspendedPrivilegeMessage(),
 				}),
 				description: getAccessDeniedMessage({
 					fallback: 'Try again with a different account.',
+					bannedMessage:
+						'This account cannot use authenticated areas. Please use a different account or contact support if this seems incorrect.',
 					suspendedMessage:
-						'Suspended accounts can still read notifications, but other actions may be blocked.',
+						'You can still use available areas, such as notifications, while restricted privileges remain unavailable.',
 				}),
 				recoveryTo: '/',
 				recoveryLabel: 'Go to home',

@@ -3,10 +3,34 @@ import { moderationKeys } from '@Api/moderation/keys';
 import type { ModeratePoemBody } from '@Api/moderation/types';
 import { poems } from '@Api/poems/endpoints';
 import { toaster } from '@BaseComponents';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const EXIT_ANIMATION_MS = 220;
+
+function getModerationErrorDescription(error: unknown, fallback: string) {
+	const appError = error as AppErrorType | undefined;
+
+	if (appError?.statusCode === 401 && isBannedAccessError(appError)) {
+		return getBannedPrivilegeMessage('moderate poems');
+	}
+
+	if (appError?.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback,
+			suspendedAction: 'moderate poems',
+		});
+	}
+
+	if (error instanceof Error) return error.message;
+	return appError?.message ?? 'Try again later.';
+}
 
 export function usePoemModerationData(enabled: boolean) {
 	const [removingPoemIds, setRemovingPoemIds] = useState<Set<number>>(new Set());
@@ -97,7 +121,10 @@ export function usePoemModerationData(enabled: boolean) {
 				toaster.create({
 					type: 'error',
 					title: status === 'approved' ? 'Could not approve poem' : 'Could not reject poem',
-					description: error instanceof Error ? error.message : 'Try again later.',
+					description: getModerationErrorDescription(
+						error,
+						'You do not have permission to moderate poems.',
+					),
 					closable: true,
 				});
 			}

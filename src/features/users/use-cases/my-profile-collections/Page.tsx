@@ -1,5 +1,6 @@
 import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useMyPoems } from '@features/poems/public/hooks/useGetMyPoems';
 import { usePoemCollections } from '@features/poems/public/hooks/useManagePoemCollections';
 import { useSavedPoems } from '@features/poems/public/hooks/useManageSavedPoems';
@@ -17,12 +18,14 @@ export function MyProfileCollectionsPage() {
 		isMissingClient,
 		isLoading: isProfileLoading,
 		isError: isProfileError,
+		error: profileError,
 		refetch: refetchProfile,
 	} = useMyProfile();
 	const {
 		collections,
 		isLoadingCollections,
 		isCollectionsError,
+		collectionsLoadError,
 		refetchCollections,
 		createCollection,
 		deleteCollection,
@@ -36,6 +39,10 @@ export function MyProfileCollectionsPage() {
 	} = usePoemCollections(!isMissingClient);
 	const { poems: myPoems } = useMyPoems(!isMissingClient);
 	const { savedPoems } = useSavedPoems(!isMissingClient);
+	const isBannedProfileError = isBannedAccessError(profileError);
+	const isBannedCollectionsError =
+		isCollectionsError && isBannedAccessError(collectionsLoadError);
+	const isProfileUnavailable = isProfileError || isBannedProfileError;
 
 	if (isMissingClient) {
 		return (
@@ -50,18 +57,30 @@ export function MyProfileCollectionsPage() {
 			<Box as='section' w='full' maxW='2xl'>
 				<AsyncState
 					isLoading={isProfileLoading}
-					isError={isProfileError}
+					isError={isProfileUnavailable}
 					isEmpty={!profile}
 					loadingElement={LoadingMyProfileSkeleton}
 					errorElement={
 						<ErrorStateCard
 							eyebrow='PROFILE UNAVAILABLE'
-							title='We could not load your profile right now.'
-							description='Please try again in a moment, or retry the request to reconnect.'
-							actionLabel='Retry profile'
-							onAction={() => {
-								void refetchProfile();
-							}}
+							title={
+								isBannedProfileError
+									? 'Profile access is unavailable for this account'
+									: 'We could not load your profile right now.'
+							}
+							description={
+								isBannedProfileError
+									? getBannedPrivilegeMessage('view profiles')
+									: 'Please try again in a moment, or retry the request to reconnect.'
+							}
+							actionLabel={isBannedProfileError ? undefined : 'Retry profile'}
+							onAction={
+								isBannedProfileError
+									? undefined
+									: () => {
+											void refetchProfile();
+										}
+							}
 						/>
 					}
 					emptyElement={<Text textStyle='body'>Profile not found.</Text>}
@@ -98,14 +117,22 @@ export function MyProfileCollectionsPage() {
 							{isCollectionsError && collections.length === 0 && (
 								<ErrorStateCard
 									eyebrow='COLLECTIONS UNAVAILABLE'
-									title='We could not load your collections right now.'
+									title={
+										isBannedCollectionsError
+											? 'Collections are unavailable for this account'
+											: 'We could not load your collections right now.'
+									}
 									description={
 										collectionsError || 'Your collections are safe. Please try again in a moment.'
 									}
-									actionLabel='Retry collections'
-									onAction={() => {
-										void refetchCollections();
-									}}
+									actionLabel={isBannedCollectionsError ? undefined : 'Retry collections'}
+									onAction={
+										isBannedCollectionsError
+											? undefined
+											: () => {
+													void refetchCollections();
+												}
+									}
 								/>
 							)}
 

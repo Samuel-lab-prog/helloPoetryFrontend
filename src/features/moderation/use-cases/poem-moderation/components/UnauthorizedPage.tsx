@@ -1,7 +1,17 @@
 import { Surface } from '@BaseComponents';
 import { Badge, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 
-export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
+type UnauthorizedPageProps = {
+	description?: string;
+	onBack: () => void;
+	title?: string;
+};
+
+export function UnauthorizedPage({
+	description = 'This page is restricted to moderators and administrators.',
+	onBack,
+	title = 'Restricted access',
+}: UnauthorizedPageProps) {
 	return (
 		<Flex
 			as='main'
@@ -18,10 +28,10 @@ export function UnauthorizedPage({ onBack }: { onBack: () => void }) {
 						Moderation
 					</Badge>
 					<Heading as='h1' textStyle='h3'>
-						Restricted access
+						{title}
 					</Heading>
 					<Text textStyle='small' color='pink.100'>
-						This page is restricted to moderators and administrators.
+						{description}
 					</Text>
 					<Button size='sm' variant='solidPink' onClick={onBack}>
 						Back

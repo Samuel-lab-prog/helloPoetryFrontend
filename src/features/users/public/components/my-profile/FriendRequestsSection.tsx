@@ -10,6 +10,7 @@ type FriendRequestsSectionProps = {
 	viewAllHref?: string;
 	isFriendRequestsLoading: boolean;
 	isFriendRequestsError: boolean;
+	friendRequestsErrorMessage?: string;
 	isSearchingFriendRequests?: boolean;
 	isAccepting: (requesterId: number) => boolean;
 	isRejecting: (requesterId: number) => boolean;
@@ -37,6 +38,7 @@ export function FriendRequestsSection({
 	viewAllHref,
 	isFriendRequestsLoading,
 	isFriendRequestsError,
+	friendRequestsErrorMessage,
 	isSearchingFriendRequests,
 	isAccepting,
 	isRejecting,
@@ -86,105 +88,106 @@ export function FriendRequestsSection({
 					)}
 				{isFriendRequestsError && (
 					<Text textStyle='small' color='red.400'>
-						Error loading requests.
+						{friendRequestsErrorMessage || 'Error loading requests.'}
 					</Text>
 				)}
 
-				{friendRequests.received.map((request, index) => {
-					const isRemoving = isRemovingRequester?.(request.requesterId) ?? false;
-					return (
-						<Box
-							key={request.requesterId}
-							overflow='hidden'
-							maxH={isRemoving ? '0px' : '96px'}
-							opacity={isRemoving ? 0 : 1}
-							transform={isRemoving ? 'translateY(-6px)' : 'translateY(0)'}
-							transition='max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease'
-							pointerEvents={isRemoving ? 'none' : 'auto'}
-							animationName='slide-from-bottom, fade-in'
-							animationDuration='320ms'
-							animationTimingFunction='ease-out'
-							animationFillMode='backwards'
-							animationDelay={`${30 + index * 30}ms`}
-							borderTop='1px solid'
-							borderColor='border'
-						>
-							<Flex
-								align={{ base: 'stretch', md: 'center' }}
-								justify='space-between'
-								direction={{ base: 'column', md: 'row' }}
-								gap={3}
-								py={3}
+				{!isFriendRequestsError &&
+					friendRequests.received.map((request, index) => {
+						const isRemoving = isRemovingRequester?.(request.requesterId) ?? false;
+						return (
+							<Box
+								key={request.requesterId}
+								overflow='hidden'
+								maxH={isRemoving ? '0px' : '96px'}
+								opacity={isRemoving ? 0 : 1}
+								transform={isRemoving ? 'translateY(-6px)' : 'translateY(0)'}
+								transition='max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease'
+								pointerEvents={isRemoving ? 'none' : 'auto'}
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay={`${30 + index * 30}ms`}
+								borderTop='1px solid'
+								borderColor='border'
 							>
-								<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
-									<NavLink to={`/authors/${request.requesterId}`}>
-										<Flex
-											align='center'
-											alignSelf='start'
-											gap={2}
-											pr={2}
-											py={1.5}
-											w='fit-content'
-											display='inline-flex'
-											borderRadius='md'
-											transition='background-color 0.2s ease'
-											_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
-										>
-											<Avatar.Root size='sm'>
-												<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
-												<Avatar.Fallback name={request.requesterNickname} />
-											</Avatar.Root>
-											<Flex direction='column' minW={0} gap={0}>
-												<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
-													{request.requesterName}
-												</Text>
-												<Text textStyle='smaller' color='pink.200' opacity={0.9}>
-													@{request.requesterNickname}
-												</Text>
-											</Flex>
-										</Flex>
-									</NavLink>
-								</Link>
 								<Flex
-									w={{ base: 'full', md: 'auto' }}
-									gap={2}
-									ml={{ base: 0, md: 'auto' }}
-									direction={{ base: 'column', sm: 'row' }}
+									align={{ base: 'stretch', md: 'center' }}
+									justify='space-between'
+									direction={{ base: 'column', md: 'row' }}
+									gap={3}
+									py={3}
 								>
-									<Button
-										aria-label='Accept request'
-										size='sm'
-										variant='solidPink'
-										colorPalette='green'
-										onClick={() => onAcceptRequest(request.requesterId)}
-										loading={isAccepting(request.requesterId)}
-										disabled={isRemoving}
-										w={{ base: 'full', sm: 'auto' }}
-										minH='44px'
-										justifyContent='center'
+									<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
+										<NavLink to={`/authors/${request.requesterId}`}>
+											<Flex
+												align='center'
+												alignSelf='start'
+												gap={2}
+												pr={2}
+												py={1.5}
+												w='fit-content'
+												display='inline-flex'
+												borderRadius='md'
+												transition='background-color 0.2s ease'
+												_hover={{ bg: 'rgba(255, 255, 255, 0.04)' }}
+											>
+												<Avatar.Root size='sm'>
+													<Avatar.Image src={request.requesterAvatarUrl ?? undefined} />
+													<Avatar.Fallback name={request.requesterNickname} />
+												</Avatar.Root>
+												<Flex direction='column' minW={0} gap={0}>
+													<Text textStyle='small' color='pink.100' lineHeight='short' truncate>
+														{request.requesterName}
+													</Text>
+													<Text textStyle='smaller' color='pink.200' opacity={0.9}>
+														@{request.requesterNickname}
+													</Text>
+												</Flex>
+											</Flex>
+										</NavLink>
+									</Link>
+									<Flex
+										w={{ base: 'full', md: 'auto' }}
+										gap={2}
+										ml={{ base: 0, md: 'auto' }}
+										direction={{ base: 'column', sm: 'row' }}
 									>
-										<Check />
-										Accept
-									</Button>
-									<Button
-										aria-label='Decline request'
-										size='sm'
-										variant='danger'
-										onClick={() => onRejectRequest(request.requesterId)}
-										loading={isRejecting(request.requesterId)}
-										disabled={isRemoving}
-										w={{ base: 'full', sm: 'auto' }}
-										minH='44px'
-										justifyContent='center'
-									>
-										<X />
-										Reject
-									</Button>
+										<Button
+											aria-label='Accept request'
+											size='sm'
+											variant='solidPink'
+											colorPalette='green'
+											onClick={() => onAcceptRequest(request.requesterId)}
+											loading={isAccepting(request.requesterId)}
+											disabled={isRemoving}
+											w={{ base: 'full', sm: 'auto' }}
+											minH='44px'
+											justifyContent='center'
+										>
+											<Check />
+											Accept
+										</Button>
+										<Button
+											aria-label='Decline request'
+											size='sm'
+											variant='danger'
+											onClick={() => onRejectRequest(request.requesterId)}
+											loading={isRejecting(request.requesterId)}
+											disabled={isRemoving}
+											w={{ base: 'full', sm: 'auto' }}
+											minH='44px'
+											justifyContent='center'
+										>
+											<X />
+											Reject
+										</Button>
+									</Flex>
 								</Flex>
-							</Flex>
-						</Box>
-					);
-				})}
+							</Box>
+						);
+					})}
 			</Flex>
 
 			{errorMessage && (

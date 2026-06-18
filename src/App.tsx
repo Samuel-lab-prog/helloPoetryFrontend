@@ -3,6 +3,7 @@ import { Navbar, Toaster } from '@BaseComponents';
 import { ErrorPage } from '@BasePages';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { canUseModerationTools } from '@features/moderation/public';
 import { type ComponentType, lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -153,16 +154,23 @@ function createRoutePrefetcher(userId?: number) {
 	};
 }
 
-function generateNavLinks(isAuthenticated: boolean, role?: string) {
+function generateNavLinks(
+	isAuthenticated: boolean,
+	authClient?: Parameters<typeof canUseModerationTools>[0],
+) {
 	const links = [
 		{ to: '/', label: 'Home' },
 		{ to: '/poets', label: 'Poets' },
 	];
 	if (isAuthenticated) {
-		links.push({ to: '/poems/new', label: 'Create' });
+		if (authClient?.status !== 'banned') {
+			links.push({ to: '/poems/new', label: 'Create' });
+		}
 		links.push({ to: '/my-profile', label: 'My Profile' });
-		links.push({ to: '/notifications', label: 'Notifications' });
-		if (role === 'moderator' || role === 'admin') {
+		if (authClient?.status !== 'banned') {
+			links.push({ to: '/notifications', label: 'Notifications' });
+		}
+		if (canUseModerationTools(authClient)) {
 			links.push({ to: '/admin/moderation', label: 'Moderation' });
 		}
 	} else {
@@ -175,7 +183,7 @@ function generateNavLinks(isAuthenticated: boolean, role?: string) {
 function AppLayout() {
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const isAuthenticated = Boolean(authClient);
-	const navLinks = generateNavLinks(isAuthenticated, authClient?.role);
+	const navLinks = generateNavLinks(isAuthenticated, authClient);
 	const prefetchRoute = createRoutePrefetcher(authClient?.id);
 
 	return <Navbar links={navLinks} onPrefetchRoute={prefetchRoute} />;

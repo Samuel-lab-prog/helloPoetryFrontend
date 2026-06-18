@@ -1,5 +1,6 @@
-import { AsyncState, EmptyStateCard, ErrorStateCard, SearchInput, getStaggeredEntryAnimationStyle } from '@BaseComponents';
+import { AsyncState, EmptyStateCard, ErrorStateCard, getStaggeredEntryAnimationStyle,SearchInput } from '@BaseComponents';
 import { Box, Button, Flex, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SearchX, Users, X } from 'lucide-react';
@@ -25,10 +26,11 @@ export function PoetsSearchView() {
 	const searchNickname = form.watch('searchNickname');
 	const [debouncedSearch, setDebouncedSearch] = useState(searchNickname);
 
-	const { poets, isLoading, isError } = usePoetsSearch(debouncedSearch);
+	const { poets, isLoading, isError, error } = usePoetsSearch(debouncedSearch);
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const showSkeletons = isLoading && poets.length === 0;
 	const visiblePoets = authClient ? poets.filter((poet) => poet.id !== authClient.id) : poets;
+	const isBannedSearchError = isBannedAccessError(error);
 
 	return (
 		<Flex direction='column' minH='100%'>
@@ -59,16 +61,24 @@ export function PoetsSearchView() {
 					<Box mt={4} w='full'>
 						<AsyncState
 							isLoading={showSkeletons}
-							isError={isError}
+							isError={isError || isBannedSearchError}
 							isEmpty={visiblePoets.length === 0}
 							loadingElement={LoadingUsersSkeletons}
 							errorElement={
 								<ErrorStateCard
 									eyebrow='SEARCH UNAVAILABLE'
-									title='We could not search poets right now.'
-									description='Please try again in a moment, or refresh the page to reconnect.'
-									actionLabel='Refresh search'
-									onAction={() => window.location.reload()}
+									title={
+										isBannedSearchError
+											? 'Poet search is unavailable for this account'
+											: 'We could not search poets right now.'
+									}
+									description={
+										isBannedSearchError
+											? getBannedPrivilegeMessage('search poets')
+											: 'Please try again in a moment, or refresh the page to reconnect.'
+									}
+									actionLabel={isBannedSearchError ? undefined : 'Refresh search'}
+									onAction={isBannedSearchError ? undefined : () => window.location.reload()}
 								/>
 							}
 							emptyElement={

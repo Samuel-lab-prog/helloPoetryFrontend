@@ -1,5 +1,6 @@
 import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import {
 	useCancelFriendRequest,
@@ -21,7 +22,12 @@ export function AuthorPage() {
 	const isValidAuthorId = Number.isInteger(authorId) && authorId > 0;
 	const authClientId = useAuthClientStore((state) => state.authClient?.id ?? -1);
 
-	const { author, isLoading: isAuthorLoading, isError: isAuthorError } = useAuthorProfile(authorId);
+	const {
+		author,
+		isLoading: isAuthorLoading,
+		isError: isAuthorError,
+		error: authorError,
+	} = useAuthorProfile(authorId);
 	const { sendFriendRequest, isSending, errorMessage, reset } = useSendFriendRequest();
 	const {
 		acceptRequest,
@@ -89,6 +95,8 @@ export function AuthorPage() {
 		: null;
 
 	const actionErrorMessage = errorMessage || rejectErrorMessage || cancelErrorMessage;
+	const isBannedAuthorError = isBannedAccessError(authorError);
+	const isAuthorUnavailable = isAuthorError || isBannedAuthorError;
 
 	return (
 		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' gap={6}>
@@ -98,16 +106,24 @@ export function AuthorPage() {
 				) : (
 					<AsyncState
 						isLoading={isAuthorLoading}
-						isError={isAuthorError}
+						isError={isAuthorUnavailable}
 						isEmpty={!author}
 						loadingElement={LoadingAuthorProfileSkeleton}
 						errorElement={
 							<ErrorStateCard
 								eyebrow='AUTHOR UNAVAILABLE'
-								title='We could not load this author right now.'
-								description='Please try again in a moment, or refresh the page to reconnect.'
-								actionLabel='Refresh author'
-								onAction={() => window.location.reload()}
+								title={
+									isBannedAuthorError
+										? 'Author profiles are unavailable for this account'
+										: 'We could not load this author right now.'
+								}
+								description={
+									isBannedAuthorError
+										? getBannedPrivilegeMessage('view profiles')
+										: 'Please try again in a moment, or refresh the page to reconnect.'
+								}
+								actionLabel={isBannedAuthorError ? undefined : 'Refresh author'}
+								onAction={isBannedAuthorError ? undefined : () => window.location.reload()}
 							/>
 						}
 						emptyElement={<Text textStyle='body'>Author not found.</Text>}
@@ -124,13 +140,15 @@ export function AuthorPage() {
 				)}
 			</Box>
 
-			<Box w='full' maxW='2xl'>
-				<AuthorPoemsSection
-					poems={author?.poems ?? []}
-					isLoading={isAuthorLoading}
-					isError={isAuthorError}
-				/>
-			</Box>
+			{isValidAuthorId && !isAuthorUnavailable && (
+				<Box w='full' maxW='2xl'>
+					<AuthorPoemsSection
+						poems={author?.poems ?? []}
+						isLoading={isAuthorLoading}
+						isError={isAuthorError}
+					/>
+				</Box>
+			)}
 		</Flex>
 	);
 }

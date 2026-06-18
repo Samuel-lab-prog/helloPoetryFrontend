@@ -1,6 +1,10 @@
 import { Surface } from '@BaseComponents';
 import { Badge, Button, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import {
+	getBannedPrivilegeMessage,
+	getSuspendedPrivilegeMessage,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { NavLink } from 'react-router-dom';
 
 import { CreatePoemForm } from './components/CreatePoemForm';
@@ -35,13 +39,80 @@ function CreatePoemAccessGate() {
 	);
 }
 
+function SuspendedCreatePoemGate() {
+	return (
+		<Surface
+			w='full'
+			maxW='2xl'
+			p={{ base: 5, md: 6 }}
+			variant='gradient'
+			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
+		>
+			<VStack align='start' gap={4}>
+				<Badge colorPalette='pink' variant='subtle'>
+					Poems
+				</Badge>
+				<Text textStyle='h3'>Create poem unavailable</Text>
+				<Text textStyle='small' color='pink.100'>
+					{getSuspendedPrivilegeMessage('create poems')}
+				</Text>
+				<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
+					<NavLink to='/'>Go to home</NavLink>
+				</Button>
+			</VStack>
+		</Surface>
+	);
+}
+
+function BannedCreatePoemGate() {
+	return (
+		<Surface
+			w='full'
+			maxW='2xl'
+			p={{ base: 5, md: 6 }}
+			variant='gradient'
+			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
+		>
+			<VStack align='start' gap={4}>
+				<Badge colorPalette='pink' variant='subtle'>
+					Poems
+				</Badge>
+				<Text textStyle='h3'>Create poem unavailable</Text>
+				<Text textStyle='small' color='pink.100'>
+					{getBannedPrivilegeMessage('create poems')}
+				</Text>
+				<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
+					<NavLink to='/my-profile'>Go to profile</NavLink>
+				</Button>
+			</VStack>
+		</Surface>
+	);
+}
+
 export function CreatePoemPage() {
-	const isAuthenticated = useAuthClientStore((state) => !!state.authClient?.id);
+	const authClient = useAuthClientStore((state) => state.authClient);
+	const isAuthenticated = !!authClient?.id;
 
 	if (!isAuthenticated) {
 		return (
 			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
 				<CreatePoemAccessGate />
+			</Flex>
+		);
+	}
+
+	if (authClient.status === 'suspended') {
+		return (
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+				<SuspendedCreatePoemGate />
+			</Flex>
+		);
+	}
+
+	if (authClient.status === 'banned') {
+		return (
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+				<BannedCreatePoemGate />
 			</Flex>
 		);
 	}

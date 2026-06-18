@@ -14,7 +14,13 @@ import {
 	useListCollection,
 	VStack,
 } from '@chakra-ui/react';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import { useQuery } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -22,6 +28,24 @@ const SEARCH_DELAY_MS = 260;
 const MIN_SEARCH_LENGTH = 2;
 
 type AuthClientPreview = { id: number; role: string } | null;
+
+function getBanUserErrorDescription(error: unknown) {
+	const appError = error as AppErrorType | undefined;
+
+	if (appError?.statusCode === 401 && isBannedAccessError(appError)) {
+		return getBannedPrivilegeMessage('moderate users');
+	}
+
+	if (appError?.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: 'You do not have permission to ban users.',
+			suspendedAction: 'moderate users',
+		});
+	}
+
+	if (error instanceof Error) return error.message;
+	return appError?.message ?? 'Try again later.';
+}
 
 export function BanUserForm({ authClient }: { authClient: AuthClientPreview }) {
 	const [searchNickname, setSearchNickname] = useState('');
@@ -108,7 +132,7 @@ export function BanUserForm({ authClient }: { authClient: AuthClientPreview }) {
 			toaster.create({
 				type: 'error',
 				title: 'Could not ban user',
-				description: error instanceof Error ? error.message : 'Try again later.',
+				description: getBanUserErrorDescription(error),
 				closable: true,
 			});
 		} finally {

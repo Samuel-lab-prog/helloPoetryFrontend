@@ -3,8 +3,14 @@ import { moderationKeys } from '@Api/moderation/keys';
 import { poemKeys } from '@Api/poems/keys';
 import { userKeys } from '@Api/users/keys';
 import { toaster } from '@BaseComponents';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import { queryClient } from '@QueryClient';
 import { useMutation } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 import { useCallback } from 'react';
 
 import type {
@@ -25,6 +31,29 @@ function isUserAction(action: ModerationAction) {
 		action === 'unban-user' ||
 		action === 'unsuspend-user'
 	);
+}
+
+function getModerationSuspendedAction(action: ModerationAction) {
+	if (isUserAction(action)) return 'moderate users';
+	return 'moderate poems';
+}
+
+function getModerationActionErrorDescription(error: unknown, action: ModerationAction) {
+	const appError = error as AppErrorType | undefined;
+
+	if (appError?.statusCode === 401 && isBannedAccessError(appError)) {
+		return getBannedPrivilegeMessage(getModerationSuspendedAction(action));
+	}
+
+	if (appError?.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: appError.message || 'You do not have permission to use moderation tools.',
+			suspendedAction: getModerationSuspendedAction(action),
+		});
+	}
+
+	if (error instanceof Error) return error.message;
+	return appError?.message ?? 'Try again later.';
 }
 
 async function invalidateModerationTargets(input: ModerationActionInput) {
@@ -123,7 +152,7 @@ export function useModerationActions(options: UseModerationActionsOptions = {}) 
 				toaster.create({
 					type: 'error',
 					title: config.errorTitle,
-					description: error instanceof Error ? error.message : 'Try again later.',
+					description: getModerationActionErrorDescription(error, input.action),
 					closable: true,
 				});
 				throw error;

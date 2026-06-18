@@ -24,6 +24,7 @@ export type MyPoemsSectionProps = {
 	searchAnimationKey?: string;
 	isLoadingMyPoems: boolean;
 	isMyPoemsError: boolean;
+	myPoemsErrorMessage?: string;
 	isSearchingMyPoems?: boolean;
 	onOpenPoem: (slug: string, id: number) => void;
 	onUpdatePoem: (id: number) => void;
@@ -51,6 +52,7 @@ export function MyPoemsSection({
 	searchAnimationKey,
 	isLoadingMyPoems,
 	isMyPoemsError,
+	myPoemsErrorMessage,
 	isSearchingMyPoems,
 	onOpenPoem,
 	onUpdatePoem,
@@ -109,145 +111,146 @@ export function MyPoemsSection({
 				)}
 				{isMyPoemsError && (
 					<Text textStyle='small' color='red.400'>
-						Error loading your poems.
+						{myPoemsErrorMessage || 'Error loading your poems.'}
 					</Text>
 				)}
 
-				{myPoems.map((poem, index) => {
-					const canEdit = canUpdatePoem(poem);
-					const canDelete = poem.moderationStatus !== 'removed';
-					return (
-						<Flex
-							key={poem.id}
-							align={{ base: 'start', md: 'center' }}
-							justify='space-between'
-							direction={{ base: 'column', md: 'row' }}
-							gap={3}
-							p={3}
-							border='1px solid'
-							borderColor='purple.700'
-							borderRadius='md'
-							animationName='slide-from-bottom, fade-in'
-							animationDuration='320ms'
-							animationTimingFunction='ease-out'
-							animationFillMode='backwards'
-							animationDelay={`${30 + index * 30}ms`}
-						>
-							<Flex direction='column' gap={1} flex='1' w='full'>
-								<Flex align='center' gap={2} wrap='wrap'>
-									<Text textStyle='small'>{poem.title}</Text>
-									{poem.status === 'draft' && (
-										<Badge size='sm' colorPalette='purple' variant='subtle'>
-											Draft
-										</Badge>
+				{!isMyPoemsError &&
+					myPoems.map((poem, index) => {
+						const canEdit = canUpdatePoem(poem);
+						const canDelete = poem.moderationStatus !== 'removed';
+						return (
+							<Flex
+								key={poem.id}
+								align={{ base: 'start', md: 'center' }}
+								justify='space-between'
+								direction={{ base: 'column', md: 'row' }}
+								gap={3}
+								p={3}
+								border='1px solid'
+								borderColor='purple.700'
+								borderRadius='md'
+								animationName='slide-from-bottom, fade-in'
+								animationDuration='320ms'
+								animationTimingFunction='ease-out'
+								animationFillMode='backwards'
+								animationDelay={`${30 + index * 30}ms`}
+							>
+								<Flex direction='column' gap={1} flex='1' w='full'>
+									<Flex align='center' gap={2} wrap='wrap'>
+										<Text textStyle='small'>{poem.title}</Text>
+										{poem.status === 'draft' && (
+											<Badge size='sm' colorPalette='purple' variant='subtle'>
+												Draft
+											</Badge>
+										)}
+									</Flex>
+									<Text textStyle='smaller' color='pink.200'>
+										{formatRelativeTime(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
+										{translateVisibility(poem.visibility)}
+									</Text>
+									{poem.status === 'published' && (
+										<Text
+											textStyle='smaller'
+											color={getModerationTextColor(poem.moderationStatus)}
+											fontWeight='semibold'
+										>
+											{translateModerationStatus(poem.moderationStatus)}
+										</Text>
+									)}
+									{poem.moderationStatus === 'rejected' && (
+										<Box
+											mt={1}
+											px={3}
+											py={2}
+											border='1px solid'
+											borderColor='red.500'
+											borderRadius='md'
+											bg='rgba(255, 60, 100, 0.08)'
+										>
+											<Text textStyle='smaller' color='red.200' fontWeight='semibold'>
+												Rejected
+											</Text>
+											<Text textStyle='smaller' color='pink.100' mt={1} whiteSpace='pre-wrap'>
+												{poem.rejectionReason?.trim() || 'No rejection reason was provided.'}
+											</Text>
+										</Box>
+									)}
+									{poem.stats && (
+										<Text textStyle='smaller' color='pink.200'>
+											{poem.stats.likesCount} likes | {poem.stats.commentsCount} comments
+										</Text>
+									)}
+									{poem.tags?.length > 0 && (
+										<HStack gap={1} wrap='wrap'>
+											{poem.tags.slice(0, 4).map((tag) => (
+												<Badge
+													key={tag.id}
+													size='sm'
+													colorPalette='pink'
+													variant='subtle'
+													textStyle='smaller'
+												>
+													#{tag.name}
+												</Badge>
+											))}
+										</HStack>
 									)}
 								</Flex>
-								<Text textStyle='smaller' color='pink.200'>
-									{formatRelativeTime(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
-									{translateVisibility(poem.visibility)}
-								</Text>
-								{poem.status === 'published' && (
-									<Text
-										textStyle='smaller'
-										color={getModerationTextColor(poem.moderationStatus)}
-										fontWeight='semibold'
-									>
-										{translateModerationStatus(poem.moderationStatus)}
-									</Text>
-								)}
-								{poem.moderationStatus === 'rejected' && (
-									<Box
-										mt={1}
-										px={3}
-										py={2}
-										border='1px solid'
-										borderColor='red.500'
-										borderRadius='md'
-										bg='rgba(255, 60, 100, 0.08)'
-									>
-										<Text textStyle='smaller' color='red.200' fontWeight='semibold'>
-											Rejected
-										</Text>
-										<Text textStyle='smaller' color='pink.100' mt={1} whiteSpace='pre-wrap'>
-											{poem.rejectionReason?.trim() || 'No rejection reason was provided.'}
-										</Text>
-									</Box>
-								)}
-								{poem.stats && (
-									<Text textStyle='smaller' color='pink.200'>
-										{poem.stats.likesCount} likes | {poem.stats.commentsCount} comments
-									</Text>
-								)}
-								{poem.tags?.length > 0 && (
-									<HStack gap={1} wrap='wrap'>
-										{poem.tags.slice(0, 4).map((tag) => (
-											<Badge
-												key={tag.id}
-												size='sm'
-												colorPalette='pink'
-												variant='subtle'
-												textStyle='smaller'
-											>
-												#{tag.name}
-											</Badge>
-										))}
-									</HStack>
-								)}
-							</Flex>
 
-							<Menu.Root positioning={{ placement: 'bottom-end' }}>
-								<Menu.Trigger asChild>
-									<IconButton
-										aria-label='Open actions menu'
-										variant='solidPink'
-										size={{ base: 'xs', md: 'sm' }}
-										alignSelf={{ base: 'end', md: 'auto' }}
-									>
-										<EllipsisVertical />
-									</IconButton>
-								</Menu.Trigger>
-								<Portal>
-									<Menu.Positioner>
-										<Menu.Content
-											bg='rgba(27, 0, 25, 0.98)'
-											border='1px solid'
-											borderColor='purple.700'
+								<Menu.Root positioning={{ placement: 'bottom-end' }}>
+									<Menu.Trigger asChild>
+										<IconButton
+											aria-label='Open actions menu'
+											variant='solidPink'
+											size={{ base: 'xs', md: 'sm' }}
+											alignSelf={{ base: 'end', md: 'auto' }}
 										>
-											<Menu.Item
-												value={`open-${poem.id}`}
-												color='pink.100'
-												_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-												onClick={() => onOpenPoem(poem.slug, poem.id)}
+											<EllipsisVertical />
+										</IconButton>
+									</Menu.Trigger>
+									<Portal>
+										<Menu.Positioner>
+											<Menu.Content
+												bg='rgba(27, 0, 25, 0.98)'
+												border='1px solid'
+												borderColor='purple.700'
 											>
-												Open
-											</Menu.Item>
-											{canEdit && (
 												<Menu.Item
-													value={`update-${poem.id}`}
+													value={`open-${poem.id}`}
 													color='pink.100'
 													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-													onClick={() => onUpdatePoem(poem.id)}
+													onClick={() => onOpenPoem(poem.slug, poem.id)}
 												>
-													Edit
+													Open
 												</Menu.Item>
-											)}
-											{canDelete && (
-												<Menu.Item
-													value={`delete-${poem.id}`}
-													color='pink.100'
-													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-													onClick={() => onDeletePoem(poem.id)}
-												>
-													Delete
-												</Menu.Item>
-											)}
-										</Menu.Content>
-									</Menu.Positioner>
-								</Portal>
-							</Menu.Root>
-						</Flex>
-					);
-				})}
+												{canEdit && (
+													<Menu.Item
+														value={`update-${poem.id}`}
+														color='pink.100'
+														_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+														onClick={() => onUpdatePoem(poem.id)}
+													>
+														Edit
+													</Menu.Item>
+												)}
+												{canDelete && (
+													<Menu.Item
+														value={`delete-${poem.id}`}
+														color='pink.100'
+														_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+														onClick={() => onDeletePoem(poem.id)}
+													>
+														Delete
+													</Menu.Item>
+												)}
+											</Menu.Content>
+										</Menu.Positioner>
+									</Portal>
+								</Menu.Root>
+							</Flex>
+						);
+					})}
 			</Flex>
 		</>
 	);

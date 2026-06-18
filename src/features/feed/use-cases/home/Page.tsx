@@ -18,6 +18,7 @@ export function HomePage() {
 		poems: feedPoems,
 		isError,
 		isLoading,
+		error: feedError,
 	} = useHomeFeed({
 		isAuthenticated,
 		limit: isAuthenticated ? POEMS_FEED_LIMIT : POEMS_FEED_LIMIT_UNAUTHENTICATED,
@@ -37,6 +38,7 @@ export function HomePage() {
 	const displayedPoems = isSearching ? (searchQuery.data?.poems ?? []) : feedPoems;
 	const isFeedLoading = isSearching ? searchQuery.isLoading : isLoading;
 	const isFeedError = isSearching ? searchQuery.isError : isError;
+	const feedErrorState = isSearching ? searchQuery.error : feedError;
 
 	return (
 		<Flex direction='column' minH='100%'>
@@ -69,6 +71,7 @@ export function HomePage() {
 						isLoading={isFeedLoading}
 						isError={isFeedError}
 						isSearching={isSearching}
+						error={feedErrorState}
 						onClearSearch={() => {
 							setSearchTitle('');
 							setDebouncedSearch('');

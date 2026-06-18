@@ -2,6 +2,7 @@
 import { moderation } from '@Api/moderation/endpoints';
 import { Avatar, Badge, Flex, Icon, Link, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { canUseModerationTools } from '@features/moderation/public';
 import { useMyProfile } from '@features/users/public/hooks/useMyProfile';
 import { useQuery } from '@tanstack/react-query';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
@@ -22,7 +23,8 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const authClient = useAuthClientStore((state) => state.authClient);
 	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
 	const { profile } = useMyProfile();
-	const canSeeModerationBadge = authClient?.role === 'moderator' || authClient?.role === 'admin';
+	const canSeeModerationBadge = canUseModerationTools(authClient);
+	const canUseAuthenticatedShortcuts = authClient?.status !== 'banned';
 	const { data: moderationPendingCount = 0 } = useQuery({
 		...moderation.getPendingPoems.query(),
 		enabled: canSeeModerationBadge,
@@ -128,90 +130,94 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 					<Flex align='center' gap={{ base: 1.5, md: 3 }} ml='auto' wrap='nowrap' flexShrink={0}>
 						{isAuthenticated ? (
 							<>
-								<Link
-									asChild
-									display='inline-flex'
-									alignItems='center'
-									justifyContent='center'
-									flexShrink={0}
-									minW='fit-content'
-									h={{ base: 7, md: 9 }}
-									px={{ base: 2, md: 3 }}
-									gap={{ base: 1.5, md: 2 }}
-									borderRadius='full'
-									border='1px solid'
-									borderColor='purple.500'
-									color='pink.100'
-									_hover={{
-										color: 'pink.50',
-										borderColor: 'pink.400',
-										bg: 'rgba(255, 255, 255, 0.06)',
-									}}
-								>
-									<NavLink
-										to='/poems/new'
-										aria-label='Criar poema'
-										onMouseEnter={() => onPrefetchRoute?.('/poems/new')}
-										onFocus={() => onPrefetchRoute?.('/poems/new')}
-									>
-										<Icon as={PenSquare} boxSize={{ base: 3, md: 4 }} />
-										<Text
-											fontSize={{ base: '2xs', md: 'sm' }}
-											fontWeight='medium'
-											whiteSpace='nowrap'
+								{canUseAuthenticatedShortcuts && (
+									<>
+										<Link
+											asChild
+											display='inline-flex'
+											alignItems='center'
+											justifyContent='center'
+											flexShrink={0}
+											minW='fit-content'
+											h={{ base: 7, md: 9 }}
+											px={{ base: 2, md: 3 }}
+											gap={{ base: 1.5, md: 2 }}
+											borderRadius='full'
+											border='1px solid'
+											borderColor='purple.500'
+											color='pink.100'
+											_hover={{
+												color: 'pink.50',
+												borderColor: 'pink.400',
+												bg: 'rgba(255, 255, 255, 0.06)',
+											}}
 										>
-											Create
-										</Text>
-									</NavLink>
-								</Link>
-								<Link
-									asChild
-									display={{ base: 'none', lg: 'inline-flex' }}
-									alignItems='center'
-									justifyContent='center'
-									position='relative'
-									flexShrink={0}
-									minW='fit-content'
-									h={9}
-									w={9}
-									borderRadius='full'
-									border='1px solid'
-									borderColor='purple.500'
-									color='pink.100'
-									_hover={{
-										color: 'pink.50',
-										borderColor: 'pink.400',
-										bg: 'rgba(255, 255, 255, 0.06)',
-									}}
-								>
-									<NavLink
-										to='/notifications'
-										aria-label='Notificações'
-										onMouseEnter={() => onPrefetchRoute?.('/notifications')}
-										onFocus={() => onPrefetchRoute?.('/notifications')}
-									>
-										<Icon as={Bell} boxSize={4.5} strokeWidth={2.2} />
-										{unreadCount > 0 && (
-											<Badge
-												position='absolute'
-												top='-1'
-												right='-1'
-												minW='1.2rem'
-												h='1.2rem'
-												px='1'
-												display='inline-flex'
-												alignItems='center'
-												justifyContent='center'
-												borderRadius='full'
-												colorPalette='pink'
-												variant='solid'
-												fontSize='2xs'
+											<NavLink
+												to='/poems/new'
+												aria-label='Criar poema'
+												onMouseEnter={() => onPrefetchRoute?.('/poems/new')}
+												onFocus={() => onPrefetchRoute?.('/poems/new')}
 											>
-												{unreadCount > 9 ? '9+' : unreadCount}
-											</Badge>
-										)}
-									</NavLink>
-								</Link>
+												<Icon as={PenSquare} boxSize={{ base: 3, md: 4 }} />
+												<Text
+													fontSize={{ base: '2xs', md: 'sm' }}
+													fontWeight='medium'
+													whiteSpace='nowrap'
+												>
+													Create
+												</Text>
+											</NavLink>
+										</Link>
+										<Link
+											asChild
+											display={{ base: 'none', lg: 'inline-flex' }}
+											alignItems='center'
+											justifyContent='center'
+											position='relative'
+											flexShrink={0}
+											minW='fit-content'
+											h={9}
+											w={9}
+											borderRadius='full'
+											border='1px solid'
+											borderColor='purple.500'
+											color='pink.100'
+											_hover={{
+												color: 'pink.50',
+												borderColor: 'pink.400',
+												bg: 'rgba(255, 255, 255, 0.06)',
+											}}
+										>
+											<NavLink
+												to='/notifications'
+												aria-label='Notificações'
+												onMouseEnter={() => onPrefetchRoute?.('/notifications')}
+												onFocus={() => onPrefetchRoute?.('/notifications')}
+											>
+												<Icon as={Bell} boxSize={4.5} strokeWidth={2.2} />
+												{unreadCount > 0 && (
+													<Badge
+														position='absolute'
+														top='-1'
+														right='-1'
+														minW='1.2rem'
+														h='1.2rem'
+														px='1'
+														display='inline-flex'
+														alignItems='center'
+														justifyContent='center'
+														borderRadius='full'
+														colorPalette='pink'
+														variant='solid'
+														fontSize='2xs'
+													>
+														{unreadCount > 9 ? '9+' : unreadCount}
+													</Badge>
+												)}
+											</NavLink>
+										</Link>
+									</>
+								)}
 								<Link asChild>
 									<NavLink
 										to='/my-profile'

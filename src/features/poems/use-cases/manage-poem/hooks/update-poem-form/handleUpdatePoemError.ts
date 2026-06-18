@@ -1,4 +1,8 @@
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 import type { UseFormSetError } from 'react-hook-form';
 
@@ -14,13 +18,22 @@ export function handleUpdatePoemError(
 	const message = normalizeErrorMessage(error?.message);
 
 	if (status === 401) {
+		if (isBannedAccessError(error)) {
+			setGeneralError(getBannedPrivilegeMessage('update poems'));
+			return;
+		}
 		setGeneralError('You do not have permission to update poems.');
 		return;
 	}
 
 	if (status === 403) {
 		if (message.includes('not active')) {
-			setGeneralError('Your user must be active to update poems.');
+			setGeneralError(
+				getAccessDeniedMessage({
+					fallback: 'Your account must be active to update poems.',
+					suspendedAction: 'update poems',
+				}),
+			);
 			return;
 		}
 		if (message.includes('not the author')) {
@@ -38,7 +51,7 @@ export function handleUpdatePoemError(
 		setGeneralError(
 			getAccessDeniedMessage({
 				fallback: 'You do not have permission to update this poem.',
-				suspendedMessage: 'Your account is suspended, so you cannot update poems.',
+				suspendedAction: 'update poems',
 			}),
 		);
 		return;

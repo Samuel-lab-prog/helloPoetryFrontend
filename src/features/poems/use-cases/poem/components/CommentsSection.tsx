@@ -1,7 +1,7 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, EmptyStateCard } from '@BaseComponents';
 import { Box, Button, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions/public';
-import { SendHorizontal } from 'lucide-react';
+import { MessageCircleOff, SendHorizontal } from 'lucide-react';
 import { type Dispatch, memo, type SetStateAction, useEffect, useMemo, useRef } from 'react';
 
 import { CommentThread } from './CommentThread';
@@ -15,6 +15,8 @@ type CommentsSectionProps = {
 	comments: PoemCommentType[];
 	isLoadingComments: boolean;
 	isCommentsError: boolean;
+	commentsError: string;
+	commentRestrictionMessage?: string;
 	isCreatingComment: boolean;
 	isDeletingComment: (commentId: number) => boolean;
 	repliesByCommentId: Record<number, PoemCommentType[]>;
@@ -39,6 +41,8 @@ export const CommentsSection = memo(function CommentsSection({
 	comments,
 	isLoadingComments,
 	isCommentsError,
+	commentsError,
+	commentRestrictionMessage,
 	isCreatingComment,
 	isDeletingComment,
 	repliesByCommentId,
@@ -54,7 +58,11 @@ export const CommentsSection = memo(function CommentsSection({
 	prefetchReplies,
 }: CommentsSectionProps) {
 	const canPublishComment =
-		isAuthenticated && poemIsCommentable && commentInput.trim().length > 0 && !isCreatingComment;
+		isAuthenticated &&
+		!commentRestrictionMessage &&
+		poemIsCommentable &&
+		commentInput.trim().length > 0 &&
+		!isCreatingComment;
 	const prefetchedRepliesRef = useRef<Set<number>>(new Set());
 
 	const renderedThreads = useMemo(
@@ -100,6 +108,22 @@ export const CommentsSection = memo(function CommentsSection({
 			void prefetchReplies(comment.id);
 		}
 	}, [comments, prefetchReplies]);
+
+	if (commentRestrictionMessage) {
+		return (
+			<Box mt={10}>
+				<Heading as='h2' textStyle={{ base: 'h4', md: 'h3' }} mb={4}>
+					Comments
+				</Heading>
+				<EmptyStateCard
+					eyebrow='Comments restricted'
+					eyebrowIcon={MessageCircleOff}
+					title='Comments are unavailable right now'
+					description={commentRestrictionMessage}
+				/>
+			</Box>
+		);
+	}
 
 	return (
 		<Box mt={10}>
@@ -182,7 +206,8 @@ export const CommentsSection = memo(function CommentsSection({
 									COMMENTS UNAVAILABLE
 								</Text>
 								<Text textStyle='smaller' color='pink.100'>
-									We could not load comments right now. Please try again in a moment, or refresh the page.
+									{commentsError ||
+										'We could not load comments right now. Please try again in a moment, or refresh the page.'}
 								</Text>
 								<Button size='xs' colorPalette='pink' variant='solid' onClick={() => window.location.reload()}>
 									Refresh comments

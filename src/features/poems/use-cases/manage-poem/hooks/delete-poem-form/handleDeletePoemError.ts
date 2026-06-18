@@ -1,4 +1,8 @@
-import { getAccessDeniedMessage } from '@features/auth/public';
+import {
+	getAccessDeniedMessage,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+} from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 
 export function handleDeletePoemError(err: unknown, setGeneralError: (msg: string) => void) {
@@ -6,6 +10,10 @@ export function handleDeletePoemError(err: unknown, setGeneralError: (msg: strin
 	const status = error?.statusCode;
 
 	if (status === 401) {
+		if (isBannedAccessError(error)) {
+			setGeneralError(getBannedPrivilegeMessage('delete poems'));
+			return;
+		}
 		setGeneralError('You do not have permission to delete poems.');
 		return;
 	}
@@ -14,7 +22,6 @@ export function handleDeletePoemError(err: unknown, setGeneralError: (msg: strin
 		setGeneralError(
 			getAccessDeniedMessage({
 				fallback: 'You can only delete your own poems.',
-				suspendedMessage: 'Your account is suspended, so you cannot delete poems.',
 			}),
 		);
 		return;
