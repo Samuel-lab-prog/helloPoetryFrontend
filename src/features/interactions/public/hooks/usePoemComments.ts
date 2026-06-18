@@ -2,6 +2,7 @@ import { interactions } from '@Api/interactions/endpoints';
 import { interactionsKeys } from '@Api/interactions/keys';
 import { type OptimisticSnapshot, restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
+import { getAccessDeniedMessage } from '@features/auth/public';
 import { eventBus } from '@root/core/events/eventBus';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
@@ -138,14 +139,24 @@ function updateLikeState(
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
 	if (error.statusCode === 404) return 'Poem not found.';
-	if (error.statusCode === 403) return 'You cannot comment on this poem.';
+	if (error.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: 'You cannot comment on this poem.',
+			suspendedMessage: 'Your account is suspended, so you cannot comment on this poem.',
+		});
+	}
 	if (error.statusCode === 422) return 'Invalid comment (1-3000 chars).';
 	return 'Error sending comment.';
 }
 
 function getDeleteCommentErrorMessage(error: AppErrorType | null) {
 	if (!error) return '';
-	if (error.statusCode === 403) return 'You cannot delete this comment.';
+	if (error.statusCode === 403) {
+		return getAccessDeniedMessage({
+			fallback: 'You cannot delete this comment.',
+			suspendedMessage: 'Your account is suspended, so you cannot delete this comment.',
+		});
+	}
 	if (error.statusCode === 404) return 'Comment not found.';
 	return 'Error deleting comment.';
 }

@@ -1,14 +1,31 @@
 import { FormField, SelectField, Surface, TagsField } from '@BaseComponents';
 import { Button, Flex, Text } from '@chakra-ui/react';
+import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { PoemCombobox } from '../../../public/components/PoemCombobox';
 import { useMyPoems } from '../../../public/hooks/useGetMyPoems';
-import { canUpdatePoem } from '../../../public/utils/canUpdatePoem';
 import { POEM_TAG_MAX_LENGTH, POEM_TAGS_MAX_AMOUNT } from '../../create-poem/components/constants';
 import { usePoem } from '../../poem/hooks/usePoem';
 import { useUpdatePoemForm } from '../hooks/update-poem-form';
+
+function canEditPoemFromAdminPanel(
+	poem?: {
+		status: string;
+		moderationStatus?: string | null;
+	} | null,
+	role?: string,
+) {
+	if (!poem) return false;
+	if (poem.moderationStatus === 'removed') return false;
+	const isPrivilegedModerator = role === 'moderator' || role === 'admin';
+	if (isPrivilegedModerator) {
+		return poem.status === 'published' && poem.moderationStatus === 'rejected';
+	}
+	if (poem.status === 'published' && poem.moderationStatus !== 'rejected') return false;
+	return true;
+}
 
 export function UpdatePoemForm() {
 	const { poems: myPoems } = useMyPoems();
@@ -24,13 +41,17 @@ export function UpdatePoemForm() {
 		isPending,
 		generalError,
 	} = useUpdatePoemForm();
+	const requesterRole = useAuthClientStore((state) => state.authClient?.role);
 
 	const poemId = watch('id');
 	const { poem, isLoading } = usePoem(poemId);
 	const [searchParams] = useSearchParams();
 	const initialPoemId = Number(searchParams.get('poemId') ?? '');
-	const editablePoems = useMemo(() => myPoems.filter((item) => canUpdatePoem(item)), [myPoems]);
-	const isEditablePoem = canUpdatePoem(poem);
+	const editablePoems = useMemo(
+		() => myPoems.filter((item) => canEditPoemFromAdminPanel(item, requesterRole)),
+		[myPoems, requesterRole],
+	);
+	const isEditablePoem = canEditPoemFromAdminPanel(poem, requesterRole);
 	const formDisabled = isLoading || !poemId || !isEditablePoem;
 
 	useEffect(() => {
@@ -66,8 +87,9 @@ export function UpdatePoemForm() {
 			{poem && !isEditablePoem && (
 				<Surface variant='soft' p={4}>
 					<Text textStyle='smaller' color='pink.100'>
-						This poem cannot be edited from the admin panel anymore. Only drafts and rejected poems
-						can be updated here.
+						{requesterRole === 'moderator' || requesterRole === 'admin'
+							? 'This poem cannot be edited from the moderation panel. Only published rejected poems can be updated here.'
+							: 'This poem cannot be edited from the admin panel anymore. Only drafts and rejected poems can be updated here.'}
 					</Text>
 				</Surface>
 			)}

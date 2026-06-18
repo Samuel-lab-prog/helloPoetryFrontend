@@ -1,7 +1,7 @@
 import { users } from '@Api/users/endpoints';
 import { userKeys } from '@Api/users/keys';
 import type { UserPrivateProfile } from '@Api/users/types';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
@@ -60,7 +60,12 @@ export function useUpdateMyProfile() {
 		if (!error) return '';
 		if (!('statusCode' in error)) return error.message || 'Error updating profile.';
 		if (error.statusCode === 401) return 'Sign in to edit your profile.';
-		if (error.statusCode === 403) return 'You do not have permission to edit this profile.';
+		if (error.statusCode === 403) {
+			return getAccessDeniedMessage({
+				fallback: 'You do not have permission to edit this profile.',
+				suspendedMessage: 'Your account is suspended, so you cannot edit your profile.',
+			});
+		}
 		if (error.statusCode === 409) return 'This nickname is already in use.';
 		if (error.statusCode === 422) return 'Invalid data. Please review the fields.';
 		return 'Error updating profile.';

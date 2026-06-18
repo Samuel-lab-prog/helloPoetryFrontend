@@ -1,3 +1,4 @@
+import { getAccessDeniedMessage } from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 import type { UseFormSetError } from 'react-hook-form';
 
@@ -34,7 +35,12 @@ export function handleUpdatePoemError(
 			setGeneralError('Removed poems cannot be updated.');
 			return;
 		}
-		setGeneralError('You do not have permission to update this poem.');
+		setGeneralError(
+			getAccessDeniedMessage({
+				fallback: 'You do not have permission to update this poem.',
+				suspendedMessage: 'Your account is suspended, so you cannot update poems.',
+			}),
+		);
 		return;
 	}
 

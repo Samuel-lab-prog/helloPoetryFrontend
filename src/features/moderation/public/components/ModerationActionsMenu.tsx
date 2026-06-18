@@ -125,7 +125,7 @@ export function ModerationActionsMenu({
 	const canShowPoemActions = canModeratePoemTarget(authClient) && Boolean(poem);
 	const canShowUserActions = canModerateUserTarget(authClient, targetUser);
 	const shouldFetchSanctionStatus =
-		isMenuOpen && canShowUserActions && Boolean(targetUser?.id) && !targetUser?.status;
+		isMenuOpen && canShowUserActions && Boolean(targetUser?.id);
 
 	const sanctionStatusQuery = useQuery({
 		...moderation.getUserSanctionStatus.query(String(targetUser?.id ?? 0)),

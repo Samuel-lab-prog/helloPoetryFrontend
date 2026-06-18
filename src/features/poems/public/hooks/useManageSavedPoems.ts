@@ -2,7 +2,7 @@ import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
@@ -91,6 +91,12 @@ export function useSavedPoems(enabled = true) {
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Sign in to save poems.';
 		if (error.statusCode === 404) return 'Poem not found.';
+		if (error.statusCode === 403) {
+			return getAccessDeniedMessage({
+				fallback: 'You do not have permission to change saved poems.',
+				suspendedMessage: 'Your account is suspended, so you cannot save poems.',
+			});
+		}
 		if (error.statusCode === 409) return '';
 		return 'Error updating saved poem.';
 	}

@@ -5,3 +5,4 @@
 export * from './hooks/useEnsureRole';
 export * from './hooks/useIsAuthenticated';
 export * from './stores/useAuthClientStore';
+export * from './utils/getAccessDeniedMessage';

@@ -2,7 +2,7 @@ import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { CollectionItemBody, CreateCollectionBody, PoemCollection } from '@Api/poems/types';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
@@ -181,7 +181,12 @@ export function usePoemCollections(enabled = true) {
 			removeCollectionItemMutation.error) as AppErrorType | null;
 		if (!error) return '';
 		if (error.statusCode === 401) return 'Sign in to manage collections.';
-		if (error.statusCode === 403) return 'You do not have permission to change this collection.';
+		if (error.statusCode === 403) {
+			return getAccessDeniedMessage({
+				fallback: 'You do not have permission to change this collection.',
+				suspendedMessage: 'Your account is suspended, so you cannot change collections.',
+			});
+		}
 		if (error.statusCode === 404) return 'Collection or poem not found.';
 		if (error.statusCode === 409)
 			return 'A collection with this name already exists or the poem was already added.';

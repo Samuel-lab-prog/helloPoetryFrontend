@@ -3,6 +3,7 @@ import { type AuthClient } from '@Api/auth/types';
 import { eventBus } from '@core/events/eventBus';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { getAccessDeniedMessage } from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 import { useState } from 'react';
 import { useForm, type UseFormSetError } from 'react-hook-form';
@@ -91,7 +92,12 @@ function handleLoginError(
 			return;
 		}
 
-		setGeneralError('You do not have permission to access.');
+		setGeneralError(
+			getAccessDeniedMessage({
+				fallback: 'You do not have permission to access.',
+				suspendedMessage: 'Your account is suspended. Please contact support.',
+			}),
+		);
 		return;
 	}
 

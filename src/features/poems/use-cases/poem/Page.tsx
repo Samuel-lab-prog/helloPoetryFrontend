@@ -1,12 +1,13 @@
 /* eslint-disable max-lines-per-function */
 import { AsyncState, ErrorStateCard, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
 import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions/public';
 import { ModerationActionsMenu } from '@features/moderation/public';
+import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
-import { findForbiddenWords } from '@Utils';
+import { findForbiddenWords, type AppErrorType } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
@@ -38,7 +39,13 @@ export function PoemPage() {
 	const [repliesByCommentId, setRepliesByCommentId] = useState<Record<number, PoemCommentType[]>>(
 		{},
 	);
-	const { poem, isError, isLoading } = usePoem(poemId);
+	const { poem, isError, isLoading, error: poemError } = usePoem(poemId);
+	const isRejectedPoem = poem?.moderationStatus === 'rejected';
+	const isPendingPoem = poem?.moderationStatus === 'pending';
+	const isRemovedPoem = poem?.moderationStatus === 'removed';
+	const isInteractionBlocked = isRejectedPoem || isPendingPoem || isRemovedPoem;
+	const canEditRejectedPoem = Boolean(poem && authClientId === poem.author.id && canUpdatePoem(poem));
+	const poemErrorInfo = getPoemErrorInfo(poemError);
 	const {
 		comments,
 		isLoadingComments,
@@ -55,7 +62,7 @@ export function PoemPage() {
 		likeCommentError,
 		fetchReplies,
 		prefetchReplies,
-	} = usePoemComments(poemId, { enabled: isAuthenticated });
+	} = usePoemComments(poemId, { enabled: isAuthenticated && !!poem && !isInteractionBlocked });
 	const { likePoem, unlikePoem, isUpdatingLike, likeError } = usePoemLike(poemId);
 	const { savedPoems, savePoem, unsavePoem, updatingSavedPoemId, saveError } = useSavedPoems(
 		authClientId > 0,
@@ -99,6 +106,10 @@ export function PoemPage() {
 	const immersiveUrl = useMemo(() => {
 		if (!poem) return '';
 		return poem.slug ? `/poems/${poem.slug}/${poem.id}/immersive` : `/poems/${poem.id}/immersive`;
+	}, [poem]);
+	const editPoemUrl = useMemo(() => {
+		if (!poem) return '';
+		return `/admin?mode=update&poemId=${poem.id}`;
 	}, [poem]);
 
 	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
@@ -177,6 +188,7 @@ export function PoemPage() {
 	}, [likeCommentError, showErrorToast]);
 
 	const handlePublishComment = useCallback(async () => {
+		if (isInteractionBlocked) return;
 		const content = commentInput.trim();
 		if (!content) return;
 		const forbiddenWordsFound = findForbiddenWords(content);
@@ -197,7 +209,7 @@ export function PoemPage() {
 		} catch {
 			// Error handled by createCommentError + consolidated toast.
 		}
-	}, [commentInput, createComment]);
+	}, [commentInput, createComment, isInteractionBlocked]);
 
 	const handleCommentInputChange = useCallback(
 		(value: string) => {
@@ -208,6 +220,7 @@ export function PoemPage() {
 	);
 
 	const handleTogglePoemLike = useCallback(async () => {
+		if (isInteractionBlocked) return;
 		if (isUpdatingLike) return;
 
 		try {
@@ -220,9 +233,10 @@ export function PoemPage() {
 		} catch {
 			// Error handled by likeError + consolidated toast.
 		}
-	}, [isUpdatingLike, likedPoem, likePoem, unlikePoem]);
+	}, [isInteractionBlocked, isUpdatingLike, likedPoem, likePoem, unlikePoem]);
 
 	const handleToggleSavePoem = useCallback(async () => {
+		if (isInteractionBlocked) return;
 		if (updatingSavedPoemId === poemId) return;
 		try {
 			if (isSaved) {
@@ -234,7 +248,7 @@ export function PoemPage() {
 		} catch {
 			// Error handled by saveError + consolidated toast.
 		}
-	}, [isSaved, poemId, savePoem, unsavePoem, updatingSavedPoemId]);
+	}, [isInteractionBlocked, isSaved, poemId, savePoem, unsavePoem, updatingSavedPoemId]);
 
 	const handleBack = useCallback(() => {
 		if (window.history.length > 1) {
@@ -264,9 +278,9 @@ export function PoemPage() {
 					emptyElement={<Box textStyle='body'>Poem not found</Box>}
 					errorElement={
 						<ErrorStateCard
-							eyebrow='POEM UNAVAILABLE'
-							title='We could not load this poem right now.'
-							description='Please try again in a moment, or refresh the page to reconnect.'
+							eyebrow={poemErrorInfo.eyebrow}
+							title={poemErrorInfo.title}
+							description={poemErrorInfo.description}
 							actionLabel='Refresh poem'
 							onAction={() => window.location.reload()}
 						/>
@@ -286,7 +300,11 @@ export function PoemPage() {
 							>
 								<Flex align='start' justify='space-between' gap={3}>
 									<Box minW={0} flex='1'>
-										<PoemHeader poem={poemHeaderPoem} />
+										<PoemHeader
+											poem={poemHeaderPoem}
+											editHref={editPoemUrl}
+											showEditPrompt={canEditRejectedPoem}
+										/>
 									</Box>
 									<ModerationActionsMenu
 										poem={moderationPoemTarget}
@@ -356,43 +374,47 @@ export function PoemPage() {
 									<Box textAlign='left'>
 										<MarkdownRenderer content={poem.content} />
 									</Box>
-									<Flex justify='flex-end' mt={6}>
-										<PoemActions
-											authClientId={authClientId}
-											likedPoem={likedPoem}
-											isSaved={isSaved}
-											isUpdatingLike={isUpdatingLike}
-											isSavingPoem={updatingSavedPoemId === poemId}
-											onToggleLike={handleTogglePoemLike}
-											onToggleSave={handleToggleSavePoem}
-										/>
-									</Flex>
+									{!isInteractionBlocked && (
+										<Flex justify='flex-end' mt={6}>
+											<PoemActions
+												authClientId={authClientId}
+												likedPoem={likedPoem}
+												isSaved={isSaved}
+												isUpdatingLike={isUpdatingLike}
+												isSavingPoem={updatingSavedPoemId === poemId}
+												onToggleLike={handleTogglePoemLike}
+												onToggleSave={handleToggleSavePoem}
+											/>
+										</Flex>
+									)}
 								</Box>
 							</Box>
 
-							<CommentsSection
-								poemIsCommentable={poem.isCommentable}
-								isAuthenticated={isAuthenticated}
-								commentInput={commentInput}
-								commentError={commentInputError}
-								authClientId={authClientId}
-								comments={comments}
-								isLoadingComments={isLoadingComments}
-								isCommentsError={isCommentsError}
-								isCreatingComment={isCreatingComment}
-								isDeletingComment={isDeletingComment}
-								repliesByCommentId={repliesByCommentId}
-								setRepliesByCommentId={setRepliesByCommentId}
-								hasMoreComments={hasMoreComments}
-								isLoadingMoreComments={isLoadingMoreComments}
-								onLoadMoreComments={loadMoreComments}
-								onCommentInputChange={handleCommentInputChange}
-								onPublishComment={handlePublishComment}
-								createComment={createComment}
-								deleteComment={deleteComment}
-								fetchReplies={fetchReplies}
-								prefetchReplies={prefetchReplies}
-							/>
+							{!isInteractionBlocked && (
+								<CommentsSection
+									poemIsCommentable={poem.isCommentable}
+									isAuthenticated={isAuthenticated}
+									commentInput={commentInput}
+									commentError={commentInputError}
+									authClientId={authClientId}
+									comments={comments}
+									isLoadingComments={isLoadingComments}
+									isCommentsError={isCommentsError}
+									isCreatingComment={isCreatingComment}
+									isDeletingComment={isDeletingComment}
+									repliesByCommentId={repliesByCommentId}
+									setRepliesByCommentId={setRepliesByCommentId}
+									hasMoreComments={hasMoreComments}
+									isLoadingMoreComments={isLoadingMoreComments}
+									onLoadMoreComments={loadMoreComments}
+									onCommentInputChange={handleCommentInputChange}
+									onPublishComment={handlePublishComment}
+									createComment={createComment}
+									deleteComment={deleteComment}
+									fetchReplies={fetchReplies}
+									prefetchReplies={prefetchReplies}
+								/>
+							)}
 						</>
 					)}
 				</AsyncState>
@@ -426,4 +448,62 @@ export function PoemPage() {
 			</Box>
 		</Flex>
 	);
+}
+
+function getPoemErrorInfo(error: unknown) {
+	const appError = error as AppErrorType | undefined;
+	const status = appError?.statusCode;
+	const message = typeof appError?.message === 'string' ? appError.message.toLowerCase() : '';
+
+	if (status === 403) {
+		return {
+			eyebrow: 'POEM UNAVAILABLE',
+			title: getAccessDeniedMessage({
+				fallback: 'You do not have permission to view this poem.',
+				suspendedMessage: 'Your account is suspended.',
+			}),
+			description: getAccessDeniedMessage({
+				fallback: 'This poem may be private, under moderation, or no longer available to your account.',
+				suspendedMessage:
+					'Suspended accounts can still read notifications, but this poem is not available here.',
+			}),
+		};
+	}
+
+	if (status === 404) {
+		return {
+			eyebrow: 'POEM NOT FOUND',
+			title: 'This poem could not be found.',
+			description: 'It may have been deleted or the link may be invalid.',
+		};
+	}
+
+	if (status === 401) {
+		return {
+			eyebrow: 'SESSION EXPIRED',
+			title: 'Please sign in again to continue.',
+			description: 'Your session expired while loading this poem.',
+		};
+	}
+
+	if (message.includes('access denied')) {
+		return {
+			eyebrow: 'POEM UNAVAILABLE',
+			title: getAccessDeniedMessage({
+				fallback: 'You do not have permission to view this poem.',
+				suspendedMessage: 'Your account is suspended.',
+			}),
+			description: getAccessDeniedMessage({
+				fallback: 'This poem may be private, under moderation, or no longer available to your account.',
+				suspendedMessage:
+					'Suspended accounts can still read notifications, but this poem is not available here.',
+			}),
+		};
+	}
+
+	return {
+		eyebrow: 'POEM UNAVAILABLE',
+		title: 'We could not load this poem right now.',
+		description: 'Please try again in a moment, or refresh the page to reconnect.',
+	};
 }

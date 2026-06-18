@@ -33,7 +33,7 @@ export function NotificationsPage() {
 		deleteNotification,
 	} = useNotificationsPanel(false);
 	const notificationItems = Array.isArray(notifications) ? notifications : [];
-	const hasNotifications = notificationItems.some(() => true);
+	const hasNotifications = notificationItems.length > 0;
 
 	const isRemoving = (id: number) => removingIds.has(id);
 	const scheduleRemove = async (id: number): Promise<void> => {

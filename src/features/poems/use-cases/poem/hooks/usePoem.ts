@@ -1,11 +1,12 @@
 import { poems } from '@Api/poems/endpoints';
 import { useQuery } from '@tanstack/react-query';
+import type { AppErrorType } from '@Utils';
 
 export function usePoem(id: number) {
 	const stringId = String(id);
 	const query = useQuery({
 		...poems.getPoem.query(stringId),
-		retry: 3,
+		retry: (failureCount, error) => shouldRetryPoemQuery(failureCount, error),
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,
 	});
@@ -16,4 +17,14 @@ export function usePoem(id: number) {
 		error: query.error,
 		refetch: query.refetch,
 	};
+}
+
+function shouldRetryPoemQuery(failureCount: number, error: unknown) {
+	const appError = error as AppErrorType | undefined;
+	const status = appError?.statusCode;
+
+	if (status === undefined) return failureCount < 3;
+	if (status >= 500) return failureCount < 3;
+
+	return false;
 }

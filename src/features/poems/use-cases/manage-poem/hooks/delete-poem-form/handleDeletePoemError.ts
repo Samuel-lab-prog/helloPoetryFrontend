@@ -1,3 +1,4 @@
+import { getAccessDeniedMessage } from '@features/auth/public';
 import type { AppErrorType } from '@Utils';
 
 export function handleDeletePoemError(err: unknown, setGeneralError: (msg: string) => void) {
@@ -10,7 +11,12 @@ export function handleDeletePoemError(err: unknown, setGeneralError: (msg: strin
 	}
 
 	if (status === 403) {
-		setGeneralError('You can only delete your own poems.');
+		setGeneralError(
+			getAccessDeniedMessage({
+				fallback: 'You can only delete your own poems.',
+				suspendedMessage: 'Your account is suspended, so you cannot delete poems.',
+			}),
+		);
 		return;
 	}
 

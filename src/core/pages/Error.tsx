@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { getAccessDeniedMessage, useAuthClientStore } from '@features/auth/public';
 import { useEffect } from 'react';
 import { isRouteErrorResponse, NavLink, useLocation, useRouteError } from 'react-router-dom';
 
@@ -100,8 +100,15 @@ function getErrorInfo(error: unknown): ErrorInfo {
 		if (error.status === 403) {
 			return {
 				status: 403,
-				message: 'You do not have permission to access this page.',
-				description: 'Try with another account or go back to the home page.',
+				message: getAccessDeniedMessage({
+					fallback: 'You do not have permission to access this page.',
+					suspendedMessage: 'Your account is suspended.',
+				}),
+				description: getAccessDeniedMessage({
+					fallback: 'Try with another account or go back to the home page.',
+					suspendedMessage:
+						'Suspended accounts can still read notifications, but other areas may be restricted.',
+				}),
 				recoveryTo: '/',
 				recoveryLabel: 'Go to home',
 			};
@@ -162,8 +169,15 @@ function getErrorInfo(error: unknown): ErrorInfo {
 			return {
 				status: 403,
 				code: maybeError.code,
-				message: 'Access denied for this action.',
-				description: 'Try again with a different account.',
+				message: getAccessDeniedMessage({
+					fallback: 'Access denied for this action.',
+					suspendedMessage: 'Your account is suspended.',
+				}),
+				description: getAccessDeniedMessage({
+					fallback: 'Try again with a different account.',
+					suspendedMessage:
+						'Suspended accounts can still read notifications, but other actions may be blocked.',
+				}),
 				recoveryTo: '/',
 				recoveryLabel: 'Go to home',
 			};

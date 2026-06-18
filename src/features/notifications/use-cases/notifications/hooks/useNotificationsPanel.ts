@@ -184,7 +184,9 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		},
 	});
 
-	const notificationsList = query.data?.pages.flatMap((page) => getNotificationsFromPage(page)) ?? [];
+	const notificationsList = Array.isArray(query.data?.pages)
+		? query.data.pages.flatMap((page) => getNotificationsFromPage(page))
+		: [];
 	const safeNotificationsList = Array.isArray(notificationsList) ? notificationsList : [];
 
 	return {
