@@ -11,6 +11,7 @@ export interface CommentThreadProps {
 	 */
 	parentAuthorId?: number;
 	parentAuthorNickname?: string;
+	parentAuthorUnavailable?: boolean;
 	/**
 	 * Hide the top divider for the first item in a list.
 	 */

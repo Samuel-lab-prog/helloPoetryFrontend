@@ -13,7 +13,11 @@ import { useParams } from 'react-router-dom';
 import { AuthorPoemsSection } from './components/AuthorPoemsSection';
 import { AuthorProfileCard } from './components/AuthorProfileCard';
 import { LoadingAuthorProfileSkeleton } from './components/skeletons/LoadingAuthorProfileSkeleton';
-import { canSendFriendRequest, getRelationStatus } from './components/utils';
+import {
+	canManageAuthorFriendship,
+	canSendFriendRequest,
+	getRelationStatus,
+} from './components/utils';
 import { useAuthorProfile } from './hooks/useAuthorProfile';
 
 export function AuthorPage() {
@@ -46,8 +50,9 @@ export function AuthorPage() {
 
 	const isAuthenticated = authClientId > 0;
 	const isSelf = !!author && author.id === authClientId;
-	const hasOutgoingRequest = !!author && author.isFriendRequester;
-	const hasIncomingRequest = !!author && author.hasIncomingFriendRequest;
+	const canManageFriendship = canManageAuthorFriendship(author);
+	const hasOutgoingRequest = canManageFriendship && !!author?.isFriendRequester;
+	const hasIncomingRequest = canManageFriendship && !!author?.hasIncomingFriendRequest;
 
 	const canSendRequest = canSendFriendRequest({
 		author,

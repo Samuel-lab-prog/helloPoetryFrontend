@@ -1,6 +1,9 @@
 import { feedKeys } from '@Api/feed/keys';
 import { friends } from '@Api/friends/endpoints';
-import { notifications } from '@Api/notifications/endpoints';
+import {
+	NOTIFICATIONS_PAGE_LIMIT,
+	prefetchNotificationsInfiniteQuery,
+} from '@Api/notifications/infiniteQuery';
 import { poems } from '@Api/poems/endpoints';
 import { users } from '@Api/users/endpoints';
 import { userKeys } from '@Api/users/keys';
@@ -10,7 +13,6 @@ import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 
 const POETS_SEARCH_LIMIT = 10;
-const NOTIFICATIONS_FETCH_LIMIT = 50;
 
 async function clearUserSessionQueries(queryClient: QueryClient): Promise<void> {
 	const keysToClear = [userKeys.anyProfile(), userKeys.anySearch()];
@@ -45,9 +47,9 @@ export async function onUserLoggedIn(
 		poems.getSavedPoems.prefetch(),
 		poems.getCollections.prefetch(),
 		friends.getMyFriendRequests.prefetch(),
-		notifications.getNotifications.prefetch({
+		prefetchNotificationsInfiniteQuery(queryClient, {
 			onlyUnread: false,
-			limit: NOTIFICATIONS_FETCH_LIMIT,
+			limit: NOTIFICATIONS_PAGE_LIMIT,
 		}),
 		users.getUsers.prefetch({
 			searchNickname: undefined,

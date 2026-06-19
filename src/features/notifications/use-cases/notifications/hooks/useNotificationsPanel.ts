@@ -1,11 +1,13 @@
 import { notifications } from '@Api/notifications/endpoints';
+import {
+	type NotificationsInfiniteData,
+	notificationsInfiniteQueryOptions,
+} from '@Api/notifications/infiniteQuery';
 import { notificationsKeys } from '@Api/notifications/keys';
 import type { NotificationItem, NotificationsPage } from '@Api/notifications/types';
 import { type OptimisticSnapshot, restoreSnapshots, snapshotQueriesData } from '@Api/optimistic';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { type InfiniteData,useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
-type NotificationsInfiniteData = InfiniteData<NotificationsPage, string | undefined>;
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function getNotificationsFromPage(page: NotificationsPage | undefined): NotificationItem[] {
 	const maybePage = page as Partial<NotificationsPage> | undefined;
@@ -32,23 +34,15 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 	);
 
 	const query = useInfiniteQuery({
-		queryKey: notificationsKeys.page({ onlyUnread, limit: 50 }),
+		...notificationsInfiniteQueryOptions({ onlyUnread }),
 		enabled: !!clientId,
-		staleTime: 1000 * 60 * 5,
-		initialPageParam: undefined as string | undefined,
-		queryFn: ({ pageParam }) =>
-			notifications.getNotifications
-				.query({ onlyUnread, limit: 50, nextCursor: pageParam })
-				.queryFn() as Promise<NotificationsPage>,
-		getNextPageParam: (lastPage) =>
-			lastPage?.hasMore && lastPage.nextCursor ? String(lastPage.nextCursor) : undefined,
 	});
 
 	function updateNotificationPages(
 		updater: (notification: NotificationItem) => NotificationItem | null,
 	) {
 		queryClient.setQueriesData<NotificationsInfiniteData>(
-			{ queryKey: notificationsKeys.page() },
+			{ queryKey: notificationsKeys.infinitePage() },
 			(old) => {
 				if (!old) return old;
 				return {
@@ -80,7 +74,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onMutate: async (id) => {
 			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.page(),
+				notificationsKeys.infinitePage(),
 			);
 
 			let markedWasUnread = false;
@@ -109,7 +103,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onMutate: async () => {
 			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.page(),
+				notificationsKeys.infinitePage(),
 			);
 
 			const nowIso = new Date().toISOString();
@@ -132,20 +126,22 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		mutationFn: () => notifications.deleteAllNotifications.mutate(),
 		onSuccess: () => {
 			setUnreadNotificationsCount(0);
-			queryClient.setQueriesData<NotificationsInfiniteData>({ queryKey: notificationsKeys.page() }, (old) =>
-				old
-					? {
-							...old,
-							pages: [
-								{
-									notifications: [],
-									hasMore: false,
-									nextCursor: undefined,
-								},
-							],
-							pageParams: [undefined],
-						}
-					: old,
+			queryClient.setQueriesData<NotificationsInfiniteData>(
+				{ queryKey: notificationsKeys.infinitePage() },
+				(old) =>
+					old
+						? {
+								...old,
+								pages: [
+									{
+										notifications: [],
+										hasMore: false,
+										nextCursor: undefined,
+									},
+								],
+								pageParams: [undefined],
+							}
+						: old,
 			);
 		},
 	});
@@ -156,7 +152,7 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		onMutate: async (id) => {
 			const previousPages = await snapshotQueriesData<NotificationsInfiniteData>(
 				queryClient,
-				notificationsKeys.page(),
+				notificationsKeys.infinitePage(),
 			);
 
 			let removedWasUnread = false;

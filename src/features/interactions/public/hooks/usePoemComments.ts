@@ -26,6 +26,7 @@ export type PoemCommentType = {
 		id: number;
 		nickname: string;
 		avatarUrl: string | null;
+		isUnavailable?: boolean;
 	};
 };
 

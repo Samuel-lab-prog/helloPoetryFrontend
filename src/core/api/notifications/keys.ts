@@ -5,4 +5,6 @@ export const notificationsKeys = createQueryKeys({
 	byId: (id: string) => ['notification', id] as const,
 	page: (params?: { onlyUnread?: boolean; limit?: number; nextCursor?: string }) =>
 		['notifications', 'page', params ?? {}] as const,
+	infinitePage: (params?: { onlyUnread?: boolean; limit?: number }) =>
+		['notifications', 'infinite-page', params ?? {}] as const,
 });

@@ -140,7 +140,12 @@ export function ModerationActionsMenu({
 			targetUser?.status === 'suspended' || Boolean(sanctionStatusQuery.data?.activeSuspension);
 
 		if (hasActiveBan) return [{ action: 'unban-user', icon: RotateCcw }];
-		if (hasActiveSuspension) return [{ action: 'unsuspend-user', icon: RotateCcw }];
+		if (hasActiveSuspension) {
+			return [
+				{ action: 'unsuspend-user', icon: RotateCcw },
+				{ action: 'ban-user', icon: Ban },
+			];
+		}
 		return [
 			{ action: 'suspend-user', icon: Clock3 },
 			{ action: 'ban-user', icon: Ban },

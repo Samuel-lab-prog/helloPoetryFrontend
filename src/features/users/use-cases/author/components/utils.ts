@@ -14,6 +14,10 @@ type RelationFlags = {
 	hasIncomingRequest: boolean;
 };
 
+export function canManageAuthorFriendship(author: AuthorProfileType | undefined): boolean {
+	return author?.status === 'active';
+}
+
 /**
  * Determines the relationship status between the authenticated user and the author.
  * @param author - The author's profile information, including relationship flags.
@@ -25,10 +29,16 @@ export function getRelationStatus(
 	flags: RelationFlags,
 ): RelationStatus | null {
 	if (!author) return null;
+	if (flags.isSelf) return null;
+	if (author.status === 'banned') {
+		return { icon: UserX, color: 'red.300', text: 'Account banned.' };
+	}
+	if (author.status === 'suspended') {
+		return { icon: Clock3, color: 'yellow.300', text: 'Account suspended.' };
+	}
 	if (!flags.isAuthenticated) {
 		return { icon: LogIn, color: 'pink.200', text: 'Sign in to send a request.' };
 	}
-	if (flags.isSelf) return null;
 	if (author.hasBlockedRequester) {
 		return { icon: UserX, color: 'red.300', text: 'You were blocked by this user.' };
 	}
@@ -56,6 +66,7 @@ type CanSendFriendRequestParams = {
  */
 export function canSendFriendRequest({ author, flags }: CanSendFriendRequestParams): boolean {
 	if (!author) return false;
+	if (!canManageAuthorFriendship(author)) return false;
 	if (!flags.isAuthenticated) return false;
 	if (flags.isSelf) return false;
 	if (author.isFriend) return false;

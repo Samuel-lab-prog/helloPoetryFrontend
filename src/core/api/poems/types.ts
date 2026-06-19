@@ -11,6 +11,7 @@ export type PoemAuthor = {
 	name: string;
 	nickname: string;
 	avatarUrl: string | null;
+	status?: 'active' | 'banned' | 'suspended';
 };
 
 export type PoemDedicationUser = {
@@ -18,6 +19,7 @@ export type PoemDedicationUser = {
 	name: string;
 	nickname: string;
 	avatarUrl: string | null;
+	status?: 'active' | 'banned' | 'suspended';
 	friendIds?: number[];
 };
 

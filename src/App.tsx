@@ -1,9 +1,14 @@
-import { friends, notifications, poems, users } from '@Api';
+import { friends, poems, users } from '@Api';
+import {
+	NOTIFICATIONS_PAGE_LIMIT,
+	prefetchNotificationsInfiniteQuery,
+} from '@Api/notifications/infiniteQuery';
 import { Navbar, Toaster } from '@BaseComponents';
 import { ErrorPage } from '@BasePages';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { canUseModerationTools } from '@features/moderation/public';
+import { queryClient } from '@QueryClient';
 import { type ComponentType, lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -84,7 +89,6 @@ const MyProfileSavedPoemsPage = lazyPage(
 const NotificationsPage = lazyPage(loadNotificationsPage, (module) => module.NotificationsPage);
 
 const prefetchedRoutes = new Set<string>();
-const PREFETCH_NOTIFICATIONS_LIMIT = 50;
 const PREFETCH_POETS_LIMIT = 10;
 
 function schedulePrefetch(work: () => void) {
@@ -125,9 +129,9 @@ function prefetchDataForRoute(to: string, userId?: number) {
 	if (!userId) return;
 
 	if (to === '/notifications') {
-		void notifications.getNotifications.prefetch({
+		void prefetchNotificationsInfiniteQuery(queryClient, {
 			onlyUnread: false,
-			limit: PREFETCH_NOTIFICATIONS_LIMIT,
+			limit: NOTIFICATIONS_PAGE_LIMIT,
 		});
 		return;
 	}

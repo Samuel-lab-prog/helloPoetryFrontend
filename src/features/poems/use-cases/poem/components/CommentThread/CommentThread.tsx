@@ -20,6 +20,7 @@ export const CommentThread = memo(function CommentThread({
 	comment,
 	parentAuthorId,
 	parentAuthorNickname,
+	parentAuthorUnavailable,
 	hideTopBorder,
 	authClientId,
 	poemIsCommentable,
@@ -40,8 +41,10 @@ export const CommentThread = memo(function CommentThread({
 	const replies = repliesByCommentId[comment.id] ?? [];
 	const hasReplies = comment.aggregateChildrenCount > 0;
 	const hasLoadedReplies = replies.length > 0;
+	const canReplyToComment = comment.author.isUnavailable !== true;
 
 	const handleToggleReplyComposer = useCallback(() => {
+		if (!canReplyToComment) return;
 		if (!isAuthenticated) {
 			setReplyError('Sign in to reply.');
 			return;
@@ -54,7 +57,7 @@ export const CommentThread = memo(function CommentThread({
 			}
 			return next;
 		});
-	}, [isAuthenticated]);
+	}, [canReplyToComment, isAuthenticated]);
 
 	const handleToggleRepliesView = useCallback(async () => {
 		setAreRepliesOpen((prev) => !prev);
@@ -132,6 +135,7 @@ export const CommentThread = memo(function CommentThread({
 					comment={comment}
 					parentAuthorId={parentAuthorId}
 					parentAuthorNickname={parentAuthorNickname}
+					parentAuthorUnavailable={parentAuthorUnavailable}
 					authClientId={authClientId}
 					isDeletingComment={isDeletingComment(comment.id)}
 					isAuthenticated={isAuthenticated}
@@ -171,6 +175,7 @@ export const CommentThread = memo(function CommentThread({
 							comment={reply}
 							parentAuthorId={comment.author.id}
 							parentAuthorNickname={comment.author.nickname}
+							parentAuthorUnavailable={comment.author.isUnavailable}
 							hideTopBorder={index === 0}
 							authClientId={authClientId}
 							poemIsCommentable={poemIsCommentable}
