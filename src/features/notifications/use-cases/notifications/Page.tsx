@@ -11,7 +11,12 @@ import {
 	Portal,
 	Text,
 } from '@chakra-ui/react';
-import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
+import {
+	AuthRequiredCard,
+	getBannedPrivilegeMessage,
+	isBannedAccessError,
+	useAuthClientStore,
+} from '@features/auth/public';
 import { BellOff, EllipsisVertical, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 
@@ -21,6 +26,7 @@ import { useNotificationsPanel } from './hooks/useNotificationsPanel';
 
 export function NotificationsPage() {
 	const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
+	const authClient = useAuthClientStore((state) => state.authClient);
 	const {
 		notifications,
 		isLoading,
@@ -37,6 +43,19 @@ export function NotificationsPage() {
 	const notificationItems = Array.isArray(notifications) ? notifications : [];
 	const hasNotifications = notificationItems.length > 0;
 	const isBannedError = isBannedAccessError(error);
+
+	if (!authClient?.id) {
+		return (
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center' w='full'>
+				<AuthRequiredCard
+					maxW='2xl'
+					eyebrow='NOTIFICATIONS UNAVAILABLE'
+					title='Sign in to view notifications'
+					description='This page is available only after sign in. Sign in to view likes, comments, replies, friend requests, and moderation updates.'
+				/>
+			</Flex>
+		);
+	}
 
 	const isRemoving = (id: number) => removingIds.has(id);
 	const scheduleRemove = async (id: number): Promise<void> => {
@@ -146,11 +165,7 @@ export function NotificationsPage() {
 							title="You're all caught up"
 							description='New likes, comments, and follow activity will appear here. If you expected something, try refreshing the page.'
 							action={
-								<Button
-									size='sm'
-									variant='solidPink'
-									onClick={() => window.location.reload()}
-								>
+								<Button size='sm' variant='solidPink' onClick={() => window.location.reload()}>
 									<HStack gap={2}>
 										<Icon as={RefreshCw} boxSize={3.5} />
 										<Text as='span'>Refresh</Text>

@@ -94,11 +94,7 @@ export function MyProfilePage() {
 	}
 
 	if (isMissingClient) {
-		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-				<ProfileAccessGate />
-			</Flex>
-		);
+		return <ProfileAccessGate />;
 	}
 
 	function handleLogout() {

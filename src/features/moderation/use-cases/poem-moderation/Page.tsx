@@ -1,5 +1,6 @@
 import { Flex, Heading, IconButton, Menu, Portal } from '@chakra-ui/react';
 import {
+	AuthRequiredCard,
 	getBannedPrivilegeMessage,
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
@@ -25,6 +26,19 @@ export function PoemModerationPage() {
 
 	const { pendingQuery, pendingPoems, isModeratingPoem, isRemovingPoem, handleModeration } =
 		usePoemModerationData(canAccess);
+
+	if (!authClient?.id) {
+		return (
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center' w='full'>
+				<AuthRequiredCard
+					maxW='2xl'
+					eyebrow='MODERATION UNAVAILABLE'
+					title='Sign in to access moderation'
+					description='This page is available only after sign in. Sign in with a moderator or administrator account to review pending poems.'
+				/>
+			</Flex>
+		);
+	}
 
 	if (!canAccess) {
 		return (

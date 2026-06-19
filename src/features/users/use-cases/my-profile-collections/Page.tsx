@@ -40,16 +40,11 @@ export function MyProfileCollectionsPage() {
 	const { poems: myPoems } = useMyPoems(!isMissingClient);
 	const { savedPoems } = useSavedPoems(!isMissingClient);
 	const isBannedProfileError = isBannedAccessError(profileError);
-	const isBannedCollectionsError =
-		isCollectionsError && isBannedAccessError(collectionsLoadError);
+	const isBannedCollectionsError = isCollectionsError && isBannedAccessError(collectionsLoadError);
 	const isProfileUnavailable = isProfileError || isBannedProfileError;
 
 	if (isMissingClient) {
-		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-				<ProfileAccessGate />
-			</Flex>
-		);
+		return <ProfileAccessGate />;
 	}
 
 	return (

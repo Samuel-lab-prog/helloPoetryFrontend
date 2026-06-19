@@ -1,11 +1,24 @@
-import { Surface } from '@BaseComponents';
-import { Badge, Box, Button, Flex, Heading, IconButton, Menu, Portal, Text, VStack } from '@chakra-ui/react';
+import { ErrorStateCard } from '@BaseComponents';
 import {
+	Badge,
+	Box,
+	Button,
+	Flex,
+	Heading,
+	HStack,
+	Icon,
+	IconButton,
+	Menu,
+	Portal,
+	Text,
+} from '@chakra-ui/react';
+import {
+	AuthRequiredCard,
 	getBannedPrivilegeMessage,
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
 } from '@features/auth/public';
-import { EllipsisVertical } from 'lucide-react';
+import { EllipsisVertical, House, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
@@ -17,43 +30,43 @@ type ActiveForm = 'create' | 'update' | 'delete';
 
 function SuspendedPoemToolGate({ action }: { action: string }) {
 	return (
-		<Surface variant='gradient' maxW='2xl' w='full'>
-			<VStack align='start' gap={4}>
-				<Badge colorPalette='pink' variant='subtle'>
-					Poems
-				</Badge>
-				<Heading as='h1' textStyle='h3'>
-					Poem tool unavailable
-				</Heading>
-				<Text textStyle='small' color='pink.100'>
-					{getSuspendedPrivilegeMessage(action)}
-				</Text>
+		<ErrorStateCard
+			maxW='2xl'
+			eyebrow='POEM TOOLS UNAVAILABLE'
+			title='Poem tool unavailable'
+			description={getSuspendedPrivilegeMessage(action)}
+			action={
 				<Button size='sm' variant='solidPink' asChild>
-					<NavLink to='/'>Go to home</NavLink>
+					<NavLink to='/'>
+						<HStack gap={2}>
+							<Icon as={House} boxSize={3.5} />
+							<Text as='span'>Go to home</Text>
+						</HStack>
+					</NavLink>
 				</Button>
-			</VStack>
-		</Surface>
+			}
+		/>
 	);
 }
 
 function BannedPoemToolGate({ action }: { action: string }) {
 	return (
-		<Surface variant='gradient' maxW='2xl' w='full'>
-			<VStack align='start' gap={4}>
-				<Badge colorPalette='pink' variant='subtle'>
-					Poems
-				</Badge>
-				<Heading as='h1' textStyle='h3'>
-					Poem tool unavailable
-				</Heading>
-				<Text textStyle='small' color='pink.100'>
-					{getBannedPrivilegeMessage(action)}
-				</Text>
+		<ErrorStateCard
+			maxW='2xl'
+			eyebrow='POEM TOOLS UNAVAILABLE'
+			title='Poem tool unavailable'
+			description={getBannedPrivilegeMessage(action)}
+			action={
 				<Button size='sm' variant='solidPink' asChild>
-					<NavLink to='/my-profile'>Go to profile</NavLink>
+					<NavLink to='/my-profile'>
+						<HStack gap={2}>
+							<Icon as={User} boxSize={3.5} />
+							<Text as='span'>Go to profile</Text>
+						</HStack>
+					</NavLink>
 				</Button>
-			</VStack>
-		</Surface>
+			}
+		/>
 	);
 }
 
@@ -70,6 +83,19 @@ export function AdminPage() {
 			setActiveForm(modeParam);
 		}
 	}, [modeParam]);
+
+	if (!authClient?.id) {
+		return (
+			<Flex as='main' layerStyle='mainPadded' direction='column' align='center' w='full'>
+				<AuthRequiredCard
+					maxW='2xl'
+					eyebrow='POEM TOOLS UNAVAILABLE'
+					title='Sign in to use poem tools'
+					description='This page is available only after sign in. Sign in to create, update, or delete your poems.'
+				/>
+			</Flex>
+		);
+	}
 
 	function changeForm(mode: ActiveForm) {
 		const params = new URLSearchParams(searchParams);

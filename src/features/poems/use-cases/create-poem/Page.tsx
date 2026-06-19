@@ -1,91 +1,66 @@
-import { Surface } from '@BaseComponents';
-import { Badge, Button, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { ErrorStateCard } from '@BaseComponents';
+import { Button, Flex, Heading, HStack, Icon, Text } from '@chakra-ui/react';
 import {
+	AuthRequiredCard,
 	getBannedPrivilegeMessage,
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
 } from '@features/auth/public';
+import { House, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 import { CreatePoemForm } from './components/CreatePoemForm';
 
 function CreatePoemAccessGate() {
 	return (
-		<Surface
-			w='full'
+		<AuthRequiredCard
 			maxW='2xl'
-			p={{ base: 5, md: 6 }}
-			variant='gradient'
-			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
-		>
-			<VStack align='start' gap={4}>
-				<Badge colorPalette='pink' variant='subtle'>
-					Poems
-				</Badge>
-				<Text textStyle='h3'>Sign in to create a poem</Text>
-				<Text textStyle='small' color='pink.100'>
-					You need to be authenticated to publish new poems.
-				</Text>
-				<HStack gap={3} wrap='wrap'>
-					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-						<NavLink to='/login'>Sign in</NavLink>
-					</Button>
-					<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-						<NavLink to='/register'>Create account</NavLink>
-					</Button>
-				</HStack>
-			</VStack>
-		</Surface>
+			eyebrow='POEMS UNAVAILABLE'
+			title='Sign in to create a poem'
+			description='This page is available only after sign in. Sign in to draft, publish, and manage your poems.'
+		/>
 	);
 }
 
 function SuspendedCreatePoemGate() {
 	return (
-		<Surface
-			w='full'
+		<ErrorStateCard
 			maxW='2xl'
-			p={{ base: 5, md: 6 }}
-			variant='gradient'
-			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
-		>
-			<VStack align='start' gap={4}>
-				<Badge colorPalette='pink' variant='subtle'>
-					Poems
-				</Badge>
-				<Text textStyle='h3'>Create poem unavailable</Text>
-				<Text textStyle='small' color='pink.100'>
-					{getSuspendedPrivilegeMessage('create poems')}
-				</Text>
-				<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-					<NavLink to='/'>Go to home</NavLink>
+			eyebrow='POEMS UNAVAILABLE'
+			title='Create poem unavailable'
+			description={getSuspendedPrivilegeMessage('create poems')}
+			action={
+				<Button size='sm' variant='solidPink' asChild>
+					<NavLink to='/'>
+						<HStack gap={2}>
+							<Icon as={House} boxSize={3.5} />
+							<Text as='span'>Go to home</Text>
+						</HStack>
+					</NavLink>
 				</Button>
-			</VStack>
-		</Surface>
+			}
+		/>
 	);
 }
 
 function BannedCreatePoemGate() {
 	return (
-		<Surface
-			w='full'
+		<ErrorStateCard
 			maxW='2xl'
-			p={{ base: 5, md: 6 }}
-			variant='gradient'
-			bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
-		>
-			<VStack align='start' gap={4}>
-				<Badge colorPalette='pink' variant='subtle'>
-					Poems
-				</Badge>
-				<Text textStyle='h3'>Create poem unavailable</Text>
-				<Text textStyle='small' color='pink.100'>
-					{getBannedPrivilegeMessage('create poems')}
-				</Text>
-				<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-					<NavLink to='/my-profile'>Go to profile</NavLink>
+			eyebrow='POEMS UNAVAILABLE'
+			title='Create poem unavailable'
+			description={getBannedPrivilegeMessage('create poems')}
+			action={
+				<Button size='sm' variant='solidPink' asChild>
+					<NavLink to='/my-profile'>
+						<HStack gap={2}>
+							<Icon as={User} boxSize={3.5} />
+							<Text as='span'>Go to profile</Text>
+						</HStack>
+					</NavLink>
 				</Button>
-			</VStack>
-		</Surface>
+			}
+		/>
 	);
 }
 

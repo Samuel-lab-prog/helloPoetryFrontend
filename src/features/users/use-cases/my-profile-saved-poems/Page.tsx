@@ -30,11 +30,7 @@ export function MyProfileSavedPoemsPage() {
 	}, [debouncedSearch, isSearching, savedPoems]);
 
 	if (!authClient?.id) {
-		return (
-			<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-				<ProfileAccessGate />
-			</Flex>
-		);
+		return <ProfileAccessGate />;
 	}
 
 	return (

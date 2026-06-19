@@ -1,6 +1,5 @@
-import { Surface } from '@BaseComponents';
-import { Badge, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
-import { NavLink } from 'react-router-dom';
+import { Flex } from '@chakra-ui/react';
+import { AuthRequiredCard } from '@features/auth/public';
 
 /**
  * Renders a gate that restricts access to the user's profile if they are not signed in.
@@ -9,32 +8,13 @@ import { NavLink } from 'react-router-dom';
  */
 export function ProfileAccessGate() {
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
-			<Surface
-				w='full'
+		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' w='full'>
+			<AuthRequiredCard
 				maxW='2xl'
-				p={{ base: 5, md: 6 }}
-				variant='gradient'
-				bg='linear-gradient(145deg, rgba(122,19,66,0.22) 0%, rgba(42,15,39,0.35) 100%)'
-			>
-				<VStack align='start' gap={4}>
-					<Badge colorPalette='pink' variant='subtle'>
-						Profile
-					</Badge>
-					<Text textStyle='h3'>Sign in to view your profile</Text>
-					<Text textStyle='small' color='pink.100'>
-						Track saved poems, friend requests, and your stats in one place.
-					</Text>
-					<HStack gap={3} wrap='wrap'>
-						<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' asChild>
-							<NavLink to='/login'>Sign in</NavLink>
-						</Button>
-						<Button size={{ base: 'sm', md: 'md' }} variant='solidPink' colorPalette='gray' asChild>
-							<NavLink to='/register'>Create account</NavLink>
-						</Button>
-					</HStack>
-				</VStack>
-			</Surface>
+				eyebrow='PROFILE UNAVAILABLE'
+				title='Sign in to view your profile'
+				description='This page is available only after sign in. Sign in to view saved poems, friend requests, collections, and your stats.'
+			/>
 		</Flex>
 	);
 }

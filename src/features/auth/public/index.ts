@@ -4,5 +4,6 @@
 
 export * from './hooks/useEnsureRole';
 export * from './hooks/useIsAuthenticated';
+export * from './components/AuthRequiredCard';
 export * from './stores/useAuthClientStore';
 export * from './utils/getAccessDeniedMessage';
