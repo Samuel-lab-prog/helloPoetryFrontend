@@ -3,6 +3,7 @@ import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem } from '@Api/poems/types';
 import { toaster } from '@BaseComponents';
+import { getPoemsCachePort } from '@core/ports/poems';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -58,10 +59,12 @@ export function useDeletePoemForm() {
 }
 
 function useDeletePoem(queryClient: ReturnType<typeof useQueryClient>) {
+	const poemsCachePort = getPoemsCachePort();
+
 	return useMutation({
 		mutationFn: (poemId: number) => poems.deletePoem.mutate(String(poemId)),
 		onMutate: async (poemId) => {
-			const poemKey = poemKeys.byId(String(poemId));
+			const poemKey = poemsCachePort.getPoemKey(poemId);
 			const previousMyPoems = await snapshotQueryData<FullPoem[]>(queryClient, poemKeys.mine());
 			const previousPoem = await snapshotQueryData<FullPoem>(queryClient, poemKey);
 

@@ -1,5 +1,6 @@
 import { interactionsKeys } from '@Api/interactions/keys';
 import { poemKeys } from '@Api/poems/keys';
+import { getCurrentAuthCacheScope } from '@features/auth/public';
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 
@@ -7,10 +8,12 @@ export async function onCommentCreated(
 	queryClient: QueryClient,
 	payload: AppEvents['commentCreated'],
 ): Promise<void> {
-	const baseCommentsKey = interactionsKeys.commentsByPoem(String(payload.poemId));
+	const authScope = getCurrentAuthCacheScope();
+	const baseCommentsKey = interactionsKeys.commentsByPoem(String(payload.poemId), { authScope });
 	const parentCommentsKey =
 		payload.parentId !== undefined
 			? interactionsKeys.commentsByPoem(String(payload.poemId), {
+					authScope,
 					parentId: String(payload.parentId),
 				})
 			: null;

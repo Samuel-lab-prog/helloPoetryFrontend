@@ -16,8 +16,8 @@ export const routes: Route[] = [
 	{ name: 'Login', path: '/login', linkText: 'Sign in', waitForText: 'Sign in' },
 	{ name: 'Register', path: '/register', linkText: 'Sign up', waitForText: 'Create account' },
 	{ name: 'Create Poem', path: '/poems/new', waitForText: 'Sign in to create a poem' },
-	{ name: 'Admin', path: '/admin', waitForText: 'Admin Panel' },
-	{ name: 'Moderation', path: '/admin/moderation', waitForText: 'Restricted access' },
+	{ name: 'Admin', path: '/admin', waitForText: 'Sign in to use poem tools' },
+	{ name: 'Moderation', path: '/admin/moderation', waitForText: 'Sign in to access moderation' },
 	{ name: 'My Profile', path: '/my-profile', waitForText: 'Sign in to view your profile' },
 	{
 		name: 'My Collections',
@@ -35,5 +35,5 @@ export const routes: Route[] = [
 		path: '/my-profile/saved-poems',
 		waitForText: 'Sign in to view your profile',
 	},
-	{ name: 'Notifications', path: '/notifications', waitForText: 'Notifications' },
+	{ name: 'Notifications', path: '/notifications', waitForText: 'Sign in to view notifications' },
 ];

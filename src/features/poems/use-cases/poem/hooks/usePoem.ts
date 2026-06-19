@@ -1,11 +1,15 @@
 import { poems } from '@Api/poems/endpoints';
+import { poemKeys } from '@Api/poems/keys';
+import { useAuthCacheScope } from '@features/auth/public';
 import { useQuery } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
 
 export function usePoem(id: number) {
 	const stringId = String(id);
+	const authScope = useAuthCacheScope();
 	const query = useQuery({
 		...poems.getPoem.query(stringId),
+		queryKey: poemKeys.byIdForViewer(stringId, authScope),
 		retry: (failureCount, error) => shouldRetryPoemQuery(failureCount, error),
 		staleTime: 1000 * 60 * 60 * 24 * 7,
 		enabled: !!id,

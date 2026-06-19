@@ -6,6 +6,7 @@ import {
 	getAccessDeniedMessage,
 	getBannedPrivilegeMessage,
 	isBannedAccessError,
+	useAuthCacheScope,
 } from '@features/auth/public';
 import { eventBus } from '@root/core/events/eventBus';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -48,10 +49,13 @@ const COMMENTS_PAGE_LIMIT = 30;
 const REPLIES_PAGE_LIMIT = 30;
 const REPLIES_STALE_TIME = 1000 * 60 * 5;
 
-function buildCommentsKey(poemId: number, parentId?: number) {
+function buildCommentsKey(poemId: number, authScope: string, parentId?: number) {
 	return parentId
-		? interactionsKeys.commentsByPoem(String(poemId), { parentId: String(parentId) })
-		: interactionsKeys.commentsByPoem(String(poemId));
+		? interactionsKeys.commentsByPoem(String(poemId), {
+				authScope,
+				parentId: String(parentId),
+			})
+		: interactionsKeys.commentsByPoem(String(poemId), { authScope });
 }
 
 type CommentPage = {
@@ -82,10 +86,11 @@ function updatePages(
 async function prepareCommentQueries(
 	queryClient: ReturnType<typeof useQueryClient>,
 	poemId: number,
+	authScope: string,
 	parentId?: number,
 ) {
-	const baseKey = buildCommentsKey(poemId);
-	const repliesKey = parentId ? buildCommentsKey(poemId, parentId) : null;
+	const baseKey = buildCommentsKey(poemId, authScope);
+	const repliesKey = parentId ? buildCommentsKey(poemId, authScope, parentId) : null;
 
 	const previousBase = await snapshotQueryData<InfiniteComments>(queryClient, baseKey);
 	const previousReplies = repliesKey
@@ -206,13 +211,15 @@ function getToggleLikeErrorMessage(error: AppErrorType | null) {
 export function usePoemComments(poemId: number, options: UsePoemCommentsOptions = {}) {
 	const queryClient = useQueryClient();
 	const poemsCachePort = getPoemsCachePort();
+	const authScope = useAuthCacheScope();
 	const isEnabled = options.enabled ?? true;
+	const canUseCommentData = isEnabled && !!poemId;
 	const poemKey = poemsCachePort.getPoemKey(poemId);
 	const [updatingLikeCommentId, setUpdatingLikeCommentId] = useState<number | null>(null);
 
 	const query = useInfiniteQuery({
-		queryKey: buildCommentsKey(poemId),
-		enabled: isEnabled && !!poemId,
+		queryKey: buildCommentsKey(poemId, authScope),
+		enabled: canUseCommentData,
 		queryFn: ({ pageParam }) =>
 			interactions.getPoemComments
 				.query(String(poemId), {
@@ -243,7 +250,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		mutationFn: (params: CommentMutationParams) =>
 			interactions.deleteComment.mutate(String(params.id)),
 		onMutate: async (params) => {
-			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
+			const context = await prepareCommentQueries(queryClient, poemId, authScope, params.parentId);
 			if (context.previousBase.data) {
 				queryClient.setQueryData<InfiniteComments>(
 					context.baseKey,
@@ -262,8 +269,10 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		},
 		onError: (_, __, context) => restoreCommentQueries(queryClient, context),
 		onSuccess: (_, params) => {
-			const baseKey = buildCommentsKey(poemId);
-			const repliesKey = params.parentId ? buildCommentsKey(poemId, params.parentId) : null;
+			const baseKey = buildCommentsKey(poemId, authScope);
+			const repliesKey = params.parentId
+				? buildCommentsKey(poemId, authScope, params.parentId)
+				: null;
 
 			queryClient.invalidateQueries({ queryKey: baseKey });
 			if (repliesKey) queryClient.invalidateQueries({ queryKey: repliesKey });
@@ -276,7 +285,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			interactions.likeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
-			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
+			const context = await prepareCommentQueries(queryClient, poemId, authScope, params.parentId);
 			if (context.previousBase.data) {
 				queryClient.setQueryData(
 					context.baseKey,
@@ -307,7 +316,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 			interactions.unlikeComment.mutate(String(params.id)),
 		onMutate: async (params) => {
 			setUpdatingLikeCommentId(params.id);
-			const context = await prepareCommentQueries(queryClient, poemId, params.parentId);
+			const context = await prepareCommentQueries(queryClient, poemId, authScope, params.parentId);
 			if (context.previousBase.data) {
 				queryClient.setQueryData(
 					context.baseKey,
@@ -336,9 +345,11 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	});
 
 	function fetchReplies(parentId: number, options?: { force?: boolean }) {
+		if (!canUseCommentData) return Promise.resolve([]);
+
 		return queryClient
 			.fetchQuery({
-				queryKey: buildCommentsKey(poemId, parentId),
+				queryKey: buildCommentsKey(poemId, authScope, parentId),
 				queryFn: () =>
 					interactions.getPoemComments
 						.query(String(poemId), {
@@ -352,8 +363,10 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	}
 
 	function prefetchReplies(parentId: number) {
+		if (!canUseCommentData) return Promise.resolve();
+
 		return queryClient.prefetchQuery({
-			queryKey: buildCommentsKey(poemId, parentId),
+			queryKey: buildCommentsKey(poemId, authScope, parentId),
 			queryFn: () =>
 				interactions.getPoemComments
 					.query(String(poemId), {
@@ -366,12 +379,12 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	}
 
 	return {
-		comments: query.data?.pages.flatMap((page) => page.comments) ?? [],
-		isLoadingComments: query.isLoading,
-		isCommentsError: query.isError,
+		comments: canUseCommentData ? (query.data?.pages.flatMap((page) => page.comments) ?? []) : [],
+		isLoadingComments: canUseCommentData && query.isLoading,
+		isCommentsError: canUseCommentData && query.isError,
 		commentsError: getCommentsErrorMessage(query.error as unknown as AppErrorType | null),
-		hasMoreComments: query.hasNextPage ?? false,
-		isLoadingMoreComments: query.isFetchingNextPage,
+		hasMoreComments: canUseCommentData ? (query.hasNextPage ?? false) : false,
+		isLoadingMoreComments: canUseCommentData && query.isFetchingNextPage,
 		loadMoreComments: () => query.fetchNextPage(),
 		createComment: mutation.mutateAsync,
 		isCreatingComment: mutation.isPending,

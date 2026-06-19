@@ -5,6 +5,7 @@ import {
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
 } from '@features/auth/public';
+import { eventBus } from '@root/core/events/eventBus';
 import { useEffect } from 'react';
 import { isRouteErrorResponse, NavLink, useLocation, useRouteError } from 'react-router-dom';
 
@@ -283,7 +284,14 @@ export function ErrorPage() {
 						<NavLink
 							to={info.recoveryTo}
 							onClick={() => {
-								if (shouldClearSession) clearAuthClient();
+								if (!shouldClearSession) return;
+								const userId = useAuthClientStore.getState().authClient?.id ?? null;
+								clearAuthClient();
+								void eventBus.publish('userLoggedOut', {
+									userId,
+									reason: 'sessionExpired',
+									loggedOutAt: new Date().toISOString(),
+								});
 							}}
 						>
 							{info.recoveryLabel}

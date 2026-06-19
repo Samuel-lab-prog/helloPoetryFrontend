@@ -2,6 +2,7 @@ import { restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
+import { getPoemsCachePort } from '@core/ports/poems';
 import {
 	getAccessDeniedMessage,
 	getBannedPrivilegeMessage,
@@ -14,6 +15,7 @@ import { useState } from 'react';
 
 export function useSavedPoems(enabled = true) {
 	const queryClient = useQueryClient();
+	const poemsCachePort = getPoemsCachePort();
 	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
 	const clientStatus = useAuthClientStore((state) => state.authClient?.status);
 	const savedKey = poemKeys.saved();
@@ -31,7 +33,8 @@ export function useSavedPoems(enabled = true) {
 			setUpdatingSavedPoemId(poemId);
 			const previous = await snapshotQueryData<SavedPoem[]>(queryClient, savedKey);
 			if ((previous.data ?? []).some((poem) => poem.id === poemId)) return previous;
-			const poem = queryClient.getQueryData<FullPoem>(poemKeys.byId(String(poemId)));
+			const poemKey = poemsCachePort.getPoemKey(poemId);
+			const poem = queryClient.getQueryData<FullPoem>(poemKey);
 			const optimistic: SavedPoem = {
 				id: poemId,
 				title: poem?.title ?? 'Poem',
@@ -57,7 +60,7 @@ export function useSavedPoems(enabled = true) {
 			return Promise.all([
 				queryClient.invalidateQueries({ queryKey: savedKey, refetchType: 'all' }),
 				queryClient.invalidateQueries({
-					queryKey: poemKeys.byId(String(poemId)),
+					queryKey: poemsCachePort.getPoemKey(poemId),
 					refetchType: 'all',
 				}),
 			]);
@@ -85,7 +88,7 @@ export function useSavedPoems(enabled = true) {
 			return Promise.all([
 				queryClient.invalidateQueries({ queryKey: savedKey, refetchType: 'all' }),
 				queryClient.invalidateQueries({
-					queryKey: poemKeys.byId(String(poemId)),
+					queryKey: poemsCachePort.getPoemKey(poemId),
 					refetchType: 'all',
 				}),
 			]);

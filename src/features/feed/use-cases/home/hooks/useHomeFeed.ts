@@ -1,7 +1,7 @@
 import { feed } from '@Api/feed/endpoints';
 import { feedKeys } from '@Api/feed/keys';
 import { getPoemsQueryPort } from '@core/ports/poems';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { useAuthCacheScope } from '@features/auth/public';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
 import type { FeedPoem } from '@root/core/api/feed/types';
 import { useQuery } from '@tanstack/react-query';
@@ -43,8 +43,7 @@ function toPoemPreviewType(item: FeedPoem): PoemPreviewType {
 
 function shouldFallbackToRecent(error: unknown) {
 	const appError = error as AppErrorType;
-	// Auth-related errors (or missing feed) should fall back to a public recent feed.
-	return appError.statusCode === 401 || appError.statusCode === 403 || appError.statusCode === 404;
+	return appError.statusCode === 404;
 }
 
 async function fetchPersonalizedFeed(): Promise<PoemPreviewType[]> {
@@ -59,11 +58,10 @@ async function fetchRecentPoems(limit: number): Promise<PoemPreviewType[]> {
 }
 
 export function useHomeFeed({ isAuthenticated, limit = 8 }: UseHomeFeedOptions) {
-	const clientId = useAuthClientStore((state) => state.authClient?.id ?? null);
+	const authScope = useAuthCacheScope();
 
 	const query = useQuery({
-		// Include auth + user in key so the cache refreshes when identity changes.
-		queryKey: feedKeys.home({ isAuthenticated, userId: clientId, limit }),
+		queryKey: feedKeys.home({ isAuthenticated, authScope, limit }),
 		retry: 2,
 		staleTime: 1000 * 60 * 5,
 		queryFn: async (): Promise<HomeFeedResult> => {

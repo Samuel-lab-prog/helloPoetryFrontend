@@ -3,7 +3,9 @@ import { createQueryKeys } from '@Api/utils';
 export const poemKeys = createQueryKeys({
 	all: () => ['poems'] as const,
 	minimal: () => ['poems-minimal'] as const,
+	byIdBase: () => ['poem'] as const,
 	byId: (id: string) => ['poem', id] as const,
+	byIdForViewer: (id: string, authScope: string) => ['poem', id, 'viewer', authScope] as const,
 	mine: () => ['poems', 'me'] as const,
 	byAuthor: (authorId: string) => ['poems', 'author', authorId] as const,
 	search: (params?: {

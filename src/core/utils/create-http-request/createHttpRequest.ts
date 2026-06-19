@@ -1,4 +1,7 @@
-﻿import type { AppErrorType } from '../appError';
+﻿import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { eventBus } from '@root/core/events/eventBus';
+
+import type { AppErrorType } from '../appError';
 
 type QueryPrimitive = string | number | boolean;
 type QueryValue = QueryPrimitive | QueryPrimitive[] | undefined;
@@ -108,10 +111,32 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 		if (!canTryRefresh) throw error;
 
 		const refreshed = await refreshSession(baseUrl);
-		if (!refreshed) throw error;
+		if (!refreshed) {
+			clearExpiredSession(appError);
+			throw error;
+		}
 
 		return requestOnce();
 	}
+}
+
+function isBannedSessionError(error: AppErrorType): boolean {
+	return error.message.toLowerCase().includes('banned');
+}
+
+function clearExpiredSession(error: AppErrorType): void {
+	if (isBannedSessionError(error)) return;
+
+	const authStore = useAuthClientStore.getState();
+	const userId = authStore.authClient?.id ?? null;
+	if (!userId) return;
+
+	authStore.clearAuthClient();
+	void eventBus.publish('userLoggedOut', {
+		userId,
+		reason: 'sessionExpired',
+		loggedOutAt: new Date().toISOString(),
+	});
 }
 
 function refreshSession(baseUrl: string): Promise<boolean> {

@@ -47,6 +47,7 @@ export function NavbarBottomNav({
 						<Link key={link.label} asChild variant='navIcon' size='sm'>
 							<NavLink
 								to={link.to}
+								aria-label={link.label}
 								style={{ display: 'block' }}
 								onClick={() => {
 									if (currentPath === link.to) {
@@ -79,9 +80,9 @@ export function NavbarBottomNav({
 											colorPalette='pink'
 											variant='solid'
 											fontSize='2xs'
-											>
-												{unreadCount > 9 ? '9+' : unreadCount}
-											</Badge>
+										>
+											{unreadCount > 9 ? '9+' : unreadCount}
+										</Badge>
 									)}
 									{link.to === '/admin/moderation' && moderationCount > 0 && (
 										<Badge

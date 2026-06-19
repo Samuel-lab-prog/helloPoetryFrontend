@@ -1,4 +1,3 @@
-import { feedKeys } from '@Api/feed/keys';
 import { friends } from '@Api/friends/endpoints';
 import {
 	NOTIFICATIONS_PAGE_LIMIT,
@@ -12,18 +11,9 @@ import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientSt
 import type { AppEvents } from '@root/core/events/eventBus';
 import type { QueryClient } from '@tanstack/react-query';
 
+import { clearSessionBoundQueries } from './sessionQueries';
+
 const POETS_SEARCH_LIMIT = 10;
-
-async function clearUserSessionQueries(queryClient: QueryClient): Promise<void> {
-	const keysToClear = [userKeys.anyProfile(), userKeys.anySearch()];
-
-	await Promise.all(
-		keysToClear.map(async (key) => {
-			await queryClient.cancelQueries({ queryKey: key });
-			queryClient.removeQueries({ queryKey: key });
-		}),
-	);
-}
 
 export async function onUserLoggedIn(
 	queryClient: QueryClient,
@@ -31,7 +21,7 @@ export async function onUserLoggedIn(
 ): Promise<void> {
 	const authStore = useAuthClientStore.getState();
 
-	await clearUserSessionQueries(queryClient);
+	await clearSessionBoundQueries(queryClient);
 
 	const profileKey = userKeys.profile(String(payload.userId));
 	try {
@@ -57,7 +47,5 @@ export async function onUserLoggedIn(
 			orderBy: 'nickname',
 			orderDirection: 'asc',
 		}),
-		queryClient.invalidateQueries({ queryKey: feedKeys.all() }),
-		queryClient.invalidateQueries({ queryKey: feedKeys.homeBase() }),
 	]);
 }
