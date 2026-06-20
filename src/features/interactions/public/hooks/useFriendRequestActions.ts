@@ -120,7 +120,7 @@ export function useFriendRequestActions() {
 				queryClient.setQueryData<AuthorProfileType>(queryKey, {
 					...previousProfile.data,
 					hasIncomingFriendRequest: false,
-					isFriend: true,
+					isFriend: false,
 				});
 			}
 

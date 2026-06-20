@@ -35,12 +35,24 @@ architectural layers.
 
 Tests should live **next to the module they test**.
 
-Example:
+Simple modules can keep a single test file next to the implementation:
 
 ```
 features/poems/hooks/usePoem.ts
 features/poems/hooks/usePoem.test.ts
 ```
+
+Behavior-heavy feature hooks should use a local `tests/` folder:
+
+```
+features/poems/hooks/usePoem.ts
+features/poems/hooks/tests/usePoem.test.tsx
+features/poems/hooks/tests/makePoemScenario.ts
+features/poems/hooks/tests/fixtures.ts
+```
+
+The test file should contain expectations, the `make<HookName>Scenario` file should own fluent setup
+and mocks, and `fixtures.ts` should hold stable sample data.
 
 ---
 

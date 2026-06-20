@@ -75,7 +75,7 @@ function useDeletePoem(queryClient: ReturnType<typeof useQueryClient>) {
 				);
 			}
 
-			queryClient.setQueryData(poemKey, undefined);
+			queryClient.removeQueries({ queryKey: poemKey });
 
 			return { previousMyPoems, previousPoem, poemId };
 		},
