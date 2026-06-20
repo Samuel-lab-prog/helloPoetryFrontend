@@ -4,31 +4,43 @@ import { clearClientAuth } from '../access-control/helpers';
 import { missingPoemRef, publicPoem, restrictedPoemRef } from './fixtures';
 import { mockPoemErrorPage, mockPublicPoemPage } from './helpers';
 
+const publicPoemImmersiveRoutes = [
+	{ label: 'id route', path: `/poems/${publicPoem.id}/immersive` },
+	{ label: 'slug route', path: `/poems/${publicPoem.slug}/${publicPoem.id}/immersive` },
+];
+
+async function expectPublicImmersivePoemReadOnly(page: Parameters<typeof mockPublicPoemPage>[0]) {
+	await expect(page.getByRole('heading', { name: publicPoem.title })).toBeVisible();
+	await expect(page.getByText(`by ${publicPoem.author.name}`)).toBeVisible();
+	await expect(page.getByText(publicPoem.content)).toBeVisible();
+	await expect(page.getByRole('link', { name: /back to poem/i })).toHaveAttribute(
+		'href',
+		`/poems/${publicPoem.slug}/${publicPoem.id}`,
+	);
+
+	await expect(page.getByRole('button', { name: /like poem/i })).not.toBeVisible();
+	await expect(page.getByRole('button', { name: /save poem/i })).not.toBeVisible();
+	await expect(page.getByPlaceholder('Write a comment (1-3000 characters)')).not.toBeVisible();
+}
+
 test.describe('logged out immersive poem page', () => {
 	test.beforeEach(async ({ page }) => {
 		await clearClientAuth(page);
 	});
 
-	test('allows reading a public poem in immersive mode', async ({ page }) => {
-		const poemMock = await mockPublicPoemPage(page);
+	for (const route of publicPoemImmersiveRoutes) {
+		test(`allows reading a public poem in immersive mode through the ${route.label}`, async ({
+			page,
+		}) => {
+			const poemMock = await mockPublicPoemPage(page);
 
-		await page.goto(`/poems/${publicPoem.slug}/${publicPoem.id}/immersive`);
+			await page.goto(route.path);
+			await expectPublicImmersivePoemReadOnly(page);
 
-		await expect(page.getByRole('heading', { name: publicPoem.title })).toBeVisible();
-		await expect(page.getByText(`by ${publicPoem.author.name}`)).toBeVisible();
-		await expect(page.getByText(publicPoem.content)).toBeVisible();
-		await expect(page.getByRole('link', { name: /back to poem/i })).toHaveAttribute(
-			'href',
-			`/poems/${publicPoem.slug}/${publicPoem.id}`,
-		);
-
-		await expect(page.getByRole('button', { name: /like poem/i })).not.toBeVisible();
-		await expect(page.getByRole('button', { name: /save poem/i })).not.toBeVisible();
-		await expect(page.getByPlaceholder('Write a comment (1-3000 characters)')).not.toBeVisible();
-
-		expect(poemMock.commentRequests).toEqual([]);
-		expect(poemMock.forbiddenMutations).toEqual([]);
-	});
+			expect(poemMock.commentRequests).toEqual([]);
+			expect(poemMock.forbiddenMutations).toEqual([]);
+		});
+	}
 
 	test('shows an unavailable card without keeping the previously loaded immersive poem', async ({
 		page,

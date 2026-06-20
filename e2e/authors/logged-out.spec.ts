@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 import { clearClientAuth } from '../access-control/helpers';
-import { loggedInFriendAuthor, privateProfile, publicAuthor } from './fixtures';
-import { mockPublicAuthorPage } from './helpers';
+import { loggedInFriendAuthor, missingAuthorRef, privateProfile, publicAuthor } from './fixtures';
+import { mockAuthorErrorPage, mockPublicAuthorPage } from './helpers';
 
 test.describe('logged out author page', () => {
 	test('shows the public poet profile without authenticated friendship actions', async ({
@@ -34,6 +34,30 @@ test.describe('logged out author page', () => {
 
 		expect(authorMock.profileRequests.length).toBeGreaterThan(0);
 		expect(authorMock.forbiddenFriendMutations).toEqual([]);
+	});
+
+	test('shows an unavailable author card without authenticated friendship actions', async ({
+		page,
+	}) => {
+		await clearClientAuth(page);
+
+		const authorMock = await mockAuthorErrorPage(page, missingAuthorRef.id);
+
+		await page.goto(`/authors/${missingAuthorRef.id}`);
+
+		const alert = page.getByRole('alert').first();
+		await expect(alert).toBeVisible();
+		await expect(alert).toContainText('AUTHOR UNAVAILABLE');
+		await expect(alert).toContainText('We could not load this author right now.');
+		await expect(alert.getByRole('button', { name: /refresh author/i })).toBeVisible();
+
+		await expect(page.getByRole('button', { name: /send friend request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /cancel request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /accept request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /reject request/i })).not.toBeVisible();
+
+		expect(authorMock.profileRequests.length).toBeGreaterThan(0);
+		expect(authorMock.friendRequests).toEqual([]);
 	});
 
 	test('does not keep logged-in friendship state after signing out', async ({ page }) => {

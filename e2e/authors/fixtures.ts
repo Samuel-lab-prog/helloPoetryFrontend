@@ -53,6 +53,10 @@ export const loggedInFriendAuthor = {
 	isFriend: true,
 };
 
+export const missingAuthorRef = {
+	id: 399,
+};
+
 export const privateProfile = {
 	id: 501,
 	name: 'Logged In Reader',

@@ -15,6 +15,11 @@ export type AuthorPageMock = {
 	setAuthorProfile: (profile: AuthorProfileFixture) => void;
 };
 
+export type AuthorErrorPageMock = {
+	friendRequests: string[];
+	profileRequests: string[];
+};
+
 function isUnsafeMethod(method: string) {
 	return method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS';
 }
@@ -77,5 +82,34 @@ export async function mockPublicAuthorPage(
 		setAuthorProfile: (profile) => {
 			authorProfile = profile;
 		},
+	};
+}
+
+export async function mockAuthorErrorPage(
+	page: Page,
+	authorId: number,
+): Promise<AuthorErrorPageMock> {
+	const friendRequests: string[] = [];
+	const profileRequests: string[] = [];
+
+	await page.route(`**/api/v1/users/${authorId}/profile`, async (route) => {
+		profileRequests.push(route.request().url());
+		await route.fulfill({
+			status: 404,
+			json: {
+				code: 'NOT_FOUND',
+				message: 'Author not found.',
+			},
+		});
+	});
+
+	await page.route('**/api/v1/friends/**', async (route) => {
+		friendRequests.push(route.request().url());
+		await route.fulfill({ status: 403, json: { message: 'Forbidden in test' } });
+	});
+
+	return {
+		friendRequests,
+		profileRequests,
 	};
 }
