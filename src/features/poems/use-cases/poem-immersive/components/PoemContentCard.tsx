@@ -1,7 +1,9 @@
-import { AsyncState } from '@BaseComponents';
+import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Text } from '@chakra-ui/react';
+import { isBannedAccessError } from '@features/auth/public';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 
+import { getPoemErrorInfo } from '../../poem/utils/getPoemErrorInfo';
 import { type DedicationUser, type Poem } from '../utils/types';
 import { PoemContent } from './PoemContent';
 import { PoemDedication } from './PoemDedication';
@@ -11,6 +13,7 @@ interface PoemContentCardProps {
 	poem: Poem | null | undefined;
 	isLoading: boolean;
 	isError: boolean;
+	error?: unknown;
 	dedicationUsers: DedicationUser[];
 }
 
@@ -18,15 +21,27 @@ export function PoemContentCard({
 	poem,
 	isLoading,
 	isError,
+	error,
 	dedicationUsers,
 }: PoemContentCardProps) {
+	const poemErrorInfo = getPoemErrorInfo(error);
+	const isBannedPoemError = isBannedAccessError(error);
+
 	return (
 		<AsyncState
 			isLoading={isLoading}
 			isError={isError}
 			isEmpty={!poem}
 			emptyElement={<Text textStyle='small'>Poem not found.</Text>}
-			errorElement={<Text textStyle='small'>Error loading the poem. Please try again.</Text>}
+			errorElement={
+				<ErrorStateCard
+					eyebrow={poemErrorInfo.eyebrow}
+					title={poemErrorInfo.title}
+					description={poemErrorInfo.description}
+					actionLabel={isBannedPoemError ? undefined : 'Refresh poem'}
+					onAction={isBannedPoemError ? undefined : () => window.location.reload()}
+				/>
+			}
 			loadingElement={<LoadingPoemSkeleton variant='immersive' />}
 		>
 			{poem && (

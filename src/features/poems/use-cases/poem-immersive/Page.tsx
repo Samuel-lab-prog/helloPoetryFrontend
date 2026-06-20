@@ -10,7 +10,7 @@ import { parsePoemId, useDedicationUsers } from './utils/utils';
 export function PoemImmersivePage() {
 	const { id } = useParams<{ id: string }>();
 	const poemId = useMemo(() => parsePoemId(id), [id]);
-	const { poem, isError, isLoading } = usePoem(poemId);
+	const { poem, isError, isLoading, error } = usePoem(poemId);
 	const dedicationUsers = useDedicationUsers(poem);
 
 	if (poemId <= 0) {
@@ -48,6 +48,7 @@ export function PoemImmersivePage() {
 					poem={poem}
 					isLoading={isLoading}
 					isError={!!isError}
+					error={error}
 					dedicationUsers={dedicationUsers}
 				/>
 			</Box>

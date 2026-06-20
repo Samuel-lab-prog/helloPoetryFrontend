@@ -12,7 +12,7 @@ export function usePoem(id: number) {
 		queryKey: poemKeys.byIdForViewer(stringId, authScope),
 		retry: (failureCount, error) => shouldRetryPoemQuery(failureCount, error),
 		staleTime: 1000 * 60 * 60 * 24 * 7,
-		enabled: !!id,
+		enabled: id > 0,
 	});
 	return {
 		poem: query.data,

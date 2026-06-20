@@ -11,6 +11,15 @@ function recordRequest(request: Request, list: string[]) {
 	list.push(request.url());
 }
 
+function filterPoemsByTitle(searchTitle: string | null) {
+	if (!searchTitle) return publicHomePoemsPage.poems;
+
+	const normalizedSearch = searchTitle.toLowerCase();
+	return publicHomePoemsPage.poems.filter((poem) =>
+		poem.title.toLowerCase().includes(normalizedSearch),
+	);
+}
+
 export async function mockLoggedOutHome(page: Page): Promise<LoggedOutHomeMock> {
 	const feedRequests: string[] = [];
 	const poemRequests: string[] = [];
@@ -29,7 +38,14 @@ export async function mockLoggedOutHome(page: Page): Promise<LoggedOutHomeMock> 
 			return;
 		}
 
-		await route.fulfill({ status: 200, json: publicHomePoemsPage });
+		const url = new URL(request.url());
+		await route.fulfill({
+			status: 200,
+			json: {
+				...publicHomePoemsPage,
+				poems: filterPoemsByTitle(url.searchParams.get('searchTitle')),
+			},
+		});
 	});
 
 	return { feedRequests, poemRequests };

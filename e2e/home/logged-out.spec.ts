@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { clearClientAuth } from '../access-control/helpers';
-import { publicHomePoem } from './fixtures';
+import { publicHomePoem, publicHomeSearchPoem } from './fixtures';
 import { mockLoggedOutHome } from './helpers';
 
 test.describe('logged out home feed', () => {
@@ -26,5 +26,36 @@ test.describe('logged out home feed', () => {
 		expect(firstPoemsRequest.searchParams.get('limit')).toBe('4');
 		expect(firstPoemsRequest.searchParams.get('orderBy')).toBe('createdAt');
 		expect(firstPoemsRequest.searchParams.get('orderDirection')).toBe('desc');
+	});
+
+	test('searches by title through public poems without requesting the personalized feed', async ({
+		page,
+	}) => {
+		const homeMock = await mockLoggedOutHome(page);
+
+		await page.goto('/');
+		await page.getByPlaceholder('Search by title').fill('searched');
+
+		await expect
+			.poll(() =>
+				homeMock.poemRequests.some((requestUrl) => {
+					const url = new URL(requestUrl);
+					return url.searchParams.get('searchTitle') === 'searched';
+				}),
+			)
+			.toBe(true);
+
+		await expect(page.getByText(publicHomeSearchPoem.title)).toBeVisible();
+		await expect(page.getByText(publicHomeSearchPoem.excerpt)).toBeVisible();
+		await expect(page.getByText(publicHomePoem.title)).not.toBeVisible();
+
+		const searchRequest = homeMock.poemRequests
+			.map((requestUrl) => new URL(requestUrl))
+			.find((url) => url.searchParams.get('searchTitle') === 'searched');
+
+		expect(searchRequest?.searchParams.get('limit')).toBe('8');
+		expect(searchRequest?.searchParams.get('orderBy')).toBe('createdAt');
+		expect(searchRequest?.searchParams.get('orderDirection')).toBe('desc');
+		expect(homeMock.feedRequests).toEqual([]);
 	});
 });

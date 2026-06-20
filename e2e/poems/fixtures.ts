@@ -32,6 +32,16 @@ export const publicPoem = {
 	},
 };
 
+export const restrictedPoemRef = {
+	id: 102,
+	slug: 'restricted-test-poem',
+};
+
+export const missingPoemRef = {
+	id: 103,
+	slug: 'missing-test-poem',
+};
+
 export const publicPoemCommentsPage = {
 	comments: [
 		{

@@ -2,7 +2,6 @@
 import { AsyncState, ErrorStateCard, MarkdownRenderer, toaster } from '@BaseComponents';
 import { Box, Button, Flex, Icon, Link } from '@chakra-ui/react';
 import {
-	getAccessDeniedMessage,
 	getBannedPrivilegeMessage,
 	getSuspendedPrivilegeMessage,
 	isBannedAccessError,
@@ -13,7 +12,7 @@ import { ModerationActionsMenu } from '@features/moderation/public';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
 import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
-import { type AppErrorType, findForbiddenWords } from '@Utils';
+import { findForbiddenWords } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
@@ -24,6 +23,7 @@ import { PoemActions } from './components/PoemActions';
 import { PoemAuthorCard } from './components/PoemAuthorCard';
 import { PoemHeader } from './components/PoemHeader';
 import { usePoem } from './hooks/usePoem';
+import { getPoemErrorInfo } from './utils/getPoemErrorInfo';
 
 function parsePoemId(rawId: string | undefined) {
 	if (!rawId) return -1;
@@ -498,73 +498,4 @@ export function PoemPage() {
 			</Box>
 		</Flex>
 	);
-}
-
-function getPoemErrorInfo(error: unknown) {
-	const appError = error as AppErrorType | undefined;
-	const status = appError?.statusCode;
-	const message = typeof appError?.message === 'string' ? appError.message.toLowerCase() : '';
-
-	if (isBannedAccessError(appError)) {
-		return {
-			eyebrow: 'POEM UNAVAILABLE',
-			title: getBannedPrivilegeMessage('view poems'),
-			description:
-				'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
-		};
-	}
-
-	if (status === 403) {
-		return {
-			eyebrow: 'POEM UNAVAILABLE',
-			title: getAccessDeniedMessage({
-				bannedAction: 'view poems',
-				fallback: 'You do not have permission to view this poem.',
-			}),
-			description: getAccessDeniedMessage({
-				bannedMessage:
-					'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
-				fallback:
-					'This poem may be private, under moderation, or no longer available to your account.',
-			}),
-		};
-	}
-
-	if (status === 404) {
-		return {
-			eyebrow: 'POEM NOT FOUND',
-			title: 'This poem could not be found.',
-			description: 'It may have been deleted or the link may be invalid.',
-		};
-	}
-
-	if (status === 401) {
-		return {
-			eyebrow: 'SESSION EXPIRED',
-			title: 'Please sign in again to continue.',
-			description: 'Your session expired while loading this poem.',
-		};
-	}
-
-	if (message.includes('access denied')) {
-		return {
-			eyebrow: 'POEM UNAVAILABLE',
-			title: getAccessDeniedMessage({
-				bannedAction: 'view poems',
-				fallback: 'You do not have permission to view this poem.',
-			}),
-			description: getAccessDeniedMessage({
-				bannedMessage:
-					'This account cannot open poems while it is banned. Please use a different account or contact support if this seems incorrect.',
-				fallback:
-					'This poem may be private, under moderation, or no longer available to your account.',
-			}),
-		};
-	}
-
-	return {
-		eyebrow: 'POEM UNAVAILABLE',
-		title: 'We could not load this poem right now.',
-		description: 'Please try again in a moment, or refresh the page to reconnect.',
-	};
 }

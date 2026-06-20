@@ -27,8 +27,37 @@ export const publicHomePoem = {
 	},
 };
 
+export const publicHomeSearchPoem = {
+	id: 603,
+	title: 'Searched Logged Out Poem',
+	slug: 'searched-logged-out-poem',
+	excerpt: 'A public poem visible when logged-out visitors search by title.',
+	createdAt: '2026-06-19T12:05:00.000Z',
+	status: 'published',
+	moderationStatus: 'approved',
+	likesCount: 4,
+	commentsCount: 1,
+	stats: {
+		likesCount: 4,
+		commentsCount: 1,
+	},
+	tags: [
+		{
+			id: 2,
+			name: 'search',
+		},
+	],
+	author: {
+		id: 604,
+		name: 'Search Result Poet',
+		nickname: 'search-result-poet',
+		avatarUrl: null,
+		status: 'active',
+	},
+};
+
 export const publicHomePoemsPage = {
-	poems: [publicHomePoem],
+	poems: [publicHomePoem, publicHomeSearchPoem],
 	hasMore: false,
 	nextCursor: null,
 };
