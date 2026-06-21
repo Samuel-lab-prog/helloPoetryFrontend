@@ -42,3 +42,22 @@ Guidelines:
 - Use `setTestAuthClient()` and `clearTestAuthClient()` for auth-dependent hooks.
 - Avoid `describe.concurrent` for hook tests because React Query, DOM state, and stores can share
   process-level state.
+
+## Feature Component Tests
+
+Use `renderWithProviders()` for component tests that need the app providers:
+
+- React Query through a fresh test query client.
+- Chakra UI and color mode through the shared app provider.
+- React Router through a memory router.
+
+Keep component scenario builders close to the component under test:
+
+```text
+components/
+  ExampleComponent.tsx
+  tests/
+    ExampleComponent.test.tsx
+    makeExampleComponentScenario.tsx
+    fixtures.ts
+```

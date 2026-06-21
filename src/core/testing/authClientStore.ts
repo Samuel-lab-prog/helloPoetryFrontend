@@ -24,3 +24,13 @@ export function setTestAuthClient(
 		unreadNotificationsCount,
 	});
 }
+
+export function setTestAuthStatus(
+	status: AuthClient['status'],
+	client: AuthClient = defaultTestAuthClient,
+) {
+	setTestAuthClient({
+		...client,
+		status,
+	});
+}
