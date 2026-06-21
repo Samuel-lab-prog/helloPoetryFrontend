@@ -1,6 +1,10 @@
 import { users } from '@Api/users/endpoints';
 import type { UserPrivateProfile } from '@root/core/api/users/types';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
@@ -23,6 +27,10 @@ export function makeUpdateMyProfileScenario() {
 		},
 		asAuthenticatedUser() {
 			setTestAuthClient();
+			return scenario;
+		},
+		asBannedUser() {
+			setTestAuthStatus('banned');
 			return scenario;
 		},
 		withCachedProfile(profile: UserPrivateProfile = privateProfile) {

@@ -57,6 +57,10 @@ export const missingAuthorRef = {
 	id: 399,
 };
 
+export const bannedAuthorRef = {
+	id: 398,
+};
+
 export const privateProfile = {
 	id: 501,
 	name: 'Logged In Reader',

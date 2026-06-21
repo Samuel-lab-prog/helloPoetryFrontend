@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { bannedAccessError } from '@root/core/testing/appErrors';
 import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -61,6 +62,28 @@ describe('FEATURE HOOK - Interactions - usePoemLike', () => {
 
 		expect(scenario.getCachedPoem()?.stats).toEqual(likedPoem.stats);
 		await waitFor(() => expect(result.current.likeError).toBe('You cannot like this poem.'));
+	});
+
+	it('shows banned-user copy and restores the cached poem when liking is blocked', async () => {
+		const scenario = makePoemLikeScenario()
+			.asBannedUser()
+			.withCachedPoem()
+			.withLikeFailure(bannedAccessError);
+
+		const { result } = scenario.render();
+
+		await expect(
+			act(async () => {
+				await result.current.likePoem();
+			}),
+		).rejects.toMatchObject({ statusCode: 401 });
+
+		expect(scenario.getCachedPoem()?.stats).toEqual(fullPoem.stats);
+		await waitFor(() =>
+			expect(result.current.likeError).toContain(
+				"This account has been banned, so you can't like poems.",
+			),
+		);
 	});
 
 	it('keeps the optimistic state for idempotent conflict responses', async () => {

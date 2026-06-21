@@ -1,6 +1,10 @@
 import { type FriendsActionsPort, registerFriendsActionsPort } from '@root/core/ports/friends';
 import { registerUsersCachePort } from '@root/core/ports/users';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
@@ -65,6 +69,10 @@ function createBaseFriendScenario() {
 		},
 		asAuthenticatedUser() {
 			setTestAuthClient();
+			return this;
+		},
+		asBannedUser() {
+			setTestAuthStatus('banned');
 			return this;
 		},
 		withAuthorProfile(profile: AuthorProfileType = authorProfile) {

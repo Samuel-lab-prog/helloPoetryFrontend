@@ -1,7 +1,13 @@
 import { expect, test } from '@playwright/test';
 
 import { clearClientAuth } from '../access-control/helpers';
-import { loggedInFriendAuthor, missingAuthorRef, privateProfile, publicAuthor } from './fixtures';
+import {
+	bannedAuthorRef,
+	loggedInFriendAuthor,
+	missingAuthorRef,
+	privateProfile,
+	publicAuthor,
+} from './fixtures';
 import { mockAuthorErrorPage, mockPublicAuthorPage } from './helpers';
 
 test.describe('logged out author page', () => {
@@ -51,6 +57,39 @@ test.describe('logged out author page', () => {
 		await expect(alert).toContainText('We could not load this author right now.');
 		await expect(alert.getByRole('button', { name: /refresh author/i })).toBeVisible();
 
+		await expect(page.getByRole('button', { name: /send friend request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /cancel request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /accept request/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /reject request/i })).not.toBeVisible();
+
+		expect(authorMock.profileRequests.length).toBeGreaterThan(0);
+		expect(authorMock.friendRequests).toEqual([]);
+	});
+
+	test('hides a banned author without keeping a previously loaded public profile', async ({
+		page,
+	}) => {
+		await clearClientAuth(page);
+
+		await mockPublicAuthorPage(page);
+		const authorMock = await mockAuthorErrorPage(page, bannedAuthorRef.id);
+		const publicPoem = publicAuthor.poems[0];
+
+		await page.goto(`/authors/${publicAuthor.id}`);
+		await expect(page.getByRole('heading', { name: publicAuthor.name })).toBeVisible();
+		await expect(page.getByRole('link', { name: new RegExp(publicPoem.title) })).toBeVisible();
+
+		await page.goto(`/authors/${bannedAuthorRef.id}`);
+
+		const alert = page.getByRole('alert').first();
+		await expect(alert).toBeVisible();
+		await expect(alert).toContainText('AUTHOR UNAVAILABLE');
+		await expect(alert).toContainText('We could not load this author right now.');
+		await expect(alert).not.toContainText(/banned/i);
+
+		await expect(page.getByRole('heading', { name: publicAuthor.name })).not.toBeVisible();
+		await expect(page.getByText(publicAuthor.bio)).not.toBeVisible();
+		await expect(page.getByRole('link', { name: new RegExp(publicPoem.title) })).not.toBeVisible();
 		await expect(page.getByRole('button', { name: /send friend request/i })).not.toBeVisible();
 		await expect(page.getByRole('button', { name: /cancel request/i })).not.toBeVisible();
 		await expect(page.getByRole('button', { name: /accept request/i })).not.toBeVisible();

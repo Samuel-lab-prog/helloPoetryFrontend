@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { eventBus } from '@root/core/events/eventBus';
+import { bannedAccessError } from '@root/core/testing/appErrors';
 import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -71,5 +72,32 @@ describe('FEATURE HOOK - Interactions - useCancelFriendRequest', () => {
 			}),
 		);
 		await waitFor(() => expect(result.current.errorMessage).toBe('Request not found.'));
+	});
+
+	it('restores requester state and shows banned-user copy when cancelling is blocked', async () => {
+		const scenario = makeCancelFriendRequestScenario();
+		scenario.asBannedUser();
+		scenario.withAuthorProfile({
+			...authorProfile,
+			isFriendRequester: true,
+		});
+		scenario.withCancelFailure(bannedAccessError);
+
+		const { result } = scenario.render();
+
+		await expect(
+			act(async () => {
+				await result.current.cancelFriendRequest(authorId);
+			}),
+		).rejects.toMatchObject({ statusCode: 401 });
+
+		expect(scenario.getCachedProfile()).toEqual(
+			expect.objectContaining({
+				isFriendRequester: true,
+			}),
+		);
+		await waitFor(() =>
+			expect(result.current.errorMessage).toContain("can't manage friend requests"),
+		);
 	});
 });

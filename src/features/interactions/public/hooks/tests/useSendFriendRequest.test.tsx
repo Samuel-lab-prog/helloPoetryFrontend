@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { bannedAccessError } from '@root/core/testing/appErrors';
 import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -58,6 +59,31 @@ describe('FEATURE HOOK - Interactions - useSendFriendRequest', () => {
 		);
 		await waitFor(() =>
 			expect(result.current.errorMessage).toBe('You cannot send a request to this user.'),
+		);
+	});
+
+	it('restores the author profile and shows banned-user copy when sending is blocked', async () => {
+		const scenario = makeSendFriendRequestScenario();
+		scenario.asBannedUser();
+		scenario.withAuthorProfile();
+		scenario.withSendFailure(bannedAccessError);
+
+		const { result } = scenario.render();
+
+		await expect(
+			act(async () => {
+				await result.current.sendFriendRequest(authorId);
+			}),
+		).rejects.toMatchObject({ statusCode: 401 });
+
+		expect(scenario.getCachedProfile()).toEqual(
+			expect.objectContaining({
+				isFriendRequester: false,
+				hasIncomingFriendRequest: true,
+			}),
+		);
+		await waitFor(() =>
+			expect(result.current.errorMessage).toContain("can't send friend requests"),
 		);
 	});
 });

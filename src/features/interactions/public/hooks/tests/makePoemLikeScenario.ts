@@ -1,7 +1,11 @@
 import { interactions } from '@Api/interactions/endpoints';
 import type { FullPoem } from '@Api/poems/types';
 import { registerPoemsCachePort } from '@root/core/ports/poems';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
@@ -28,6 +32,10 @@ export function makePoemLikeScenario() {
 		},
 		asAuthenticatedUser() {
 			setTestAuthClient();
+			return scenario;
+		},
+		asBannedUser() {
+			setTestAuthStatus('banned');
 			return scenario;
 		},
 		withCachedPoem(poem: FullPoem = fullPoem) {

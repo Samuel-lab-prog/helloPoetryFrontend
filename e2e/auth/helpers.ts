@@ -7,6 +7,12 @@ type PublicAuthPageRequest = {
 	url: string;
 };
 
+type PersistedAuthClient = {
+	id: number;
+	role: 'admin' | 'author' | 'moderator';
+	status: 'active' | 'banned' | 'suspended';
+};
+
 type MockApiFailure = {
 	json: {
 		code: string;
@@ -43,11 +49,20 @@ export type ExpiredSessionMock = {
 	unexpectedApiRequests: PublicAuthPageRequest[];
 };
 
+export type BannedSessionMock = {
+	bannedRequests: PublicAuthPageRequest[];
+	refreshRequests: PublicAuthPageRequest[];
+};
+
 const allowedPublicPaths = new Set(['/api/v1/users/check-email', '/api/v1/users/check-nickname']);
 const privateHrefs = ['/poems/new', '/my-profile', '/notifications', '/admin', '/admin/moderation'];
 const expiredSessionResponse = {
 	code: 'UNAUTHORIZED',
 	message: 'Session expired',
+};
+const bannedSessionResponse = {
+	code: 'UNAUTHORIZED',
+	message: 'Client is banned',
 };
 
 function recordRequest(request: Request): PublicAuthPageRequest {
@@ -148,6 +163,28 @@ export async function getPersistedAuthClient(page: Page) {
 	});
 }
 
+export async function seedPersistedAuthClient(
+	page: Page,
+	authClient: PersistedAuthClient,
+	unreadNotificationsCount = 0,
+) {
+	await page.context().clearCookies();
+	await page.addInitScript(
+		({ client, unreadCount }) => {
+			window.localStorage.clear();
+			window.sessionStorage.clear();
+			window.localStorage.setItem(
+				'auth-client',
+				JSON.stringify({
+					authClient: client,
+					unreadNotificationsCount: unreadCount,
+				}),
+			);
+		},
+		{ client: authClient, unreadCount: unreadNotificationsCount },
+	);
+}
+
 export async function expectLoggedOutNavbar(page: Page) {
 	await expect(page.locator('a[href="/login"]').first()).toBeVisible();
 	await expect(page.locator('a[href="/register"]').first()).toBeVisible();
@@ -216,6 +253,37 @@ export async function mockLoggedOutAuthPages(
 		loginRequests,
 		registerRequests,
 		unexpectedApiRequests,
+	};
+}
+
+export async function mockBannedSession(page: Page): Promise<BannedSessionMock> {
+	const bannedRequests: PublicAuthPageRequest[] = [];
+	const refreshRequests: PublicAuthPageRequest[] = [];
+
+	await page.route('**/api/v1/**', async (route) => {
+		const request = route.request();
+		const url = new URL(request.url());
+		const path = url.pathname;
+
+		if (request.method() === 'POST' && path === '/api/v1/auth/refresh') {
+			refreshRequests.push(recordRequest(request));
+			await route.fulfill({
+				status: 401,
+				json: bannedSessionResponse,
+			});
+			return;
+		}
+
+		bannedRequests.push(recordRequest(request));
+		await route.fulfill({
+			status: 401,
+			json: bannedSessionResponse,
+		});
+	});
+
+	return {
+		bannedRequests,
+		refreshRequests,
 	};
 }
 

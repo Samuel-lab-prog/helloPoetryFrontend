@@ -1,7 +1,13 @@
 import { expect, test } from '@playwright/test';
 
 import { clearClientAuth } from '../access-control/helpers';
-import { missingPoemRef, publicPoem, publicPoemCommentsPage, restrictedPoemRef } from './fixtures';
+import {
+	bannedAuthorPoemRef,
+	missingPoemRef,
+	publicPoem,
+	publicPoemCommentsPage,
+	restrictedPoemRef,
+} from './fixtures';
 import { mockPoemErrorPage, mockPublicPoemPage } from './helpers';
 
 const publicPoemRoutes = [
@@ -68,6 +74,37 @@ test.describe('logged out poem interactions', () => {
 			'This poem may be private, under moderation, or no longer available to your account.',
 		);
 		await expect(alert.getByRole('button', { name: /refresh poem/i })).toBeVisible();
+
+		await expect(page.getByRole('heading', { name: publicPoem.title })).not.toBeVisible();
+		await expect(page.getByText(publicPoem.content)).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /like poem/i })).not.toBeVisible();
+		await expect(page.getByRole('button', { name: /save poem/i })).not.toBeVisible();
+		await expect(page.getByPlaceholder('Write a comment (1-3000 characters)')).not.toBeVisible();
+
+		expect(errorMock.poemRequests.length).toBeGreaterThan(0);
+		expect(errorMock.interactionRequests).toEqual([]);
+	});
+
+	test("hides a banned author's poem without keeping the previously loaded poem", async ({
+		page,
+	}) => {
+		await mockPublicPoemPage(page);
+		const errorMock = await mockPoemErrorPage(page, {
+			poemId: bannedAuthorPoemRef.id,
+			status: 404,
+		});
+
+		await page.goto(`/poems/${publicPoem.slug}/${publicPoem.id}`);
+		await expect(page.getByRole('heading', { name: publicPoem.title })).toBeVisible();
+		await expect(page.getByText(publicPoem.content)).toBeVisible();
+
+		await page.goto(`/poems/${bannedAuthorPoemRef.slug}/${bannedAuthorPoemRef.id}`);
+
+		const alert = page.getByRole('alert').first();
+		await expect(alert).toBeVisible();
+		await expect(alert).toContainText('POEM NOT FOUND');
+		await expect(alert).toContainText('This poem could not be found.');
+		await expect(alert).not.toContainText(/banned/i);
 
 		await expect(page.getByRole('heading', { name: publicPoem.title })).not.toBeVisible();
 		await expect(page.getByText(publicPoem.content)).not.toBeVisible();

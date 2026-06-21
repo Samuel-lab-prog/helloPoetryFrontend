@@ -2,7 +2,11 @@ import { interactions } from '@Api/interactions/endpoints';
 import { interactionsKeys } from '@Api/interactions/keys';
 import { eventBus } from '@root/core/events/eventBus';
 import { registerPoemsCachePort } from '@root/core/ports/poems';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
@@ -27,6 +31,13 @@ function mockCommentsQuery(comments: PoemCommentType[] = [rootComment]) {
 	}));
 }
 
+function mockCommentsFailure(error: unknown) {
+	return vi.spyOn(interactions.getPoemComments, 'query').mockImplementation((requestedPoemId) => ({
+		queryKey: interactionsKeys.commentsByPoem(requestedPoemId),
+		queryFn: () => Promise.reject(error),
+	}));
+}
+
 export function makePoemCommentsScenario() {
 	registerPoemsCachePort({
 		getPoemKey: (id) => ['poem', id],
@@ -44,8 +55,16 @@ export function makePoemCommentsScenario() {
 			setTestAuthClient();
 			return scenario;
 		},
+		asBannedUser() {
+			setTestAuthStatus('banned');
+			return scenario;
+		},
 		withComments(comments: PoemCommentType[] = [rootComment]) {
 			scenario.mocks.commentsQuery = mockCommentsQuery(comments);
+			return scenario;
+		},
+		withCommentsFailure(error: unknown = new Error('comments failed')) {
+			scenario.mocks.commentsQuery = mockCommentsFailure(error);
 			return scenario;
 		},
 		withReplies(replies: PoemCommentType[] = [replyComment]) {
@@ -62,10 +81,23 @@ export function makePoemCommentsScenario() {
 				.mockResolvedValue();
 			return scenario;
 		},
-		withDeleteCommentFailure(message = 'delete failed') {
+		withCreateCommentFailure(error: unknown = new Error('create failed')) {
+			scenario.mocks.createComment = vi
+				.spyOn(interactions.commentPoem, 'mutate')
+				.mockRejectedValue(error);
+			return scenario;
+		},
+		withDeleteCommentFailure(error: unknown = new Error('delete failed')) {
+			const rejection = typeof error === 'string' ? new Error(error) : error;
 			scenario.mocks.deleteComment = vi
 				.spyOn(interactions.deleteComment, 'mutate')
-				.mockRejectedValue(new Error(message));
+				.mockRejectedValue(rejection);
+			return scenario;
+		},
+		withLikeCommentFailure(error: unknown = new Error('like failed')) {
+			scenario.mocks.likeComment = vi
+				.spyOn(interactions.likeComment, 'mutate')
+				.mockRejectedValue(error);
 			return scenario;
 		},
 		watchingCommentCreatedEvents() {

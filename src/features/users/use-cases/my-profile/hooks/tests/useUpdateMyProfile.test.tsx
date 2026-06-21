@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { bannedAccessError } from '@root/core/testing/appErrors';
 import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -81,5 +82,30 @@ describe('FEATURE HOOK - Users - useUpdateMyProfile', () => {
 			expect(result.current.updateProfileError).toBe('This nickname is already in use.');
 			expect(result.current.conflictField).toBe('nickname');
 		});
+	});
+
+	it('keeps edit controls authenticated but shows banned-user copy when update is blocked', async () => {
+		const scenario = makeUpdateMyProfileScenario()
+			.asBannedUser()
+			.withCachedProfile()
+			.withUpdateFailure(bannedAccessError);
+
+		const { result } = scenario.render();
+
+		expect(result.current.canEditProfile).toBe(true);
+		await expect(
+			act(async () => {
+				await result.current.updateMyProfile({
+					name: 'Blocked Poet',
+				});
+			}),
+		).rejects.toMatchObject({ statusCode: 401 });
+
+		expect(scenario.getCachedProfile()).toEqual(
+			expect.objectContaining({
+				name: 'Poet Name',
+			}),
+		);
+		await waitFor(() => expect(result.current.updateProfileError).toContain("can't edit profiles"));
 	});
 });

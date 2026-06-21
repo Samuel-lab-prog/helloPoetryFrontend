@@ -165,7 +165,12 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 			</Text>
 			<Flex align='center' justify='space-between' mb={2} gap={3} wrap='wrap'>
 				<Flex align='center' gap={2}>
-					<Button size='sm' variant='outlinePurple' onClick={togglePlay}>
+					<Button
+						size='sm'
+						variant='outlinePurple'
+						aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+						onClick={togglePlay}
+					>
 						{isPlaying ? <PauseIcon /> : <PlayIcon />}
 					</Button>
 					<Text textStyle='small' color='pink.200'>
@@ -174,7 +179,12 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 				</Flex>
 			</Flex>
 			<Flex align='center' gap={2} mb={3} wrap='wrap'>
-				<Button size='sm' variant='ghost' onClick={toggleMute}>
+				<Button
+					size='sm'
+					variant='ghost'
+					aria-label={isMuted || volume === 0 ? 'Unmute audio' : 'Mute audio'}
+					onClick={toggleMute}
+				>
 					{isMuted || volume === 0 ? <VolumeXIcon /> : <Volume2Icon />}
 				</Button>
 				<input

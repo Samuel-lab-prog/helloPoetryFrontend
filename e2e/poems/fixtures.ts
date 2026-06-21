@@ -42,6 +42,11 @@ export const missingPoemRef = {
 	slug: 'missing-test-poem',
 };
 
+export const bannedAuthorPoemRef = {
+	id: 104,
+	slug: 'banned-author-test-poem',
+};
+
 export const publicPoemCommentsPage = {
 	comments: [
 		{

@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { bannedAccessError } from '@root/core/testing/appErrors';
 import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -89,5 +90,31 @@ describe('FEATURE HOOK - Interactions - useFriendRequestActions', () => {
 		expect(result.current.isRemovingRequester(requesterId)).toBe(false);
 		expect(result.current.isHiddenRequester(requesterId)).toBe(false);
 		await waitFor(() => expect(result.current.errorMessage).toBe('Request not found.'));
+	});
+
+	it('restores the requester profile and shows banned-user copy when managing requests is blocked', async () => {
+		const scenario = makeFriendRequestActionsScenario();
+		scenario.asBannedUser();
+		scenario.withRequesterProfile();
+		scenario.withAcceptFailure(bannedAccessError);
+
+		const { result } = scenario.render();
+
+		await expect(
+			act(async () => {
+				await result.current.acceptRequest(requesterId);
+			}),
+		).rejects.toMatchObject({ statusCode: 401 });
+
+		expect(scenario.getCachedRequesterProfile()).toEqual(
+			expect.objectContaining({
+				hasIncomingFriendRequest: true,
+				isFriend: false,
+			}),
+		);
+		expect(result.current.isRemovingRequester(requesterId)).toBe(false);
+		await waitFor(() =>
+			expect(result.current.errorMessage).toContain("can't manage friend requests"),
+		);
 	});
 });
