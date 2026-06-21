@@ -14,9 +14,12 @@ export function FormButton({
 	variant = 'solidPink',
 	...props
 }: FormButtonProps) {
+	const loadingAriaLabel = loading && typeof children === 'string' ? children : undefined;
+
 	return (
 		<BaseButton
 			type='submit'
+			aria-label={props['aria-label'] ?? loadingAriaLabel}
 			variant={variant}
 			loading={loading}
 			disabled={!isValid || loading}
