@@ -17,9 +17,7 @@ describe('FEATURE HOOK - Poems - usePoemCollections', () => {
 	});
 
 	it('does not expose collections for banned users', () => {
-		const scenario = makePoemCollectionsScenario()
-			.asBannedUser()
-			.withCollections([poemCollection]);
+		const scenario = makePoemCollectionsScenario().asBannedUser().withCollections([poemCollection]);
 
 		const { result } = scenario.render();
 

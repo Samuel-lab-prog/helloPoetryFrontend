@@ -209,7 +209,12 @@ export const CommentsSection = memo(function CommentsSection({
 									{commentsError ||
 										'We could not load comments right now. Please try again in a moment, or refresh the page.'}
 								</Text>
-								<Button size='xs' colorPalette='pink' variant='solid' onClick={() => window.location.reload()}>
+								<Button
+									size='xs'
+									colorPalette='pink'
+									variant='solid'
+									onClick={() => window.location.reload()}
+								>
 									Refresh comments
 								</Button>
 							</Flex>

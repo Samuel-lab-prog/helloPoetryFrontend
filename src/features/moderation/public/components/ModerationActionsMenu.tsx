@@ -58,7 +58,8 @@ const POEM_ACTIONS: ActionItem[] = [
 function shouldShowPoemAction(action: ModerationAction, poem?: ModerationTargetPoem) {
 	if (!poem) return false;
 	const moderationStatus = poem.moderationStatus;
-	if (action === 'approve-poem') return moderationStatus === 'pending' || moderationStatus === 'rejected';
+	if (action === 'approve-poem')
+		return moderationStatus === 'pending' || moderationStatus === 'rejected';
 	if (action === 'reject-poem') return moderationStatus === 'pending';
 	if (action === 'remove-poem') return moderationStatus !== 'removed';
 	return false;
@@ -84,7 +85,11 @@ function ActionMenuItem({
 			}}
 		>
 			<HStack gap={2}>
-				<Icon as={item.icon} boxSize={4} color={config.tone === 'danger' ? 'red.300' : 'pink.200'} />
+				<Icon
+					as={item.icon}
+					boxSize={4}
+					color={config.tone === 'danger' ? 'red.300' : 'pink.200'}
+				/>
 				<Text as='span' textStyle='small'>
 					{config.label}
 				</Text>
@@ -124,8 +129,7 @@ export function ModerationActionsMenu({
 	const targetUser = user ?? poem?.author;
 	const canShowPoemActions = canModeratePoemTarget(authClient) && Boolean(poem);
 	const canShowUserActions = canModerateUserTarget(authClient, targetUser);
-	const shouldFetchSanctionStatus =
-		isMenuOpen && canShowUserActions && Boolean(targetUser?.id);
+	const shouldFetchSanctionStatus = isMenuOpen && canShowUserActions && Boolean(targetUser?.id);
 
 	const sanctionStatusQuery = useQuery({
 		...moderation.getUserSanctionStatus.query(String(targetUser?.id ?? 0)),
@@ -135,7 +139,8 @@ export function ModerationActionsMenu({
 
 	const userActions = useMemo<ActionItem[]>(() => {
 		if (!canShowUserActions) return [];
-		const hasActiveBan = targetUser?.status === 'banned' || Boolean(sanctionStatusQuery.data?.activeBan);
+		const hasActiveBan =
+			targetUser?.status === 'banned' || Boolean(sanctionStatusQuery.data?.activeBan);
 		const hasActiveSuspension =
 			targetUser?.status === 'suspended' || Boolean(sanctionStatusQuery.data?.activeSuspension);
 

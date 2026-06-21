@@ -13,7 +13,11 @@ type PoemAuthorCardProps = {
 	children?: ReactNode;
 };
 
-export const PoemAuthorCard = memo(function PoemAuthorCard({ author, embedded = false, children }: PoemAuthorCardProps) {
+export const PoemAuthorCard = memo(function PoemAuthorCard({
+	author,
+	embedded = false,
+	children,
+}: PoemAuthorCardProps) {
 	return (
 		<Flex
 			mt={embedded ? 5 : 6}

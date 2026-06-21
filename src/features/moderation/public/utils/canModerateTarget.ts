@@ -6,8 +6,7 @@ type ModerationRequester = Pick<AuthClient, 'id' | 'role' | 'status'> | null | u
 
 export function canUseModerationTools(requester: ModerationRequester) {
 	return (
-		requester?.status === 'active' &&
-		(requester.role === 'admin' || requester.role === 'moderator')
+		requester?.status === 'active' && (requester.role === 'admin' || requester.role === 'moderator')
 	);
 }
 

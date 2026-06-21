@@ -1,4 +1,4 @@
-import { Box, Button, type BoxProps, Text, VStack } from '@chakra-ui/react';
+import { Box, type BoxProps, Button, Text, VStack } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
 
 import { stateCardSurfaceStyles } from '../state-card/surfaceStyles';

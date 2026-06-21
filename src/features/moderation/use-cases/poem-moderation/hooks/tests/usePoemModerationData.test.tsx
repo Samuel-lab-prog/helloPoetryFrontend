@@ -16,9 +16,7 @@ describe('FEATURE HOOK - Moderation - usePoemModerationData', () => {
 	});
 
 	it('loads pending poems and hides a moderated poem after the exit delay', async () => {
-		const scenario = makePoemModerationDataScenario()
-			.withPendingPoems()
-			.withModerationSuccess();
+		const scenario = makePoemModerationDataScenario().withPendingPoems().withModerationSuccess();
 
 		const { result } = scenario.render();
 

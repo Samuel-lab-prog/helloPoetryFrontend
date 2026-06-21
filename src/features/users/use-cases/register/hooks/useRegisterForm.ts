@@ -121,7 +121,9 @@ function handleRegisterError(
 
 		if (mapped) return;
 
-		setGeneralError('An account with these details may already exist. Review the fields and try again.');
+		setGeneralError(
+			'An account with these details may already exist. Review the fields and try again.',
+		);
 		return;
 	}
 
@@ -140,10 +142,7 @@ function handleRegisterError(
 	setGeneralError(REGISTER_NETWORK_ERROR_MESSAGE);
 }
 
-function setValidationFieldError(
-	message: string,
-	setError: UseFormSetError<RegisterDataType>,
-) {
+function setValidationFieldError(message: string, setError: UseFormSetError<RegisterDataType>) {
 	if (message.includes('email')) {
 		setError('email', {
 			type: 'manual',

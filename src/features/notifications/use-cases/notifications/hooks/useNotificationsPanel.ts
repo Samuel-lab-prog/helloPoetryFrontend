@@ -61,7 +61,9 @@ export function useNotificationsPanel(onlyUnread: boolean) {
 		);
 	}
 
-	function getUnreadCountFromSnapshots(snapshots: Array<OptimisticSnapshot<NotificationsInfiniteData>>) {
+	function getUnreadCountFromSnapshots(
+		snapshots: Array<OptimisticSnapshot<NotificationsInfiniteData>>,
+	) {
 		return snapshots
 			.flatMap((snapshot) => snapshot.data?.pages ?? [])
 			.flatMap((page) => getNotificationsFromPage(page))

@@ -32,12 +32,10 @@ export function makePoemModerationDataScenario() {
 			return scenario;
 		},
 		withModerationSuccess() {
-			scenario.mocks.moderatePoem = vi
-				.spyOn(moderation.moderatePoem, 'mutate')
-				.mockResolvedValue({
-					id: pendingPoem.id,
-					moderationStatus: 'approved',
-				});
+			scenario.mocks.moderatePoem = vi.spyOn(moderation.moderatePoem, 'mutate').mockResolvedValue({
+				id: pendingPoem.id,
+				moderationStatus: 'approved',
+			});
 			return scenario;
 		},
 		withModerationFailure(error: unknown = new Error('moderation failed')) {

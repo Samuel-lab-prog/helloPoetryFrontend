@@ -17,9 +17,7 @@ describe('FEATURE HOOK - Poems - usePoem', () => {
 	});
 
 	it('loads a poem with the viewer-scoped query key', async () => {
-		const scenario = makePoemScenario()
-			.asAuthenticatedUser()
-			.withPoemSuccess();
+		const scenario = makePoemScenario().asAuthenticatedUser().withPoemSuccess();
 
 		const { result } = scenario.render();
 
@@ -30,9 +28,7 @@ describe('FEATURE HOOK - Poems - usePoem', () => {
 	});
 
 	it('does not execute the query function for invalid poem ids', async () => {
-		const scenario = makePoemScenario()
-			.asLoggedOutVisitor()
-			.withPoemSuccess();
+		const scenario = makePoemScenario().asLoggedOutVisitor().withPoemSuccess();
 
 		const { result } = scenario.render(0);
 
@@ -43,9 +39,7 @@ describe('FEATURE HOOK - Poems - usePoem', () => {
 	});
 
 	it('does not retry not-found poem responses', async () => {
-		const scenario = makePoemScenario()
-			.asAuthenticatedUser()
-			.withPoemFailure({ statusCode: 404 });
+		const scenario = makePoemScenario().asAuthenticatedUser().withPoemFailure({ statusCode: 404 });
 
 		const { result } = scenario.render();
 

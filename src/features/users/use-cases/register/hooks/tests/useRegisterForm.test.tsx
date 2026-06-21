@@ -27,9 +27,7 @@ describe('FEATURE HOOK - Users - useRegisterForm', () => {
 
 	it('uploads the avatar, creates the user, and navigates to login', async () => {
 		const file = avatarFile();
-		const scenario = makeRegisterFormScenario()
-			.withAvatarUploadSuccess()
-			.withRegisterSuccess();
+		const scenario = makeRegisterFormScenario().withAvatarUploadSuccess().withRegisterSuccess();
 
 		const { result } = scenario.render();
 

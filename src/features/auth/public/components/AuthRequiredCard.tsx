@@ -1,5 +1,5 @@
 import { ErrorStateCard } from '@BaseComponents';
-import { type BoxProps,Button, HStack, Icon, Text } from '@chakra-ui/react';
+import { type BoxProps, Button, HStack, Icon, Text } from '@chakra-ui/react';
 import { LogIn, UserPlus } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 

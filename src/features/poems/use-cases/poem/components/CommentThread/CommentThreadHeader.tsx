@@ -38,7 +38,9 @@ export function CommentThreadHeader({
 			<Box flex='1' minW={0}>
 				<Flex align='center' gap={2} mb={2}>
 					<Avatar.Root size='xs'>
-						<Avatar.Image src={isAuthorUnavailable ? undefined : (comment.author.avatarUrl ?? undefined)} />
+						<Avatar.Image
+							src={isAuthorUnavailable ? undefined : (comment.author.avatarUrl ?? undefined)}
+						/>
 						<Avatar.Fallback name={authorLabel} />
 					</Avatar.Root>
 					<Box>

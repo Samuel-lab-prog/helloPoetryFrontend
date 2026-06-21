@@ -30,13 +30,7 @@ export function EmptyStateCard({
 	...boxProps
 }: EmptyStateCardProps) {
 	return (
-		<Box
-			role={role}
-			aria-live={ariaLive}
-			w='full'
-			{...stateCardSurfaceStyles}
-			{...boxProps}
-		>
+		<Box role={role} aria-live={ariaLive} w='full' {...stateCardSurfaceStyles} {...boxProps}>
 			<VStack align='start' gap={4} position='relative' zIndex={1}>
 				{eyebrow ? (
 					<HStack

@@ -1,4 +1,10 @@
-import { AsyncState, EmptyStateCard, ErrorStateCard, getStaggeredEntryAnimationStyle,SearchInput } from '@BaseComponents';
+import {
+	AsyncState,
+	EmptyStateCard,
+	ErrorStateCard,
+	getStaggeredEntryAnimationStyle,
+	SearchInput,
+} from '@BaseComponents';
 import { Box, Button, Flex, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';

@@ -15,9 +15,7 @@ import { type LoginDataType, loginSchema } from '../schemas/loginSchema';
 const FEED_ROUTE = '/';
 const INVALID_CREDENTIALS_MESSAGE = 'Incorrect credentials';
 
-type LoginErrorDisplay =
-	| { kind: 'field'; message: string }
-	| { kind: 'general'; message: string };
+type LoginErrorDisplay = { kind: 'field'; message: string } | { kind: 'general'; message: string };
 
 export function useLoginForm() {
 	const [generalError, setGeneralError] = useState('');

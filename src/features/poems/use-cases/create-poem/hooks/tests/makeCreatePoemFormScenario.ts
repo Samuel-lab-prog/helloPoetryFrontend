@@ -22,7 +22,9 @@ export function makeCreatePoemFormScenario() {
 			poemCreated: vi.spyOn(eventBus, 'publish').mockResolvedValue(),
 		} as Record<string, unknown>,
 		withCreateSuccess() {
-			scenario.mocks.createPoem = vi.spyOn(poems.createPoem, 'mutate').mockResolvedValue(createdPoem);
+			scenario.mocks.createPoem = vi
+				.spyOn(poems.createPoem, 'mutate')
+				.mockResolvedValue(createdPoem);
 			return scenario;
 		},
 		withCreateFailure(error: unknown) {

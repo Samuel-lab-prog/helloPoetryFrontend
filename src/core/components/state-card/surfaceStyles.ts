@@ -4,7 +4,8 @@ export const stateCardSurfaceStyles = {
 	borderRadius: '2xl',
 	border: '1px solid',
 	borderColor: 'purple.700',
-	bgGradient: 'linear(to-br, rgba(42, 21, 57, 0.92), rgba(30, 20, 46, 0.98) 55%, rgba(25, 31, 58, 0.96))',
+	bgGradient:
+		'linear(to-br, rgba(42, 21, 57, 0.92), rgba(30, 20, 46, 0.98) 55%, rgba(25, 31, 58, 0.96))',
 	p: { base: 5, md: 6 },
 	shadow: '0 12px 30px rgba(0,0,0,0.28)',
 	_before: {

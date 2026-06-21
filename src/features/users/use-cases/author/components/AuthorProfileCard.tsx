@@ -36,12 +36,7 @@ export function AuthorProfileCard({
 			animationDelay='30ms'
 		>
 			<Flex direction='column' gap={4}>
-				<Flex
-					align='start'
-					justify='space-between'
-					gap={4}
-					w='full'
-				>
+				<Flex align='start' justify='space-between' gap={4} w='full'>
 					<Flex
 						direction={{ base: 'column', md: 'row' }}
 						align={{ base: 'start', md: 'start' }}

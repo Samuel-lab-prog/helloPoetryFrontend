@@ -4,14 +4,12 @@ import { clearClientAuth, expectAuthRequiredCard } from '../access-control/helpe
 import { signedInSessionPoem, signedInSessionProfile } from './fixtures';
 import { expectLoggedOutNavbar, getPersistedAuthClient, mockExpiredSession } from './helpers';
 
-test.describe('session expiration', () => {
+test.describe('Auth -> session expiration', () => {
 	test.beforeEach(async ({ page }) => {
 		await clearClientAuth(page);
 	});
 
-	test('clears auth and hides cached private profile data when refresh fails after a 401', async ({
-		page,
-	}) => {
+	test('Refresh failure -> clears auth and hides cached private profile data', async ({ page }) => {
 		const sessionMock = await mockExpiredSession(page);
 
 		await page.goto('/login');

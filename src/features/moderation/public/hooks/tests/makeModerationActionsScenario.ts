@@ -31,12 +31,10 @@ export function makeModerationActionsScenario() {
 			return scenario;
 		},
 		withPoemModerationSuccess() {
-			scenario.mocks.moderatePoem = vi
-				.spyOn(moderation.moderatePoem, 'mutate')
-				.mockResolvedValue({
-					id: 44,
-					moderationStatus: 'approved',
-				});
+			scenario.mocks.moderatePoem = vi.spyOn(moderation.moderatePoem, 'mutate').mockResolvedValue({
+				id: 44,
+				moderationStatus: 'approved',
+			});
 			return scenario;
 		},
 		withPoemModerationFailure(error: unknown = new Error('moderation failed')) {

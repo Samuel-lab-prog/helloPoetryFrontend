@@ -1,8 +1,8 @@
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import { toaster } from '@BaseComponents';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { findForbiddenWords } from '@Utils';
 import { useState } from 'react';
@@ -33,8 +33,7 @@ export function useUpdatePoemForm() {
 			queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(data.id)) });
 			const isPublished = data.status === 'published';
 			const wasApprovedImmediately =
-				isPublished &&
-				(requesterRole === 'admin' || requesterRole === 'moderator');
+				isPublished && (requesterRole === 'admin' || requesterRole === 'moderator');
 			toaster.create({
 				type: 'success',
 				title: 'Poem updated',

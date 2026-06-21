@@ -23,8 +23,8 @@ async function expectNoBannedPrivateShortcuts(page: Page) {
 	await expect(page.locator('a[href="/register"]')).toHaveCount(0);
 }
 
-test.describe('banned session access control', () => {
-	test('keeps auth state and shows clear blocked states for a banned author', async ({ page }) => {
+test.describe('Auth -> banned session access control', () => {
+	test('Banned author -> keeps auth state and shows blocked states', async ({ page }) => {
 		await page.setViewportSize({ width: 1280, height: 720 });
 		await seedPersistedAuthClient(page, bannedAuthorClient);
 		const sessionMock = await mockBannedSession(page);
@@ -72,7 +72,7 @@ test.describe('banned session access control', () => {
 		expect(sessionMock.refreshRequests.length).toBeGreaterThan(0);
 	});
 
-	test('blocks moderation tools for a banned moderator', async ({ page }) => {
+	test('Banned moderator -> blocks moderation tools', async ({ page }) => {
 		await page.setViewportSize({ width: 1280, height: 720 });
 		await seedPersistedAuthClient(page, bannedModeratorClient);
 		const sessionMock = await mockBannedSession(page);

@@ -15,9 +15,7 @@ describe('FEATURE HOOK - Poems - useDeletePoemForm', () => {
 	});
 
 	it('deletes a poem, invalidates lists, and shows success feedback', async () => {
-		const scenario = makeDeletePoemFormScenario()
-			.withCachedPoem()
-			.withDeleteSuccess();
+		const scenario = makeDeletePoemFormScenario().withCachedPoem().withDeleteSuccess();
 
 		const { result } = scenario.render();
 

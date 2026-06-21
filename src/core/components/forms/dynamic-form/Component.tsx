@@ -58,7 +58,14 @@ export function DynamicForm<T extends FieldValues>({
 					>
 						<Icon as={CircleAlert} boxSize={4} color='red.400' />
 					</Flex>
-					<Text textStyle='smaller' lineHeight='1.45' color='error' minH={7} display='flex' alignItems='center'>
+					<Text
+						textStyle='smaller'
+						lineHeight='1.45'
+						color='error'
+						minH={7}
+						display='flex'
+						alignItems='center'
+					>
 						{generalError}
 					</Text>
 				</Flex>

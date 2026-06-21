@@ -41,18 +41,18 @@ const protectedRoutes: ProtectedRouteExpectation[] = [
 
 protectedRoutes.push(createPoemRoute, adminRoute, notificationsRoute, moderationRoute);
 
-test.describe('logged out access control', () => {
+test.describe('Access control -> logged out', () => {
 	test.beforeEach(async ({ page }) => {
 		await clearClientAuth(page);
 	});
 
 	for (const route of protectedRoutes) {
-		test(`${route.path} shows the shared auth required card`, async ({ page }) => {
+		test(`${route.path} -> shows the shared auth required card`, async ({ page }) => {
 			await expectLoggedOutProtectedRoute(page, route);
 		});
 	}
 
-	test('/admin does not expose poem tools while logged out', async ({ page }) => {
+	test('/admin -> does not expose poem tools while logged out', async ({ page }) => {
 		await expectLoggedOutProtectedRoute(page, adminRoute);
 
 		await expect(page.getByRole('heading', { name: 'Admin Panel' })).not.toBeVisible();
@@ -62,7 +62,7 @@ test.describe('logged out access control', () => {
 		await expect(page.getByText(/^delete poem$/i)).not.toBeVisible();
 	});
 
-	test('/notifications does not render the notifications shell while logged out', async ({
+	test('/notifications -> does not render the notifications shell while logged out', async ({
 		page,
 	}) => {
 		await expectLoggedOutProtectedRoute(page, notificationsRoute);

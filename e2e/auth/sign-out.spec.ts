@@ -4,12 +4,12 @@ import { clearClientAuth, expectAuthRequiredCard } from '../access-control/helpe
 import { signedInSessionPoem, signedInSessionProfile } from './fixtures';
 import { expectLoggedOutNavbar, getPersistedAuthClient, mockSignOutSession } from './helpers';
 
-test.describe('sign out transition', () => {
+test.describe('Auth -> sign out transition', () => {
 	test.beforeEach(async ({ page }) => {
 		await clearClientAuth(page);
 	});
 
-	test('returns to logged-out navigation and hides private cached data without a reload', async ({
+	test('Sign out -> returns to logged-out navigation and hides private cached data', async ({
 		page,
 	}) => {
 		const sessionMock = await mockSignOutSession(page);

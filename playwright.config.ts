@@ -2,10 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
-const CI = false;
+const CI = !!process.env.CI;
 
 export default defineConfig({
 	testDir: './e2e',
+	reporter: CI ? 'dot' : 'list',
 	timeout: 60_000,
 	expect: {
 		timeout: 10_000,

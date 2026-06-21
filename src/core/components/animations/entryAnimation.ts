@@ -4,7 +4,10 @@ type EntryAnimationOptions = {
 	durationMs?: number;
 };
 
-export function getStaggeredEntryAnimationStyle(index: number, options: EntryAnimationOptions = {}) {
+export function getStaggeredEntryAnimationStyle(
+	index: number,
+	options: EntryAnimationOptions = {},
+) {
 	const { baseDelayMs = 30, delayStepMs = 30, durationMs = 320 } = options;
 
 	return {

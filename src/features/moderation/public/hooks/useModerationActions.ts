@@ -65,9 +65,7 @@ async function invalidateModerationTargets(input: ModerationActionInput) {
 		queryClient.invalidateQueries({ queryKey: poemKeys.all() }),
 		queryClient.invalidateQueries({ queryKey: poemKeys.mine() }),
 		queryClient.invalidateQueries({ queryKey: userKeys.all() }),
-		...(poemId
-			? [queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(poemId)) })]
-			: []),
+		...(poemId ? [queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(poemId)) })] : []),
 		...(userId
 			? [
 					queryClient.invalidateQueries({ queryKey: userKeys.profile(String(userId)) }),
@@ -158,14 +156,7 @@ export function useModerationActions(options: UseModerationActionsOptions = {}) 
 				throw error;
 			}
 		},
-		[
-			banMutation,
-			moderatePoemMutation,
-			options,
-			suspendMutation,
-			unbanMutation,
-			unsuspendMutation,
-		],
+		[banMutation, moderatePoemMutation, options, suspendMutation, unbanMutation, unsuspendMutation],
 	);
 
 	return {

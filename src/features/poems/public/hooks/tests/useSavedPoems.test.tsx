@@ -17,9 +17,7 @@ describe('FEATURE HOOK - Poems - useSavedPoems', () => {
 	});
 
 	it('does not expose saved poems for banned users', () => {
-		const scenario = makeSavedPoemsScenario()
-			.asBannedUser()
-			.withSavedPoems([savedPoem]);
+		const scenario = makeSavedPoemsScenario().asBannedUser().withSavedPoems([savedPoem]);
 
 		const { result } = scenario.render();
 

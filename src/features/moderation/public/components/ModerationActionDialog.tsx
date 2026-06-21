@@ -18,7 +18,11 @@ type ModerationActionDialogProps = {
 	onConfirm: (payload: { reason?: string; durationDays?: number }) => Promise<void>;
 };
 
-function getTargetLabel(action: ModerationAction, poem?: ModerationTargetPoem, user?: ModerationTargetUser) {
+function getTargetLabel(
+	action: ModerationAction,
+	poem?: ModerationTargetPoem,
+	user?: ModerationTargetUser,
+) {
 	if (action.endsWith('-poem')) return getPoemTargetLabel(poem);
 	return getUserTargetLabel(user);
 }

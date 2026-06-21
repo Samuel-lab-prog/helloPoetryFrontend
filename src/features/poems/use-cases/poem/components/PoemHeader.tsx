@@ -64,7 +64,7 @@ export function PoemHeader({ poem, editHref, showEditPrompt = false }: PoemHeade
 							? normalizedRejectionReason || 'No rejection reason was provided.'
 							: isRemoved
 								? 'This poem was removed by moderation. Interactions are disabled.'
-							: 'This poem is waiting for moderation review. Interactions are disabled until it is approved.'}
+								: 'This poem is waiting for moderation review. Interactions are disabled until it is approved.'}
 					</Text>
 					{isRejected && showEditPrompt && editHref && (
 						<Flex
@@ -76,14 +76,20 @@ export function PoemHeader({ poem, editHref, showEditPrompt = false }: PoemHeade
 							align={{ base: 'start', md: 'center' }}
 							justify='space-between'
 							gap={3}
+						>
+							<Text textStyle='smaller' color='pink.100'>
+								This poem was rejected. You can edit it and resubmit it for moderation.
+							</Text>
+							<Button
+								asChild
+								size='sm'
+								variant='solidPink'
+								colorPalette='gray'
+								alignSelf='flex-end'
 							>
-								<Text textStyle='smaller' color='pink.100'>
-									This poem was rejected. You can edit it and resubmit it for moderation.
-								</Text>
-								<Button asChild size='sm' variant='solidPink' colorPalette='gray' alignSelf='flex-end'>
-									<NavLink to={editHref}>Edit poem</NavLink>
-								</Button>
-							</Flex>
+								<NavLink to={editHref}>Edit poem</NavLink>
+							</Button>
+						</Flex>
 					)}
 				</Box>
 			)}

@@ -7,14 +7,12 @@ async function getStoredAuthClient(page: Parameters<typeof clearClientAuth>[0]) 
 	return page.evaluate(() => window.localStorage.getItem('auth-client'));
 }
 
-test.describe('logged out auth pages', () => {
+test.describe('Auth -> logged out pages', () => {
 	test.beforeEach(async ({ page }) => {
 		await clearClientAuth(page);
 	});
 
-	test('keeps the login page public without calling private APIs before submit', async ({
-		page,
-	}) => {
+	test('Login -> stays public without calling private APIs before submit', async ({ page }) => {
 		const authMock = await mockLoggedOutAuthPages(page);
 
 		await page.goto('/login');
@@ -39,7 +37,7 @@ test.describe('logged out auth pages', () => {
 		expect(authMock.unexpectedApiRequests).toEqual([]);
 	});
 
-	test('shows a clear login failure without storing an authenticated client', async ({ page }) => {
+	test('Login -> failure does not store an authenticated client', async ({ page }) => {
 		const authMock = await mockLoggedOutAuthPages(page, {
 			loginFailure: {
 				status: 401,
@@ -64,7 +62,7 @@ test.describe('logged out auth pages', () => {
 		expect(authMock.unexpectedApiRequests).toEqual([]);
 	});
 
-	test('keeps the register page public and only runs public availability checks before submit', async ({
+	test('Register -> stays public and only runs availability checks before submit', async ({
 		page,
 	}) => {
 		const authMock = await mockLoggedOutAuthPages(page);
@@ -105,9 +103,7 @@ test.describe('logged out auth pages', () => {
 		expect(authMock.unexpectedApiRequests).toEqual([]);
 	});
 
-	test('shows a clear register failure without creating an authenticated session', async ({
-		page,
-	}) => {
+	test('Register -> failure does not create an authenticated session', async ({ page }) => {
 		const authMock = await mockLoggedOutAuthPages(page, {
 			registerFailure: {
 				status: 409,
