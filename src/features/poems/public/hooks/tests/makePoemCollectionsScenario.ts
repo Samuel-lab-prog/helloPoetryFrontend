@@ -1,11 +1,11 @@
 import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { PoemCollection } from '@Api/poems/types';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

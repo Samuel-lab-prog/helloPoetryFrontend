@@ -2,12 +2,12 @@ import { moderation } from '@Api/moderation/endpoints';
 import { moderationKeys } from '@Api/moderation/keys';
 import { poemKeys } from '@Api/poems/keys';
 import { userKeys } from '@Api/users/keys';
-import { toaster } from '@BaseComponents';
+import { toaster } from '@core/components/ui/toaster';
 import {
 	getAccessDeniedMessage,
 	getBannedPrivilegeMessage,
 	isBannedAccessError,
-} from '@features/auth/public';
+} from '@features/auth/public/utils/getAccessDeniedMessage';
 import { queryClient } from '@QueryClient';
 import { useMutation } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';

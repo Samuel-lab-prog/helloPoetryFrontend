@@ -55,12 +55,11 @@ concerns.
 
 ```text
 src/
+  app/                  # Application bootstrap, providers, layouts and routes
   features/              # Feature modules (auth, poems, moderation...)
-  core/                  # Shared infrastructure (api, stores, events)
-  components/            # Shared UI components
-  themes/                # Design tokens and recipes
-  App.tsx                # App shell
-  main.tsx               # Entry point
+  core/                  # Shared infrastructure, UI, themes and ports
+  test-support/          # Test-only shared fixtures
+  main.tsx               # Thin Vite entry point
 ```
 
 ---

@@ -1,6 +1,5 @@
 // @vitest-environment happy-dom
-import { clearTestAuthClient } from '@root/core/testing/authClientStore';
-import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { clearTestAuthClient, getTestAuthClient } from '@root/test-support/authClientStore';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -16,7 +15,7 @@ vi.mock('react-router-dom', async () => {
 	};
 });
 
-describe('CORE PAGE - ErrorPage', () => {
+describe('AUTH FEATURE - RouteErrorPage', () => {
 	beforeEach(() => {
 		vi.restoreAllMocks();
 		clearTestAuthClient();
@@ -57,7 +56,7 @@ describe('CORE PAGE - ErrorPage', () => {
 				}),
 			),
 		);
-		expect(useAuthClientStore.getState().authClient).toBeNull();
+		expect(getTestAuthClient()).toBeNull();
 	});
 
 	it('keeps banned 401 errors distinct from ordinary session expiration', () => {

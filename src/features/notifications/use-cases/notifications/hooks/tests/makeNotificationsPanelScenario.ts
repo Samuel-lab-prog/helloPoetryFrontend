@@ -1,11 +1,11 @@
 import { notifications } from '@Api/notifications/endpoints';
 import type { NotificationsInfiniteData } from '@Api/notifications/infiniteQuery';
 import type { NotificationItem } from '@Api/notifications/types';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

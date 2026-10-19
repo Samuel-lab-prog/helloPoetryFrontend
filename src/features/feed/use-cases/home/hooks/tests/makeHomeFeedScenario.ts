@@ -2,11 +2,11 @@ import { feed } from '@Api/feed/endpoints';
 import type { FeedPoem } from '@Api/feed/types';
 import type { PaginatedPoemsType, PoemPreviewType } from '@features/poems/public/types';
 import { registerPoemsQueryPort } from '@root/core/ports/poems';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

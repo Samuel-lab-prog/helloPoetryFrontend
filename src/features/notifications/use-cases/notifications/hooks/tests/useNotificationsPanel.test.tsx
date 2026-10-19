@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
+import { clearTestAuthClient } from '@root/test-support/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

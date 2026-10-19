@@ -15,6 +15,14 @@ export function clearTestAuthClient() {
 	});
 }
 
+export function getTestAuthClient(): AuthClient | null {
+	return useAuthClientStore.getState().authClient;
+}
+
+export function getTestUnreadNotificationsCount(): number {
+	return useAuthClientStore.getState().unreadNotificationsCount;
+}
+
 export function setTestAuthClient(
 	client: AuthClient = defaultTestAuthClient,
 	unreadNotificationsCount = 0,

@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { eventBus } from '@root/core/events/eventBus';
 import { bannedAccessError } from '@root/core/testing/appErrors';
-import { clearTestAuthClient } from '@root/core/testing/authClientStore';
+import { clearTestAuthClient } from '@root/test-support/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

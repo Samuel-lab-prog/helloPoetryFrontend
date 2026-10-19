@@ -1,21 +1,19 @@
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
-import {
-	getAccessDeniedMessage,
-	getBannedPrivilegeMessage,
-	getSuspendedPrivilegeMessage,
-	useAuthClientStore,
-} from '@features/auth/public';
-import { eventBus } from '@root/core/events/eventBus';
 import { useEffect } from 'react';
 import { isRouteErrorResponse, NavLink, useLocation, useRouteError } from 'react-router-dom';
 
-type ErrorInfo = {
+export type RouteErrorInfo = {
 	status?: number;
 	code?: string;
 	message: string;
 	description: string;
 	recoveryTo: string;
 	recoveryLabel: string;
+};
+
+type ErrorPageProps = {
+	resolveAuthError: (error: unknown) => RouteErrorInfo | null;
+	onSessionExpired: () => void;
 };
 
 type RouteErrorTelemetry = {
@@ -28,21 +26,6 @@ type RouteErrorTelemetry = {
 	timestamp: string;
 	rawError?: unknown;
 };
-
-function isLikelyExpiredSessionValidationError({
-	status,
-	code,
-	message,
-}: {
-	status?: number;
-	code?: string;
-	message?: string;
-}) {
-	if (status !== 422) return false;
-	if (code !== 'VALIDATION') return false;
-	if (!message) return false;
-	return message.toLowerCase().includes('validation failed');
-}
 
 function sendErrorTelemetry(payload: RouteErrorTelemetry) {
 	console.error('[route-error]', payload);
@@ -70,70 +53,14 @@ function sendErrorTelemetry(payload: RouteErrorTelemetry) {
 	}
 }
 
-function getErrorInfo(error: unknown): ErrorInfo {
+function getErrorInfo(
+	error: unknown,
+	resolveAuthError: ErrorPageProps['resolveAuthError'],
+): RouteErrorInfo {
+	const authError = resolveAuthError(error);
+	if (authError) return authError;
+
 	if (isRouteErrorResponse(error)) {
-		const routeData = error.data as { code?: string; message?: string } | undefined;
-		const routeCode = routeData?.code;
-		const routeMessage = routeData?.message;
-
-		if (error.status === 401) {
-			if (routeMessage?.toLowerCase().includes('banned')) {
-				return {
-					status: 401,
-					code: routeCode,
-					message: getBannedPrivilegeMessage(),
-					description: 'Please use a different account or contact support if this seems incorrect.',
-					recoveryTo: '/login',
-					recoveryLabel: 'Go to sign in',
-				};
-			}
-
-			return {
-				status: 401,
-				message: 'Your session has expired.',
-				description: 'Please sign in again to continue.',
-				recoveryTo: '/login',
-				recoveryLabel: 'Sign in again',
-			};
-		}
-
-		if (
-			isLikelyExpiredSessionValidationError({
-				status: error.status,
-				code: routeCode,
-				message: routeMessage,
-			})
-		) {
-			return {
-				status: 401,
-				code: routeCode,
-				message: 'Your session has expired.',
-				description: 'Please sign in again to continue.',
-				recoveryTo: '/login',
-				recoveryLabel: 'Sign in again',
-			};
-		}
-
-		if (error.status === 403) {
-			return {
-				status: 403,
-				message: getAccessDeniedMessage({
-					fallback: 'You do not have permission to access this page.',
-					bannedMessage: getBannedPrivilegeMessage(),
-					suspendedMessage: getSuspendedPrivilegeMessage(),
-				}),
-				description: getAccessDeniedMessage({
-					fallback: 'Try with another account or go back to the home page.',
-					bannedMessage:
-						'This account cannot use authenticated areas. Please use a different account or contact support if this seems incorrect.',
-					suspendedMessage:
-						'You can still use available areas, such as notifications, while restricted privileges remain unavailable.',
-				}),
-				recoveryTo: '/',
-				recoveryLabel: 'Go to home',
-			};
-		}
-
 		if (error.status === 404) {
 			return {
 				status: 404,
@@ -157,66 +84,6 @@ function getErrorInfo(error: unknown): ErrorInfo {
 		const maybeError = error as { statusCode?: number; code?: string; message?: string };
 		const status = maybeError.statusCode;
 
-		if (status === 401) {
-			if (maybeError.message?.toLowerCase().includes('banned')) {
-				return {
-					status: 401,
-					code: maybeError.code,
-					message: getBannedPrivilegeMessage(),
-					description: 'Please use a different account or contact support if this seems incorrect.',
-					recoveryTo: '/login',
-					recoveryLabel: 'Go to sign in',
-				};
-			}
-
-			return {
-				status: 401,
-				code: maybeError.code,
-				message: 'Your session has expired.',
-				description: 'Please sign in again to continue.',
-				recoveryTo: '/login',
-				recoveryLabel: 'Sign in again',
-			};
-		}
-
-		if (
-			isLikelyExpiredSessionValidationError({
-				status,
-				code: maybeError.code,
-				message: maybeError.message,
-			})
-		) {
-			return {
-				status: 401,
-				code: maybeError.code,
-				message: 'Your session has expired.',
-				description: 'Please sign in again to continue.',
-				recoveryTo: '/login',
-				recoveryLabel: 'Sign in again',
-			};
-		}
-
-		if (status === 403) {
-			return {
-				status: 403,
-				code: maybeError.code,
-				message: getAccessDeniedMessage({
-					fallback: 'Access denied for this action.',
-					bannedMessage: getBannedPrivilegeMessage(),
-					suspendedMessage: getSuspendedPrivilegeMessage(),
-				}),
-				description: getAccessDeniedMessage({
-					fallback: 'Try again with a different account.',
-					bannedMessage:
-						'This account cannot use authenticated areas. Please use a different account or contact support if this seems incorrect.',
-					suspendedMessage:
-						'You can still use available areas, such as notifications, while restricted privileges remain unavailable.',
-				}),
-				recoveryTo: '/',
-				recoveryLabel: 'Go to home',
-			};
-		}
-
 		if (typeof maybeError.message === 'string' && maybeError.message.length > 0) {
 			return {
 				status,
@@ -237,11 +104,10 @@ function getErrorInfo(error: unknown): ErrorInfo {
 	};
 }
 
-export function ErrorPage() {
+export function ErrorPage({ resolveAuthError, onSessionExpired }: ErrorPageProps) {
 	const error = useRouteError();
 	const location = useLocation();
-	const clearAuthClient = useAuthClientStore((state) => state.clearAuthClient);
-	const info = getErrorInfo(error);
+	const info = getErrorInfo(error, resolveAuthError);
 	const shouldClearSession = info.status === 401;
 
 	useEffect(() => {
@@ -285,13 +151,7 @@ export function ErrorPage() {
 							to={info.recoveryTo}
 							onClick={() => {
 								if (!shouldClearSession) return;
-								const userId = useAuthClientStore.getState().authClient?.id ?? null;
-								clearAuthClient();
-								void eventBus.publish('userLoggedOut', {
-									userId,
-									reason: 'sessionExpired',
-									loggedOutAt: new Date().toISOString(),
-								});
+								onSessionExpired();
 							}}
 						>
 							{info.recoveryLabel}

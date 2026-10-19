@@ -1,14 +1,14 @@
 import { users } from '@Api/users/endpoints';
 import type { UserPrivateProfile } from '@root/core/api/users/types';
 import {
-	clearTestAuthClient,
-	setTestAuthClient,
-	setTestAuthStatus,
-} from '@root/core/testing/authClientStore';
-import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

@@ -3,8 +3,10 @@
  */
 
 export * from './components/AuthRequiredCard';
+export * from './components/AuthRouteErrorPage';
 export * from './hooks/useEnsureRole';
 export * from './hooks/useIsAuthenticated';
 export * from './stores/useAuthClientStore';
 export * from './utils/authCacheScope';
 export * from './utils/getAccessDeniedMessage';
+export * from './utils/routeErrorPresentation';

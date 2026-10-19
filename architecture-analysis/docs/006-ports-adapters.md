@@ -68,7 +68,7 @@ export const poemsQueryPort: PoemsQueryPort = {
 
 ### Registration (app boot)
 
-File: `frontend/src/main.tsx`
+File: `frontend/src/app/bootstrap/registerApplicationDependencies.ts`
 
 ```ts
 registerPoemsQueryPort(poemsQueryPort);
@@ -145,7 +145,7 @@ export const friendsActionsPort: FriendsActionsPort = {
 
 ### Registration
 
-File: `frontend/src/main.tsx`
+File: `frontend/src/app/bootstrap/registerApplicationDependencies.ts`
 
 ```ts
 registerFriendsActionsPort(friendsActionsPort);
@@ -187,7 +187,7 @@ No need for ports when:
 
 1. Create a new port in `frontend/src/core/ports/<name>.ts`.
 2. Implement adapter in `frontend/src/features/<provider>/adapters/<name>.ts`.
-3. Register the adapter in `frontend/src/main.tsx`.
+3. Register the adapter in `frontend/src/app/bootstrap/registerApplicationDependencies.ts`.
 4. Replace cross-domain imports in consumer with `get<PortName>()`.
 5. Run `bun run metrics` to confirm no cross-domain violations.
 
@@ -200,7 +200,7 @@ No need for ports when:
 ## Troubleshooting
 
 - If you get `Port not registered` error:
-  - Check `main.tsx` registration.
+  - Check `src/app/bootstrap/registerApplicationDependencies.ts` registration.
   - Ensure adapter file is imported correctly.
 
 - If you still see cross-domain violations:

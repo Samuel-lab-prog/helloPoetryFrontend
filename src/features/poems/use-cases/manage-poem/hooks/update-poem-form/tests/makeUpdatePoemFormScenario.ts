@@ -1,10 +1,10 @@
 import { poems } from '@Api/poems/endpoints';
 import { toaster } from '@BaseComponents';
-import { setTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { setTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

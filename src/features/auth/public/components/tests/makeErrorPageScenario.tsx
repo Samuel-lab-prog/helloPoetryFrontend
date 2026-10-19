@@ -1,14 +1,14 @@
+import { eventBus } from '@root/core/events/eventBus';
+import { renderWithProviders } from '@root/core/testing/renderWithProviders';
 import {
 	clearTestAuthClient,
 	setTestAuthClient,
 	setTestAuthStatus,
-} from '@root/core/testing/authClientStore';
-import { renderWithProviders } from '@root/core/testing/renderWithProviders';
+} from '@root/test-support/authClientStore';
 import { useLocation, useRouteError } from 'react-router-dom';
 import { vi } from 'vitest';
 
-import { eventBus } from '../../events/eventBus';
-import { ErrorPage } from '../Error';
+import { AuthRouteErrorPage } from '../AuthRouteErrorPage';
 
 type AppError = {
 	statusCode?: number;
@@ -90,7 +90,7 @@ export function makeErrorPageScenario() {
 		},
 		render() {
 			setRouteContext(error, path);
-			return renderWithProviders(<ErrorPage />, { route: path });
+			return renderWithProviders(<AuthRouteErrorPage />, { route: path });
 		},
 	};
 

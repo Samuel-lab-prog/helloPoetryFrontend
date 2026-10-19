@@ -1,3 +1,10 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const features = fs
+	.readdirSync(path.join(__dirname, 'src/features'), { withFileTypes: true })
+	.filter((entry) => entry.isDirectory())
+	.map((entry) => entry.name);
+
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
 	forbidden: [
@@ -23,6 +30,61 @@ module.exports = {
 				circular: true,
 			},
 		},
+		{
+			name: 'core-is-independent',
+			severity: 'error',
+			from: { path: '^src/core/' },
+			to: { path: '^src/(?:app|features)/' },
+		},
+		{
+			name: 'features-do-not-import-app-composition',
+			severity: 'error',
+			from: { path: '^src/features/' },
+			to: { path: '^src/app/' },
+		},
+		{
+			name: 'app-uses-feature-entrypoints',
+			severity: 'error',
+			comment: 'Composition may import feature public APIs, route page entries and adapters.',
+			from: { path: '^src/app/' },
+			to: {
+				path: '^src/features/',
+				pathNot: [
+					'^src/features/[^/]+/public/',
+					'^src/features/[^/]+/use-cases/[^/]+/Page\\.tsx$',
+					'^src/features/[^/]+/adapters/',
+				],
+			},
+		},
+		{
+			name: 'only-bootstrap-imports-feature-adapters',
+			severity: 'error',
+			from: { path: '^src/app/', pathNot: '^src/app/bootstrap/' },
+			to: { path: '^src/features/[^/]+/adapters/' },
+		},
+		{
+			name: 'test-support-is-private-to-tests',
+			severity: 'error',
+			comment: 'Production modules must not depend on test-only fixtures.',
+			from: {
+				path: '^src/',
+				pathNot: ['(^|/)tests?/', '[.](?:test|spec)[.](?:ts|tsx)$'],
+			},
+			to: { path: '^src/test-support/' },
+		},
+		...features.flatMap((sourceFeature) =>
+			features
+				.filter((targetFeature) => targetFeature !== sourceFeature)
+				.map((targetFeature) => ({
+					name: `cross-feature-${sourceFeature}-to-${targetFeature}-uses-public`,
+					severity: 'error',
+					from: { path: `^src/features/${sourceFeature}/` },
+					to: {
+						path: `^src/features/${targetFeature}/`,
+						pathNot: `^src/features/${targetFeature}/public/`,
+					},
+				})),
+		),
 		{
 			name: 'no-orphans',
 			comment:

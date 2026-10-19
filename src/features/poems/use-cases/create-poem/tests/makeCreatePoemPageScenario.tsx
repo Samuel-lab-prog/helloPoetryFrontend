@@ -1,5 +1,5 @@
-import { clearTestAuthClient, setTestAuthStatus } from '@root/core/testing/authClientStore';
 import { renderWithProviders } from '@root/core/testing/renderWithProviders';
+import { clearTestAuthClient, setTestAuthStatus } from '@root/test-support/authClientStore';
 
 import { CreatePoemPage } from '../Page';
 

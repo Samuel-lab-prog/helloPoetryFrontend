@@ -1,10 +1,10 @@
 import { auth } from '@Api/auth/endpoints';
 import { eventBus } from '@root/core/events/eventBus';
-import { clearTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { clearTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

@@ -7,7 +7,7 @@ type Violation = {
 	module: string;
 };
 
-const ALLOWED_ROOT_FILES = ['src/main.tsx', 'src/App.tsx', 'src/vite-env.d.ts'];
+const ALLOWED_ROOT_FILES = ['src/main.tsx', 'src/vite-env.d.ts'];
 
 function checkNoRootSourceCode(cruiseResult: DepcruiseResult): Violation[] {
 	const violations: Violation[] = [];

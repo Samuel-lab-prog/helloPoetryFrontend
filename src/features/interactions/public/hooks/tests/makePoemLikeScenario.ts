@@ -2,14 +2,14 @@ import { interactions } from '@Api/interactions/endpoints';
 import type { FullPoem } from '@Api/poems/types';
 import { registerPoemsCachePort } from '@root/core/ports/poems';
 import {
-	clearTestAuthClient,
-	setTestAuthClient,
-	setTestAuthStatus,
-} from '@root/core/testing/authClientStore';
-import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

@@ -1,10 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import { moderation } from '@Api/moderation/endpoints';
 import { Avatar, Badge, Flex, Icon, Link, Text, useBreakpointValue } from '@chakra-ui/react';
-import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
-import { canUseModerationTools } from '@features/moderation/public';
-import { useMyProfile } from '@features/users/public/hooks/useMyProfile';
-import { useQuery } from '@tanstack/react-query';
 import { Bell, LogIn, PenSquare, UserPlus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
@@ -16,21 +11,23 @@ import type { NavbarLink } from './utils';
 
 type NavbarProps = {
 	links: NavbarLink[];
+	isAuthenticated: boolean;
+	canUseAuthenticatedShortcuts: boolean;
+	unreadCount: number;
+	profile?: { avatarUrl: string | null; name: string; nickname: string };
+	moderationPendingCount: number;
 	onPrefetchRoute?: (to: string) => void;
 };
 
-export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
-	const authClient = useAuthClientStore((state) => state.authClient);
-	const unreadCount = useAuthClientStore((state) => state.unreadNotificationsCount);
-	const { profile } = useMyProfile();
-	const canSeeModerationBadge = canUseModerationTools(authClient);
-	const canUseAuthenticatedShortcuts = authClient?.status !== 'banned';
-	const { data: moderationPendingCount = 0 } = useQuery({
-		...moderation.getPendingPoems.query(),
-		enabled: canSeeModerationBadge,
-		staleTime: 1000 * 30,
-		select: (pendingPoems) => pendingPoems.length,
-	});
+export function Navbar({
+	links,
+	isAuthenticated,
+	canUseAuthenticatedShortcuts,
+	unreadCount,
+	profile,
+	moderationPendingCount,
+	onPrefetchRoute,
+}: NavbarProps) {
 	const location = useLocation();
 	const contentRef = useRef<HTMLDivElement | null>(null);
 	const [navHidden, setNavHidden] = useState(false);
@@ -41,7 +38,6 @@ export function Navbar({ links, onPrefetchRoute }: NavbarProps) {
 	const shouldHideNav = isMobile && navHidden;
 	const isImmersiveRoute = location.pathname.includes('/immersive');
 	const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	const isAuthenticated = Boolean(authClient);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'auto' });

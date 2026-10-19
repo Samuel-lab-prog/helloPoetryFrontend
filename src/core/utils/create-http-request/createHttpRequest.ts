@@ -1,5 +1,5 @@
-﻿import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { eventBus } from '@root/core/events/eventBus';
+import { getAuthSessionPort } from '@root/core/ports/authSession';
 
 import type { AppErrorType } from '../appError';
 
@@ -127,11 +127,11 @@ function isBannedSessionError(error: AppErrorType): boolean {
 function clearExpiredSession(error: AppErrorType): void {
 	if (isBannedSessionError(error)) return;
 
-	const authStore = useAuthClientStore.getState();
-	const userId = authStore.authClient?.id ?? null;
+	const authSession = getAuthSessionPort();
+	const userId = authSession.getCurrentIdentity()?.id ?? null;
 	if (!userId) return;
 
-	authStore.clearAuthClient();
+	authSession.clearAuthClient();
 	void eventBus.publish('userLoggedOut', {
 		userId,
 		reason: 'sessionExpired',

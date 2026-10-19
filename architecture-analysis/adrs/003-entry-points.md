@@ -6,12 +6,13 @@ Accepted at 2026-03-14
 
 ## Context
 
-Entry points (`main.tsx`, `App.tsx`, routing setup) are volatile and should not contain feature
-logic. Mixing responsibilities makes changes risky.
+The Vite entry (`main.tsx`) and application composition (bootstrap, routing and providers) are
+volatile and should not contain feature business logic. Mixing responsibilities makes changes risky.
 
 ## Decision
 
-- Entry points are limited to composition and wiring.
+- `main.tsx` delegates to the explicit composition layer in `src/app/`.
+- App modules are limited to composition and wiring; feature business logic stays inside features.
 - Feature logic must live inside features or core modules.
 - Entry points should stay thin and declarative.
 

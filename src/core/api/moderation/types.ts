@@ -4,7 +4,7 @@ import type {
 	PoemStatus,
 	PoemTag,
 	PoemVisibility,
-} from '@features/poems/public/types';
+} from '@Api/poems/types';
 
 export type BanUserBody = {
 	userId: string;

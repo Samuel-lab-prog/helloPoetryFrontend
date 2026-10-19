@@ -2,11 +2,11 @@ import { poems } from '@Api/poems/endpoints';
 import { poemKeys } from '@Api/poems/keys';
 import type { FullPoem, SavedPoem } from '@Api/poems/types';
 import { registerPoemsCachePort } from '@root/core/ports/poems';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
 import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 

@@ -1,7 +1,7 @@
 import { moderation } from '@Api/moderation/endpoints';
 import { moderationKeys } from '@Api/moderation/keys';
-import { clearTestAuthClient, setTestAuthClient } from '@root/core/testing/authClientStore';
 import { renderWithProviders } from '@root/core/testing/renderWithProviders';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { vi } from 'vitest';
 
 import type { ModerationTargetPoem, ModerationTargetUser } from '../../types';

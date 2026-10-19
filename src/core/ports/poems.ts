@@ -1,4 +1,4 @@
-import type { PaginatedPoemsType, SearchPoemsParams } from '@features/poems/public/types';
+import type { PaginatedPoems as PaginatedPoemsType, SearchPoemsParams } from '@Api/poems/types';
 
 type QueryOptions<TData> = {
 	queryKey: readonly unknown[];

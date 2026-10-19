@@ -1,15 +1,15 @@
 import { type FriendsActionsPort, registerFriendsActionsPort } from '@root/core/ports/friends';
 import { registerUsersCachePort } from '@root/core/ports/users';
 import {
-	clearTestAuthClient,
-	setTestAuthClient,
-	setTestAuthStatus,
-} from '@root/core/testing/authClientStore';
-import {
 	createQueryClientWrapper,
 	createTestQueryClient,
 } from '@root/core/testing/renderHookWithQueryClient';
 import type { AuthorProfileType } from '@root/features/poems/public/types';
+import {
+	clearTestAuthClient,
+	setTestAuthClient,
+	setTestAuthStatus,
+} from '@root/test-support/authClientStore';
 import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 
