@@ -1,3 +1,4 @@
+import { auth } from '@Api/auth/endpoints';
 import { AsyncState, ErrorStateCard } from '@BaseComponents';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/public';
@@ -26,6 +27,7 @@ export function MyProfilePage() {
 	const navigate = useNavigate();
 	const clearAuthClient = useAuthClientStore((state) => state.clearAuthClient);
 	const [isLoggingOut, setIsLoggingOut] = useState(false);
+	const [logoutError, setLogoutError] = useState(false);
 
 	const { profile, isLoading, isError, error: profileError, isMissingClient } = useMyProfile();
 	const { updateMyProfile, isUpdatingProfile, updateProfileError, conflictField } =
@@ -100,14 +102,23 @@ export function MyProfilePage() {
 	function handleLogout() {
 		if (isLoggingOut) return;
 		setIsLoggingOut(true);
-		const authClient = useAuthClientStore.getState().authClient;
-		navigate('/login', { replace: true });
-		clearAuthClient();
-		void eventBus.publish('userLoggedOut', {
-			userId: authClient?.id ?? null,
-			reason: 'manual',
-			loggedOutAt: new Date().toISOString(),
-		});
+		setLogoutError(false);
+		void (async () => {
+			try {
+				await auth.logout.mutate(undefined);
+				const authClient = useAuthClientStore.getState().authClient;
+				clearAuthClient();
+				await eventBus.publish('userLoggedOut', {
+					userId: authClient?.id ?? null,
+					reason: 'manual',
+					loggedOutAt: new Date().toISOString(),
+				});
+				navigate('/login', { replace: true });
+			} catch {
+				setLogoutError(true);
+				setIsLoggingOut(false);
+			}
+		})();
 	}
 
 	return (
@@ -122,6 +133,11 @@ export function MyProfilePage() {
 		>
 			<Box as='section' w='full'>
 				<ProfileHeader isLoggingOut={isLoggingOut} onLogout={handleLogout} />
+				{logoutError && (
+					<Text role='alert' color='red.600' textStyle='small' mb={4}>
+						We could not end your session. Check your connection and try again.
+					</Text>
+				)}
 
 				<AsyncState
 					isLoading={isLoading}

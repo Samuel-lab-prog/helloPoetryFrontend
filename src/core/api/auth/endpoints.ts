@@ -12,6 +12,22 @@ const login = createMutationEndpoint<LoginBody, AuthClient>({
 		}),
 });
 
+const bootstrapCsrfToken = () =>
+	createHTTPRequest<{ csrfToken: string }>({
+		method: 'GET',
+		path: `/auth/csrf`,
+	});
+
+const logout = createMutationEndpoint<void, { success: true }>({
+	fn: () =>
+		createHTTPRequest<{ success: true }>({
+			method: 'POST',
+			path: '/auth/logout',
+		}),
+});
+
 export const auth = {
 	login,
+	bootstrapCsrfToken,
+	logout,
 };

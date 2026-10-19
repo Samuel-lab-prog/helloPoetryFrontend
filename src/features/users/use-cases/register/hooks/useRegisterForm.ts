@@ -1,3 +1,4 @@
+import { auth } from '@Api/auth/endpoints';
 import { users } from '@Api/users/endpoints';
 import type { CreateUserBody } from '@Api/users/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -22,6 +23,7 @@ const AVATAR_UPLOAD_FALLBACK_MESSAGE = "We couldn't upload your avatar. Please t
 export function useRegisterForm() {
 	const [generalError, setGeneralError] = useState('');
 	const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+	const [isPreparingRegistration, setIsPreparingRegistration] = useState(false);
 	const navigate = useNavigate();
 
 	const form = useForm<RegisterDataType>({
@@ -49,11 +51,21 @@ export function useRegisterForm() {
 		setGeneralError('');
 		form.clearErrors();
 
-		if (isUploadingAvatar || registerMutation.isPending) return;
+		if (isPreparingRegistration || isUploadingAvatar || registerMutation.isPending) return;
 
 		void (async () => {
 			const { avatar, ...rest } = data;
 			let avatarUrl: string | undefined;
+			setIsPreparingRegistration(true);
+
+			try {
+				await auth.bootstrapCsrfToken();
+			} catch {
+				setGeneralError(REGISTER_NETWORK_ERROR_MESSAGE);
+				setIsPreparingRegistration(false);
+				return;
+			}
+
 			try {
 				if (avatar) {
 					setIsUploadingAvatar(true);
@@ -74,6 +86,7 @@ export function useRegisterForm() {
 				});
 			} finally {
 				setIsUploadingAvatar(false);
+				setIsPreparingRegistration(false);
 			}
 		})();
 	}
@@ -84,7 +97,7 @@ export function useRegisterForm() {
 		handleSubmit: form.handleSubmit,
 		formState: form.formState,
 		control: form.control,
-		isPending: isUploadingAvatar || registerMutation.isPending,
+		isPending: isPreparingRegistration || isUploadingAvatar || registerMutation.isPending,
 		setError: form.setError,
 		clearErrors: form.clearErrors,
 	};

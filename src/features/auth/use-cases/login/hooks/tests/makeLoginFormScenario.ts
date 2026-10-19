@@ -19,8 +19,8 @@ export function makeLoginFormScenario() {
 		mocks: {
 			userLoggedIn: vi.spyOn(eventBus, 'publish').mockResolvedValue(),
 		} as Record<string, unknown>,
-		withLoginSuccess() {
-			scenario.mocks.login = vi.spyOn(auth.login, 'mutate').mockResolvedValue(authClient);
+		withLoginSuccess(client = authClient) {
+			scenario.mocks.login = vi.spyOn(auth.login, 'mutate').mockResolvedValue(client);
 			return scenario;
 		},
 		withLoginFailure(error: unknown) {

@@ -1,4 +1,5 @@
 // @vitest-environment happy-dom
+import { auth } from '@Api/auth/endpoints';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -27,7 +28,10 @@ describe('FEATURE HOOK - Users - useRegisterForm', () => {
 
 	it('uploads the avatar, creates the user, and navigates to login', async () => {
 		const file = avatarFile();
-		const scenario = makeRegisterFormScenario().withAvatarUploadSuccess().withRegisterSuccess();
+		const scenario = makeRegisterFormScenario()
+			.withCsrfBootstrapSuccess()
+			.withAvatarUploadSuccess()
+			.withRegisterSuccess();
 
 		const { result } = scenario.render();
 
@@ -48,12 +52,13 @@ describe('FEATURE HOOK - Users - useRegisterForm', () => {
 				avatarUrl: 'https://example.com/avatar.png',
 			}),
 		);
+		expect(scenario.mocks.bootstrapCsrfToken).toHaveBeenCalledOnce();
 		expect(scenario.mocks.uploadAvatarFile).toHaveBeenCalledWith(file);
 		expect(navigateMock).toHaveBeenCalledWith('/login');
 	});
 
 	it('maps nickname conflicts to a field error', async () => {
-		const scenario = makeRegisterFormScenario().withRegisterFailure({
+		const scenario = makeRegisterFormScenario().withCsrfBootstrapSuccess().withRegisterFailure({
 			statusCode: 409,
 			message: 'nickname already exists',
 		});
@@ -74,6 +79,7 @@ describe('FEATURE HOOK - Users - useRegisterForm', () => {
 
 	it('keeps registration from running when avatar upload fails', async () => {
 		const scenario = makeRegisterFormScenario()
+			.withCsrfBootstrapSuccess()
 			.withAvatarUploadFailure('Avatar upload failed')
 			.withRegisterSuccess();
 
@@ -90,5 +96,24 @@ describe('FEATURE HOOK - Users - useRegisterForm', () => {
 			expect(result.current.formState.errors.avatar?.message).toBe('Avatar upload failed'),
 		);
 		expect(scenario.mocks.createUser).not.toHaveBeenCalled();
+	});
+
+	it('does not attempt registration when CSRF bootstrap fails', async () => {
+		const scenario = makeRegisterFormScenario().withRegisterSuccess();
+		vi.spyOn(auth, 'bootstrapCsrfToken').mockRejectedValue(new Error('CSRF bootstrap failed'));
+
+		const { result } = scenario.render();
+
+		act(() => {
+			result.current.onSubmit(registerData);
+		});
+
+		await waitFor(() =>
+			expect(result.current.generalError).toBe(
+				"We couldn't create your account. Check your connection and try again.",
+			),
+		);
+		expect(scenario.mocks.createUser).not.toHaveBeenCalled();
+		expect(navigateMock).not.toHaveBeenCalled();
 	});
 });

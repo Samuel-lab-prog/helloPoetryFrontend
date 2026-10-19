@@ -1,9 +1,11 @@
+import { auth } from '@Api/auth/endpoints';
 import { eventBus } from '@root/core/events/eventBus';
 import { registerAuthSessionPort } from '@root/core/ports/authSession';
 
 import { createHTTPRequest } from './createHttpRequest';
 
 const realFetch = globalThis.fetch;
+const realDocument = globalThis.document;
 
 function jsonResponse(status: number, body: unknown) {
 	return new Response(JSON.stringify(body), {
@@ -22,12 +24,14 @@ describe('createHTTPRequest session integration', () => {
 
 	beforeEach(() => {
 		import.meta.env.VITE_API_URL = 'https://api.test';
+		globalThis.document = { cookie: 'csrf_token=session-csrf' } as Document;
 		registerAuthSessionPort(session);
 		vi.clearAllMocks();
 	});
 
 	afterEach(() => {
 		globalThis.fetch = realFetch;
+		globalThis.document = realDocument;
 		vi.restoreAllMocks();
 	});
 
@@ -76,6 +80,46 @@ describe('createHTTPRequest session integration', () => {
 
 		await expect(createHTTPRequest({ path: '/users/me' })).resolves.toEqual({ ok: true });
 		expect(globalThis.fetch).toHaveBeenCalledTimes(3);
+		expect(globalThis.fetch).toHaveBeenNthCalledWith(
+			2,
+			'https://api.test/auth/refresh',
+			expect.objectContaining({
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'x-csrf-token': 'session-csrf' },
+			}),
+		);
 		expect(session.clearAuthClient).not.toHaveBeenCalled();
+	});
+
+	it('sends logout with CSRF and credentials without attempting automatic refresh', async () => {
+		const fetch = vi.fn().mockResolvedValueOnce(jsonResponse(200, { success: true }));
+		globalThis.fetch = fetch as typeof globalThis.fetch;
+
+		await expect(auth.logout.mutate(undefined)).resolves.toEqual({ success: true });
+
+		expect(fetch).toHaveBeenCalledOnce();
+		expect(fetch).toHaveBeenCalledWith(
+			'https://api.test/auth/logout',
+			expect.objectContaining({
+				method: 'POST',
+				credentials: 'include',
+				headers: { 'x-csrf-token': 'session-csrf' },
+			}),
+		);
+	});
+
+	it('does not attempt refresh when the logout request fails', async () => {
+		const fetch = vi
+			.fn()
+			.mockResolvedValueOnce(
+				jsonResponse(401, { code: 'UNAUTHORIZED', message: 'not authenticated' }),
+			);
+		globalThis.fetch = fetch as typeof globalThis.fetch;
+
+		await expect(auth.logout.mutate(undefined)).rejects.toMatchObject({
+			statusCode: 401,
+		});
+		expect(fetch).toHaveBeenCalledOnce();
 	});
 });

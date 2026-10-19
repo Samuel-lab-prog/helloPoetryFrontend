@@ -103,6 +103,7 @@ export async function createHTTPRequest<TResponse, TBody = undefined>({
 		const canTryRefresh =
 			path !== '/auth/login' &&
 			path !== '/auth/refresh' &&
+			path !== '/auth/logout' &&
 			(appError.statusCode === 401 ||
 				(appError.statusCode === 422 &&
 					appError.code === 'VALIDATION' &&
@@ -142,9 +143,11 @@ function clearExpiredSession(error: AppErrorType): void {
 function refreshSession(baseUrl: string): Promise<boolean> {
 	if (refreshSessionInFlight) return refreshSessionInFlight;
 
+	const csrfToken = getCookieValue('csrf_token');
 	refreshSessionInFlight = fetch(`${baseUrl}/auth/refresh`, {
 		method: 'POST',
 		credentials: 'include',
+		headers: csrfToken ? { 'x-csrf-token': csrfToken } : undefined,
 	})
 		.then((response) => response.ok)
 		.catch(() => false)

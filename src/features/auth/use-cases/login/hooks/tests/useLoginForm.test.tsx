@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { useAuthClientStore } from '@root/features/auth/public/stores/useAuthClientStore';
-import { clearTestAuthClient } from '@root/test-support/authClientStore';
+import { clearTestAuthClient, setTestAuthClient } from '@root/test-support/authClientStore';
 import { act, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -63,5 +63,20 @@ describe('FEATURE HOOK - Auth - useLoginForm', () => {
 
 		await waitFor(() => expect(result.current.generalError).toContain("can't sign in"));
 		expect(navigateMock).not.toHaveBeenCalled();
+	});
+
+	it('stores a different account after the previous local session was cleared', async () => {
+		setTestAuthClient({ id: 41, role: 'author', status: 'active' });
+		clearTestAuthClient();
+		const nextClient = { id: 42, role: 'author', status: 'active' } as const;
+		const scenario = makeLoginFormScenario().withLoginSuccess(nextClient);
+		const { result } = scenario.render();
+
+		act(() => {
+			result.current.onSubmit(loginData);
+		});
+
+		await waitFor(() => expect(useAuthClientStore.getState().authClient).toEqual(nextClient));
+		expect(navigateMock).toHaveBeenCalledWith('/', { replace: true });
 	});
 });

@@ -1,3 +1,4 @@
+import { auth } from '@Api/auth/endpoints';
 import { users } from '@Api/users/endpoints';
 import {
 	createQueryClientWrapper,
@@ -14,6 +15,12 @@ export function makeRegisterFormScenario() {
 	const scenario = {
 		queryClient,
 		mocks: {} as Record<string, unknown>,
+		withCsrfBootstrapSuccess() {
+			scenario.mocks.bootstrapCsrfToken = vi
+				.spyOn(auth, 'bootstrapCsrfToken')
+				.mockResolvedValue({ csrfToken: 'test-csrf-token' });
+			return scenario;
+		},
 		withAvatarUploadSuccess(url = 'https://example.com/avatar.png') {
 			scenario.mocks.uploadAvatarFile = vi
 				.spyOn(avatarUpload, 'uploadAvatarFile')
