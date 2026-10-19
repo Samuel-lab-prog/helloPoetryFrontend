@@ -100,6 +100,24 @@ export function makePoemCommentsScenario() {
 				.mockRejectedValue(error);
 			return scenario;
 		},
+		withLikeCommentSuccess() {
+			scenario.mocks.likeComment = vi
+				.spyOn(interactions.likeComment, 'mutate')
+				.mockResolvedValue(undefined);
+			return scenario;
+		},
+		withUnlikeCommentSuccess() {
+			scenario.mocks.unlikeComment = vi
+				.spyOn(interactions.unlikeComment, 'mutate')
+				.mockResolvedValue(undefined);
+			return scenario;
+		},
+		withUnlikeCommentFailure(error: unknown = new Error('unlike failed')) {
+			scenario.mocks.unlikeComment = vi
+				.spyOn(interactions.unlikeComment, 'mutate')
+				.mockRejectedValue(error);
+			return scenario;
+		},
 		watchingCommentCreatedEvents() {
 			scenario.mocks.commentCreatedEvent = vi.spyOn(eventBus, 'publish').mockResolvedValue();
 			return scenario;
@@ -116,6 +134,24 @@ export function makePoemCommentsScenario() {
 			return queryClient.getQueryData<InfiniteComments>(
 				interactionsKeys.commentsByPoem(String(poemId), {
 					authScope: 'user:123:active',
+				}),
+			);
+		},
+		seedReplies(parentId: number, comments: PoemCommentType[] = [replyComment]) {
+			queryClient.setQueryData(
+				interactionsKeys.commentsByPoem(String(poemId), {
+					authScope: 'user:123:active',
+					parentId: String(parentId),
+				}),
+				{ comments, hasMore: false },
+			);
+			return scenario;
+		},
+		getCachedReplies(parentId: number) {
+			return queryClient.getQueryData<{ comments: PoemCommentType[] }>(
+				interactionsKeys.commentsByPoem(String(poemId), {
+					authScope: 'user:123:active',
+					parentId: String(parentId),
 				}),
 			);
 		},

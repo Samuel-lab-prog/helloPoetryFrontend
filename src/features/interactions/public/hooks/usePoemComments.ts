@@ -1,5 +1,4 @@
 import { interactions } from '@Api/interactions/endpoints';
-import { interactionsKeys } from '@Api/interactions/keys';
 import { type OptimisticSnapshot, restoreSnapshot, snapshotQueryData } from '@Api/optimistic';
 import { getPoemsCachePort } from '@core/ports/poems';
 import {
@@ -11,25 +10,17 @@ import {
 import { eventBus } from '@root/core/events/eventBus';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AppErrorType } from '@Utils';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-export type PoemCommentType = {
-	id: number;
-	poemId: number;
-	content: string;
-	createdAt: string;
-	status: 'visible' | 'deletedByAuthor' | 'deletedByModerator';
-	parentId: number | null;
-	aggregateChildrenCount: number;
-	likesCount: number;
-	likedByCurrentUser: boolean;
-	author: {
-		id: number;
-		nickname: string;
-		avatarUrl: string | null;
-		isUnavailable?: boolean;
-	};
-};
+import {
+	type CommentLikeParams,
+	optimisticallyUpdateCommentLike,
+	rollbackCommentLike,
+} from './commentLikeCache';
+import { buildCommentsKey, fetchPoemCommentReplies, REPLIES_STALE_TIME } from './commentQueries';
+import type { CommentPage, InfiniteComments, PoemCommentType } from './commentTypes';
+
+export type { PoemCommentType } from './commentTypes';
 
 type UsePoemCommentsOptions = {
 	enabled?: boolean;
@@ -46,28 +37,7 @@ type CreateCommentParams = {
 };
 
 const COMMENTS_PAGE_LIMIT = 30;
-const REPLIES_PAGE_LIMIT = 30;
-const REPLIES_STALE_TIME = 1000 * 60 * 5;
-
-function buildCommentsKey(poemId: number, authScope: string, parentId?: number) {
-	return parentId
-		? interactionsKeys.commentsByPoem(String(poemId), {
-				authScope,
-				parentId: String(parentId),
-			})
-		: interactionsKeys.commentsByPoem(String(poemId), { authScope });
-}
-
-type CommentPage = {
-	comments: PoemCommentType[];
-	hasMore: boolean;
-	nextCursor?: number;
-};
-
-type InfiniteComments = {
-	pages: CommentPage[];
-	pageParams: unknown[];
-};
+export { usePoemCommentReplies } from './commentQueries';
 
 function updatePages(
 	data: InfiniteComments | undefined,
@@ -127,23 +97,6 @@ function removeCommentFromList(list: PoemCommentType[], params: CommentMutationP
 					}
 				: comment,
 		);
-}
-
-function updateLikeState(
-	list: PoemCommentType[],
-	params: CommentMutationParams,
-	delta: number,
-	likedByCurrentUser: boolean,
-) {
-	return list.map((comment) =>
-		comment.id === params.id
-			? {
-					...comment,
-					likesCount: Math.max(0, comment.likesCount + delta),
-					likedByCurrentUser,
-				}
-			: comment,
-	);
 }
 
 function getCreateCommentErrorMessage(error: AppErrorType | null) {
@@ -215,7 +168,11 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 	const isEnabled = options.enabled ?? true;
 	const canUseCommentData = isEnabled && !!poemId;
 	const poemKey = poemsCachePort.getPoemKey(poemId);
-	const [updatingLikeCommentId, setUpdatingLikeCommentId] = useState<number | null>(null);
+	const [updatingLikeCommentIds, setUpdatingLikeCommentIds] = useState<ReadonlySet<number>>(
+		() => new Set(),
+	);
+	const pendingLikeIds = useRef(new Set<number>());
+	const commentsToReconcile = useRef(new Set<number>());
 
 	const query = useInfiniteQuery({
 		queryKey: buildCommentsKey(poemId, authScope),
@@ -280,69 +237,57 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		},
 	});
 
-	const likeCommentMutation = useMutation({
-		mutationFn: (params: CommentMutationParams) =>
-			interactions.likeComment.mutate(String(params.id)),
-		onMutate: async (params) => {
-			setUpdatingLikeCommentId(params.id);
-			const context = await prepareCommentQueries(queryClient, poemId, authScope, params.parentId);
-			if (context.previousBase.data) {
-				queryClient.setQueryData(
-					context.baseKey,
-					updatePages(context.previousBase.data, (list) => updateLikeState(list, params, 1, true)),
-				);
-			}
-			if (context.repliesKey && context.previousReplies?.data) {
-				queryClient.setQueryData(context.repliesKey, {
-					...context.previousReplies.data,
-					comments: updateLikeState(context.previousReplies.data.comments, params, 1, true),
-				});
-			}
-			return context;
+	const commentLikeMutationKey = ['comment-like', poemId, authScope] as const;
+	const commentLikeMutation = useMutation({
+		mutationKey: commentLikeMutationKey,
+		mutationFn: (params: CommentLikeParams) =>
+			params.liked
+				? interactions.likeComment.mutate(String(params.id))
+				: interactions.unlikeComment.mutate(String(params.id)),
+		onMutate: (params) => {
+			const baseKey = buildCommentsKey(poemId, authScope);
+			const repliesKey = params.parentId
+				? buildCommentsKey(poemId, authScope, params.parentId)
+				: null;
+			return optimisticallyUpdateCommentLike(queryClient, params, baseKey, repliesKey);
 		},
-		onError: (error, _variables, context) => {
+		onError: (error, params, context) => {
 			const appError = error as unknown as AppErrorType;
-			if (appError?.statusCode === 409) return;
-			restoreCommentQueries(queryClient, context);
+			if (appError?.statusCode === 409) {
+				commentsToReconcile.current.add(params.parentId ?? 0);
+				return;
+			}
+			if (!context) return;
+			rollbackCommentLike(queryClient, context);
 		},
-		onSettled: (_data, _error, params) => {
-			if (!params?.id) return;
-			setUpdatingLikeCommentId((current) => (current === params.id ? null : current));
+		onSettled: async () => {
+			if (queryClient.isMutating({ mutationKey: commentLikeMutationKey }) !== 1) return;
+			const parentsToReconcile = [...commentsToReconcile.current];
+			if (parentsToReconcile.length === 0) return;
+			commentsToReconcile.current.clear();
+			await queryClient.invalidateQueries({
+				queryKey: buildCommentsKey(poemId, authScope),
+				exact: true,
+			});
+			await Promise.allSettled(
+				parentsToReconcile
+					.filter((parentId) => parentId > 0)
+					.map((parentId) => fetchReplies(parentId, { force: true })),
+			);
 		},
 	});
 
-	const unlikeCommentMutation = useMutation({
-		mutationFn: (params: CommentMutationParams) =>
-			interactions.unlikeComment.mutate(String(params.id)),
-		onMutate: async (params) => {
-			setUpdatingLikeCommentId(params.id);
-			const context = await prepareCommentQueries(queryClient, poemId, authScope, params.parentId);
-			if (context.previousBase.data) {
-				queryClient.setQueryData(
-					context.baseKey,
-					updatePages(context.previousBase.data, (list) =>
-						updateLikeState(list, params, -1, false),
-					),
-				);
-			}
-			if (context.repliesKey && context.previousReplies?.data) {
-				queryClient.setQueryData(context.repliesKey, {
-					...context.previousReplies.data,
-					comments: updateLikeState(context.previousReplies.data.comments, params, -1, false),
-				});
-			}
-			return context;
-		},
-		onError: (error, _variables, context) => {
-			const appError = error as unknown as AppErrorType;
-			if (appError?.statusCode === 409) return;
-			restoreCommentQueries(queryClient, context);
-		},
-		onSettled: (_data, _error, params) => {
-			if (!params?.id) return;
-			setUpdatingLikeCommentId((current) => (current === params.id ? null : current));
-		},
-	});
+	async function toggleCommentLike(params: CommentMutationParams, liked: boolean) {
+		if (!canUseCommentData || pendingLikeIds.current.has(params.id)) return;
+		pendingLikeIds.current.add(params.id);
+		setUpdatingLikeCommentIds(new Set(pendingLikeIds.current));
+		try {
+			await commentLikeMutation.mutateAsync({ ...params, liked });
+		} finally {
+			pendingLikeIds.current.delete(params.id);
+			setUpdatingLikeCommentIds(new Set(pendingLikeIds.current));
+		}
+	}
 
 	function fetchReplies(parentId: number, options?: { force?: boolean }) {
 		if (!canUseCommentData) return Promise.resolve([]);
@@ -350,13 +295,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		return queryClient
 			.fetchQuery({
 				queryKey: buildCommentsKey(poemId, authScope, parentId),
-				queryFn: () =>
-					interactions.getPoemComments
-						.query(String(poemId), {
-							parentId: String(parentId),
-							limit: REPLIES_PAGE_LIMIT,
-						})
-						.queryFn(),
+				queryFn: () => fetchPoemCommentReplies(poemId, parentId),
 				staleTime: options?.force ? 0 : REPLIES_STALE_TIME,
 			})
 			.then((page) => page.comments);
@@ -367,13 +306,7 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 
 		return queryClient.prefetchQuery({
 			queryKey: buildCommentsKey(poemId, authScope, parentId),
-			queryFn: () =>
-				interactions.getPoemComments
-					.query(String(poemId), {
-						parentId: String(parentId),
-						limit: REPLIES_PAGE_LIMIT,
-					})
-					.queryFn(),
+			queryFn: () => fetchPoemCommentReplies(poemId, parentId),
 			staleTime: REPLIES_STALE_TIME,
 		});
 	}
@@ -397,12 +330,13 @@ export function usePoemComments(poemId: number, options: UsePoemCommentsOptions 
 		deleteCommentError: getDeleteCommentErrorMessage(
 			deleteMutation.error as unknown as AppErrorType | null,
 		),
-		likeComment: (args: CommentMutationParams) => likeCommentMutation.mutateAsync(args),
-		unlikeComment: (args: CommentMutationParams) => unlikeCommentMutation.mutateAsync(args),
-		updatingLikeCommentId,
+		likeComment: (args: CommentMutationParams) => toggleCommentLike(args, true),
+		unlikeComment: (args: CommentMutationParams) => toggleCommentLike(args, false),
+		updatingLikeCommentIds,
 		likeCommentError: getToggleLikeErrorMessage(
-			(likeCommentMutation.error || unlikeCommentMutation.error) as unknown as AppErrorType | null,
+			commentLikeMutation.error as unknown as AppErrorType | null,
 		),
+		authScope,
 		fetchReplies,
 		prefetchReplies,
 		refetchComments: query.refetch,

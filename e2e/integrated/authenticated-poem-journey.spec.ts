@@ -108,6 +108,87 @@ test('prepared author publishes a poem that a second account can read and intera
 	await page.getByRole('button', { name: 'Send comment' }).click();
 	expect((await commentResponsePromise).status()).toBe(201);
 	await expect(page.getByText(comment)).toBeVisible();
+	const commentThread = page.locator('[id^="comment-"]').filter({ hasText: comment }).first();
+	const likeCommentResponsePromise = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'POST' &&
+			/\/api\/v1\/interactions\/comments\/\d+\/like$/.test(new URL(response.url()).pathname),
+	);
+	await commentThread.getByRole('button', { name: 'Like comment' }).click();
+	expect((await likeCommentResponsePromise).status()).toBe(201);
+	await expect(commentThread.getByRole('button', { name: 'Unlike comment' })).toHaveAttribute(
+		'aria-pressed',
+		'true',
+	);
+	await expect(commentThread.getByLabel('1 like')).toBeVisible();
+	await page.reload();
+	await expect(page.getByText(comment)).toBeVisible();
+	const reloadedCommentThread = page
+		.locator('[id^="comment-"]')
+		.filter({ hasText: comment })
+		.first();
+	await expect(
+		reloadedCommentThread.getByRole('button', { name: 'Unlike comment' }),
+	).toHaveAttribute('aria-pressed', 'true');
+
+	const unlikeCommentResponsePromise = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'DELETE' &&
+			/\/api\/v1\/interactions\/comments\/\d+\/like$/.test(new URL(response.url()).pathname),
+	);
+	await commentThread.getByRole('button', { name: 'Unlike comment' }).click();
+	expect((await unlikeCommentResponsePromise).status()).toBe(204);
+	await expect(commentThread.getByRole('button', { name: 'Like comment' })).toHaveAttribute(
+		'aria-pressed',
+		'false',
+	);
+	await expect(commentThread.getByLabel('0 likes')).toBeVisible();
+
+	const reply = 'A disposable reply from the integrated journey.';
+	await commentThread.getByRole('button', { name: 'Reply to comment' }).click();
+	await commentThread.getByPlaceholder('Reply to comment').fill(reply);
+	const replyResponsePromise = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'POST' &&
+			new URL(response.url()).pathname === `/api/v1/interactions/poems/${createdPoem.id}/comments`,
+	);
+	await commentThread.getByRole('button', { name: 'Send reply' }).click();
+	expect((await replyResponsePromise).status()).toBe(201);
+	const replyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).first();
+	await expect(replyThread).toBeVisible();
+	const likeReplyResponsePromise = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'POST' &&
+			/\/api\/v1\/interactions\/comments\/\d+\/like$/.test(new URL(response.url()).pathname),
+	);
+	await replyThread.getByRole('button', { name: 'Like comment' }).click();
+	expect((await likeReplyResponsePromise).status()).toBe(201);
+	await expect(replyThread.getByRole('button', { name: 'Unlike comment' })).toHaveAttribute(
+		'aria-pressed',
+		'true',
+	);
+	await expect(replyThread.getByLabel('1 like')).toBeVisible();
+	await page.reload();
+	const reloadedRootThread = page.locator('[id^="comment-"]').filter({ hasText: comment }).first();
+	await reloadedRootThread.getByRole('button', { name: 'View replies' }).click();
+	const reloadedReplyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).first();
+	await expect(reloadedReplyThread).toBeVisible();
+	await expect(reloadedReplyThread.getByRole('button', { name: 'Unlike comment' })).toHaveAttribute(
+		'aria-pressed',
+		'true',
+	);
+	const unlikeReplyResponsePromise = page.waitForResponse(
+		(response) =>
+			response.request().method() === 'DELETE' &&
+			/\/api\/v1\/interactions\/comments\/\d+\/like$/.test(new URL(response.url()).pathname),
+	);
+	await reloadedReplyThread.getByRole('button', { name: 'Unlike comment' }).click();
+	expect((await unlikeReplyResponsePromise).status()).toBe(204);
+	await expect(reloadedReplyThread.getByRole('button', { name: 'Like comment' })).toHaveAttribute(
+		'aria-pressed',
+		'false',
+	);
+	await expect(reloadedReplyThread.getByLabel('0 likes')).toBeVisible();
 
 	await signOut(page);
 	await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();

@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { authClientId, replyComment, rootComment } from './fixtures';
@@ -68,6 +68,43 @@ describe('FEATURE COMPONENT - Poems - CommentsSection', () => {
 			.render();
 
 		expect(screen.getByText('Remove forbidden words: forbidden')).toBeTruthy();
+	});
+
+	it('renders an accessible like toggle and calls the comment mutation', async () => {
+		const scenario = makeCommentsSectionScenario().withComments([rootComment]);
+		scenario.render();
+
+		const likeButton = screen.getByRole('button', { name: 'Like comment' });
+		expect(likeButton.getAttribute('aria-pressed')).toBe('false');
+		expect(screen.getByLabelText('0 likes')).toBeTruthy();
+		fireEvent.click(likeButton);
+
+		await waitFor(() =>
+			expect(scenario.mocks.likeComment).toHaveBeenCalledWith({
+				id: rootComment.id,
+				parentId: undefined,
+			}),
+		);
+	});
+
+	it('disables comment likes for visitors and unavailable authors', () => {
+		makeCommentsSectionScenario().asLoggedOutVisitor().withComments([rootComment]).render();
+		expect(
+			(screen.getByRole('button', { name: 'Like comment' }) as HTMLButtonElement).disabled,
+		).toBe(true);
+
+		cleanup();
+		makeCommentsSectionScenario()
+			.withComments([
+				{
+					...rootComment,
+					author: { ...rootComment.author, isUnavailable: true },
+				},
+			])
+			.render();
+		expect(
+			(screen.getByRole('button', { name: 'Like comment' }) as HTMLButtonElement).disabled,
+		).toBe(true);
 	});
 
 	it('prefetches replies for the first visible comments that have children', async () => {

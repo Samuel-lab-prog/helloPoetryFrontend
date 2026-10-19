@@ -36,6 +36,13 @@ export const rootComment: PoemCommentType = {
 	},
 };
 
+export const otherRootComment: PoemCommentType = {
+	...rootComment,
+	id: 102,
+	content: 'Another visible comment',
+	aggregateChildrenCount: 0,
+};
+
 export const replyComment: PoemCommentType = {
 	...rootComment,
 	id: 101,
@@ -55,6 +62,13 @@ export function getRootCommentsKey() {
 	return interactionsKeys.commentsByPoem(String(poemId), { authScope });
 }
 
+export function getRepliesKey(parentId: number) {
+	return interactionsKeys.commentsByPoem(String(poemId), {
+		authScope,
+		parentId: String(parentId),
+	});
+}
+
 export function seedRootComments(
 	queryClient: QueryClient,
 	comments: PoemCommentType[] = [rootComment],
@@ -63,6 +77,14 @@ export function seedRootComments(
 		pages: [commentPage(comments)],
 		pageParams: [undefined],
 	});
+}
+
+export function seedReplies(
+	queryClient: QueryClient,
+	parentId: number,
+	comments: PoemCommentType[] = [replyComment],
+) {
+	queryClient.setQueryData(getRepliesKey(parentId), commentPage(comments));
 }
 
 export const likedPoemId = 55;

@@ -2,6 +2,7 @@ import type { PoemCommentType } from '@features/interactions/public';
 
 export const poemId = 44;
 export const authClientId = 123;
+export const authCacheScope = 'user:123:active';
 
 export const rootComment: PoemCommentType = {
 	id: 100,

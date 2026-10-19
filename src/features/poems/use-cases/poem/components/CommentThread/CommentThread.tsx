@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { type PoemCommentType } from '@features/interactions/public';
+import { type PoemCommentType, usePoemCommentReplies } from '@features/interactions/public';
 import { findForbiddenWords } from '@Utils';
 import { memo, useCallback, useState } from 'react';
 
@@ -18,6 +18,8 @@ import { type CommentThreadProps } from './types';
  */
 export const CommentThread = memo(function CommentThread({
 	comment,
+	poemId,
+	authScope,
 	parentAuthorId,
 	parentAuthorNickname,
 	parentAuthorUnavailable,
@@ -29,19 +31,24 @@ export const CommentThread = memo(function CommentThread({
 	isDeletingComment,
 	createComment,
 	deleteComment,
+	likeComment,
+	unlikeComment,
+	updatingLikeCommentIds,
 	fetchReplies,
-	repliesByCommentId,
-	setRepliesByCommentId,
 }: CommentThreadProps) {
 	const [isReplyComposerOpen, setIsReplyComposerOpen] = useState(false);
 	const [areRepliesOpen, setAreRepliesOpen] = useState(false);
 	const [replyInput, setReplyInput] = useState('');
 	const [replyError, setReplyError] = useState('');
 
-	const replies = repliesByCommentId[comment.id] ?? [];
+	const { replies, hasLoadedReplies, isLoadingReplies } = usePoemCommentReplies(
+		poemId,
+		authScope,
+		comment.id,
+	);
 	const hasReplies = comment.aggregateChildrenCount > 0;
-	const hasLoadedReplies = replies.length > 0;
 	const canReplyToComment = comment.author.isUnavailable !== true;
+	const isLikePending = updatingLikeCommentIds.has(comment.id);
 
 	const handleToggleReplyComposer = useCallback(() => {
 		if (!canReplyToComment) return;
@@ -61,28 +68,20 @@ export const CommentThread = memo(function CommentThread({
 
 	const handleToggleRepliesView = useCallback(async () => {
 		setAreRepliesOpen((prev) => !prev);
-		if (!areRepliesOpen && !repliesByCommentId[comment.id] && hasReplies) {
+		if (!areRepliesOpen && !hasLoadedReplies && hasReplies) {
 			try {
-				const fetched = await fetchReplies(comment.id);
-				setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
+				await fetchReplies(comment.id);
 			} catch {
 				setReplyError('Error loading replies.');
 			}
 		}
-	}, [
-		areRepliesOpen,
-		comment.id,
-		fetchReplies,
-		hasReplies,
-		repliesByCommentId,
-		setRepliesByCommentId,
-	]);
+	}, [areRepliesOpen, comment.id, fetchReplies, hasReplies, hasLoadedReplies]);
 
 	const handlePrefetchReplies = useCallback(() => {
 		if (!hasReplies) return;
-		if (repliesByCommentId[comment.id]) return;
+		if (hasLoadedReplies) return;
 		void fetchReplies(comment.id);
-	}, [comment.id, fetchReplies, hasReplies, repliesByCommentId]);
+	}, [comment.id, fetchReplies, hasLoadedReplies, hasReplies]);
 
 	const handleCreateReply = useCallback(async () => {
 		if (!replyInput.trim()) return;
@@ -101,25 +100,41 @@ export const CommentThread = memo(function CommentThread({
 			setReplyInput('');
 			setReplyError('');
 			setAreRepliesOpen(true);
-			const fetched = await fetchReplies(comment.id, { force: true });
-			setRepliesByCommentId((prev) => ({ ...prev, [comment.id]: fetched }));
+			await fetchReplies(comment.id, { force: true });
 		} catch {
 			setReplyError('Error sending reply.');
 		}
-	}, [comment.id, createComment, fetchReplies, isAuthenticated, replyInput, setRepliesByCommentId]);
+	}, [comment.id, createComment, fetchReplies, isAuthenticated, replyInput]);
 
 	const handleDelete = useCallback(async () => {
 		await deleteComment({ id: comment.id, parentId: comment.parentId ?? undefined });
 		if (comment.parentId) {
-			const parentReplies = await fetchReplies(comment.parentId, { force: true });
-			setRepliesByCommentId((prev) => ({
-				...prev,
-				[comment.parentId!]: parentReplies,
-			}));
+			await fetchReplies(comment.parentId, { force: true });
 		}
-	}, [comment.id, comment.parentId, deleteComment, fetchReplies, setRepliesByCommentId]);
+	}, [comment.id, comment.parentId, deleteComment, fetchReplies]);
 
-	// TODO: Re-enable comment like handler when UI for likes returns.
+	const handleToggleLike = useCallback(async () => {
+		if (!isAuthenticated || !canReplyToComment || isLikePending) return;
+		try {
+			const args = { id: comment.id, parentId: comment.parentId ?? undefined };
+			if (comment.likedByCurrentUser) {
+				await unlikeComment(args);
+				return;
+			}
+			await likeComment(args);
+		} catch {
+			// The hook exposes the shared error message for the page-level toast.
+		}
+	}, [
+		canReplyToComment,
+		comment.id,
+		comment.likedByCurrentUser,
+		comment.parentId,
+		isAuthenticated,
+		isLikePending,
+		likeComment,
+		unlikeComment,
+	]);
 
 	return (
 		<Box w='full'>
@@ -149,8 +164,13 @@ export const CommentThread = memo(function CommentThread({
 					areRepliesOpen={areRepliesOpen}
 					hasReplies={hasReplies}
 					hasLoadedReplies={hasLoadedReplies}
+					isLoadingReplies={isLoadingReplies}
 					onToggleReplies={handleToggleRepliesView}
 					onPrefetchReplies={handlePrefetchReplies}
+					isAuthenticated={isAuthenticated}
+					isLikePending={isLikePending}
+					canLike={canReplyToComment}
+					onToggleLike={handleToggleLike}
 				/>
 
 				{isReplyComposerOpen && (
@@ -173,6 +193,8 @@ export const CommentThread = memo(function CommentThread({
 						<CommentThread
 							key={reply.id}
 							comment={reply}
+							poemId={poemId}
+							authScope={authScope}
 							parentAuthorId={comment.author.id}
 							parentAuthorNickname={comment.author.nickname}
 							parentAuthorUnavailable={comment.author.isUnavailable}
@@ -184,9 +206,10 @@ export const CommentThread = memo(function CommentThread({
 							isDeletingComment={isDeletingComment}
 							createComment={createComment}
 							deleteComment={deleteComment}
+							likeComment={likeComment}
+							unlikeComment={unlikeComment}
+							updatingLikeCommentIds={updatingLikeCommentIds}
 							fetchReplies={fetchReplies}
-							repliesByCommentId={repliesByCommentId}
-							setRepliesByCommentId={setRepliesByCommentId}
 						/>
 					)}
 				/>

@@ -1,11 +1,12 @@
 import { type PoemCommentType } from '@features/interactions/public';
-import { type Dispatch, type SetStateAction } from 'react';
 
 export interface CommentThreadProps {
 	/**
 	 * Comment item to render, including author and counts for likes/replies.
 	 */
 	comment: PoemCommentType;
+	poemId: number;
+	authScope: string;
 	/**
 	 * Parent comment author info, used to render breadcrumb text.
 	 */
@@ -44,16 +45,11 @@ export interface CommentThreadProps {
 	 * Deletes a comment by id (optionally scoped to a parent comment).
 	 */
 	deleteComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	updatingLikeCommentIds: ReadonlySet<number>;
 	/**
 	 * Fetches replies for a parent comment, optionally forcing a refresh.
 	 */
 	fetchReplies: (parentId: number, options?: { force?: boolean }) => Promise<PoemCommentType[]>;
-	/**
-	 * Cached replies keyed by parent comment id.
-	 */
-	repliesByCommentId: Record<number, PoemCommentType[]>;
-	/**
-	 * Setter for cached replies keyed by parent comment id.
-	 */
-	setRepliesByCommentId: Dispatch<SetStateAction<Record<number, PoemCommentType[]>>>;
 }

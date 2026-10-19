@@ -7,7 +7,7 @@ import {
 	isBannedAccessError,
 	useAuthClientStore,
 } from '@features/auth/public';
-import { type PoemCommentType, usePoemComments, usePoemLike } from '@features/interactions/public';
+import { usePoemComments, usePoemLike } from '@features/interactions/public';
 import { ModerationActionsMenu } from '@features/moderation/public';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
@@ -45,9 +45,6 @@ export function PoemPage() {
 
 	const [commentInput, setCommentInput] = useState('');
 	const [commentInputError, setCommentInputError] = useState('');
-	const [repliesByCommentId, setRepliesByCommentId] = useState<Record<number, PoemCommentType[]>>(
-		{},
-	);
 	const { poem, isError, isLoading, error: poemError } = usePoem(poemId);
 	const isRejectedPoem = poem?.moderationStatus === 'rejected';
 	const isPendingPoem = poem?.moderationStatus === 'pending';
@@ -73,6 +70,10 @@ export function PoemPage() {
 		isDeletingComment,
 		deleteCommentError,
 		likeCommentError,
+		likeComment,
+		unlikeComment,
+		updatingLikeCommentIds,
+		authScope,
 		fetchReplies,
 		prefetchReplies,
 	} = usePoemComments(poemId, {
@@ -128,6 +129,7 @@ export function PoemPage() {
 	}, [poem]);
 
 	const loadingReplyParentsRef = useRef<Set<number>>(new Set());
+	const attemptedReplyParentsRef = useRef<Set<number>>(new Set());
 	const shownErrorsRef = useRef<Record<string, string>>({});
 
 	const likedPoem = poem?.stats?.likedByCurrentUser ?? false;
@@ -138,26 +140,15 @@ export function PoemPage() {
 			: '';
 
 	useEffect(() => {
-		if (!comments.length) return;
-		let isMounted = true;
-
 		for (const parent of comments) {
 			if (parent.aggregateChildrenCount <= 0) continue;
-			const existingRepliesCount = repliesByCommentId[parent.id]?.length ?? 0;
-			if (existingRepliesCount >= parent.aggregateChildrenCount) continue;
+			if (attemptedReplyParentsRef.current.has(parent.id)) continue;
 			if (loadingReplyParentsRef.current.has(parent.id)) continue;
 
 			loadingReplyParentsRef.current.add(parent.id);
+			attemptedReplyParentsRef.current.add(parent.id);
 			void fetchReplies(parent.id)
-				.then((replies) => {
-					if (!isMounted) return;
-					setRepliesByCommentId((prev) => {
-						if (prev[parent.id]) return prev;
-						return { ...prev, [parent.id]: replies };
-					});
-				})
 				.catch(() => {
-					if (!isMounted) return;
 					toaster.create({
 						type: 'error',
 						title: 'Error loading replies',
@@ -165,15 +156,9 @@ export function PoemPage() {
 						closable: true,
 					});
 				})
-				.finally(() => {
-					loadingReplyParentsRef.current.delete(parent.id);
-				});
+				.finally(() => loadingReplyParentsRef.current.delete(parent.id));
 		}
-
-		return () => {
-			isMounted = false;
-		};
-	}, [comments, fetchReplies, repliesByCommentId]);
+	}, [comments, fetchReplies]);
 
 	const showErrorToast = useCallback((key: string, message: string) => {
 		if (!message) return;
@@ -452,8 +437,11 @@ export function PoemPage() {
 									commentsError={commentsError}
 									isCreatingComment={isCreatingComment}
 									isDeletingComment={isDeletingComment}
-									repliesByCommentId={repliesByCommentId}
-									setRepliesByCommentId={setRepliesByCommentId}
+									poemId={poemId}
+									authScope={authScope}
+									likeComment={likeComment}
+									unlikeComment={unlikeComment}
+									updatingLikeCommentIds={updatingLikeCommentIds}
 									hasMoreComments={hasMoreComments}
 									isLoadingMoreComments={isLoadingMoreComments}
 									onLoadMoreComments={loadMoreComments}

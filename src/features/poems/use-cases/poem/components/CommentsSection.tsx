@@ -2,11 +2,13 @@ import { AsyncState, EmptyStateCard } from '@BaseComponents';
 import { Box, Button, Flex, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import type { PoemCommentType } from '@features/interactions/public';
 import { MessageCircleOff, SendHorizontal } from 'lucide-react';
-import { type Dispatch, memo, type SetStateAction, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 
 import { CommentThread } from './CommentThread';
 
 type CommentsSectionProps = {
+	poemId: number;
+	authScope: string;
 	poemIsCommentable: boolean;
 	isAuthenticated: boolean;
 	commentInput: string;
@@ -19,8 +21,9 @@ type CommentsSectionProps = {
 	commentRestrictionMessage?: string;
 	isCreatingComment: boolean;
 	isDeletingComment: (commentId: number) => boolean;
-	repliesByCommentId: Record<number, PoemCommentType[]>;
-	setRepliesByCommentId: Dispatch<SetStateAction<Record<number, PoemCommentType[]>>>;
+	likeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	unlikeComment: (args: { id: number; parentId?: number }) => Promise<void>;
+	updatingLikeCommentIds: ReadonlySet<number>;
 	hasMoreComments: boolean;
 	isLoadingMoreComments: boolean;
 	onLoadMoreComments: () => Promise<unknown>;
@@ -33,6 +36,8 @@ type CommentsSectionProps = {
 };
 
 export const CommentsSection = memo(function CommentsSection({
+	poemId,
+	authScope,
 	poemIsCommentable,
 	isAuthenticated,
 	commentInput,
@@ -45,8 +50,9 @@ export const CommentsSection = memo(function CommentsSection({
 	commentRestrictionMessage,
 	isCreatingComment,
 	isDeletingComment,
-	repliesByCommentId,
-	setRepliesByCommentId,
+	likeComment,
+	unlikeComment,
+	updatingLikeCommentIds,
 	hasMoreComments,
 	isLoadingMoreComments,
 	onLoadMoreComments,
@@ -71,6 +77,8 @@ export const CommentsSection = memo(function CommentsSection({
 				<CommentThread
 					key={comment.id}
 					comment={comment}
+					poemId={poemId}
+					authScope={authScope}
 					hideTopBorder={index === 0}
 					authClientId={authClientId}
 					poemIsCommentable={poemIsCommentable}
@@ -79,9 +87,10 @@ export const CommentsSection = memo(function CommentsSection({
 					isDeletingComment={isDeletingComment}
 					createComment={createComment}
 					deleteComment={deleteComment}
+					likeComment={likeComment}
+					unlikeComment={unlikeComment}
+					updatingLikeCommentIds={updatingLikeCommentIds}
 					fetchReplies={fetchReplies}
-					repliesByCommentId={repliesByCommentId}
-					setRepliesByCommentId={setRepliesByCommentId}
 				/>
 			)),
 		[
@@ -93,9 +102,12 @@ export const CommentsSection = memo(function CommentsSection({
 			isAuthenticated,
 			isCreatingComment,
 			isDeletingComment,
+			likeComment,
+			poemId,
+			authScope,
 			poemIsCommentable,
-			repliesByCommentId,
-			setRepliesByCommentId,
+			unlikeComment,
+			updatingLikeCommentIds,
 		],
 	);
 
