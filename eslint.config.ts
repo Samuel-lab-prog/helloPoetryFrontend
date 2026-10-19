@@ -60,4 +60,30 @@ export default defineConfig([
 			'arrow-body-style': ['error', 'as-needed'],
 		},
 	},
+	{
+		files: ['e2e/**/*.ts', 'playwright*.ts'],
+		ignores: ['node_modules/**', 'test-results/**', 'playwright-report/**'],
+		extends: [js.configs.recommended, tseslint.configs.recommended, eslintConfigPrettier],
+		plugins: {
+			'simple-import-sort': simpleImportSort,
+		},
+		languageOptions: {
+			ecmaVersion: 'latest',
+			sourceType: 'module',
+			globals: globals.node,
+		},
+		rules: {
+			'@typescript-eslint/no-unused-vars': 'error',
+			'no-var': 'error',
+			'prefer-const': 'error',
+			'no-await-in-loop': 'error',
+			'no-duplicate-imports': 'error',
+			'no-eval': 'error',
+			'simple-import-sort/imports': 'error',
+			'simple-import-sort/exports': 'error',
+			eqeqeq: ['error', 'always'],
+			'no-unused-vars': 'off',
+			'no-undef': 'off',
+		},
+	},
 ]);

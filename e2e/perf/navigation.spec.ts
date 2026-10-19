@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { green, red } from 'kleur/colors';
+
 import { printTable } from '../../architecture-analysis/src/PrintTable';
 import { routes } from './routes';
 import { measureRoute } from './utils/measureRoute';
@@ -20,7 +21,7 @@ test('SPA navigation stays within budget', async ({ page }) => {
 		maxLongTaskMs: number;
 	}[] = [];
 
-	for (const route of routes) {
+	const measureAndRecordRoute = async (route: (typeof routes)[number]) => {
 		const result = await measureRoute({
 			page,
 			navigate: async () => {
@@ -64,7 +65,12 @@ test('SPA navigation stays within budget', async ({ page }) => {
 			),
 			contentType: 'application/json',
 		});
-	}
+	};
+
+	await routes.reduce<Promise<void>>(
+		(pending, route) => pending.then(() => measureAndRecordRoute(route)),
+		Promise.resolve(),
+	);
 
 	printTable(
 		'Navigation Performance',

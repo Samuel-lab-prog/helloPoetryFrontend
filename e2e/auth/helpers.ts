@@ -189,9 +189,9 @@ export async function expectLoggedOutNavbar(page: Page) {
 	await expect(page.locator('a[href="/login"]').first()).toBeVisible();
 	await expect(page.locator('a[href="/register"]').first()).toBeVisible();
 
-	for (const href of privateHrefs) {
-		await expect(page.locator(`a[href="${href}"]`)).toHaveCount(0);
-	}
+	await Promise.all(
+		privateHrefs.map((href) => expect(page.locator(`a[href="${href}"]`)).toHaveCount(0)),
+	);
 }
 
 export async function mockLoggedOutAuthPages(

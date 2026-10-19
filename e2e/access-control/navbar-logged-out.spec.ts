@@ -18,17 +18,19 @@ async function expectVisibleNavLink(page: Page, href: string, name: string) {
 	await expect
 		.poll(async () => {
 			const count = await links.count();
-			for (let index = 0; index < count; index += 1) {
-				const link = links.nth(index);
-				if (!(await link.isVisible())) continue;
+			const matches = await Promise.all(
+				Array.from({ length: count }, async (_, index) => {
+					const link = links.nth(index);
+					if (!(await link.isVisible())) return false;
 
-				const [label, text] = await Promise.all([
-					link.getAttribute('aria-label'),
-					link.innerText().catch(() => ''),
-				]);
-				if (label?.includes(name) || text.includes(name)) return true;
-			}
-			return false;
+					const [label, text] = await Promise.all([
+						link.getAttribute('aria-label'),
+						link.innerText().catch(() => ''),
+					]);
+					return label?.includes(name) || text.includes(name);
+				}),
+			);
+			return matches.some(Boolean);
 		})
 		.toBe(true);
 }
@@ -37,13 +39,11 @@ async function expectLoggedOutNavbar(page: Page) {
 	await mockLoggedOutHome(page);
 	await page.goto('/');
 
-	for (const link of publicLinks) {
-		await expectVisibleNavLink(page, link.href, link.name);
-	}
+	await Promise.all(publicLinks.map((link) => expectVisibleNavLink(page, link.href, link.name)));
 
-	for (const href of privateHrefs) {
-		await expect(page.locator(`a[href="${href}"]`)).toHaveCount(0);
-	}
+	await Promise.all(
+		privateHrefs.map((href) => expect(page.locator(`a[href="${href}"]`)).toHaveCount(0)),
+	);
 }
 
 test.describe('logged out navbar', () => {
