@@ -4,6 +4,7 @@ import { getBannedPrivilegeMessage, isBannedAccessError } from '@features/auth/p
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
 import { useFriendRequestActions } from '@features/interactions/public';
 import { useMyFriendRequests } from '@features/users/public/hooks/useMyFriendRequests';
+import { scrollFocusedControlIntoView } from '@root/core/utils/scrollFocusedControlIntoView';
 import { ArrowLeft } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -59,7 +60,13 @@ export function MyProfileFriendRequestsPage() {
 	if (!authClient?.id) return <ProfileAccessGate />;
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			align='center'
+			onFocusCapture={(event) => scrollFocusedControlIntoView(event.target)}
+		>
 			<Box as='section' w='full' maxW='5xl'>
 				<Flex mb={6} direction='column' gap={4}>
 					<Flex align='center' justify='space-between' gap={3} wrap='wrap'>

@@ -40,7 +40,7 @@ export function ModerationPoemCard({
 	const [expanded, setExpanded] = useState(false);
 	const [showRejectForm, setShowRejectForm] = useState(false);
 	const [rejectionReason, setRejectionReason] = useState('');
-	const createdAt = formatDate(poem.createdAt);
+	const createdAt = formatDate(poem.createdAt, undefined, 'en-US');
 
 	function getPreviewText(poem: ModerationPoem) {
 		if (poem.excerpt && poem.excerpt.trim().length > 0) return poem.excerpt;

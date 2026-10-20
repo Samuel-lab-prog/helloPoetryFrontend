@@ -12,16 +12,19 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 		<Flex mt={4} direction='row'>
 			<Flex
 				flex='1'
+				minW={0}
 				p={{ base: 3, md: 4 }}
 				gap={2}
 				align='center'
+				justify='center'
+				direction={{ base: 'column', sm: 'row' }}
 				borderRightWidth='1px'
 				borderRightStyle='solid'
 				borderRightColor='pink.300'
 			>
 				<BookOpen size={18} />
-				<Flex direction='column' minW={0}>
-					<Text textStyle='smaller' color='pink.200'>
+				<Flex direction='column' minW={0} textAlign={{ base: 'center', sm: 'left' }}>
+					<Text textStyle='smaller' color='pink.200' whiteSpace='nowrap'>
 						Poems
 					</Text>
 					<Text textStyle={{ base: 'h4', md: 'h3' }}>{profile.stats?.poems?.length ?? 0}</Text>
@@ -29,16 +32,19 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 			</Flex>
 			<Flex
 				flex='1'
+				minW={0}
 				p={{ base: 3, md: 4 }}
 				gap={2}
 				align='center'
+				justify='center'
+				direction={{ base: 'column', sm: 'row' }}
 				borderRightWidth='1px'
 				borderRightStyle='solid'
 				borderRightColor='pink.300'
 			>
 				<MessageSquare size={18} />
-				<Flex direction='column' minW={0}>
-					<Text textStyle='smaller' color='pink.200'>
+				<Flex direction='column' minW={0} textAlign={{ base: 'center', sm: 'left' }}>
+					<Text textStyle='smaller' color='pink.200' whiteSpace='nowrap'>
 						Comments
 					</Text>
 					<Text textStyle={{ base: 'h4', md: 'h3' }}>
@@ -46,10 +52,18 @@ export function ProfileStatsGrid({ profile }: ProfileStatsGridProps) {
 					</Text>
 				</Flex>
 			</Flex>
-			<Flex flex='1' p={{ base: 3, md: 4 }} gap={2} align='center'>
+			<Flex
+				flex='1'
+				minW={0}
+				p={{ base: 3, md: 4 }}
+				gap={2}
+				align='center'
+				justify='center'
+				direction={{ base: 'column', sm: 'row' }}
+			>
 				<Users size={18} />
-				<Flex direction='column' minW={0}>
-					<Text textStyle='smaller' color='pink.200'>
+				<Flex direction='column' minW={0} textAlign={{ base: 'center', sm: 'left' }}>
+					<Text textStyle='smaller' color='pink.200' whiteSpace='nowrap'>
 						Friends
 					</Text>
 					<Text textStyle={{ base: 'h4', md: 'h3' }}>{profile.stats?.friends?.length ?? 0}</Text>

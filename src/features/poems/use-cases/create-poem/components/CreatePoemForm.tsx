@@ -1,6 +1,6 @@
 import { poems } from '@Api/poems/endpoints';
-import { DynamicForm, type Field, type FieldRenderers } from '@BaseComponents';
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { DynamicForm, type Field, type FieldRenderers, FormField } from '@BaseComponents';
+import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import { type ComponentType, lazy, Suspense, useDeferredValue, useMemo, useState } from 'react';
 import type { Control } from 'react-hook-form';
 
@@ -120,14 +120,84 @@ export function CreatePoemForm() {
 				showCharacterCount: true,
 			},
 			{
-				name: 'content',
-				label: 'Content (Markdown)',
-				required: true,
-				type: 'textarea',
-				rows: 8,
-				minLength: POEM_CONTENT_MIN_LENGTH,
-				maxLength: POEM_CONTENT_MAX_LENGTH,
-				showCharacterCount: true,
+				kind: 'custom',
+				id: 'content-preview',
+				render: ({ control, errors, setError, clearErrors }) => (
+					<VStack w='full' align='stretch' gap={4}>
+						<FormField<CreatePoemType>
+							name='content'
+							label='Content (Markdown)'
+							control={control}
+							error={errors.content}
+							required
+							as='textarea'
+							rows={12}
+							minLength={POEM_CONTENT_MIN_LENGTH}
+							maxLength={POEM_CONTENT_MAX_LENGTH}
+							showCharacterCount
+							setError={setError}
+							clearErrors={clearErrors}
+						/>
+						<Box
+							as='section'
+							aria-label='Poem preview'
+							w='full'
+							p={{ base: 3, md: 4 }}
+							border='1px solid'
+							borderColor='purple.700'
+							borderRadius='lg'
+							bg='rgba(255, 255, 255, 0.025)'
+						>
+							<Heading as='h2' textStyle='h4' mb={3}>
+								Preview
+							</Heading>
+							{isEmptyPreview ? (
+								<Text textStyle='smaller' color='pink.200'>
+									Fill out the form to see the poem preview
+								</Text>
+							) : (
+								<>
+									<PoemHeader
+										poem={{
+											title: previewPoem.title,
+											excerpt: previewPoem.excerpt,
+											tags: previewPoem.tags.map((tag: string, index: number) => ({
+												id: index,
+												name: tag,
+											})),
+										}}
+									/>
+									<Suspense
+										fallback={
+											<Text mt={4} textStyle='smaller' color='pink.200'>
+												Loading preview...
+											</Text>
+										}
+									>
+										<Box
+											as='article'
+											mt={4}
+											w='full'
+											maxW='65ch'
+											mx='auto'
+											whiteSpace='pre-wrap'
+											wordBreak='break-word'
+											textStyle='small'
+											css={{
+												'& pre, & table': {
+													maxWidth: '100%',
+													overflowX: 'auto',
+												},
+											}}
+										>
+											<LazyMarkdownRenderer content={previewPoem.content} />
+										</Box>
+									</Suspense>
+								</>
+							)}
+						</Box>
+					</VStack>
+				),
 			},
 			{
 				kind: 'tags',
@@ -179,7 +249,7 @@ export function CreatePoemForm() {
 				disabled: isUploadingAudio || isPending,
 			},
 		],
-		[isPending, isUploadingAudio],
+		[isEmptyPreview, isPending, isUploadingAudio, previewPoem],
 	);
 
 	const dedicationRenderer: NonNullable<FieldRenderers<CreatePoemType>['dedication']> = ({
@@ -222,57 +292,6 @@ export function CreatePoemForm() {
 				cardProps={{ w: 'full', maxW: '3xl', gap: 2 }}
 				renderers={renderers}
 			/>
-
-			<Heading as='h2' textStyle='h4' mt={8}>
-				Preview
-			</Heading>
-
-			<Box as='section' maxW='4xl' w='full'>
-				{isEmptyPreview ? (
-					<Box textStyle='smaller' color='gray.500'>
-						Fill out the form to see the poem preview
-					</Box>
-				) : (
-					<>
-						<PoemHeader
-							poem={{
-								title: previewPoem.title,
-								excerpt: previewPoem.excerpt,
-								tags: previewPoem.tags.map((tag: string, index: number) => ({
-									id: index,
-									name: tag,
-								})),
-							}}
-						/>
-
-						<Suspense
-							fallback={
-								<Text mt={10} textStyle='smaller' color='pink.200'>
-									Loading preview...
-								</Text>
-							}
-						>
-							<Box
-								as='article'
-								textAlign='justify'
-								mt={10}
-								whiteSpace='pre-wrap'
-								wordBreak='break-word'
-								textStyle='smaller'
-							>
-								<LazyMarkdownRenderer content={previewPoem.content} />
-							</Box>
-						</Suspense>
-					</>
-				)}
-
-				<Box
-					mt={8}
-					w='full'
-					justifyContent={['end', undefined, undefined, 'center']}
-					display='flex'
-				></Box>
-			</Box>
 		</>
 	);
 }

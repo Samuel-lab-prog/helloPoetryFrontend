@@ -6,6 +6,7 @@ import {
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
 } from '@features/auth/public';
+import { scrollFocusedControlIntoView } from '@root/core/utils/scrollFocusedControlIntoView';
 import { House, User } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
@@ -93,7 +94,14 @@ export function CreatePoemPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center' gap={4}>
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			align='center'
+			gap={4}
+			onFocusCapture={(event) => scrollFocusedControlIntoView(event.target)}
+		>
 			<Flex as='section' direction='column' w='full' maxW='3xl'>
 				<Heading as='h1' textStyle='h2' color='accent' mb={0} textAlign='center'>
 					Create Poem

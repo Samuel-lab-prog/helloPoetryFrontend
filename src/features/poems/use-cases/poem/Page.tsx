@@ -12,6 +12,7 @@ import { ModerationActionsMenu } from '@features/moderation/public';
 import { LoadingPoemSkeleton } from '@features/poems/public/components/LoadingPoemSkeleton';
 import { PoemAudioPlayer } from '@features/poems/public/components/PoemAudioPlayer';
 import { canUpdatePoem } from '@features/poems/public/utils/canUpdatePoem';
+import { scrollFocusedControlIntoView } from '@root/core/utils/scrollFocusedControlIntoView';
 import { findForbiddenWords } from '@Utils';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -305,7 +306,13 @@ export function PoemPage() {
 	}
 
 	return (
-		<Flex as='main' layerStyle='mainPadded' direction='column' align='center'>
+		<Flex
+			as='main'
+			layerStyle='mainPadded'
+			direction='column'
+			align='center'
+			onFocusCapture={(event) => scrollFocusedControlIntoView(event.target)}
+		>
 			<Box as='section' maxW='2xl' w='full'>
 				<AsyncState
 					isLoading={isLoading}

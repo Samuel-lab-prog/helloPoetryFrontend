@@ -99,7 +99,7 @@ export function FriendRequestsSection({
 							<Box
 								key={request.requesterId}
 								overflow='hidden'
-								maxH={isRemoving ? '0px' : '96px'}
+								maxH={isRemoving ? '0px' : { base: '200px', md: '96px' }}
 								opacity={isRemoving ? 0 : 1}
 								transform={isRemoving ? 'translateY(-6px)' : 'translateY(0)'}
 								transition='max-height 0.22s ease, opacity 0.18s ease, transform 0.22s ease'
@@ -119,7 +119,13 @@ export function FriendRequestsSection({
 									gap={3}
 									py={3}
 								>
-									<Link asChild display='inline-flex' w='fit-content' alignSelf='start'>
+									<Link
+										asChild
+										display='inline-flex'
+										w={{ base: 'full', md: 'fit-content' }}
+										maxW='full'
+										alignSelf='start'
+									>
 										<NavLink to={`/authors/${request.requesterId}`}>
 											<Flex
 												align='center'
@@ -127,7 +133,8 @@ export function FriendRequestsSection({
 												gap={2}
 												pr={2}
 												py={1.5}
-												w='fit-content'
+												w='full'
+												maxW='full'
 												display='inline-flex'
 												borderRadius='md'
 												transition='background-color 0.2s ease'

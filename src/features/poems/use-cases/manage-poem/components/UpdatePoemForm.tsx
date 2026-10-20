@@ -148,7 +148,7 @@ export function UpdatePoemForm() {
 			<FormField
 				label='Summary'
 				as='textarea'
-				rows={5}
+				rows={3}
 				control={control}
 				name='excerpt'
 				error={errors.excerpt}
@@ -159,7 +159,7 @@ export function UpdatePoemForm() {
 			<FormField
 				label='Content (Markdown)'
 				as='textarea'
-				rows={20}
+				rows={12}
 				control={control}
 				name='content'
 				error={errors.content}

@@ -18,6 +18,7 @@ import {
 	getSuspendedPrivilegeMessage,
 	useAuthClientStore,
 } from '@features/auth/public';
+import { scrollFocusedControlIntoView } from '@root/core/utils/scrollFocusedControlIntoView';
 import { EllipsisVertical, House, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
@@ -116,6 +117,7 @@ export function AdminPage() {
 			overflowY='auto'
 			scrollbarGutter='stable'
 			gap={0}
+			onFocusCapture={(event) => scrollFocusedControlIntoView(event.target)}
 		>
 			<Box as='section' w='full' mb={6}>
 				<Flex

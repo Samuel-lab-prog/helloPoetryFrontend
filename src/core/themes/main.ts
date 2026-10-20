@@ -117,12 +117,11 @@ const semanticTokens = defineSemanticTokens({
 const globalCss = defineGlobalStyles({
 	html: {
 		scrollBehavior: 'smooth',
-		scrollbarGutter: 'stable',
 		fontSize: '20px',
 	},
 
 	'h1, h2, h3, h4, h5, h6': {
-		marginBottom: { base: '0.15em', md: '0.15em', lg: '0.25em', xl: '0.25', '2xl': '0.25em' },
+		marginBottom: { base: '0.15em', md: '0.15em', lg: '0.25em', xl: '0.25em', '2xl': '0.25em' },
 	},
 
 	body: {

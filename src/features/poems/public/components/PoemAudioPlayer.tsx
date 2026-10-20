@@ -115,6 +115,10 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					overflow: 'visible',
 					accentColor: '#F472B6',
 				},
+				'& input[type="range"]:focus-visible': {
+					outline: '2px solid #FBCFE8',
+					outlineOffset: '4px',
+				},
 				'& input[type="range"]::-webkit-slider-runnable-track': {
 					height: '6px',
 					borderRadius: '999px',
@@ -206,7 +210,7 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 			</Flex>
 
 			<Flex align='center' gap={3}>
-				<Text textStyle='smaller' color='pink.200'>
+				<Text textStyle='smaller' color='pink.200' whiteSpace='nowrap' flexShrink={0}>
 					{Math.round(progressValue)}%
 				</Text>
 				<input
@@ -220,7 +224,9 @@ export function PoemAudioPlayer({ src, title = 'Poem audio' }: PoemAudioPlayerPr
 					data-range='progress'
 					style={
 						{
-							width: '100%',
+							width: 'auto',
+							flex: '1 1 auto',
+							minWidth: 0,
 							'--range-progress': `${Math.round(progressValue)}%`,
 						} as CSSProperties
 					}
