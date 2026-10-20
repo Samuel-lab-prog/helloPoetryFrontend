@@ -61,3 +61,12 @@ never deletes a host database or persistent data volume.
 Run the Docker-mocked cleanup tests without starting Docker using `bun run test:e2e:cleanup`. This
 command is intentionally not part of CI. Each integrated run shows the disposable database target
 and requires explicit authorization before starting PostgreSQL and applying migrations.
+
+The discovery scenario creates disposable poems through the authenticated API, then checks the
+public home and search interface against the real API. It covers title and tag filters, OR matching
+across multiple tags, combined title/tag filtering, supported sort orders, the 20-item page
+boundary, URL restoration after reload, clicking a poem tag, and the unfiltered recent feed. It also
+asserts that private, friends-only, unlisted, pending, and rejected poems do not appear in either
+the feed response or filtered search response. The scenario creates 22 pagination poems, two
+tag-matching poems, and visibility fixtures in the isolated database; Compose cleanup removes that
+database after the run.

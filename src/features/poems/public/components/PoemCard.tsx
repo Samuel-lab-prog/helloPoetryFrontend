@@ -2,6 +2,7 @@ import {
 	Avatar,
 	Badge,
 	Box,
+	Button,
 	Card,
 	Flex,
 	Icon,
@@ -21,9 +22,15 @@ type PoemCardProps = {
 	poem: PoemPreviewType;
 	hideAuthorMeta?: boolean;
 	variant?: 'card' | 'flat';
+	onTagClick?: (tag: string) => void;
 };
 
-export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: PoemCardProps) {
+export function PoemCard({
+	poem,
+	hideAuthorMeta = false,
+	variant = 'card',
+	onTagClick,
+}: PoemCardProps) {
 	const relativeCreatedAt = formatRelativeTime(poem.createdAt);
 	const likesCount = poem.stats?.likesCount ?? poem.likesCount;
 	const commentsCount = poem.stats?.commentsCount ?? poem.commentsCount;
@@ -53,12 +60,12 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 					<Flex align='start' justify='space-between' gap={2}>
 						<LinkOverlay asChild>
 							<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-								<Flex direction='column' gap={1}>
+								<Flex direction='column' gap={1} minW={0} flex='1'>
 									<Text textStyle='h4' mb={0}>
 										{poem.title}
 									</Text>
 									{poem.excerpt && (
-										<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
+										<Text textStyle='small' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
 											{poem.excerpt}
 										</Text>
 									)}
@@ -127,19 +134,36 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 
 					{poem.tags.length > 0 && (
 						<Flex gap={2} wrap='wrap'>
-							{poem.tags.slice(0, 4).map((tag: TagType) => (
-								<Badge
-									key={tag.id}
-									size='sm'
-									colorPalette='pink'
-									variant='subtle'
-									fontSize={{ base: '2xs', md: 'xs' }}
-									px={{ base: 1.5, md: 2 }}
-									py={{ base: 0.5, md: 1 }}
-								>
-									#{tag.name}
-								</Badge>
-							))}
+							{poem.tags.slice(0, 4).map((tag: TagType) =>
+								onTagClick ? (
+									<Button
+										key={tag.id}
+										size='xs'
+										variant='subtle'
+										colorPalette='pink'
+										aria-label={`Search poems tagged ${tag.name}`}
+										onClick={(event) => {
+											event.preventDefault();
+											event.stopPropagation();
+											onTagClick(tag.name);
+										}}
+									>
+										#{tag.name}
+									</Button>
+								) : (
+									<Badge
+										key={tag.id}
+										size='sm'
+										colorPalette='pink'
+										variant='subtle'
+										fontSize='13px'
+										px={{ base: 1.5, md: 2 }}
+										py={{ base: 0.5, md: 1 }}
+									>
+										#{tag.name}
+									</Badge>
+								),
+							)}
 						</Flex>
 					)}
 				</Flex>
@@ -197,12 +221,12 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 				</Flex>
 				<LinkOverlay asChild>
 					<NavLink to={`/poems/${poem.slug}/${poem.id}`}>
-						<Flex direction='column' gap={1}>
+						<Flex direction='column' gap={1} minW={0} flex='1'>
 							<Card.Title as='h4' textStyle='h4' mb={0}>
 								{poem.title}
 							</Card.Title>
 							{poem.excerpt && (
-								<Text textStyle='smaller' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
+								<Text textStyle='small' color='pink.100' opacity={0.9} lineClamp={3} mb={0}>
 									{poem.excerpt}
 								</Text>
 							)}
@@ -273,7 +297,7 @@ export function PoemCard({ poem, hideAuthorMeta = false, variant = 'card' }: Poe
 									size='sm'
 									colorPalette='pink'
 									variant='subtle'
-									fontSize={['2xs', 'xs']}
+									fontSize='13px'
 									px={{ base: 1.5, md: 2 }}
 									py={{ base: 0.5, md: 1 }}
 								>

@@ -8,6 +8,7 @@ type SearchInputProps = {
 	onValueChange: (value: string) => void;
 	onDebouncedChange?: (value: string) => void;
 	debounceMs?: number;
+	maxLength?: number;
 };
 
 export function SearchInput({
@@ -17,6 +18,7 @@ export function SearchInput({
 	onValueChange,
 	onDebouncedChange,
 	debounceMs = 250,
+	maxLength,
 }: SearchInputProps) {
 	useEffect(() => {
 		if (!onDebouncedChange) return undefined;
@@ -29,17 +31,18 @@ export function SearchInput({
 
 	return (
 		<Field.Root>
-			<Field.Label textStyle='smaller' fontWeight='medium' color='text'>
+			<Field.Label textStyle='small' fontWeight='medium' color='text'>
 				{label}
 			</Field.Label>
 			<Input
 				w='full'
 				value={value}
+				maxLength={maxLength}
 				px={3}
 				py={2}
 				onChange={(event) => onValueChange(event.target.value)}
 				placeholder={placeholder}
-				textStyle='smaller'
+				textStyle='body'
 				transition='all 0.22s ease'
 				bg='rgba(255, 255, 255, 0.03)'
 				borderColor='border'

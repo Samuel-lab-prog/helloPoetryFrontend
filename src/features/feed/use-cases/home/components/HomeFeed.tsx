@@ -19,6 +19,7 @@ type HomeFeedProps = {
 	isSearching: boolean;
 	error?: unknown;
 	onClearSearch?: () => void;
+	onTagClick?: (tag: string) => void;
 };
 
 export function HomeFeed({
@@ -28,6 +29,7 @@ export function HomeFeed({
 	isSearching,
 	error,
 	onClearSearch,
+	onTagClick,
 }: HomeFeedProps) {
 	const showSkeletons = isLoading && poems.length === 0;
 	const isBannedError = isBannedAccessError(error);
@@ -92,7 +94,7 @@ export function HomeFeed({
 							_first={{ borderTop: 'none' }}
 							pt={2}
 						>
-							<PoemCard poem={poem} variant='flat' />
+							<PoemCard poem={poem} variant='flat' onTagClick={onTagClick} />
 						</Box>
 					))}
 				</Flex>

@@ -154,7 +154,7 @@ test('prepared author publishes a poem that a second account can read and intera
 	);
 	await commentThread.getByRole('button', { name: 'Send reply' }).click();
 	expect((await replyResponsePromise).status()).toBe(201);
-	const replyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).first();
+	const replyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).last();
 	await expect(replyThread).toBeVisible();
 	const likeReplyResponsePromise = page.waitForResponse(
 		(response) =>
@@ -171,7 +171,7 @@ test('prepared author publishes a poem that a second account can read and intera
 	await page.reload();
 	const reloadedRootThread = page.locator('[id^="comment-"]').filter({ hasText: comment }).first();
 	await reloadedRootThread.getByRole('button', { name: 'View replies' }).click();
-	const reloadedReplyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).first();
+	const reloadedReplyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).last();
 	await expect(reloadedReplyThread).toBeVisible();
 	await expect(reloadedReplyThread.getByRole('button', { name: 'Unlike comment' })).toHaveAttribute(
 		'aria-pressed',
