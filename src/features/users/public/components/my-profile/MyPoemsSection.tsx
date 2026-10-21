@@ -2,6 +2,7 @@ import { Surface } from '@BaseComponents';
 import {
 	Badge,
 	Box,
+	Button,
 	Flex,
 	Heading,
 	HStack,
@@ -26,6 +27,9 @@ export type MyPoemsSectionProps = {
 	isMyPoemsError: boolean;
 	myPoemsErrorMessage?: string;
 	isSearchingMyPoems?: boolean;
+	emptyMessage?: string;
+	draftsCount?: number;
+	draftsHref?: string;
 	onOpenPoem: (slug: string, id: number) => void;
 	onUpdatePoem: (id: number) => void;
 	onDeletePoem: (id: number) => void;
@@ -54,6 +58,9 @@ export function MyPoemsSection({
 	isMyPoemsError,
 	myPoemsErrorMessage,
 	isSearchingMyPoems,
+	emptyMessage,
+	draftsCount,
+	draftsHref,
 	onOpenPoem,
 	onUpdatePoem,
 	onDeletePoem,
@@ -71,18 +78,31 @@ export function MyPoemsSection({
 								My poems
 							</Heading>
 						</HStack>
-						{viewAllHref && (
-							<Link
-								asChild
-								textStyle='small'
-								color='pink.200'
-								textDecoration='underline'
-								textUnderlineOffset='3px'
-								flexShrink={0}
-							>
-								<NavLink to={viewAllHref}>View all</NavLink>
-							</Link>
-						)}
+						<HStack gap={3} wrap='wrap' justify='end'>
+							{draftsHref && (draftsCount ?? 0) > 0 && (
+								<Link
+									asChild
+									textStyle='smaller'
+									color='pink.200'
+									textDecoration='underline'
+									textUnderlineOffset='3px'
+								>
+									<NavLink to={draftsHref}>Continue writing · {draftsCount} drafts</NavLink>
+								</Link>
+							)}
+							{viewAllHref && (
+								<Link
+									asChild
+									textStyle='small'
+									color='pink.200'
+									textDecoration='underline'
+									textUnderlineOffset='3px'
+									flexShrink={0}
+								>
+									<NavLink to={viewAllHref}>View all</NavLink>
+								</Link>
+							)}
+						</HStack>
 					</Flex>
 					{viewAllHref && Boolean(totalPoemsCount) && (
 						<Text mb={4} textStyle='smaller' color='pink.200' textAlign='left'>
@@ -104,9 +124,10 @@ export function MyPoemsSection({
 				{isLoadingMyPoems && <Text textStyle='small'>Loading your poems...</Text>}
 				{!isLoadingMyPoems && !isMyPoemsError && myPoems.length === 0 && (
 					<Text textStyle='small'>
-						{isSearchingMyPoems
-							? 'No poems found for your search.'
-							: 'You have not published any poems yet.'}
+						{emptyMessage ??
+							(isSearchingMyPoems
+								? 'No poems found for your search.'
+								: 'You have not published any poems yet.')}
 					</Text>
 				)}
 				{isMyPoemsError && (
@@ -146,8 +167,11 @@ export function MyPoemsSection({
 										)}
 									</Flex>
 									<Text textStyle='smaller' color='pink.200'>
-										{formatRelativeTime(poem.createdAt)} | {translateStatus(poem.status)} |{' '}
-										{translateVisibility(poem.visibility)}
+										{poem.status === 'draft' ? 'Updated ' : ''}
+										{formatRelativeTime(
+											poem.status === 'draft' ? poem.updatedAt : poem.createdAt,
+										)}{' '}
+										| {translateStatus(poem.status)} | {translateVisibility(poem.visibility)}
 									</Text>
 									{poem.status === 'published' && (
 										<Text
@@ -198,56 +222,68 @@ export function MyPoemsSection({
 									)}
 								</Flex>
 
-								<Menu.Root positioning={{ placement: 'bottom-end' }}>
-									<Menu.Trigger asChild>
-										<IconButton
-											aria-label='Open actions menu'
-											variant='solidPink'
+								<HStack gap={2} alignSelf={{ base: 'end', md: 'auto' }} flexShrink={0}>
+									{poem.status === 'draft' && canEdit && (
+										<Button
+											aria-label={`Continue writing ${poem.title}`}
 											size={{ base: 'xs', md: 'sm' }}
-											alignSelf={{ base: 'end', md: 'auto' }}
+											variant='outlinePurple'
+											onClick={() => onUpdatePoem(poem.id)}
 										>
-											<EllipsisVertical />
-										</IconButton>
-									</Menu.Trigger>
-									<Portal>
-										<Menu.Positioner>
-											<Menu.Content
-												bg='rgba(27, 0, 25, 0.98)'
-												border='1px solid'
-												borderColor='purple.700'
+											Continue writing
+										</Button>
+									)}
+									<Menu.Root positioning={{ placement: 'bottom-end' }}>
+										<Menu.Trigger asChild>
+											<IconButton
+												aria-label='Open actions menu'
+												variant='solidPink'
+												size={{ base: 'xs', md: 'sm' }}
+												alignSelf={{ base: 'end', md: 'auto' }}
 											>
-												<Menu.Item
-													value={`open-${poem.id}`}
-													color='pink.100'
-													_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-													onClick={() => onOpenPoem(poem.slug, poem.id)}
+												<EllipsisVertical />
+											</IconButton>
+										</Menu.Trigger>
+										<Portal>
+											<Menu.Positioner>
+												<Menu.Content
+													bg='rgba(27, 0, 25, 0.98)'
+													border='1px solid'
+													borderColor='purple.700'
 												>
-													Open
-												</Menu.Item>
-												{canEdit && (
 													<Menu.Item
-														value={`update-${poem.id}`}
+														value={`open-${poem.id}`}
 														color='pink.100'
 														_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-														onClick={() => onUpdatePoem(poem.id)}
+														onClick={() => onOpenPoem(poem.slug, poem.id)}
 													>
-														Edit
+														Open
 													</Menu.Item>
-												)}
-												{canDelete && (
-													<Menu.Item
-														value={`delete-${poem.id}`}
-														color='pink.100'
-														_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
-														onClick={() => onDeletePoem(poem.id)}
-													>
-														Delete
-													</Menu.Item>
-												)}
-											</Menu.Content>
-										</Menu.Positioner>
-									</Portal>
-								</Menu.Root>
+													{canEdit && (
+														<Menu.Item
+															value={`update-${poem.id}`}
+															color='pink.100'
+															_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+															onClick={() => onUpdatePoem(poem.id)}
+														>
+															Edit
+														</Menu.Item>
+													)}
+													{canDelete && (
+														<Menu.Item
+															value={`delete-${poem.id}`}
+															color='pink.100'
+															_hover={{ bg: 'rgba(255, 255, 255, 0.06)' }}
+															onClick={() => onDeletePoem(poem.id)}
+														>
+															Delete
+														</Menu.Item>
+													)}
+												</Menu.Content>
+											</Menu.Positioner>
+										</Portal>
+									</Menu.Root>
+								</HStack>
 							</Flex>
 						);
 					})}

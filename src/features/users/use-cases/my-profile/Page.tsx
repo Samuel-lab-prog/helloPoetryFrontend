@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { CollectionsSection } from '../../public/components/my-profile/CollectionsSection';
 import { FriendRequestsSection } from '../../public/components/my-profile/FriendRequestsSection';
 import { MyPoemsSection } from '../../public/components/my-profile/MyPoemsSection';
+import { prioritizeRecentDrafts } from '../../public/components/my-profile/myPoemsUtils';
 import { ProfileAccessGate } from '../../public/components/my-profile/ProfileAccessGate';
 import { ProfileOverviewSection } from '../../public/components/my-profile/ProfileOverviewSection';
 import { SavedPoemsSection } from '../../public/components/my-profile/SavedPoemsSection';
@@ -86,6 +87,8 @@ export function MyProfilePage() {
 		? getBannedPrivilegeMessage('view your poems')
 		: undefined;
 	const isProfileUnavailable = isError || isBannedProfileError;
+	const recentProfilePoems = prioritizeRecentDrafts(myPoems, 3);
+	const draftCount = myPoems.filter((poem) => poem.status === 'draft').length;
 
 	if (isLoggingOut) {
 		return (
@@ -221,9 +224,11 @@ export function MyProfilePage() {
 								animationDelay='90ms'
 							>
 								<MyPoemsSection
-									myPoems={myPoems.slice(0, 3)}
+									myPoems={recentProfilePoems}
 									totalPoemsCount={myPoems.length}
 									viewAllHref='/my-profile/poems'
+									draftsCount={draftCount}
+									draftsHref='/my-profile/poems?status=draft'
 									isLoadingMyPoems={isLoadingMyPoems}
 									isMyPoemsError={isMyPoemsError}
 									myPoemsErrorMessage={myPoemsErrorMessage}
