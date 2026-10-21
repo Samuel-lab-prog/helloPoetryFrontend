@@ -152,9 +152,24 @@ test('prepared author publishes a poem that a second account can read and intera
 			response.request().method() === 'POST' &&
 			new URL(response.url()).pathname === `/api/v1/interactions/poems/${createdPoem.id}/comments`,
 	);
+	const parentId = Number((await commentThread.getAttribute('id'))?.replace('comment-', ''));
+	expect(parentId).toBeGreaterThan(0);
+	const repliesResponsePromise = page.waitForResponse((response) => {
+		const url = new URL(response.url());
+		return (
+			response.request().method() === 'GET' &&
+			url.pathname === `/api/v1/interactions/poems/${createdPoem.id}/comments` &&
+			url.searchParams.get('parentId') === String(parentId)
+		);
+	});
 	await commentThread.getByRole('button', { name: 'Send reply' }).click();
 	expect((await replyResponsePromise).status()).toBe(201);
-	const replyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).last();
+	const repliesPage = (await (await repliesResponsePromise).json()) as {
+		comments: Array<{ id: number; content: string }>;
+	};
+	const replyRecord = (await repliesPage).comments.find((item) => item.content === reply);
+	expect(replyRecord).toBeDefined();
+	const replyThread = page.locator(`#comment-${replyRecord?.id}`);
 	await expect(replyThread).toBeVisible();
 	const likeReplyResponsePromise = page.waitForResponse(
 		(response) =>
@@ -171,7 +186,7 @@ test('prepared author publishes a poem that a second account can read and intera
 	await page.reload();
 	const reloadedRootThread = page.locator('[id^="comment-"]').filter({ hasText: comment }).first();
 	await reloadedRootThread.getByRole('button', { name: 'View replies' }).click();
-	const reloadedReplyThread = page.locator('[id^="comment-"]').filter({ hasText: reply }).last();
+	const reloadedReplyThread = page.locator(`#comment-${replyRecord?.id}`);
 	await expect(reloadedReplyThread).toBeVisible();
 	await expect(reloadedReplyThread.getByRole('button', { name: 'Unlike comment' })).toHaveAttribute(
 		'aria-pressed',
