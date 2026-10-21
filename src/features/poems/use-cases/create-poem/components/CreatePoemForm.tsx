@@ -1,6 +1,7 @@
 import { poems } from '@Api/poems/endpoints';
 import { DynamicForm, type Field, type FieldRenderers, FormField } from '@BaseComponents';
 import { Box, Heading, Text, VStack } from '@chakra-ui/react';
+import { useUnsavedChangesPrompt } from '@root/core/utils/useUnsavedChangesPrompt';
 import { type ComponentType, lazy, Suspense, useDeferredValue, useMemo, useState } from 'react';
 import type { Control } from 'react-hook-form';
 
@@ -43,9 +44,10 @@ export function CreatePoemForm() {
 
 	const {
 		handleSubmit,
-		formState: { errors, isValid },
+		formState: { errors, isValid, isDirty },
 		onSubmit,
 		isPending,
+		hasPersistedPoem,
 		generalError,
 		control,
 		watch,
@@ -71,14 +73,17 @@ export function CreatePoemForm() {
 			} catch (error) {
 				const message = error instanceof Error ? error.message : 'Error uploading audio.';
 				setError('audio', { type: 'manual', message });
+				throw error;
 			} finally {
 				setIsUploadingAudio(false);
 			}
 		},
 	});
+	useUnsavedChangesPrompt(isDirty, isPending || isUploadingAudio);
 	const preview = watch(['title', 'excerpt', 'content', 'tags', 'status']);
 
 	const [title, excerpt, content, tags, status] = preview;
+	const persistedFieldsDisabled = isPending || hasPersistedPoem;
 	const deferredTitle = useDeferredValue(title ?? '');
 	const deferredExcerpt = useDeferredValue(excerpt ?? '');
 	const deferredContent = useDeferredValue(content ?? '');
@@ -104,6 +109,7 @@ export function CreatePoemForm() {
 			{
 				name: 'title',
 				label: 'Title',
+				disabled: persistedFieldsDisabled,
 				required: true,
 				minLength: POEM_TITLE_MIN_LENGTH,
 				maxLength: POEM_TITLE_MAX_LENGTH,
@@ -112,6 +118,7 @@ export function CreatePoemForm() {
 			{
 				name: 'excerpt',
 				label: 'Summary',
+				disabled: persistedFieldsDisabled,
 				required: true,
 				type: 'textarea',
 				rows: 3,
@@ -132,6 +139,7 @@ export function CreatePoemForm() {
 							required
 							as='textarea'
 							rows={12}
+							disabled={persistedFieldsDisabled}
 							minLength={POEM_CONTENT_MIN_LENGTH}
 							maxLength={POEM_CONTENT_MAX_LENGTH}
 							showCharacterCount
@@ -203,7 +211,7 @@ export function CreatePoemForm() {
 				kind: 'tags',
 				name: 'tags',
 				label: 'Tags',
-				disabled: isPending,
+				disabled: persistedFieldsDisabled,
 				maxTags: POEM_TAGS_MAX_AMOUNT,
 				maxTagLength: POEM_TAG_MAX_LENGTH,
 				placeholder: 'Add your tags',
@@ -212,6 +220,7 @@ export function CreatePoemForm() {
 				kind: 'select',
 				name: 'status',
 				label: 'Status',
+				disabled: persistedFieldsDisabled,
 				options: [
 					{ value: 'draft', label: 'Draft' },
 					{ value: 'published', label: 'Published' },
@@ -221,6 +230,7 @@ export function CreatePoemForm() {
 				kind: 'select',
 				name: 'visibility',
 				label: 'Visibility',
+				disabled: persistedFieldsDisabled,
 				options: [
 					{ value: 'public', label: 'Public' },
 					{ value: 'friends', label: 'Friends' },
@@ -232,6 +242,7 @@ export function CreatePoemForm() {
 				kind: 'select',
 				name: 'isCommentable',
 				label: 'Comments',
+				disabled: persistedFieldsDisabled,
 				options: [
 					{ value: 'true', label: 'Allowed' },
 					{ value: 'false', label: 'Disabled' },
@@ -249,7 +260,7 @@ export function CreatePoemForm() {
 				disabled: isUploadingAudio || isPending,
 			},
 		],
-		[isEmptyPreview, isPending, isUploadingAudio, previewPoem],
+		[isEmptyPreview, isPending, isUploadingAudio, persistedFieldsDisabled, previewPoem],
 	);
 
 	const dedicationRenderer: NonNullable<FieldRenderers<CreatePoemType>['dedication']> = ({
@@ -267,7 +278,7 @@ export function CreatePoemForm() {
 				name='toUserIds'
 				control={control}
 				error={errors.toUserIds}
-				disabled={isPending}
+				disabled={persistedFieldsDisabled}
 			/>
 		</Suspense>
 	);
@@ -282,12 +293,12 @@ export function CreatePoemForm() {
 				fields={fields}
 				control={control}
 				errors={errors}
-				isValid={isValid}
-				loading={isPending}
+				isValid={isValid || hasPersistedPoem}
+				loading={isPending || isUploadingAudio}
 				generalError={generalError}
 				onSubmit={onSubmit}
 				handleSubmitFn={handleSubmit}
-				buttonLabel='Create Poem'
+				buttonLabel={hasPersistedPoem ? 'Retry audio upload' : 'Create Poem'}
 				buttonVariant='surface'
 				cardProps={{ w: 'full', maxW: '3xl', gap: 2 }}
 				renderers={renderers}

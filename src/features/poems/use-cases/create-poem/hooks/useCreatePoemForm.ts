@@ -23,6 +23,7 @@ type UseCreatePoemFormOptions = {
 
 export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 	const [generalError, setGeneralError] = useState('');
+	const [persistedPoem, setPersistedPoem] = useState<CreatePoemResult | null>(null);
 
 	const form = useForm<CreatePoemType>({
 		resolver: zodResolver(createPoemSchema),
@@ -45,17 +46,29 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 
 		try {
 			if (applyForbiddenWordsValidation(data, form.setError)) return;
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { audio, ...rest } = data;
-			const createdPoem = await mutateAsync(rest as CreatePoemPayload);
-			if (options.onCreated) {
-				await options.onCreated(createdPoem, data);
+			let createdPoem = persistedPoem;
+			if (!createdPoem) {
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { audio, ...rest } = data;
+				createdPoem = await mutateAsync(rest as CreatePoemPayload);
+				setPersistedPoem(createdPoem);
+				void eventBus.publish('poemCreated', {
+					poemId: createdPoem.id,
+					createdAt: new Date().toISOString(),
+				});
 			}
-			void eventBus.publish('poemCreated', {
-				poemId: createdPoem.id,
-				createdAt: new Date().toISOString(),
-			});
+
+			try {
+				if (options.onCreated) await options.onCreated(createdPoem, data);
+			} catch {
+				setGeneralError(
+					'Your poem was created, but the audio upload failed. Your writing is still here; retry the audio upload or keep the poem without audio.',
+				);
+				return;
+			}
+
 			form.reset();
+			setPersistedPoem(null);
 			const isPublished = data.status === 'published';
 			toaster.create({
 				type: 'success',
@@ -87,6 +100,7 @@ export function useCreatePoemForm(options: UseCreatePoemFormOptions = {}) {
 		clearErrors: form.clearErrors,
 		onSubmit,
 		isPending,
+		hasPersistedPoem: persistedPoem !== null,
 		generalError,
 	};
 }

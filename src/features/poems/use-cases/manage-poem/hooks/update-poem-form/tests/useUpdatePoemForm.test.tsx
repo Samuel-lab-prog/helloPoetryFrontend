@@ -61,6 +61,33 @@ describe('FEATURE HOOK - Poems - useUpdatePoemForm', () => {
 		);
 	});
 
+	it('clears dirty state only after a successful update', async () => {
+		const scenario = makeUpdatePoemFormScenario().withUpdateSuccess();
+		const { result } = scenario.render();
+		void result.current.formState.isDirty;
+
+		act(() => result.current.setValue('title', 'Unsaved title', { shouldDirty: true }));
+		expect(result.current.formState.isDirty).toBe(true);
+
+		await act(() => result.current.onSubmit(updatePoemData));
+		expect(result.current.formState.isDirty).toBe(false);
+	});
+
+	it('keeps dirty state after a failed update', async () => {
+		const scenario = makeUpdatePoemFormScenario().withUpdateFailure({
+			statusCode: 500,
+			message: 'temporary failure',
+		});
+		const { result } = scenario.render();
+		void result.current.formState.isDirty;
+
+		act(() => result.current.setValue('title', 'Unsaved title', { shouldDirty: true }));
+		expect(result.current.formState.isDirty).toBe(true);
+
+		await act(() => result.current.onSubmit(updatePoemData));
+		expect(result.current.formState.isDirty).toBe(true);
+	});
+
 	it('maps duplicate title conflicts to the title field', async () => {
 		const scenario = makeUpdatePoemFormScenario().withUpdateFailure({
 			statusCode: 409,

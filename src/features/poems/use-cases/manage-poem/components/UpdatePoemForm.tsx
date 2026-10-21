@@ -1,6 +1,7 @@
 import { FormField, SelectField, Surface, TagsField } from '@BaseComponents';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { useAuthClientStore } from '@features/auth/public/stores/useAuthClientStore';
+import { useUnsavedChangesPrompt } from '@root/core/utils/useUnsavedChangesPrompt';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -36,11 +37,12 @@ export function UpdatePoemForm() {
 		watch,
 		reset,
 		setValue,
-		formState: { errors, isValid },
+		formState: { errors, isValid, isDirty },
 		onSubmit,
 		isPending,
 		generalError,
 	} = useUpdatePoemForm();
+	useUnsavedChangesPrompt(isDirty, isPending);
 	const requesterRole = useAuthClientStore((state) => state.authClient?.role);
 
 	const poemId = watch('id');

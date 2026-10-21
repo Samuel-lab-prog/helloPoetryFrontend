@@ -29,6 +29,7 @@ export function useUpdatePoemForm() {
 		try {
 			if (applyForbiddenWordsValidation(data, form.setError)) return;
 			await mutateAsync(data);
+			form.reset(data);
 			queryClient.invalidateQueries({ queryKey: poemKeys.minimal() });
 			queryClient.invalidateQueries({ queryKey: poemKeys.byId(String(data.id)) });
 			const isPublished = data.status === 'published';
